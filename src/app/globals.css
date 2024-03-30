@@ -1,0 +1,136 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+h1 {
+  font-size: 32px;
+}
+
+/* :root {
+  --foreground-rgb: 0, 0, 0;
+  --background-start-rgb: 214, 219, 220;
+  --background-end-rgb: 255, 255, 255;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --foreground-rgb: 255, 255, 255;
+    --background-start-rgb: 0, 0, 0;
+    --background-end-rgb: 0, 0, 0;
+  }
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: linear-gradient(
+      to bottom,
+      transparent,
+      rgb(var(--background-end-rgb))
+    )
+    rgb(var(--background-start-rgb));
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+} */
+
+/* from old site */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  position: relative;
+  font-weight: normal;
+}
+@font-face {
+  font-family: "Rubik";
+  src: url("/fonts/Rubik-VariableFont_wght.ttf") format("truetype-variations");
+  font-weight: 1 999;
+}
+@font-face {
+  font-family: "PlusJakartaSans";
+  src: url("/fonts/PlusJakartaSans-VariableFont_wght.ttf")
+    format("truetype-variations");
+  font-weight: 1 999;
+}
+@font-face {
+  font-family: "Changa";
+  src: url("/fonts/Changa-VariableFont_wght.ttf") format("truetype-variations");
+  font-weight: 1 999;
+}
+
+@font-face {
+  font-family: "IBM Plex Sans";
+  src: url("/fonts/IBM_Plex/IBMPlexSans-Regular.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "NeoSansArabic";
+  src: url("/fonts/neoSansArabic/NeoSansArabic.ttf");
+}
+html,
+body,
+#root {
+  margin: 0;
+  font-family: "IBM Plex Sans", "Changa", "Roboto", sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+  background-color: #eeeeee;
+  color: #616161;
+  height: 100vh;
+  padding-bottom: 64px;
+}
+
+html body.dark,
+body.dark #root {
+  background-color: #616161;
+  color: #eeeeee;
+  padding-bottom: 48px;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+button {
+  margin: 0;
+  font-family: "PlusJakartaSans", "Changa";
+}
+
+h1.landing-title {
+  font-size: clamp(2.625rem, 1.2857rem + 3.5714vw, 4rem);
+}
+
+a {
+  direction: none;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
+    monospace;
+}
+
+ol,
+ul {
+  display: block;
+  list-style: none;
+  margin-block-start: 0;
+  margin-block-end: 0;
+  margin-inline-start: 0px;
+  margin-inline-end: 0px;
+  padding-inline-start: 0px;
+}
+
+centered {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
