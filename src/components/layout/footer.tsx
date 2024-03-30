@@ -17,22 +17,32 @@ export default function Footer() {
     <footer className="flex-col justify-center w-full pb-4">
       <nav className="flex mt-6 justify-center w-full text-xl" dir="utd">
         <div className={linkClass}>
-          <a rel="noopener noreferrer" href={'https://www.patreon.com/critfumbleweb'} target="_blank">
-            <Image
-              src={"/img/patreon.avif"}
-              alt={'Support us on Patreon'}
-              width={213}
-              height={50}
-            />
-          </a>
-        </div>
-        <div className={linkClass}>
           <a rel="noopener noreferrer" href={'https://github.com/Crit-Fumble'} target="_blank">
             <Image
               src={"/img/github.png"}
               alt={'Follow us on GitHub'}
               width={128}
               height={51}
+            />
+          </a>
+        </div>
+        <div className={linkClass}>
+          <a rel="noopener noreferrer" href={'https://app.roll20.net/users/6244861/crit-fumble-gaming'} target="_blank">
+            <Image
+              src={"/img/roll20.png"}
+              alt={'Find Us on Roll20!'}
+              width={165}
+              height={50}
+            />
+          </a>
+        </div>
+        <div className={linkClass}>
+          <a rel="noopener noreferrer" href={'https://www.patreon.com/critfumbleweb'} target="_blank">
+            <Image
+              src={"/img/patreon.avif"}
+              alt={'Support us on Patreon'}
+              width={213}
+              height={50}
             />
           </a>
         </div>
@@ -46,6 +56,7 @@ export default function Footer() {
             />
           </a>
         </div>
+        
       </nav>
       <div className={'text-center'}>
         <DarkModeToggle />
