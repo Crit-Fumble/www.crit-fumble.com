@@ -1,15 +1,6 @@
 import Image from "next/image";
 import DarkModeToggle from "./darkModeToggle";
 
-const FooterImage = ({src, alt, width = 128, height = 128}: {src: string, alt: string, width: number}) => {
-  return <Image 
-    src={src}
-    alt={alt}
-    height={height}
-    width={width}
-  />
-};
-
 export default function Footer() {
   const linkClass = 'p-2';
 
