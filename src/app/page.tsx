@@ -1,11 +1,11 @@
+import Footer from "@/components/layout/footer";
 import Image from "next/image";
 
 export default function Page() {
   // TODO: SEO and things
   
   return (
-    <div>
-      <div className={'flex justify-center'}>
+      <div className={'flex flex-col justify-center'}>
           <div className={'p-8 flex flex-col items-center text-center'} >
               <div className={'p-4 flex justify-center'}>
                 <Image className={'rounded-full'} alt="CFG Logo" src='/img/cfg-logo.jpg' height={'256'} width={'256'}/>
@@ -19,7 +19,8 @@ export default function Page() {
 
               <p className={'p-4'}>To find out more, chat with us, or find a group to play with, join our <a className="text-green-600" href={'https://discord.gg/dZzsst6TdG'} target="_blank">Discord Server</a>.</p>
           </div>
+
+          <Footer />
       </div>
-    </div>
   );
 }
