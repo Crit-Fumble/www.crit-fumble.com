@@ -103,7 +103,7 @@ export const _TopBar = () => {
   // };
 
   return !isLoading && (<div
-      className={"flex flex-row items-end p-0 m-0 w-100"}
+      className={"flex flex-row items-end p-0 m-0 ßw-100"}
     >
       {/* <Button>
         My Games
