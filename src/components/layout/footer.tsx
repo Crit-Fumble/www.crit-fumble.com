@@ -50,7 +50,7 @@ export default function Footer() {
         
       </nav>
       <div className={'text-center'}>
-        <DarkModeToggle />
+        {/* <DarkModeToggle /> */}
         <p>© {new Date().getFullYear()}, Crit Fumble Gaming</p>
       </div>
     </footer>

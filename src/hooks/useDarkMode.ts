@@ -16,7 +16,6 @@ export default function useDarkMode() {
         setIsDark(isDark);
     }, [])
     useEffect(() => {
-
         document.body.classList[isDark ? 'add' : 'remove']('dark');
     }, [isDark]);
 

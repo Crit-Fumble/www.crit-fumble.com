@@ -26,7 +26,7 @@ export default function Page({ session } : PageProps) {
 
               <p className={'p-4 italic'}>If the GM doesn&apos;t kill you, the dice will.</p>
 
-              <Link className="text-5xl	border-2 border-slate-700 p-4" href="/dashboard">Enter</Link>
+              {/* <Link className="text-5xl	border-2 border-slate-700 p-4" href="/dashboard">Enter</Link> */}
 
               <p className={'p-4'}>Welcome to Crit Fumble Gaming! We&apos;re a VTTRPG group and have players with some of the worst luck and dumbest ideas. We started as an in-person group in the Midwest United States, but have moved our campaigns online and have since grown to include members all over the country. We play a few long-running campaigns, as well as plenty of one-shots and &quot;mini-campaigns&quot; that only last a few sessions.</p>
           </div>
