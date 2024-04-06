@@ -17,7 +17,7 @@ const config = {
         token.name = session.name
       }
       return token
-    }
+    },
   },
 };
 
