@@ -14,16 +14,13 @@ export const metadata: Metadata = {
 export default function RootLayout({
   children,
   session,
-}: Readonly<{
-  children: React.ReactNode;
-  session: Session;
-}>) {
+}: any) {
 
   return (
     <html lang="en">
       <body className={inter.className}>
-        <TopBar session={session} />
         {children}
+        <TopBar session={session} />
       </body>
     </html>
   );

@@ -16,3 +16,4 @@ export type CfgProfile = {
   gameSystems: string[],
   gameSettings: string[],
 }
+

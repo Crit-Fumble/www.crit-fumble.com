@@ -45,7 +45,7 @@ const UserMenu = ({
   const user = useMemo(() => session?.data?.user, [session?.data?.user]);
 
   return (
-    <>
+    <div className="ml-auto">
       <Button style={style} className={className} {...bindTrigger(popupState)}>
         {user?.image ? (
           <Image
@@ -86,12 +86,12 @@ const UserMenu = ({
           </MenuItem>
         )}
       </Menu>
-    </>
+    </div>
   );
 };
 
 // export const Menu = ({ user, url, setUrl }: MenuProps) => {
-export const _TopBar = () => {
+export const TopBarInner = () => {
   const session = useSession();
   const { data, status, update } = session;
   const isLoading = useMemo(() => status === "loading", [status]);
@@ -103,7 +103,7 @@ export const _TopBar = () => {
   // };
 
   return !isLoading && (<div
-      className={"flex flex-row items-end p-0 m-0 ßw-100"}
+      className={"flex flex-row items-end p-0 m-0 w-100 top-0 absolute"}
     >
       {/* <Button>
         My Games
@@ -119,7 +119,7 @@ export const _TopBar = () => {
 export const TopBar = ({ session }: TopBarProps) => {
   return (
     <SessionProvider session={session}>
-      <_TopBar />
+      <TopBarInner />
     </SessionProvider>
   );
 };
