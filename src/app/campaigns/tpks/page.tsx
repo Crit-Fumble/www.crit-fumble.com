@@ -9,7 +9,11 @@ export default function Dnd5eScreen() {
   return (
       <div className={'flex flex-col justify-center text-center'}>
         <nav>
-          <a href="https://5etools.crit-fumble.com/quickreference.html#bookref-quick,2" target="_blank">Open in New Tab</a> | <a href="/">Back to Home</a>
+          <a className="p-2" href="https://5etools.crit-fumble.com/quickreference.html#bookref-quick,2" target="_blank">
+            5eTools
+          </a> | <a className="p-2" href="/">
+            Back to Home
+          </a>
         </nav>
         <iframe src="https://5etools.crit-fumble.com/quickreference.html#bookref-quick,2" className={'h-screen'}></iframe>
       </div>
