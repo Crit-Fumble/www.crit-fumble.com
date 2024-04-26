@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { Inter } from "next/font/google";
 import { TopBarSession } from "@/components/layout/topBar";
-import Footer from "@/components/layout/footer";
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
