@@ -12,11 +12,11 @@ export default function Page({ session } : any) {
   // TODO: SEO and things
   
   return (
-      <div className={'flex flex-col justify-center'}>
-        <div className="fixed top-0 h-[389px] p-0 m-0 w-full overflow-hidden"> 
-          <Image className="w-full min-h-[389px]" alt="CFG Background" src='/img/dice-back.jpg' height={'389'} width={'693'}/>
+      <div className={'flex flex-col justify-stretch items-center'}>
+        <div className="absolute h-[389px] p-0 m-0 w-full overflow-hidden"> 
+          <Image layout="fill" objectFit="cover" className="w-full min-h-[389px]" alt="CFG Background" src='/img/dice-back.jpg'/>
         </div>
-        <div className={'p-8 pt-[120px] flex flex-col items-center text-center'} >
+        <div className={'p-8 pt-[192px] flex flex-col items-center text-center'} >
           <div className={'p-4 flex justify-center'}>
             <Image className={'rounded-full'} alt="CFG Logo" src='/img/cfg-logo.jpg' height={'256'} width={'256'}/>
           </div>
