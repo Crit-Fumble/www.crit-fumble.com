@@ -6,37 +6,6 @@ h1 {
   font-size: 32px;
 }
 
-/* :root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
-}
-
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
-}
-
-@layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
-} */
-
-/* from old site */
 *,
 *::before,
 *::after {
@@ -73,9 +42,17 @@ body {
   font-family: "NeoSansArabic";
   src: url("/fonts/neoSansArabic/NeoSansArabic.ttf");
 }
-html,
-body,
+
 #root {
+  padding: 0;
+  margin: 0;
+  background-color: #616161;
+  color: #eeeeee;
+}
+
+html,
+body {
+  padding: 0;
   margin: 0;
   font-family: "IBM Plex Sans", "Changa", "Roboto", sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -83,15 +60,12 @@ body,
 
   background-color: #eeeeee;
   color: #616161;
-  height: 100vh;
-  padding-bottom: 64px;
+  min-height: 100vh;
 }
 
-html body.dark,
-body.dark #root {
+html body.dark {
   background-color: #616161;
   color: #eeeeee;
-  padding-bottom: 48px;
 }
 
 h1,

@@ -3,6 +3,7 @@ import { getServerSession } from "next-auth";
 import { Inter } from "next/font/google";
 import { TopBarSession } from "@/components/layout/topBar";
 import "./globals.css";
+import { BottomBarSession } from "@/components/layout/bottomBar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,7 +21,10 @@ export default async function RootLayout({
   return (
     <html lang="en">
       <body className={`${inter.className} dark`}>
-        <main className={'pt-16'}>{children}</main>
+        <main className={'min-h-[100vh] pt-16 w-full h-max flex flex-col items-stretch justify-between flex-1'}>
+          {children}
+          <BottomBarSession session={session} />
+        </main>
         <TopBarSession session={session} />
       </body>
     </html>
