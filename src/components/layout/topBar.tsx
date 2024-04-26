@@ -38,7 +38,7 @@ export const TopBarInner = () => {
             src={data?.user?.image}
           />
         )}
-        {data?.user?.name && <p className="p-2">{data?.user?.name} |</p>}
+        {data?.user?.name && <p className="p-2">{data?.user?.name}</p>}
       </div>
       {(pathname !== '/') && <a href="/"><button className="p-2">Home</button></a>}
 
