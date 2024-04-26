@@ -26,7 +26,7 @@ export const TopBarInner = () => {
   const pathname = usePathname();
 
   return !isLoading && (<div
-      className={"w-full flex flex-row justify-items-end items-center p-0 m-0 top-0 right-0 absolute bg-gray-300 dark:bg-gray-700 "}
+      className={"h-[48px] w-full flex flex-row justify-items-end items-center p-0 m-0 top-0 right-0 absolute bg-gray-300 dark:bg-gray-700 "}
     >
       <div className="flex flex-row items-center ">
         {data?.user?.image && (
