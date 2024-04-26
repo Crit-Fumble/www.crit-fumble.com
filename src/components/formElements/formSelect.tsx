@@ -1,6 +1,3 @@
-// src/form-component/FormInputText.tsx
-import MenuItem from "@mui/material/MenuItem";
-import Select from "@mui/material/Select";
 import { Controller } from "react-hook-form";
 
 type FormInputProps = {
@@ -9,36 +6,31 @@ type FormInputProps = {
   label: string;
 };
 
-export const FormSelect = ({ name, control, label }: FormInputProps) => {
+export const FormSelect = ({ name, control, label, ...inputProps }: FormInputProps) => {
   return (
     <Controller
       name={name}
       control={control}
       render={({
-        field: { onChange, value },
+        field: { name, onChange, value },
         fieldState: { error },
-        formState,
+        // formState,
       }) => (
-        <Select
-          value={value}
-          onChange={onChange}
-          label={label}
-          variant="outlined"
-        >
-          <MenuItem value="1">1</MenuItem>
-          <MenuItem value="2">2</MenuItem>
-          <MenuItem value="3">3</MenuItem>
-        </Select>
-        // <TextField
-        //   helperText={error ? error.message : null}
-        //   size="small"
-        //   error={!!error}
-        //   onChange={onChange}
-        //   value={value}
-        //   fullWidth
-        //   label={label}
-        //   variant="outlined"
-        // />
+        <>
+          {label && (<label htmlFor={name}>{label}</label>)}
+          <select
+            id={name}
+            name={name}
+            value={value}
+            onChange={onChange}
+            {...inputProps}
+          >
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+          </select>
+          {error?.message && <div>{error.message}</div>}
+        </>
       )}
     />
   );

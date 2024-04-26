@@ -1,6 +1,4 @@
-// src/form-component/FormInputText.tsx
 import { Controller } from "react-hook-form";
-import TextField from "@mui/material/TextField";
 
 type FormInputProps = {
   name: string;
@@ -8,26 +6,23 @@ type FormInputProps = {
   label: string;
 };
 
-export const FormInput = ({ name, control, label }: FormInputProps) => {
+export const FormInput = ({ name, control, label, ...inputProps }: FormInputProps) => {
   return (
     <Controller
       name={name}
       control={control}
       render={({
         field: { onChange, value },
-        fieldState: { error },
-        formState,
       }) => (
-        <TextField
-          name={name}
-          helperText={error ? error.message : null}
-          error={!!error}
-          onChange={onChange}
-          value={value}
-          fullWidth
-          label={label}
-          variant="outlined"
-        />
+        <>
+          {label && (<label>{label}</label>)}
+          <input
+            name={name}
+            onChange={onChange}
+            value={value}
+            {...inputProps}
+          />
+        </>
       )}
     />
   );
