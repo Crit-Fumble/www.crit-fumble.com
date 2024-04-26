@@ -9,14 +9,14 @@ const config = {
     ],
   callbacks: {
     session({ session, token, user } : any) {
-      return session; // The return type will match the one returned in `useSession()`
+      return Promise.resolve(session); // The return type will match the one returned in `useSession()`
     },
     jwt({ token, trigger, session } : any) {
       if (trigger === "update" && session?.name) {
         // Note, that `session` can be any arbitrary object, remember to validate it!
         token.name = session.name
       }
-      return token
+      return Promise.resolve(token);
     },
   },
 };

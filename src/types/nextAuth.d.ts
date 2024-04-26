@@ -13,5 +13,6 @@ declare module "next-auth" {
         discord?: DiscordProfile,
         cfg: CfgProfile,
     }
+    darkMode: boolean
   }
 }

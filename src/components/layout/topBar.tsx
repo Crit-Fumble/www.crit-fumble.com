@@ -1,26 +1,14 @@
 "use client";
-import Button from "@mui/material/Button";
 import { SessionProvider, signIn, signOut, useSession } from "next-auth/react";
 import Image from "next/image";
-import {
-  usePopupState,
-  bindTrigger,
-  bindMenu,
-} from "material-ui-popup-state/hooks";
-// import { Input, MenuItem } from "@mui/material";
-import useDarkMode from "@/hooks/useDarkMode";
-import { use, useMemo, useState } from "react";
-import { Menu, MenuItem } from "@mui/material";
+import { usePathname } from 'next/navigation'
+import { useMemo } from "react";
 import { Session } from "next-auth";
-// import { useRef } from "react";
+import useDarkMode from "@/hooks/useDarkMode";
 
 interface TopBarProps {
-  session: Session;
+  session?: Session | null;
 }
-
-const className =
-  "cursor-pointer bg-transparent transition-colors duration-300 border-none  decoration-none text-primary-500 hover:bg-primary-600 hover:text-white font-light centered !outline-none text-3xl";
-const style = { padding: 0, margin: 0 , height: "48px", width: "48px", minWidth: "48px", minHeight: "48px" };
 
 const handleLogout = async (): Promise<void> => {
   signOut({ callbackUrl: "/" });
@@ -30,93 +18,61 @@ const handleLogin = async (): Promise<void> => {
   signIn();
 };
 
-const UserMenu = ({
-  session,
-}: {
-  session: {
-    update?: Function;
-    data?: Session | null;
-    status: "loading" | "authenticated" | "unauthenticated";
-  } | null;
-}) => {
-  const popupState = usePopupState({ variant: "popover", popupId: "userMenu" });
-  const { isDark, toggleDark } = useDarkMode();
-  const isAuth = useMemo(() => session?.status === "authenticated", [session?.status]);
-  const user = useMemo(() => session?.data?.user, [session?.data?.user]);
-
-  return (
-    <div className="ml-auto">
-      <Button style={style} className={className} {...bindTrigger(popupState)}>
-        {user?.image ? (
-          <Image
-            alt={`${user?.name}'s avatar`}
-            width={48}
-            height={48}
-            src={user?.image}
-          />
-        ) : (
-          '👤'
-        )}
-      </Button>
-      <Menu {...bindMenu(popupState)}>
-        {/* <MenuItem onClick={popupState.close}>Profile</MenuItem>
-        <MenuItem onClick={popupState.close}>My Account</MenuItem> */}
-        <MenuItem
-            onClick={toggleDark}
-          >
-            Use {isDark ? "Light" : "Dark"} Mode
-          </MenuItem>
-        {isAuth ? (
-          <MenuItem
-            onClick={() => {
-              popupState.close();
-              handleLogout();
-            }}
-          >
-            Logout
-          </MenuItem>
-        ) : (
-          <MenuItem
-            onClick={() => {
-              popupState.close();
-              handleLogin();
-            }}
-          >
-            Login
-          </MenuItem>
-        )}
-      </Menu>
-    </div>
-  );
-};
-
-// export const Menu = ({ user, url, setUrl }: MenuProps) => {
 export const TopBarInner = () => {
   const session = useSession();
   const { data, status, update } = session;
   const isLoading = useMemo(() => status === "loading", [status]);
-
-  // const urlRef = useRef({ value: url })
-
-  // const handleGo = async (): Promise<void> => {
-  //   setUrl(urlRef.current.value);
-  // };
+  const { isDark, toggleDark } = useDarkMode();
+  const pathname = usePathname();
 
   return !isLoading && (<div
-      className={"flex flex-row items-end p-0 m-0 w-100 top-0 absolute"}
+      className={"w-full flex flex-row justify-items-end items-center p-0 m-0 top-0 right-0 absolute bg-gray-300 dark:bg-gray-700 "}
     >
-      {/* <Button>
-        My Games
-      </Button> */}
-      <UserMenu session={{ data, status, update }} />
-      {/* <Input defaultValue={url} inputRef={urlRef} style={{ width: '100%' }} type="text" />
-      <Button onClick={handleGo} style={style} className={className}>
-        ➜
-      </Button> */}
+      <div className="flex flex-row items-center ">
+        {data?.user?.image && (
+          <Image
+            priority
+            alt={`${data?.user?.name}'s avatar`}
+            width={48}
+            height={48}
+            src={data?.user?.image}
+          />
+        )}
+        {data?.user?.name && <p className="p-2">{data?.user?.name} |</p>}
+      </div>
+      {(pathname !== '/') && <a href="/"><button className="p-2">Home</button></a>}
+
+      {/* {session?.status === "authenticated" && (pathname !== '/dashboard') && (<>
+        <a className="p-2" href="/dashboard">Dashboard</a>
+      </>)} */}
+      
+      <div className="ml-auto flex flex-row items-center">
+        <a onClick={toggleDark}>
+          {isDark ? '🌙' : '☀️'}
+        </a>
+      </div>
+      {session?.status === "authenticated" ? (
+        <>
+          <button className="p-2"
+            onClick={() => {
+              handleLogout();
+            }}
+          >Logout</button>
+        </>
+        ) : (
+          <button className="p-2"
+            onClick={() => {
+              handleLogin();
+            }}
+          >
+            Login
+          </button>
+        )}
+        
     </div>);
 };
 
-export const TopBar = ({ session }: TopBarProps) => {
+export const TopBarSession = ({ session }: TopBarProps) => {
   return (
     <SessionProvider session={session}>
       <TopBarInner />

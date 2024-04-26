@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 export default function useDarkMode() {
-    const [isDark, setIsDark] = useState(false);
+    const [isDark, setIsDark] = useState(true);
 
     const toggleDark = () => {
         
@@ -12,11 +12,12 @@ export default function useDarkMode() {
 
     }
     useEffect(() => {
-        const isDark = JSON.parse(localStorage.getItem('isDark') || 'false');
+        const isDark = JSON.parse(localStorage.getItem('isDark') ?? 'true');
         setIsDark(isDark);
     }, [])
+
     useEffect(() => {
-        document.body.classList[isDark ? 'add' : 'remove']('dark');
+      document.body.classList[isDark ? 'add' : 'remove']('dark');
     }, [isDark]);
 
 
