@@ -1,4 +1,3 @@
-import Footer from "@/components/layout/footer";
 import Image from "next/image";
 
 export default function DndSrd5eScreen() {
