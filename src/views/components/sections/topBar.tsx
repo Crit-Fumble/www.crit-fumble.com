@@ -4,7 +4,7 @@ import Image from "next/image";
 import { usePathname } from 'next/navigation'
 import { useMemo } from "react";
 import { Session } from "next-auth";
-import useDarkMode from "@/hooks/useDarkMode";
+import useDarkMode from "@/views/hooks/useDarkMode";
 
 interface TopBarProps {
   session?: Session | null;

@@ -1,0 +1,25 @@
+services:
+  # app:
+  # build: .
+  # depends_on:
+  #   - postgres
+  # environment:
+  #   - DATABASE_URL: postgres://${DATABASE_USER}:${DATABASE_PASSWORD}@${DATABASE_NAME}:${DATABASE_PORT}/db
+  #   - NODE_ENV: development
+  #   - PORT: 3000
+  # ports:
+  #   - 3000:3000
+  # command: npm run dev
+  # volumes:
+  #   - .:/app/
+  #   - /app/node_modules
+
+  postgres:
+    image: postgres:16.1
+    env_file: .env
+    ports:
+      - ${DATABASE_PORT}:5432
+    environment:
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+      POSTGRES_DB: ${DATABASE_NAME}
