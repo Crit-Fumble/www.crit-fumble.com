@@ -13,7 +13,7 @@
     "@trpc/client": "^11.0.0-rc.354",
     "@trpc/server": "^11.0.0-rc.354",
     "material-ui-popup-state": "^5.1.0",
-    "next": "14.1.4",
+    "next": "14.2.12",
     "next-auth": "^4.24.7",
     "npm": "^10.5.1",
     "prisma": "^5.13.0",
