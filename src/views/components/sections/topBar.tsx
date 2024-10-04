@@ -18,6 +18,8 @@ const handleLogin = async (): Promise<void> => {
   signIn();
 };
 
+// const topBarStyle = (isDark: boolean) => ();
+
 export const TopBarInner = () => {
   const session = useSession();
   const { data, status, update } = session;
@@ -26,9 +28,28 @@ export const TopBarInner = () => {
   const pathname = usePathname();
 
   return !isLoading && (<div
-      className={"h-[48px] w-full flex flex-row justify-items-end items-center p-0 m-0 top-0 right-0 absolute bg-gray-300 dark:bg-gray-700 "}
+      style={{
+        position: 'absolute',
+        top: 0,
+        right: 0, 
+        left: 0, 
+        padding: 0,
+        margin: 0,
+        height: '48px',
+        width: '100%',
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyItems: 'end',
+        backgroundColor: isDark ? '#374151' : '#d1d5db',
+      }}
     >
-      <div className="flex flex-row items-center ">
+      <div style={{
+        display: 'flex',
+        flexDirection: 'row',
+        gap: '8px',
+        alignItems: 'center',
+      }}>
         {data?.user?.image && (
           <Image
             priority
@@ -46,18 +67,24 @@ export const TopBarInner = () => {
         <a className="p-2" href="/dashboard">Dashboard</a>
       </>)} */}
 
-      <div className="ml-auto flex flex-row items-center">
-        <a className="p-2 cursor-pointer" onClick={toggleDark}>
+      <div style={{
+        marginLeft: 'auto',
+        display: 'flex',
+        flexDirection: 'row',
+        gap: '8px',
+        alignItems: 'center',
+      }}>
+        <a style={{padding: '2px'}} className="cursor-pointer" onClick={toggleDark}>
           {isDark ? '🌙' : '☀️'}
         </a>
         {session?.status === "authenticated" ? (
-          <button className="p-2 cursor-pointer"
+          <button style={{padding: '2px'}}  className="cursor-pointer"
             onClick={() => {
               handleLogout();
             }}
           >Logout</button>
         ) : (
-          <button className="p-2 cursor-pointer"
+          <button style={{padding: '2px'}} className="cursor-pointer"
             onClick={() => {
               handleLogin();
             }}
