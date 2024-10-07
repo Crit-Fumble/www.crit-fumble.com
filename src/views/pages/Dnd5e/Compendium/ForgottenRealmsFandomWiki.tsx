@@ -4,26 +4,28 @@ import { SessionProvider, useSession } from "next-auth/react";
 import { useMemo, useState } from "react";
 
 
-const PageInner = ({ user, ...props }: any) => {
+const PageInner = ({ player, characters, ...props }: any) => {
   const session = useSession();
   const { data, status, update } = session;
   const isLoading = useMemo(() => status === "loading", [status]);
-  
+
   return (
     <div className="flex flex-col align-middle items-center">
-      <div className="flex flex-row align-middle items-center">
-        <a href="/play/dnd5e">Play D&D 5e</a>
+      <div>
+        <iframe style={{
+          height: 'calc(100vh - 92px)',
+          width: '100vw',
+        }} src={`https://forgottenrealms.fandom.com/wiki/`} />
       </div>
     </div>
   )
 }
 
-const Page = ({ session }: any) => {
-  const [iframeUrl, setIframeUrl] = useState()
+const Page = ({ session, ...props }: any) => {
 
   return (
     <SessionProvider session={session}>
-      <PageInner iframeUrl={iframeUrl} />
+      <PageInner {...props} />
     </SessionProvider>
   );
 };

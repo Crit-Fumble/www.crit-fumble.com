@@ -1,7 +1,7 @@
 "use server";
 
 import { getCharacterPageProps } from "@/controllers/character";
-import Dnd5eDowntimeView from "@/views/pages/Dnd5e/Downtime";
+import Dnd5eWorldView from "@/views/pages/Dnd5e/Player/World";
 
 const Page = async ({ params: {partySlug, characterSlug} }: any) => {
   const props = await getCharacterPageProps({
@@ -9,7 +9,7 @@ const Page = async ({ params: {partySlug, characterSlug} }: any) => {
     character: { slug: characterSlug }
   });
 
-  return (<Dnd5eDowntimeView {...props}/>);
+  return (<Dnd5eWorldView {...props}/>);
 };
 
 export default Page;

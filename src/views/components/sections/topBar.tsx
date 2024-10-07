@@ -60,17 +60,36 @@ export const TopBarInner = () => {
             src={data?.user?.image}
           />
         )}
-        {data?.user?.name && <p className="p-2">{data?.user?.name}</p>}
-        {data?.user?.name && '|' }
+        {data?.user?.name && <p className="p-2">Welcome, {data?.user?.name}!</p>}
       </div>
-      {/* {(pathname !== '/') &&  */}
-        <a href="/"><button className="p-2 cursor-pointer">Home</button></a>
-      {/* } */}
-      |
-      {/* {(pathname !== '/play') &&  */}
+      {/*   | */}
+      {/* <a href="/"><button className="p-2 cursor-pointer">Home</button></a> */}
+
+      {/* {isLoggedIn && '|' }
+
       {isLoggedIn && 
-        <a href="/play"><button className="p-2 cursor-pointer">Play</button></a>
+        <a href="/social"><button className="p-2 cursor-pointer">Social</button></a>
+      } */}
+
+      {isLoggedIn && '|' }
+
+      {isLoggedIn && 
+        <a href="/hi"><button className="p-2 cursor-pointer">About</button></a>
       }
+
+      {isLoggedIn && '|' }
+
+      {isLoggedIn && 
+        <a href="/game"><button className="p-2 cursor-pointer">Video</button></a>
+      }
+
+      {isLoggedIn && '|' }
+
+      {isLoggedIn && 
+        <a href="/play"><button className="p-2 cursor-pointer">Tabletop</button></a>
+      }
+
+      {/* {isLoggedIn && '|' } */}
 
       {/* {session?.status === "authenticated" && (pathname !== '/dashboard') && (<>
         <a className="p-2" href="/dashboard">Dashboard</a>

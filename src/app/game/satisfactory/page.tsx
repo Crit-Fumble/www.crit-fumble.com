@@ -1,6 +1,6 @@
 import { getServerSession } from "next-auth";
-import Image from "next/image";
 import { redirect } from "next/navigation";
+import GamerView from '@/views/pages/Satisfactory/Gamer/Home';
 
 const Page = async () => {
   const session = await getServerSession();
@@ -11,7 +11,7 @@ const Page = async () => {
 
   return (
     <div className={"flex flex-col justify-center items-center w-100"}>
-      <iframe style={{height: 'calc(100vh - 92px)'}} className="w-[100vw]" src="https://5etools.crit-fumble.com/dmscreen.html" />
+      <GamerView />
     </div>
   );
 };

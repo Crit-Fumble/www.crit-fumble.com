@@ -1,7 +1,7 @@
 "use server";
 
 import { getPlayerPageProps } from "@/controllers/player";
-import Dnd5eCompendiumSearchView from "@/views/pages/Dnd5e/CompendiumSearch";
+import Dnd5eCompendiumSearchView from "@/views/pages/Dnd5e/Compendium/Search";
 
 const Page = async () => {
   const props = await getPlayerPageProps();

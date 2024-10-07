@@ -1,7 +1,7 @@
 "use server";
 
 import { getCharacterPageProps } from "@/controllers/character";
-import Dnd5eInitiativeView from "@/views/pages/Dnd5e/Initiative";
+import Dnd5eInitiativeView from "@/views/pages/Dnd5e/Player/Initiative";
 
 const Page = async ({ params: {partySlug, characterSlug} }: any) => {
   const props = await getCharacterPageProps({

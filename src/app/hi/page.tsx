@@ -24,12 +24,8 @@ export default function Page({ session } : any) {
           <h1>Crit Fumble Gaming</h1>
 
           <p className={'p-4 italic'}>If the GM doesn&apos;t kill you, the dice will.</p>
-          
-          <div className="w-[100%] flex flex-col gap-2">
-            <a href='/hi'>Learn About CFG</a>
-            <a href='/game'>Play Video Games</a>
-            <a href='/play'>Play Tabletop Games</a>
-          </div>
+
+          <p className={'p-4'}>Welcome to Crit Fumble Gaming! We&apos;re a VTTRPG group and have players with some of the worst luck and dumbest ideas. We started as an in-person group in the Midwest United States, but have moved our campaigns online and have since grown to include members all over the country. We play a few long-running campaigns, as well as plenty of one-shots and &quot;mini-campaigns&quot; that only last a few sessions.</p>
         </div>
       </div>
   );
