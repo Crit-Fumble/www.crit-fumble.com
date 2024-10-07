@@ -1,4 +1,3 @@
-import dnd5eSrd51 from './compendiums/dnd5eSrd51';
 import dnd5eCfg from './compendiums/dnd5eCfg';
 
 // eslint-disable-next-line import/no-anonymous-default-export

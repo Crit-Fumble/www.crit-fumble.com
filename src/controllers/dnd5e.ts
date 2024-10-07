@@ -34,7 +34,14 @@ export const getCompendiumPageProps = async () => {
     ...baseCompendium,
     'ability-scores': await apiHandler(`/play/dnd5e${baseCompendium?.['ability-scores']}`),
     'alignments': await apiHandler(`/play/dnd5e${baseCompendium?.['alignments']}`),
-    'equipment-categories': await apiHandler(`/play/dnd5e${baseCompendium?.['equipment-categories']}`),
+    'equipment-categories': await apiHandler(`/play/dnd5e${baseCompendium?.['equipment-categories']}`)
+      .then(async res => {
+        const results = await Promise.all(res?.results?.map((section: any) => apiHandler(`/play/dnd5e${section?.url}`)));
+
+        res.results = results;
+
+        return res;
+      }),
     'magic-schools': await apiHandler(`/play/dnd5e${baseCompendium?.['magic-schools']}`),
     'rule-sections': await apiHandler(`/play/dnd5e${baseCompendium?.['rule-sections']}`)
       .then(async res => {
