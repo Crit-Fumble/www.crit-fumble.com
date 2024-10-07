@@ -26,13 +26,6 @@ const PageInner = ({ player, campaign, party, character, ...props }: any) => {
             Downtime
           </a>
           -
-          <a href={`/play/dnd5e/${party.slug}`}>
-            Party
-          </a>
-          <a href={`/play/dnd5e/${party.slug}/${character.slug}/world`}>
-            World
-          </a>
-          -
           <a href={`https://discord.com/channels/${campaign?.discord?.serverId}/${party?.discord?.voiceChannelId}`} target="_blank">
             Voice
           </a>
