@@ -5,7 +5,7 @@ import { getPlayerByDiscordName } from "@/services/player";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
-export const getPlayerPageProps = async (props: any = {}) => {
+export const getPlayerPageProps = async () => {
   const session = await getServerSession();
 
   if (!session) {

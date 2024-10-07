@@ -37,3 +37,10 @@ export const getPartyByName = async ( name: string ) => {
 
   return response ?? {};
 }
+
+export const getPartiesByParentPartyId = async ( parentParty: string ) => {
+  if (!parentParty) return {};
+  const response = data.filter(party => party?.parentParty === parentParty);
+
+  return response ?? {};
+}

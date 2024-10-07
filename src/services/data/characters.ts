@@ -4,10 +4,11 @@ export default [
     id: "42069",
     player: "0",
     campaign: "0",
-    party: '4',
+    party: '42069',
     name: "Old Man",
     slug: "old-man",
     dndBeyond: { id: '91332012' },
+    discord: {},
     // roll20: { id:'' },
   },
   {

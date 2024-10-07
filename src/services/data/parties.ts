@@ -7,6 +7,7 @@ export default [
     slug: 'bom',
     name: 'Barrel of Mayhem',
     dndBeyond: { id: '5789654' },
+    roll20: { id: '17858042' },
     discord: {
       roleId: '1270594737211965551',
       voiceChannelId: '1270594998894592000',
@@ -21,7 +22,7 @@ export default [
     // discord: {},
   },
   {
-    id: '13',
+    id: '23',
     slug: 'neveren-hunters',
     name: 'Neveren Hunters',
     parentParty: '3',
@@ -30,10 +31,13 @@ export default [
   {
     id: '4',
     slug: 'tpks',
+    campaign: '0',
     name: 'The Total Party Knockouts',
+    dndBeyond: { id: '4820997'},
+    roll20: { id: '17353381' },
     discord: {
       voiceChannelId: '1175910585020448768',
-      sideChatThreadId: '',
+      sideChatThreadId: '1175910620894351462',
       roleId: '1175901224785162391',
     },
   },
@@ -90,6 +94,13 @@ export default [
     slug: 'th-llc',
     dndBeyond: { id: '4570864' },
     // discord: {},
+  },
+  {
+    id: '42069',
+    campaign: '0',
+    name: 'Old Man Party',
+    slug: 'old-man',
+    player: '0',
   },
   {
     id: '12300',

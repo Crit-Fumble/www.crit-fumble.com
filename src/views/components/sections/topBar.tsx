@@ -24,6 +24,7 @@ export const TopBarInner = () => {
   const session = useSession();
   const { data, status, update } = session;
   const isLoading = useMemo(() => status === "loading", [status]);
+  const isLoggedIn = useMemo(() => status === "authenticated", [status])
   const { isDark, toggleDark } = useDarkMode();
   const pathname = usePathname();
 
@@ -60,15 +61,16 @@ export const TopBarInner = () => {
           />
         )}
         {data?.user?.name && <p className="p-2">{data?.user?.name}</p>}
+        {data?.user?.name && '|' }
       </div>
-      |
       {/* {(pathname !== '/') &&  */}
         <a href="/"><button className="p-2 cursor-pointer">Home</button></a>
       {/* } */}
       |
       {/* {(pathname !== '/play') &&  */}
+      {isLoggedIn && 
         <a href="/play"><button className="p-2 cursor-pointer">Play</button></a>
-      {/* } */}
+      }
 
       {/* {session?.status === "authenticated" && (pathname !== '/dashboard') && (<>
         <a className="p-2" href="/dashboard">Dashboard</a>

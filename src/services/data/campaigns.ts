@@ -11,6 +11,7 @@ export default [
       id: '803f16a4-ae62-435c-b24e-b27a71a02d3c',
       name: 'Toril CFG-XXII',
       slug: 'toril22',
+      worldMapId: '7bf65011-b5ac-4051-bfcf-8bb3c7420173',
     },
     discord: {
       serverId: '1002008886137589771',

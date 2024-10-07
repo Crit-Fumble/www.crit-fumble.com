@@ -36,3 +36,11 @@ export const getCharactersByPlayerId = async ( playerId: string ) => {
 
   return response ?? [];
 }
+
+export const getCharactersByPartyIds = async ( partyIds: string[] ) => {
+  if (!partyIds || !partyIds?.length) return [];
+
+  const response = data.filter(character => partyIds.includes(character?.party ?? ''));
+
+  return response ?? [];
+}
