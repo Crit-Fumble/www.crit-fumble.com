@@ -49,6 +49,9 @@ const PageInner = ({ player, campaign, party, character, ...props }: any) => {
           <a href="https://5etools.crit-fumble.com" target="_blank">
             5eTools
           </a>
+          <a href="https://forgottenrealms.fandom.com/wiki/" target="_blank">
+            FR Wiki
+          </a>
         </div>
       </div>
       {character?.dndBeyond?.id && <div>
