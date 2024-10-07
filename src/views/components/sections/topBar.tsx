@@ -61,7 +61,14 @@ export const TopBarInner = () => {
         )}
         {data?.user?.name && <p className="p-2">{data?.user?.name}</p>}
       </div>
-      {(pathname !== '/') && <a href="/"><button className="p-2 cursor-pointer">Home</button></a>}
+      |
+      {/* {(pathname !== '/') &&  */}
+        <a href="/"><button className="p-2 cursor-pointer">Home</button></a>
+      {/* } */}
+      |
+      {/* {(pathname !== '/play') &&  */}
+        <a href="/play"><button className="p-2 cursor-pointer">Play</button></a>
+      {/* } */}
 
       {/* {session?.status === "authenticated" && (pathname !== '/dashboard') && (<>
         <a className="p-2" href="/dashboard">Dashboard</a>
