@@ -14,7 +14,7 @@ const PageInner = ({ player, characters, ...props }: any) => {
       <div className="flex flex-row align-middle items-center">
         {/* {JSON.stringify(data, null, 2)} */}
         {characters?.map(
-          (character: any) => (<a href={`/play/dnd5e/${character?.party?.slug}/${character?.slug}`}>
+          (character: any) => (<a key={character.id} href={`/play/dnd5e/${character?.party?.slug}/${character?.slug}`}>
             Play {character.name} ({character?.party?.name})
           </a>)
         )}
