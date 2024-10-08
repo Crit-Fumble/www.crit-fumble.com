@@ -16,10 +16,11 @@ export const getCharacterPageProps = async ({ character: { slug: characterSlug }
   // const user: any = await getUser(props?.user);
   const player: any = await getPlayerByDiscordName(session?.user?.name);
   const party: any = await getPartyBySlug(partySlug);
+  const parentParty: any = await getPartyBySlug(partySlug?.parentParty);
   const character: any = await getCharacterBySlug(characterSlug);
   // TODO: ensure character is in party, otherwise, redirect to correct party and route
 
-  const campaign: any = await getCampaignById(character?.campaign);
+  const campaign: any = await getCampaignById(party?.campaign);
   const world: any = await getWorld(campaign?.worldAnvil);
   // const party: any = await getParty();
   // const league: any = await getParties(;
@@ -34,6 +35,7 @@ export const getCharacterPageProps = async ({ character: { slug: characterSlug }
     player,
     campaign,
     party,
+    parentParty,
     character,
     world,
   }

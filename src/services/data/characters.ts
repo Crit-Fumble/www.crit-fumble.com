@@ -83,7 +83,7 @@ export default [
     id: "11080",
     player: "80",
     campaign: "0",
-    party: '34',
+    party: '24',
     name: "Mr. G",
     slug: "mr-g",
     // roll20: { id: '' },

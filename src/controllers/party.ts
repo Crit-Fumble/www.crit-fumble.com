@@ -3,7 +3,7 @@ import { getCampaignById } from '@/services/campaign';
 import { getCharactersByPartyIds } from '@/services/character';
 import { getPartyBySlug, getPartiesByParentPartyId, getPartyById } from '@/services/party';
 import { getPlayerByDiscordName } from '@/services/player';
-import { getWorld } from '@/services/worldAnvil';
+import { getWorld, getWorldById } from '@/services/worldAnvil';
 import { redirect } from 'next/navigation';
 
 export const getPartyPageProps = async ({ party: { slug: partySlug }}: any) => {
@@ -19,10 +19,17 @@ export const getPartyPageProps = async ({ party: { slug: partySlug }}: any) => {
   const parentParty = await getPartyById(party.parentParty);
   const subParties: any = await getPartiesByParentPartyId(party.id);
   const subPartyIds = subParties?.map((subParty: any) => subParty.id);
+  const rawCharacters: any = await getCharactersByPartyIds([party?.id, ...subPartyIds]);
+
+  const characters: any = await Promise.all(
+    rawCharacters?.map(async (character: any) => ({
+      ...character,
+      party: await getPartyById(character?.party),
+    }))
+  );
 
   const campaign: any = await getCampaignById(party?.campaign);
-  const characters: any = await getCharactersByPartyIds([party?.id, ...subPartyIds]);
-  const world: any = await getWorld(campaign?.worldAnvil);
+  const world: any = await getWorldById(campaign?.worldAnvil?.id);
 
   const response = {
     session,

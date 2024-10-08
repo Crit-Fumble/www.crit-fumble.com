@@ -4,6 +4,8 @@ export default [
   // Live
   {
     id: '3',
+    campaign: '0',
+    gm: '0',
     slug: 'bom',
     name: 'Barrel of Mayhem',
     dndBeyond: { id: '5789654' },
@@ -16,6 +18,8 @@ export default [
   },
   {
     id: '13',
+    campaign: '0',
+    gm: '0',
     slug: 'cragmaw-hunters',
     name: 'Cragmaw Hunters',
     parentParty: '3',
@@ -23,6 +27,8 @@ export default [
   },
   {
     id: '23',
+    campaign: '0',
+    gm: '0',
     slug: 'neveren-hunters',
     name: 'Neveren Hunters',
     parentParty: '3',
@@ -30,8 +36,9 @@ export default [
   },
   {
     id: '4',
-    slug: 'tpks',
     campaign: '0',
+    gm: '0',
+    slug: 'tpks',
     name: 'The Total Party Knockouts',
     dndBeyond: { id: '4820997'},
     roll20: { id: '17353381' },
@@ -43,6 +50,8 @@ export default [
   },
   {
     id: '14',
+    campaign: '0',
+    gm: '0',
     name: 'Blue Lily Alchemy',
     slug: 'blue-lily-alchemy',
     parentParty: '4',
@@ -50,20 +59,25 @@ export default [
   },
   {
     id: '24',
-    name: 'Arcane Regiment',
+    campaign: '0',
+    gm: '0',
+    name: 'The Arcane Regiment',
     slug: 'arcane-regiment',
     parentParty: '4',
     // discord: {},
   },
   {
     id: '34',
-    name: 'Order of Ghost Hunters',
-    slug: 'ghost-hunters',
-    parentParty: '4',
+    campaign: '0',
+    gm: '0',
+    name: 'The Dungeon Asset Procurement Squad',
+    slug: 'daps',
     // discord: {},
   },
   {
     id: '44',
+    campaign: '0',
+    gm: '0',
     parentParty: '4',
     name: 'Looking for Clues Detective Agency',
     slug: 'looking-for-clues',
@@ -71,6 +85,8 @@ export default [
   },
   {
     id: '54',
+    campaign: '0',
+    gm: '0',
     parentParty: '4',
     name: 'Undertale Ventures, Inc',
     slug: 'undertale-ventures-inc',
@@ -80,6 +96,8 @@ export default [
   // Pbp
   {
     id: '6',
+    campaign: '0',
+    gm: '0',
     name: 'The Coastal Commission',
     slug: 'cc',
     discordRoleId: '1223108951005073418',
@@ -89,6 +107,8 @@ export default [
   // In-person
   {
     id: '5',
+    campaign: '0',
+    gm: '0',
     // parentParty: 'P',
     name: 'Thoreau Holdings, LLC',
     slug: 'th-llc',
@@ -98,13 +118,15 @@ export default [
   {
     id: '42069',
     campaign: '0',
-    name: 'Old Man Party',
-    slug: 'old-man',
-    player: '0',
+    gm: '0',
+    name: 'The Multiversal Dungeon Society',
+    slug: 'mds',
+    roll20: { id: '16807234' },
   },
   {
     id: '12300',
     campaign: '9',
+    gm: '0',
     player: '300',
     name: 'Buttons',
   },

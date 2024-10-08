@@ -60,7 +60,7 @@ export const TopBarInner = () => {
             src={data?.user?.image}
           />
         )}
-        {data?.user?.name && <p className="p-2">Welcome, {data?.user?.name}!</p>}
+        {/* {data?.user?.name && <p className="p-2">Welcome, {data?.user?.name}!</p>} */}
       </div>
       {/*   | */}
       {/* <a href="/"><button className="p-2 cursor-pointer">Home</button></a> */}
@@ -71,10 +71,10 @@ export const TopBarInner = () => {
         <a href="/social"><button className="p-2 cursor-pointer">Social</button></a>
       } */}
 
-      {isLoggedIn && '|' }
+      {/* {isLoggedIn && '|' } */}
 
       {isLoggedIn && 
-        <a href="/hi"><button className="p-2 cursor-pointer">About</button></a>
+        <a href="/"><button className="p-2 cursor-pointer">Home</button></a>
       }
 
       {isLoggedIn && '|' }

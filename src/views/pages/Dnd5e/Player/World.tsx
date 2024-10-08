@@ -31,16 +31,16 @@ const PageInner = ({ player, campaign, party, character, ...props }: any) => {
           </a>
         </div>
       </div>
-      {character?.dndBeyond?.id && <div>
+      {/* {character?.dndBeyond?.id && <div>
         <iframe style={{
           height: 'calc(100vh - 92px)',
           width: '800px',
         }} src={`https://www.dndbeyond.com/characters/${character?.dndBeyond?.id}`} />
-      </div>}
+      </div>} */}
       <div>
         <iframe style={{
           height: 'calc(100vh - 92px)',
-          width: 'calc(100vw - 800px - 128px)',
+          width: 'calc(100vw - 128px)',
         }} src={`https://worldanvil.com/w/toril22/map/${campaign.worldAnvil.worldMapId}`} />
       </div>
     </div>
