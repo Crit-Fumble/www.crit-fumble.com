@@ -1,5 +1,5 @@
 import { srdHandler as _srdHandler } from "@/services/dnd5eSrd51Api";
-import { fiveEToolsDataHandler as _fiveEToolsDataHandler } from "@/services/fiveETools";
+import { fiveEToolsHandler as _fiveEToolsHandler, fiveEToolsDataHandler as _fiveEToolsDataHandler } from "@/services/fiveETools";
 import { getCharactersByUserId } from "@/services/character";
 import { getPartyById } from "@/services/party";
 import { getUserByDiscordName } from "@/services/user";
@@ -8,6 +8,7 @@ import { redirect } from "next/navigation";
 
 export const srdApiHandler = _srdHandler;
 export const fiveEToolsDataApiHandler = _fiveEToolsDataHandler;
+export const fiveEToolsApiHandler = _fiveEToolsHandler;
 
 export const getCompendiumPageProps = async () => {
   const session = await getServerSession();
