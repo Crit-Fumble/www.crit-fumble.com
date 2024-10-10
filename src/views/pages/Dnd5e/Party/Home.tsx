@@ -4,7 +4,6 @@ import Dnd5ePartyRoster from "@/views/components/blocks/Dnd5ePartyRoster";
 import { SessionProvider, useSession } from "next-auth/react";
 import { useMemo, useState } from "react";
 
-
 const PageInner = ({ ...props }: any) => {
   const session = useSession();
   const { data, status, update } = session;

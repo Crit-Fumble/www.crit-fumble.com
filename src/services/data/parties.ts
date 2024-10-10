@@ -13,7 +13,7 @@ export default [
     discord: {
       roleId: '1270594737211965551',
       voiceChannelId: '1270594998894592000',
-      sideChatThreadId: '1175910620894351462',
+      sideChatThreadId: '1270595656368787456',
     },
   },
   {
@@ -23,7 +23,9 @@ export default [
     slug: 'cragmaw-hunters',
     name: 'Cragmaw Hunters',
     parentParty: '3',
-    // discord: {},
+    discord: {
+      sideChatThreadId: '1276661660031123459',
+    },
   },
   {
     id: '23',
@@ -32,7 +34,9 @@ export default [
     slug: 'neveren-hunters',
     name: 'Neveren Hunters',
     parentParty: '3',
-    // discord: {},
+    discord: {
+      sideChatThreadId: '1276662026973876284',
+    },
   },
   {
     id: '4',
@@ -55,7 +59,9 @@ export default [
     name: 'Blue Lily Alchemy',
     slug: 'blue-lily-alchemy',
     parentParty: '4',
-    // discord: {},
+    discord: {
+      sideChatThreadId: '1208506710206193664',
+    },
   },
   {
     id: '24',
@@ -64,7 +70,9 @@ export default [
     name: 'The Arcane Regiment',
     slug: 'arcane-regiment',
     parentParty: '4',
-    // discord: {},
+    discord: {
+      sideChatThreadId: '1208880481668440124',
+    },
   },
   {
     id: '34',
@@ -72,7 +80,9 @@ export default [
     gm: '0',
     name: 'The Dungeon Asset Procurement Squad',
     slug: 'daps',
-    // discord: {},
+    discord: {
+      sideChatThreadId: '1208444082054111302',
+    },
   },
   {
     id: '44',
@@ -81,7 +91,9 @@ export default [
     parentParty: '4',
     name: 'Looking for Clues Detective Agency',
     slug: 'looking-for-clues',
-    // discord: {},
+    discord: {
+      sideChatThreadId: '1208507508532969482',
+    },
   },
   {
     id: '54',
@@ -90,7 +102,9 @@ export default [
     parentParty: '4',
     name: 'Undertale Ventures, Inc',
     slug: 'undertale-ventures-inc',
-    // discord: {},
+    discord: {
+      sideChatThreadId: '1220862831025590353',
+    },
   },
 
   // Pbp
@@ -101,7 +115,10 @@ export default [
     name: 'The Coastal Commission',
     slug: 'cc',
     discordRoleId: '1223108951005073418',
-    dndBeyond: { id: '3683948' }
+    dndBeyond: { id: '3683948' },
+    discord: {
+      sideChatThreadId: '1210861800476770326',
+    },
   },
 
   // In-person
@@ -113,7 +130,9 @@ export default [
     name: 'Thoreau Holdings, LLC',
     slug: 'th-llc',
     dndBeyond: { id: '4570864' },
-    // discord: {},
+    discord: {
+      sideChatThreadId: '1208143325735948351',
+    },
   },
   {
     id: '42069',
@@ -122,6 +141,28 @@ export default [
     name: 'The Multiversal Dungeon Society',
     slug: 'mds',
     roll20: { id: '16807234' },
+  },
+  {
+    id: '69420',
+    campaign: '0',
+    gm: '0',
+    name: 'The Party',
+    slug: 'the-party',
+    // roll20: { id: '16807234' },
+    discord: {
+      sideChatThreadId: '1089044977008521307',
+    },
+  },
+  {
+    id: '420',
+    campaign: '0',
+    gm: '0',
+    name: 'Ministry of Mask',
+    slug: 'ministry-of-mask',
+    // roll20: { id: '16807234' },
+    discord: {
+      sideChatThreadId: '1208501417933930527',
+    },
   },
   {
     id: '12300',

@@ -12,6 +12,11 @@ export default [
       name: 'Toril CFG-XXII',
       slug: 'toril22',
       worldMapId: '7bf65011-b5ac-4051-bfcf-8bb3c7420173',
+      chronicleId: '',
+      chronicleSlug: 'parties-die-in-the-forgotten-realms-chronicle',
+    },
+    worldAnvilCampaign: {
+      joinLink: 'http://www.worldanvil.com/epic/R3Nwbp06l65VzG58FUKxbxiYssSZNC/join/xZqj-6auN-MxzCEq',
     },
     discord: {
       serverId: '1002008886137589771',
@@ -21,7 +26,6 @@ export default [
       gmRoles: ['1069440294594031676'],
       botRoles: ['1238650809466753086', '1057112560589094996'],
 
-      // categoryId: '1053338890947280945',
       // chatChannelId: '1005144020726587402',
       forumChannelId: '1072401844594286633',
       // compendiumChannelId: '1072767395141267476',
@@ -30,7 +34,6 @@ export default [
       // questsChannelId: '1130215492771123341',
       playByPostChannelId: '1111854956165734471',
       voiceChannelId: '1257731412740669561',
-      // gmVoiceChannelId: '',
     },
   },
   {

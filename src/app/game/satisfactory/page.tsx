@@ -1,6 +1,6 @@
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
-import GamerView from '@/views/pages/Satisfactory/Gamer/Home';
+import SatisfactoryGamerView from '@/views/pages/Satisfactory/Gamer/Home';
 
 const Page = async () => {
   const session = await getServerSession();
@@ -11,7 +11,7 @@ const Page = async () => {
 
   return (
     <div className={"flex flex-col justify-center items-center w-100"}>
-      <GamerView />
+      <SatisfactoryGamerView />
     </div>
   );
 };

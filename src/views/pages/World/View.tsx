@@ -27,7 +27,10 @@ const PageInner = ({ world, ...props }: any) => {
                 <a href={`${block.url}`} target="_blank">{block.title}</a>
                 <div>
                   {/* {yaml.stringify(block?.textualdata)} */}
-                  {JSON.stringify(block?.data, null, 2)}
+                  {/* split textualdata on \\r\\n, then parse bbcode */}
+                  {/* public json at https://www.worldanvil.com/sheet/${block.id}/json */}
+                  {/* split properties on \r\n */}
+                  {/* {JSON.stringify(block?.data, null, 2)} */}
                 </div>
               </div>
             ))}

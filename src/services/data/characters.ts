@@ -19,6 +19,9 @@ export default [
     name: "Crulk",
     slug: "crulk",
     dndBeyond: { id: '133484175' },
+    discord: {
+      characterThreadId: '1280620901582245949',
+    },
     // roll20: { id:'' },
   },
   {
@@ -29,6 +32,9 @@ export default [
     name: "Yojito",
     slug: "yojito",
     dndBeyond: { id: '66206768' },
+    discord: {
+      characterThreadId: '1288303997756637306',
+    },
     // roll20: { id:'' },
   },
   {
@@ -48,6 +54,9 @@ export default [
     party: '23',
     name: "Nissa",
     slug: "nissa",
+    discord: {
+      characterThreadId: '1278203694885900389',
+    },
     // roll20: { id: '' },
   },
   {
@@ -77,6 +86,10 @@ export default [
     campaign: "0",
     name: "Drott",
     slug: "drott",
+    worldAnvil: {
+      sheetId: '1047472',
+      personId: '76c7e00c-1fd6-4440-9d88-f20b98b201ff',
+    }
     // roll20: { id: '' },
   },
   {
@@ -86,6 +99,10 @@ export default [
     party: '24',
     name: "Mr. G",
     slug: "mr-g",
+    worldAnvil: {
+      sheetId: '1047472',
+      personId: '76c7e00c-1fd6-4440-9d88-f20b98b201ff',
+    }
     // roll20: { id: '' },
   },
   {
@@ -96,6 +113,9 @@ export default [
     name: "Estelle",
     slug: "estelle",
     dndBeyond: { id: '114298374' },
+    discord: {
+      characterThreadId: '1207233151856803880',
+    },
   },
   {
     id: "11020",
@@ -113,6 +133,9 @@ export default [
     party: "5",
     name: "Heu",
     dndBeyond: { id: '54557012' },
+    discord: {
+      characterThreadId: '1072734092912754778',
+    },
     // roll20: { id:'' },
   },
   {
@@ -122,6 +145,9 @@ export default [
     party: "5",
     name: "Ashkazi",
     dndBeyond: { id: '15443223' },
+    discord: {
+      characterThreadId: '1072733650174627880',
+    },
     // roll20: { id:'' },
   },
   {

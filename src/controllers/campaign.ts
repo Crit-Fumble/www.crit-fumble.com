@@ -1,6 +1,6 @@
 import { getServerSession } from '@/services/auth';
 import { getCampaign } from '@/services/campaign';
-import { getPlayerByDiscordName } from '@/services/player';
+import { getUserByDiscordName } from '@/services/user';
 import { getWorld } from '@/services/worldAnvil';
 import { redirect } from 'next/navigation';
 
@@ -11,7 +11,7 @@ export const getCampaignPageProps = async (props: any) => {
     redirect("/api/auth/signin");
   }
 
-  const player: any = await getPlayerByDiscordName(session?.user?.name);
+  const player: any = await getUserByDiscordName(session?.user?.name);
   const campaign: any = await getCampaign(props?.campaign);
   const world: any = await getWorld(campaign?.worldAnvil);
 

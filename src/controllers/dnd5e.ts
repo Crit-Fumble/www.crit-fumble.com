@@ -1,7 +1,7 @@
 import { handler as _apiHandler } from "@/services/dnd5eSrd51Api";
-import { getCharactersByPlayerId } from "@/services/character";
+import { getCharactersByUserId } from "@/services/character";
 import { getPartyById } from "@/services/party";
-import { getPlayerByDiscordName } from "@/services/player";
+import { getUserByDiscordName } from "@/services/user";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
@@ -18,8 +18,8 @@ export const getCompendiumPageProps = async () => {
 
   // TODO: verify correct user for character
 
-  const player: any = await getPlayerByDiscordName(user?.name);
-  const rawCharacters = await getCharactersByPlayerId(player.id);
+  const player: any = await getUserByDiscordName(user?.name);
+  const rawCharacters = await getCharactersByUserId(player.id);
 
   const characters: any = await Promise.all(
     rawCharacters?.map(async (character: any) => ({

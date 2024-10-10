@@ -1,7 +1,7 @@
 import { getServerSession } from '@/services/auth';
 import { getCampaignById } from '@/services/campaign';
 import { getPartyBySlug } from '@/services/party';
-import { getPlayerByDiscordName } from '@/services/player';
+import { getUserByDiscordName } from '@/services/user';
 import { getBlockById, getBlockFoldersByWorldId, getBlocksByBlockFolderId, getWorld, getWorldBySlug } from '@/services/worldAnvil';
 import { redirect } from 'next/navigation';
 import yaml from 'yaml';
@@ -48,7 +48,7 @@ export const getWorldViewPageProps = async (props: any) => {
     redirect("/api/auth/signin");
   }
 
-  const player: any = await getPlayerByDiscordName(session?.user?.name);
+  const player: any = await getUserByDiscordName(session?.user?.name);
 
   let worldSlug: any = props?.worldAnvil?.slug;
 
@@ -66,7 +66,12 @@ export const getWorldViewPageProps = async (props: any) => {
   }
 
   if (!worldSlug) {
-    throw new Error('World Cannot be found');
+    console.error('World Cannot be found');
+
+    return {
+      ...props,
+      player,
+    }
   }
 
   try {
@@ -100,7 +105,7 @@ export const getWorldHomePageProps = async (props: any) => {
     redirect("/api/auth/signin");
   }
 
-  const player: any = await getPlayerByDiscordName(session?.user?.name);
+  const player: any = await getUserByDiscordName(session?.user?.name);
   const world: any = await getWorld(props?.worldAnvil);
 
   const blockFolders = await getBlockFoldersByWorldId(world.id);

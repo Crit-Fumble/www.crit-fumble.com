@@ -1,3 +1,5 @@
+import { getServerSession } from "@/controllers/auth";
+import { DND_5E, SATISFACTORY } from "@/views/config";
 import { Metadata } from "next";
 import Image from "next/image";
 
@@ -8,7 +10,9 @@ export const metadata: Metadata = {
   description: "Welcome to Crit Fumble Gaming! We're a VTTRPG group and have players with some of the worst luck and dumbest ideas. We started as an in-person group in the Midwest United States, but have moved our campaigns online and have since grown to include members all over the country. We play a few long-running campaigns, as well as plenty of one-shots and mini-campaigns that only last a few sessions.",
 };
 
-export default function Page({ session } : any) {
+export default async function Page() {
+  const session = await getServerSession();
+  console.log(session);
   // TODO: SEO and things
   
   return (
@@ -29,9 +33,10 @@ export default function Page({ session } : any) {
             Welcome to Crit Fumble Gaming! We&apos;re a VTTRPG group and have players with some of the worst luck and dumbest ideas. We started as an in-person group in the Midwest United States, but have moved our campaigns online and have since grown to include members all over the country. We play a few long-running campaigns, as well as plenty of one-shots and &quot;mini-campaigns&quot; that only last a few sessions.
           </p>
 
-          <div className="w-[100%] flex flex-col gap-2">
-            <a href='/game'>Play Video Games</a>
-            <a href='/play'>Play Tabletop Games</a>
+          <div className="flex flex-col gap-2 justify-center items-center">
+            {!session && <a className={SATISFACTORY.TW_CLASSES.LINK} href='/api/auth/signin'>Log In</a>}
+            {session && <a className={SATISFACTORY.TW_CLASSES.LINK} href='/game'>Play Video Games</a>}
+            {session && <a className={DND_5E.TW_CLASSES.LINK} href='/play'>Play Tabletop Games</a>}
           </div>
         </div>
       </div>

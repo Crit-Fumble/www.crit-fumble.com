@@ -8,6 +8,7 @@ const Page = async ({ params: { worldSlug } }: any) => {
     worldAnvil: { slug: worldSlug },
   });
 
+  // TODO: show all blocks with client-side filtering
   return (<WorldView {...props}/>);
 };
 

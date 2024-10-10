@@ -1,23 +1,23 @@
 
-import { getCharactersByPlayerId } from "@/services/character";
+import { getCharactersByUserId } from "@/services/character";
 import { getPartyById } from "@/services/party";
-import { getPlayerByDiscordName } from "@/services/player";
+import { getUserByDiscordName } from "@/services/user";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
-export const getPlayerPageProps = async () => {
+export const getUserPageProps = async () => {
   const session = await getServerSession();
 
   if (!session) {
     redirect("/api/auth/signin");
   }
 
-  const { user: user } = session;
+  const { user: sessionUser } = session;
 
   // TODO: verify correct user for character
 
-  const player: any = await getPlayerByDiscordName(user?.name);
-  const rawCharacters = await getCharactersByPlayerId(player.id);
+  const user: any = await getUserByDiscordName(sessionUser?.name);
+  const rawCharacters = await getCharactersByUserId(user.id);
 
   const characters: any = await Promise.all(
     rawCharacters?.map(async (character: any) => ({
@@ -28,7 +28,7 @@ export const getPlayerPageProps = async () => {
 
   return {
     session,
-    player,
+    user,
     characters,
   }
 };

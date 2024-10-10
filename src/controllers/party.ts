@@ -2,7 +2,7 @@ import { getServerSession } from '@/services/auth';
 import { getCampaignById } from '@/services/campaign';
 import { getCharactersByPartyIds } from '@/services/character';
 import { getPartyBySlug, getPartiesByParentPartyId, getPartyById } from '@/services/party';
-import { getPlayerByDiscordName } from '@/services/player';
+import { getUserByDiscordName } from '@/services/user';
 import { getWorld, getWorldById } from '@/services/worldAnvil';
 import { redirect } from 'next/navigation';
 
@@ -13,7 +13,7 @@ export const getPartyPageProps = async ({ party: { slug: partySlug }}: any) => {
     redirect("/api/auth/signin");
   }
 
-  const player: any = await getPlayerByDiscordName(session?.user?.name);
+  const player: any = await getUserByDiscordName(session?.user?.name);
   // const characters: any[] = await getCharactersByPlayerId(player.id);
   const party: any = await getPartyBySlug(partySlug);
   const parentParty = await getPartyById(party.parentParty);

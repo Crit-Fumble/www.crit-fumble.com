@@ -1,12 +1,12 @@
 import { getServerSession } from '@/services/auth';
 import { getCampaignById } from '@/services/campaign';
 import { getCharacterBySlug } from '@/services/character';
-import { getPartyBySlug } from '@/services/party';
-import { getPlayerByDiscordName } from '@/services/player';
+import { getPartyById, getPartyBySlug } from '@/services/party';
+import { getUserByDiscordName } from '@/services/user';
 import { getWorld } from '@/services/worldAnvil';
 import { redirect } from 'next/navigation';
 
-export const getCharacterPageProps = async ({ character: { slug: characterSlug }, party: { slug: partySlug }, ...props}: any) => {
+export const getCharacterPageProps = async ({ character: { slug: characterSlug }, party: { slug: partySlug }, ...incProps}: any) => {
   const session = await getServerSession();
 
   if (!session) {
@@ -14,9 +14,9 @@ export const getCharacterPageProps = async ({ character: { slug: characterSlug }
   }
 
   // const user: any = await getUser(props?.user);
-  const player: any = await getPlayerByDiscordName(session?.user?.name);
+  const player: any = await getUserByDiscordName(session?.user?.name);
   const party: any = await getPartyBySlug(partySlug);
-  const parentParty: any = await getPartyBySlug(partySlug?.parentParty);
+  const parentParty: any = await getPartyById(party?.parentParty);
   const character: any = await getCharacterBySlug(characterSlug);
   // TODO: ensure character is in party, otherwise, redirect to correct party and route
 
@@ -29,8 +29,8 @@ export const getCharacterPageProps = async ({ character: { slug: characterSlug }
 
   // const character: any = campaign?.find;
 
-  return {
-    ...props,
+  const outProps = {
+    ...incProps,
     session,
     player,
     campaign,
@@ -39,4 +39,8 @@ export const getCharacterPageProps = async ({ character: { slug: characterSlug }
     character,
     world,
   }
+
+  console.log(outProps);
+
+  return outProps;
 };

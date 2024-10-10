@@ -26,6 +26,10 @@ export default [
       name: 'hobdaytrain',
       displayName: 'Hob Daytrain',
     },
+    steam: {
+      slug: 'hobdaytrain',
+      name: "Hob Daytrain",
+    },
     worldAnvil: {
       name: "Hob Daytrain",
       slug: "hobdaytrain",
@@ -84,6 +88,12 @@ export default [
     id: "10",
     name: "EisenElch",
     slug: "eisenelch",
+    // steam: {
+
+    // },
+    // worldAnvil: {
+
+    // },
     discord: {
       id: "1235921801737928819",
       name: 'eisen_stier',

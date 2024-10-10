@@ -2,6 +2,7 @@
 
 import { SessionProvider, useSession } from "next-auth/react";
 import { useMemo, useState } from "react";
+import { SATISFACTORY } from "../config";
 
 
 const PageInner = ({ user, ...props }: any) => {
@@ -11,7 +12,7 @@ const PageInner = ({ user, ...props }: any) => {
   
   return (
     <div className="flex flex-col gap-2 justify-center items-center">
-      <a href="/game/satisfactory">Play Satisfactory</a>
+      <a className={SATISFACTORY.TW_CLASSES.LINK} href="/game/satisfactory">Play Satisfactory</a>
     </div>
   )
 }

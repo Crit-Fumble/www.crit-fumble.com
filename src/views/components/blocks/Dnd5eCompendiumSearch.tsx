@@ -1,3 +1,4 @@
+import { DND_5E } from "@/views/config";
 import { useRef, useState } from "react";
 
 const Page = () => {
@@ -13,7 +14,7 @@ const Page = () => {
     <div className="input-group pad_top">
       <span className="input-group-addon url">https://www.crit-fumble.com/play/dnd5e/api/</span>
       <input ref={queryRef} id="interactive" type="text" className="form-control" placeholder="spells/acid-arrow/" />
-      <span className="input-group-btn"><button onClick={onSubmit} className="btn btn-primary">
+      <span className={DND_5E.TW_CLASSES.BUTTON}><button onClick={onSubmit} className="btn btn-primary">
         submit
       </button></span>
     </div>

@@ -1,13 +1,12 @@
 "use server";
 
-import { getPlayerPageProps } from "@/controllers/player";
-import { getWorldViewPageProps } from "@/controllers/world";
-import Dnd5ePlayerView from "@/views/pages/Dnd5e/Player/Home";
+import { getUserPageProps } from "@/controllers/user";
+import Dnd5ePlayerHomeView from "@/views/pages/Dnd5e/Player/Home";
 
-const Page = async ({ params: { worldSlug }} : any) => {
-  const props = await getWorldViewPageProps({ worldAnvil: { slug: worldSlug }});
+const Page = async () => {
+  const props = await getUserPageProps();
 
-  return (<Dnd5ePlayerView {...props} />);
+  return (<Dnd5ePlayerHomeView {...props} />);
 };
 
 export default Page;
