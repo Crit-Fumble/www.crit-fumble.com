@@ -1,9 +1,6 @@
-import { NextRequest } from "next/server";
-import { getServerSession } from "./auth";
+const SRD_API_URL = 'https://www.dnd5eapi.co/';
 
-const API_URL = 'https://www.dnd5eapi.co/';
-
-export const handler = async (path: string) => {
+export const srdHandler = async (path: string) => {
 
   // TODO: check cfg data first
 
@@ -11,7 +8,7 @@ export const handler = async (path: string) => {
 
   console.log(apiPath);
 
-  const rawResponse = await fetch(`${API_URL}${apiPath}`);
+  const rawResponse = await fetch(`${SRD_API_URL}${apiPath}`);
 
   const response = (await rawResponse?.json());
 
