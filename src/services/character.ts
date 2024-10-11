@@ -1,4 +1,4 @@
-import data from './data/characters';
+import data from '../data/characters';
 
 export const getCharacter = async ( character: any ) => {
   let result = {};

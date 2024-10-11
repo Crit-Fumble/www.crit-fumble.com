@@ -1,4 +1,4 @@
-import data from './data/campaigns';
+import data from '../data/campaigns';
 
 export const getCampaign = async ( campaign: any ) => {
   let result = {};

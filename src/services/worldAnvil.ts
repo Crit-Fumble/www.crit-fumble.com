@@ -1,5 +1,5 @@
 "use server";
-import campaigns from './data/campaigns';
+import campaigns from '../data/campaigns';
 import { worldAnvil as config} from '@/services/config';
 
 type WorldAnvilId = string;

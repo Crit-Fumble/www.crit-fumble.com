@@ -1,4 +1,4 @@
-import data from './data/users';
+import data from '../data/users';
 
 export const getUser = async ( user: any ) => {
   let result = {};

@@ -1,4 +1,4 @@
-import data from './data/parties';
+import data from '../data/parties';
 
 export const getParty = async ( party: any ) => {
   let result = {};
