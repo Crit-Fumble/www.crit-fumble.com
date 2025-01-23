@@ -6,7 +6,7 @@ import { getUserByDiscordName } from '@/services/UserService';
 import { getWorld } from '@/services/WorldAnvilService';
 import { redirect } from 'next/navigation';
 
-export const getCharacterPageProps = async ({ character: { slug: characterSlug }, party: { slug: partySlug }, ...incProps}: any) => {
+export const getCharacterPageProps = async ({ character: { slug: characterSlug }, ...incProps}: any) => {
   const session = await getServerSession();
 
   if (!session) {
@@ -15,10 +15,10 @@ export const getCharacterPageProps = async ({ character: { slug: characterSlug }
 
   // const user: any = await getUser(props?.user);
   const player: any = await getUserByDiscordName(session?.user?.name);
-  const party: any = await getPartyBySlug(partySlug);
-  const parentParty: any = await getPartyById(party?.parentParty);
   const character: any = await getCharacterBySlug(characterSlug);
-  // TODO: ensure character is in party, otherwise, redirect to correct party and route
+  // TODO: ensure character is in party
+  const party: any = await getPartyById(character?.party);
+  const parentParty: any = await getPartyById(party?.parentParty);
 
   const campaign: any = await getCampaignById(party?.campaign);
   const world: any = await getWorld(campaign?.worldAnvil);

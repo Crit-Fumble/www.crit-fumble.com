@@ -1,6 +1,6 @@
-
-import { DND_5E } from "@/views/config";
-import ButtonBlock from "./Dnd5eLinkButtonBlock";
+"use client";
+import { DEFAULT } from "@/views/config";
+import ButtonBlock from "./LinkButtonBlock";
 
 const Dnd5eCharacterView = ({ player, campaign, party, parentParty, character, world }: any) => {
   const discordServerId = campaign?.discord?.serverId;
@@ -22,7 +22,7 @@ const Dnd5eCharacterView = ({ player, campaign, party, parentParty, character, w
       <div className="flex flex-col gap-2 justify-start text-center">
         {character?.name && <h1>{character.name}</h1>}
         {character?.description && <p>{character.description}</p>}
-        {party?.name && <p><a className={DND_5E.TW_CLASSES.LINK} href={`/play/dnd5e/${party.slug}`}>View {party.name}</a></p>}
+        {party?.name && <p><a className={DEFAULT.TW_CLASSES.LINK} href={`/play/dnd5e/${party.slug}`}>View {party.name}</a></p>}
       </div>
       <div className="flex flex-col gap-2 text-center">
         {roll20Id && <ButtonBlock title={'Roll20 VTT'} target={'vtt'} options={'height=1080, width=1152'} url={roll20VttUrl} />}

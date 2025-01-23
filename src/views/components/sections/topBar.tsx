@@ -73,21 +73,37 @@ export const TopBarInner = () => {
 
       {/* {isLoggedIn && '|' } */}
 
-      {isLoggedIn && 
+      {/* {isLoggedIn && 
         <a href="/"><button className="p-2 cursor-pointer">Home</button></a>
-      }
+      } */}
 
-      {isLoggedIn && '|' }
-
-      {isLoggedIn && 
-        <a href="/game"><button className="p-2 cursor-pointer">Video</button></a>
-      }
-
-      {isLoggedIn && '|' }
+      {/* TODO: let users create characters */}
+      {/* {isLoggedIn && '|' }
 
       {isLoggedIn && 
-        <a href="/play"><button className="p-2 cursor-pointer">Tabletop</button></a>
-      }
+        <a href={`/character`}><button className="p-2 cursor-pointer">Characters</button></a>
+      } */}
+
+      {/* TODO: let users create campaigns */}
+      {/* {isLoggedIn && '|' }
+
+      {isLoggedIn && 
+        <a href={`/campaign`}><button className="p-2 cursor-pointer">Campaigns</button></a>
+      } */}
+
+      {/* TODO: let users create worlds */}
+      {/* {isLoggedIn && '|' }
+
+      {isLoggedIn && 
+        <a href={`/world`}><button className="p-2 cursor-pointer">Worlds</button></a>
+      } */}
+
+
+      {/* {isLoggedIn && '|' }
+
+      {isLoggedIn && 
+        <a href={`/user/${userSlug}`}><button className="p-2 cursor-pointer">Profile</button></a>
+      } */}
 
       {/* {isLoggedIn && '|' } */}
 

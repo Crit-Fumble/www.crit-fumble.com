@@ -1,4 +1,4 @@
-import { getServerSession } from '@/services/auth';
+import { getServerSession } from '@/services/AuthService';
 import { getCampaignById } from '@/services/CampaignService';
 import { getPartyBySlug } from '@/services/PartyService';
 import { getUserByDiscordName } from '@/services/UserService';
