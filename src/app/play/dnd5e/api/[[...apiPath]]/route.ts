@@ -1,4 +1,4 @@
-import { srdApiHandler } from "@/controllers/dnd5e";
+import { srdApiHandler } from "@/controllers/Dnd5eController";
 import { NextRequest, NextResponse } from "next/server";
 
 

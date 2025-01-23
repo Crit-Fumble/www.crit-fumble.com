@@ -26,13 +26,13 @@ export const BottomBarInner = () => {
         <a className="p-2 cursor-pointer" href="https://github.com/Crit-Fumble" target="_blank">
           <Image alt={'Github Logo'} width={24} height={24} src={isDark ? '/img/github-white.svg' : '/img/github.svg'} />
         </a>
-        <a className="p-2 cursor-pointer" href="https://app.roll20.net/users/6244861/crit-fumble-gaming" target="_blank">
+        {/* <a className="p-2 cursor-pointer" href="https://app.roll20.net/users/6244861/crit-fumble-gaming" target="_blank">
           <Image alt={'Roll20 Logo'} width={28} height={28} src={'/img/roll20.png'} />
-        </a>
+        </a> */}
         <a className="p-2 cursor-pointer" href="https://discord.gg/dZzsst6TdG" target="_blank">
           <Image alt={'Discord Logo'} width={28} height={28} src={'/img/discord.svg'} />
         </a>
-        <div className="p-2">© 2024, Crit Fumble Gaming</div>
+        <div className="p-2">© 2025, Crit Fumble Gaming</div>
     </div>);
 };
 

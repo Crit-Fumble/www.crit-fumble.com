@@ -1,6 +1,6 @@
 "use server";
 
-import { getPartyPageProps } from "@/controllers/party";
+import { getPartyPageProps } from "@/controllers/PartyController";
 import Dnd5ePartyView from "@/views/pages/Dnd5e/Party/Home";
 
 const Page = async ({ params: { partySlug } }: any) => {

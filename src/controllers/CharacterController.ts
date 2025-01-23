@@ -1,9 +1,9 @@
-import { getServerSession } from '@/services/auth';
-import { getCampaignById } from '@/services/campaign';
-import { getCharacterBySlug } from '@/services/character';
-import { getPartyById, getPartyBySlug } from '@/services/party';
-import { getUserByDiscordName } from '@/services/user';
-import { getWorld } from '@/services/worldAnvil';
+import { getServerSession } from '@/services/AuthService';
+import { getCampaignById } from '@/services/CampaignService';
+import { getCharacterBySlug } from '@/services/CharacterService';
+import { getPartyById, getPartyBySlug } from '@/services/PartyService';
+import { getUserByDiscordName } from '@/services/UserService';
+import { getWorld } from '@/services/WorldAnvilService';
 import { redirect } from 'next/navigation';
 
 export const getCharacterPageProps = async ({ character: { slug: characterSlug }, party: { slug: partySlug }, ...incProps}: any) => {

@@ -1,4 +1,4 @@
-import { getServerSession } from "@/controllers/auth";
+import { getServerSession } from "@/controllers/UserController";
 import { NextRequest } from "next/server";
 
 export async function GET(request: NextRequest) {

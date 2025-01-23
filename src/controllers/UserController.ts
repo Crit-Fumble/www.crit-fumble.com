@@ -1,15 +1,14 @@
-
-import { getCharactersByUserId } from "@/services/character";
-import { getPartyById } from "@/services/party";
-import { getUserByDiscordName } from "@/services/user";
-import { getServerSession } from "next-auth";
+import { handler as _authHandler, getServerSession as _getServerSession } from '@/services/AuthService'
+import { getCharactersByUserId } from "@/services/CharacterService";
+import { getPartyById } from "@/services/PartyService";
+import { getUserByDiscordName } from "@/services/UserService";
 import { redirect } from "next/navigation";
 
 export const getUserPageProps = async () => {
   const session = await getServerSession();
 
   if (!session) {
-    redirect("/api/auth/signin");
+    redirect("/auth/signin");
   }
 
   const { user: sessionUser } = session;
@@ -32,3 +31,6 @@ export const getUserPageProps = async () => {
     characters,
   }
 };
+
+export const authHandler = _authHandler;
+export const getServerSession = _getServerSession;

@@ -1,8 +1,8 @@
-import { srdHandler as _srdHandler } from "@/services/dnd5eSrd51Api";
-import { fiveEToolsHandler as _fiveEToolsHandler, fiveEToolsDataHandler as _fiveEToolsDataHandler } from "@/services/fiveETools";
-import { getCharactersByUserId } from "@/services/character";
-import { getPartyById } from "@/services/party";
-import { getUserByDiscordName } from "@/services/user";
+import { srdHandler as _srdHandler } from "@/services/Dnd5eSrd51ApiService";
+import { fiveEToolsHandler as _fiveEToolsHandler, fiveEToolsDataHandler as _fiveEToolsDataHandler } from "@/services/FiveEToolsService";
+import { getCharactersByUserId } from "@/services/CharacterService";
+import { getPartyById } from "@/services/PartyService";
+import { getUserByDiscordName } from "@/services/UserService";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 

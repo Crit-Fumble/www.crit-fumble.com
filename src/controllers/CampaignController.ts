@@ -1,7 +1,7 @@
 import { getServerSession } from '@/services/auth';
-import { getCampaign } from '@/services/campaign';
-import { getUserByDiscordName } from '@/services/user';
-import { getWorld } from '@/services/worldAnvil';
+import { getCampaign } from '@/services/CampaignService';
+import { getUserByDiscordName } from '@/services/UserService';
+import { getWorld } from '@/services/WorldAnvilService';
 import { redirect } from 'next/navigation';
 
 export const getCampaignPageProps = async (props: any) => {

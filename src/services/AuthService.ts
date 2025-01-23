@@ -3,7 +3,6 @@
 import NextAuth, { getServerSession as _getServerSession } from "next-auth";
 import DiscordProvider from "next-auth/providers/discord";
 import { discord } from "@/services/config";
-import { handler as _handler } from '@/services/auth';
 
 const config = { 
     providers: [ 

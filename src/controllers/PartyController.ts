@@ -1,9 +1,9 @@
 import { getServerSession } from '@/services/auth';
-import { getCampaignById } from '@/services/campaign';
-import { getCharactersByPartyIds } from '@/services/character';
-import { getPartyBySlug, getPartiesByParentPartyId, getPartyById } from '@/services/party';
-import { getUserByDiscordName } from '@/services/user';
-import { getWorld, getWorldById } from '@/services/worldAnvil';
+import { getCampaignById } from '@/services/CampaignService';
+import { getCharactersByPartyIds } from '@/services/CharacterService';
+import { getPartyBySlug, getPartiesByParentPartyId, getPartyById } from '@/services/PartyService';
+import { getUserByDiscordName } from '@/services/UserService';
+import { getWorld, getWorldById } from '@/services/WorldAnvilService';
 import { redirect } from 'next/navigation';
 
 export const getPartyPageProps = async ({ party: { slug: partySlug }}: any) => {

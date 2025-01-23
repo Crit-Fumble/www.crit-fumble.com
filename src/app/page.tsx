@@ -1,4 +1,4 @@
-import { getServerSession } from "@/controllers/auth";
+import { getServerSession } from "@/controllers/UserController";
 import { DND_5E, SATISFACTORY } from "@/views/config";
 import { Metadata } from "next";
 import Image from "next/image";

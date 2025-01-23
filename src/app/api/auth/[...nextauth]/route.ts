@@ -1,4 +1,4 @@
 import NextAuth from "next-auth";
-import { handler } from "@/controllers/auth";
+import { authHandler } from "@/controllers/UserController";
 
-export { handler as GET, handler as POST }
+export { authHandler as GET, authHandler as POST }

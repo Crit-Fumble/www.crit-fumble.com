@@ -1,7 +1,7 @@
 "use server";
 
-import { getWorldViewPageProps } from "@/controllers/world";
-import { getBlockById } from "@/services/worldAnvil";
+import { getWorldViewPageProps } from "@/controllers/WorldController";
+import { getBlockById } from "@/services/WorldAnvilService";
 import WorldView from "@/views/pages/World/View";
 
 const Page = async ({ params: { worldSlug, blockId } }: any) => {

@@ -1,8 +1,8 @@
 import { getServerSession } from '@/services/auth';
-import { getCampaignById } from '@/services/campaign';
-import { getPartyBySlug } from '@/services/party';
-import { getUserByDiscordName } from '@/services/user';
-import { getBlockById, getBlockFoldersByWorldId, getBlocksByBlockFolderId, getWorld, getWorldBySlug } from '@/services/worldAnvil';
+import { getCampaignById } from '@/services/CampaignService';
+import { getPartyBySlug } from '@/services/PartyService';
+import { getUserByDiscordName } from '@/services/UserService';
+import { getBlockById, getBlockFoldersByWorldId, getBlocksByBlockFolderId, getWorld, getWorldBySlug } from '@/services/WorldAnvilService';
 import { redirect } from 'next/navigation';
 import yaml from 'yaml';
 

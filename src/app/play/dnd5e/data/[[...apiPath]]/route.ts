@@ -1,4 +1,4 @@
-import { fiveEToolsDataApiHandler } from "@/controllers/dnd5e";
+import { fiveEToolsDataApiHandler } from "@/controllers/Dnd5eController";
 import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async (req: NextRequest) => {

@@ -1,6 +1,6 @@
 "use server";
 
-import { getCharacterPageProps } from "@/controllers/character";
+import { getCharacterPageProps } from "@/controllers/CharacterController";
 import Dnd5eTravelView from "@/views/pages/Dnd5e/Player/Travel";
 
 const Page = async ({ params: {partySlug, characterSlug} }: any) => {
