@@ -2,41 +2,74 @@
 
 import { marked } from "marked";
 import { SessionProvider, useSession } from "next-auth/react";
-import { useMemo, useState } from "react";
+import React, { useMemo, useState } from "react";
+import { Card, CardHeader, CardContent } from '@/views/components/blocks/Card';
+import { Dropdown } from "@/views/components/blocks/Dropdown";
 
 
-const PageInner = ({ player, characters, compendium, ...props }: any) => {
-  const session = useSession();
-  const { data, status, update } = session;
-  const isLoading = useMemo(() => status === "loading", [status]);
-
-  return (
-    <div className="flex flex-col justify-items-center items-center">
-      <div 
-        style={{ height: '128px', borderBottom: '1px solid' }} 
-        className="flex flex-row flex-wrap gap-4 justify-items-center items-center text-xs"
-      >
-        {compendium?.['rule-sections']?.results?.map((section: any) => (
-          <a key={section.index} href={`#${section.index}`}>{section.name}</a>
-        ))}
-      </div>
-      <hr />
-      <div style={{ height: 'calc(100vh - 270px)'}} className="flex flex-col justify-items-center items-center gap-4 overflow-y-auto">
-        {compendium?.['rule-sections']?.results?.map((section: any) => (
-          <div key={section.index} >
-            <div 
-              className="border-2 border-slate-100 p-4" 
-              id={section.index} 
-              dangerouslySetInnerHTML={{ __html: marked.parse(section.desc)}} 
-            />
-          </div>
-        ))}
-      </div>
-    </div>
-  )
+interface Dnd5eHomePageInnerProps {
+  player: any;
+  characters: any;
+  compendium: {
+    'rule-sections'?: {
+      results?: Array<{
+        index: string;
+        name: string;
+        desc: string;
+      }>;
+    };
+  };
+  [key: string]: any;
 }
 
-const Page = ({ session, ...props }: any) => {
+const PageInner: React.FC<Dnd5eHomePageInnerProps> = ({ compendium, ...props }) => {
+  const { data, status } = useSession();
+  const isLoading = useMemo(() => status === 'loading', [status]);
+
+  return (
+    <div className="flex flex-row max-h-[calc(100vh-92px)]">
+      <div className="">
+        {/* <CardHeader className="text-center text-2xl font-bold">
+          Compendium Sections
+        </CardHeader> */}
+        <div className="flex flex-wrap gap-2">
+          <h3>D&D5e SRD</h3>
+          <ol>
+          {compendium?.['rule-sections']?.results?.map((section) => (
+            <li>
+              <a
+                key={section.index}
+                href={`#${section.index}`}
+                className="hover:underline"
+              >
+                <em>{section.name}</em>
+              </a>
+            </li>
+          ))}
+          </ol>
+        </div>
+      </div>
+      <div className="flex flex-col items-left">
+        <div className="w-full max-w-4xl overflow-y-auto">
+          {compendium?.['rule-sections']?.results?.map((section) => (
+            <Card id={section.index} key={section.index} className="mb-4">
+              <CardHeader className="text-xl font-semibold">
+                {section.name}
+              </CardHeader>
+              <CardContent
+                className="prose"
+              >
+                <div className="parsed-markdown flex flex-col items-left gap-2" dangerouslySetInnerHTML={{ __html: marked.parse(section.desc) }} />
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+      </div>
+    </div>
+  );
+};
+
+const Dnd5eHomePage = ({ session, ...props }: any) => {
 
   return (
     <SessionProvider session={session}>
@@ -45,4 +78,4 @@ const Page = ({ session, ...props }: any) => {
   );
 };
 
-export default Page;
+export default Dnd5eHomePage;

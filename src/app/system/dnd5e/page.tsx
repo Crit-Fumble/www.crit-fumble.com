@@ -1,12 +1,12 @@
 "use server";
 
-import { getUserPageProps } from "@/controllers/UserController";
-import Dnd5ePlayerHomeView from "@/views/pages/System/Dnd5e/Player/Home";
+import { getCompendiumPageProps } from "@/controllers/Dnd5eController";
+import Dnd5eHomePage from "@/views/pages/System/Dnd5e/Compendium/Home";
 
 const Page = async () => {
-  const props = await getUserPageProps();
+  const props = await getCompendiumPageProps();
 
-  return (<Dnd5ePlayerHomeView {...props} />);
+  return (<Dnd5eHomePage {...props} />);
 };
 
 export default Page;
