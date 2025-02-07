@@ -7,6 +7,7 @@ export default [
     slug: 'pdfr',
     system: 'dnd5e',
     gms: ['0'],
+    active: true,
     worldAnvil: {
       id: '803f16a4-ae62-435c-b24e-b27a71a02d3c',
       name: 'Toril CFG-XXII',
@@ -40,9 +41,4 @@ export default [
       voiceChannelId: '1257731412740669561',
     },
   },
-  {
-    id: '9',
-    name: 'Buttons Beyond the Witchlight',
-    slug: 'bbtw',
-  }
 ]

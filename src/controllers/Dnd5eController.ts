@@ -1,8 +1,8 @@
-import { srdHandler as _srdHandler } from "@/services/Dnd5eSrd51ApiService";
+import { srdHandler as _srdHandler } from "@/services/Dnd5eSrdApiService";
 import { fiveEToolsHandler as _fiveEToolsHandler, fiveEToolsDataHandler as _fiveEToolsDataHandler } from "@/services/FiveEToolsService";
-import { getCharactersByUserId } from "@/services/CharacterService";
+import { getCharactersByPlayerId } from "@/services/CharacterService";
 import { getPartyById } from "@/services/PartyService";
-import { getUserByDiscordName } from "@/services/UserService";
+import { getUserByDiscordId } from "@/services/ProfileService";
 import { getServerSession } from "next-auth";
 import { redirect } from "next/navigation";
 
@@ -13,7 +13,7 @@ export const fiveEToolsApiHandler = _fiveEToolsHandler;
 export const getCompendiumPageProps = async () => {
   const session = await getServerSession();
 
-  if (!session) {
+  if (!session?.user?.id) {
     // TODO: get url for redirect
     redirect(`/api/auth/signin?callbackUrl=${encodeURIComponent(`/system/dnd5e`)}`);
   }
@@ -22,8 +22,8 @@ export const getCompendiumPageProps = async () => {
 
   // TODO: verify correct user for character
 
-  const player: any = await getUserByDiscordName(user?.name);
-  const rawCharacters = await getCharactersByUserId(player.id);
+  const profile: any = await getUserByDiscordId(user?.id);
+  const rawCharacters = await getCharactersByPlayerId(profile.id);
 
   const characters: any = await Promise.all(
     rawCharacters?.map(async (character: any) => ({
@@ -32,37 +32,9 @@ export const getCompendiumPageProps = async () => {
     }))
   );
 
-  const baseCompendium = await srdApiHandler('/play/dnd5e/api/');
-  
-  const compendium: any = {
-    ...baseCompendium,
-    'ability-scores': await srdApiHandler(`/play/dnd5e${baseCompendium?.['ability-scores']}`),
-    'alignments': await srdApiHandler(`/play/dnd5e${baseCompendium?.['alignments']}`),
-    'equipment-categories': await srdApiHandler(`/play/dnd5e${baseCompendium?.['equipment-categories']}`)
-      .then(async res => {
-        const results = await Promise.all(res?.results?.map((section: any) => srdApiHandler(`/play/dnd5e${section?.url}`)));
-
-        res.results = results;
-
-        return res;
-      }),
-    'magic-schools': await srdApiHandler(`/play/dnd5e${baseCompendium?.['magic-schools']}`),
-    'rule-sections': await srdApiHandler(`/play/dnd5e${baseCompendium?.['rule-sections']}`)
-      .then(async res => {
-        const results = await Promise.all(res?.results?.map((section: any) => srdApiHandler(`/play/dnd5e${section?.url}`)));
-
-        res.results = results;
-
-        return res;
-      }),
-    'skills': await srdApiHandler(`/play/dnd5e${baseCompendium?.['skills']}`),
-    'weapon-properties': await srdApiHandler(`/play/dnd5e${baseCompendium?.['weapon-properties']}`),
-  }
-
   return {
     session,
-    player,
+    profile,
     characters,
-    compendium,
   }
 };

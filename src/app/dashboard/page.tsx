@@ -1,8 +1,6 @@
 "use server";
 
 import { getUserDashboardPageProps } from "@/controllers/UserController";
-import { getCharacterBySlug, getCharactersByUserId } from "@/services/CharacterService";
-import { getUserBySlug } from "@/services/UserService";
 import UserDashboard from "@/views/pages/User/UserDashboard";
 
 

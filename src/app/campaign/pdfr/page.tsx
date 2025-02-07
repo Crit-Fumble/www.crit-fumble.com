@@ -3,9 +3,9 @@ import { Card, CardContent, CardHeader } from "@/views/components/blocks/Card";
 import { PartyCard } from "@/views/components/blocks/PartyCard";
 
 const Page = async () => {
-  const props = await getCampaignPageProps({ campaign: { slug: 'pdfr' }});
+  const props = await getCampaignPageProps('pdfr');
 
-  const { characters, parties, player } = props;
+  const { characters, parties, profile } = props;
 
   return (
     <div className="flex flex-row max-h-[calc(100vh-92px)]">
@@ -61,7 +61,7 @@ const Page = async () => {
           <Card id="introduction" className="flex flex-col">
             <CardHeader>Parties Die in the Forgotten Realms</CardHeader>
             <CardContent>
-              <p>Welcome, {props?.player?.name}, to a Forgotten Realms-based D&D5e campaign by Crit-Fumble Gaming!</p>
+              <p>Welcome, {props?.profile?.name}, to a Forgotten Realms-based D&D5e campaign by Crit-Fumble Gaming!</p>
             </CardContent>
           </Card>
           <Card id="campaign-links" className="overflow:hidden">
@@ -92,7 +92,7 @@ const Page = async () => {
               </ul>
               <div className="flex flex-grid gap-2">
                 {parties?.filter((party: any) => (party.campaign === '0' && !party.parentParty && party.active))?.map((party: any) => (
-                  <PartyCard key={party?.id} partyId={party?.id} parties={parties} characters={characters} player={player} className="flex-1"/>
+                  <PartyCard key={party?.id} partyId={party?.id} parties={parties} characters={characters} player={profile} className="flex-1"/>
                 ))}
               </div>
             </CardContent>

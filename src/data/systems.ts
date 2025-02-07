@@ -6,6 +6,7 @@ export default [
     name: 'D&D 5e',
     slug: 'dnd5e',
     description: '',
+    srdApi: 'https://www.dnd5eapi.co/',
   },
   {
     id: '2',

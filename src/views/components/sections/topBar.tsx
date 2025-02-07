@@ -1,34 +1,21 @@
 "use client";
-import { SessionProvider, signIn, signOut, useSession } from "next-auth/react";
-import Image from "next/image";
-import { usePathname } from 'next/navigation'
+// import { usePathname } from 'next/navigation'
 import { useMemo } from "react";
+import useDarkMode from "@/controllers/hooks/useDarkMode";
+import { SessionProvider } from "@/controllers/AuthController";
+import NavigationMenu from "../blocks/NavigationMenu";
 import { Session } from "next-auth";
-import useDarkMode from "@/views/hooks/useDarkMode";
+import { signIn, signOut, useSession } from "next-auth/react";
 
 interface TopBarProps {
   session?: Session | null;
 }
 
-const handleLogout = async (): Promise<void> => {
-  signOut({ callbackUrl: "/" });
-};
-
-const handleLogin = async (): Promise<void> => {
-  signIn('Discord');
-};
-
 // const topBarStyle = (isDark: boolean) => ();
 
 export const TopBarInner = () => {
-  const session = useSession();
-  const { data, status, update } = session;
-  const isLoading = useMemo(() => status === "loading", [status]);
-  const isLoggedIn = useMemo(() => status === "authenticated", [status])
-  const { isDark, toggleDark } = useDarkMode();
-  const pathname = usePathname();
 
-  return !isLoading && (<div
+  return <div
       style={{
         position: 'absolute',
         top: 0,
@@ -36,114 +23,11 @@ export const TopBarInner = () => {
         left: 0, 
         padding: 0,
         margin: 0,
-        height: '48px',
         width: '100%',
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyItems: 'end',
-        backgroundColor: isDark ? '#374151' : '#d1d5db',
       }}
     >
-      <a href="/dashboard"><div style={{
-        display: 'flex',
-        flexDirection: 'row',
-        gap: '8px',
-        alignItems: 'center',
-      }}>
-        {data?.user?.image && (
-          <Image
-            priority
-            alt={`${data?.user?.name}'s avatar`}
-            width={48}
-            height={48}
-            src={data?.user?.image}
-          />
-        )}
-        {/* {data?.user?.name && <p className="p-2">Welcome, {data?.user?.name}!</p>} */}
-      </div></a>
-      <a href="/"><button className="p-2 cursor-pointer">Home</button></a>
-
-      {isLoggedIn && '|' }
-
-      {isLoggedIn && 
-        <a href="/system/dnd5e"><button className="p-2 cursor-pointer">D&D5e Rules</button></a>
-      }
-
-
-      {/* {isLoggedIn && '|' }
-
-      {isLoggedIn && 
-        <a href="/social"><button className="p-2 cursor-pointer">Social</button></a>
-      } */}
-
-      {/* {isLoggedIn && '|' } */}
-
-      {/* {isLoggedIn && 
-        <a href="/"><button className="p-2 cursor-pointer">Home</button></a>
-      } */}
-
-      {/* TODO: let users create characters */}
-      {/* {isLoggedIn && '|' }
-
-      {isLoggedIn && 
-        <a href={`/character`}><button className="p-2 cursor-pointer">Characters</button></a>
-      } */}
-
-      {/* TODO: let users create campaigns */}
-      {/* {isLoggedIn && '|' }
-
-      {isLoggedIn && 
-        <a href={`/campaign`}><button className="p-2 cursor-pointer">Campaigns</button></a>
-      } */}
-
-      {/* TODO: let users create worlds */}
-      {/* {isLoggedIn && '|' }
-
-      {isLoggedIn && 
-        <a href={`/world`}><button className="p-2 cursor-pointer">Worlds</button></a>
-      } */}
-
-
-      {/* {isLoggedIn && '|' }
-
-      {isLoggedIn && 
-        <a href={`/user/${userSlug}`}><button className="p-2 cursor-pointer">Profile</button></a>
-      } */}
-
-      {/* {isLoggedIn && '|' } */}
-
-      {/* {session?.status === "authenticated" && (pathname !== '/dashboard') && (<>
-        <a className="p-2" href="/dashboard">Dashboard</a>
-      </>)} */}
-
-      <div style={{
-        marginLeft: 'auto',
-        display: 'flex',
-        flexDirection: 'row',
-        gap: '8px',
-        alignItems: 'center',
-      }}>
-        <a style={{padding: '2px'}} className="cursor-pointer" onClick={toggleDark}>
-          {isDark ? '🌙' : '☀️'}
-        </a>
-        {session?.status === "authenticated" ? (
-          <button style={{padding: '2px'}}  className="cursor-pointer"
-            onClick={() => {
-              handleLogout();
-            }}
-          >Logout</button>
-        ) : (
-          <button style={{padding: '2px'}} className="cursor-pointer"
-            onClick={() => {
-              handleLogin();
-            }}
-          >Login</button>
-        )}
-      </div>
-
-        
-    </div>);
+      <NavigationMenu />
+    </div>;
 };
 
 export const TopBarSession = ({ session }: TopBarProps) => {

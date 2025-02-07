@@ -1,4 +1,5 @@
 import data from '../data/campaigns';
+import { getCharactersByPlayerId } from './CharacterService';
 
 export const getCampaign = async ( campaign: any ) => {
   let result = {};
@@ -35,4 +36,19 @@ export const getCampaignByName = async ( name: string ) => {
   const response = data.find(campaign => campaign?.name === name);
 
   return response ?? {};
+}
+
+export const getCampaignsByGmId = async ( id: string ) => {
+  if (!id) return [];
+  const response = data.filter(campaign => campaign?.gms?.includes(id));
+
+  return response ?? [];
+}
+export const getCampaignsByPlayerId = async ( id: string ) => {
+  if (!id) return [];
+  const characters = await getCharactersByPlayerId(id);
+  const campaignIds = characters.map(char => char?.campaign);
+  const response = data.filter(campaign => campaignIds?.includes(campaign?.id) || campaign?.gms?.includes(id) );
+
+  return response ?? [];
 }

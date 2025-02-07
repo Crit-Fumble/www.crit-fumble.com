@@ -230,16 +230,4 @@ export default [
     },
     // roll20: { id:'' },
   },
-  {
-    id: "12300",
-    player: "300",
-    campaign: "9",
-    name: "Buttons",
-    // foundryVtt: {
-    //   user: 'Buttons',
-    //   password: '',
-    // },
-    // dndBeyond: { id: '' },
-    // roll20: { id:'' },
-  },
 ];

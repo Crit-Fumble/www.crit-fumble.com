@@ -1,4 +1,5 @@
 import NextAuth from "next-auth"
+import {Auth, User, Profile, Campaign, Character} from './cfg';
 import { DiscordProfile } from "next-auth/providers/discord"
 
 declare module "next-auth" {
@@ -7,12 +8,11 @@ declare module "next-auth" {
    */
 
   interface Session {
-    user: {
-        name: string,
-        image?: string,
-        discord?: DiscordProfile,
-        cfg: CfgProfile,
-    }
-    darkMode: boolean
+    expires: ISODateString;
+    darkMode?: boolean;
+    profile?: Profile;
+    user?: User;
+    campaigns?: Campaigns[];
+    characters?: Character[];
   }
 }

@@ -7,7 +7,7 @@ import { useEffect, useRef } from "react";
 const Page = ({ params: { apiPath }, searchParams }: { params:{ apiPath?: string }, searchParams: { [key: string]: string | string[] | undefined } }) => {
   const iframeRef = useRef(null);
   // const router = useRouter();
-  // const path = apiPath; //?.slice('/play/dnd5e/tools/'.length);
+  // const path = apiPath; //?.slice('/system/dnd5e/tools/'.length);
   // const queryString = ''; //searchParams;
 
   // useEffect(() => {
@@ -18,7 +18,7 @@ const Page = ({ params: { apiPath }, searchParams }: { params:{ apiPath?: string
 
   //   // if (iframeRef?.current?.contentWindow?.location) {
   //   //  // TODO: the thing
-  //   //   router.push(`/play/dnd5e/tools/${iframeRef?.current?.src}`);
+  //   //   router.push(`/system/dnd5e/tools/${iframeRef?.current?.src}`);
   //   // }
   // }, [router, iframeRef.current?.src]);
 

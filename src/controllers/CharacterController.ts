@@ -2,7 +2,7 @@ import { getServerSession } from '@/services/AuthService';
 import { getCampaignById } from '@/services/CampaignService';
 import { getCharacterBySlug } from '@/services/CharacterService';
 import { getPartyById, getPartyBySlug } from '@/services/PartyService';
-import { getUserByDiscordName } from '@/services/UserService';
+import { getUserByDiscordId } from '@/services/ProfileService';
 import { getWorld } from '@/services/WorldAnvilService';
 import { redirect } from 'next/navigation';
 
@@ -12,13 +12,13 @@ export const getCharacterPageProps = async ({ character: { slug: characterSlug }
   }
   const session = await getServerSession();
 
-  if (!session) {
+  if (!session?.user?.id) {
     // TODO: get url for redirect
     redirect(`/api/auth/signin?callbackUrl=${encodeURIComponent(`/character/${characterSlug}`)}`);
   }
 
   // const user: any = await getUser(props?.user);
-  const player: any = await getUserByDiscordName(session?.user?.name);
+  const player: any = await getUserByDiscordId(session.user.id);
   const character: any = await getCharacterBySlug(characterSlug);
   
   // TODO: ensure character is in party

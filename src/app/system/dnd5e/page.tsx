@@ -1,12 +1,15 @@
 "use server";
 
-import { getCompendiumPageProps } from "@/controllers/Dnd5eController";
-import Dnd5eHomePage from "@/views/pages/System/Dnd5e/Compendium/Home";
-
 const Page = async () => {
-  const props = await getCompendiumPageProps();
 
-  return (<Dnd5eHomePage {...props} />);
+  return (<div>
+    {/* TODO: table of Contents here */}
+    <nav>
+      <li className="underline" >
+        <a href="/system/dnd5e/tools">5e Tools</a>
+      </li>
+    </nav>
+  </div>);
 };
 
 export default Page;

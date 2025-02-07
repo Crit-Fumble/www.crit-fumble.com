@@ -1,4 +1,5 @@
 import data from '../data/parties';
+import { getCharactersByPlayerId } from './CharacterService';
 
 export const getParty = async ( party: any ) => {
   let result = {};
@@ -50,4 +51,13 @@ export const getPartiesByParentPartyId = async ( parentParty: string ) => {
   const response = data.filter(party => party?.parentParty === parentParty);
 
   return response ?? {};
+}
+
+export const getPartiesByPlayerId = async ( playerId: string ) => {
+  if (!playerId) return [];
+  const characters = await getCharactersByPlayerId(playerId);
+  const partyIds = characters.map(char => char?.party);
+  const response = data.filter(party => partyIds.includes(party?.id));
+
+  return response ?? [];
 }

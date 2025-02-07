@@ -1,7 +1,7 @@
 import { getServerSession } from '@/services/AuthService';
 import { getCampaignById } from '@/services/CampaignService';
 import { getPartyBySlug } from '@/services/PartyService';
-import { getUserByDiscordName } from '@/services/UserService';
+import { getUserByDiscordId } from '@/services/ProfileService';
 import { getBlockById, getBlockFoldersByWorldId, getBlocksByBlockFolderId, getWorld, getWorldBySlug } from '@/services/WorldAnvilService';
 import { redirect } from 'next/navigation';
 import yaml from 'yaml';
@@ -9,12 +9,12 @@ import yaml from 'yaml';
 export const getWorldPageProps = async (props: any) => {
   const session = await getServerSession();
 
-  if (!session) {
+  if (!session?.user?.id) {
     // TODO: get url for redirect
     redirect("/api/auth/signin");
   }
 
-  const player: any = await getUserByDiscordName(session?.user?.name);
+  const player: any = await getUserByDiscordId(session.user.id);
   const world: any = await getWorld(props?.world);
 
   return {
@@ -62,11 +62,11 @@ const mapGetBlockEntities = async (blockFolder: any) => {
 export const getWorldViewPageProps = async (props: any) => {
   const session = await getServerSession();
 
-  if (!session) {
+  if (!session?.user?.id) {
     redirect("/api/auth/signin");
   }
 
-  const player: any = await getUserByDiscordName(session?.user?.name);
+  const player: any = await getUserByDiscordId(session.user.id);
 
   let worldSlug: any = props?.worldAnvil?.slug;
 
@@ -119,11 +119,11 @@ export const getWorldViewPageProps = async (props: any) => {
 export const getWorldHomePageProps = async (props: any) => {
   const session = await getServerSession();
 
-  if (!session) {
+  if (!session?.user?.id) {
     redirect("/api/auth/signin");
   }
 
-  const player: any = await getUserByDiscordName(session?.user?.name);
+  const player: any = await getUserByDiscordId(session.user.id);
   const world: any = await getWorld(props?.worldAnvil);
 
   const blockFolders = await getBlockFoldersByWorldId(world.id);

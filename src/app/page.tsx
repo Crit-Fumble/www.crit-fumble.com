@@ -35,8 +35,6 @@ export default async function Page() {
 
               <div className="flex flex-col gap-2 justify-center items-center">
                 {!session && <a className={DEFAULT.TW_CLASSES.LINK} href='/api/auth/signin'>Log In</a>}
-                {session && <a className={DEFAULT.TW_CLASSES.LINK} href='/dashboard'>User Dashboard</a>}
-                {session && <a className={DEFAULT.TW_CLASSES.LINK} href='/system/dnd5e'>D&D5e Rules Reference</a>}
               </div>
             </CardContent>
           </Card>

@@ -29,9 +29,7 @@ export const getCharacterById = async ( id: string ) => {
 
   return response ?? {};
 }
-export const getCharactersByUserId = async ( userId: string ) => {
-  if (!userId) return [];
-
+export const getCharactersByPlayerId = async ( userId: string ) => {
   const response = data.filter(character => character?.player === userId);
 
   return response ?? [];
