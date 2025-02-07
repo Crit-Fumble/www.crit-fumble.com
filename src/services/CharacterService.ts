@@ -37,6 +37,14 @@ export const getCharactersByUserId = async ( userId: string ) => {
   return response ?? [];
 }
 
+export const getCharactersByCampaignId = async ( campaignId: string ) => {
+  if (!campaignId) return [];
+
+  const response = data.filter(character => character?.campaign === campaignId);
+
+  return response ?? [];
+}
+
 export const getCharactersByPartyIds = async ( partyIds: string[] ) => {
   if (!partyIds || !partyIds?.length) return [];
 

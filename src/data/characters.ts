@@ -61,7 +61,7 @@ export default [
   },
   {
     id: "10040",
-    player: "30",
+    player: "40",
     campaign: "0",
     party: '3',
     name: "Nissa",
@@ -103,7 +103,7 @@ export default [
       password: '',
     },
     discord: {
-      characterThreadId: '',
+      characterThreadId: '1336486959459078316',
     },
     // roll20: { id: '' },
   },

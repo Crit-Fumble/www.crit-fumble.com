@@ -1,7 +1,7 @@
 
 // eslint-disable-next-line import/no-anonymous-default-export
 export default [
-  // Live
+  // Live Tuesdays
   {
     id: '3',
     campaign: '0',
@@ -16,6 +16,8 @@ export default [
       sideChatThreadId: '1270595656368787456',
     },
   },
+
+  // Live - TPKs
   {
     id: '4',
     campaign: '0',
