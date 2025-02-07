@@ -19,7 +19,23 @@ const Page = async () => {
               href={`#introduction`}
               className="hover:underline"
             >
-              <em>Introduction</em>
+              <em>Welcome!</em>
+            </a>
+          </li>
+          <li >
+            <a
+              href={`#campaign-links`}
+              className="hover:underline"
+            >
+              <em>Campaign Links</em>
+            </a>
+          </li>
+          <li >
+            <a
+              href={`#overview`}
+              className="hover:underline"
+            >
+              <em>Overview</em>
             </a>
           </li>
           <li >
@@ -32,10 +48,10 @@ const Page = async () => {
           </li>
           <li >
             <a
-              href={`#campaign-links`}
+              href={`#roll20-performance`}
               className="hover:underline"
             >
-              <em>Campaign Links</em>
+              <em>Roll20 Performance</em>
             </a>
           </li>
         </ol>
@@ -46,6 +62,50 @@ const Page = async () => {
             <CardHeader>Parties Die in the Forgotten Realms</CardHeader>
             <CardContent>
               <p>Welcome, {props?.player?.name}, to a Forgotten Realms-based D&D5e campaign by Crit-Fumble Gaming!</p>
+            </CardContent>
+          </Card>
+          <Card id="campaign-links" className="overflow:hidden">
+            <CardHeader>Campaign Links</CardHeader>
+            <CardContent>
+              <ul className="underline">
+                <li>
+                  <a href="https://discord.com/channels/1002008886137589771/1175910585020448768" target="_blank">Discord Voice Chat</a>
+                </li>
+                <li>
+                  <a href="https://discord.com/channels/1002008886137589771/1305943118796947528" target="_blank">Discord Campaign Chat Thread</a>
+                </li>
+                <li>
+                  <a href="https://discord.com/channels/1002008886137589771/1072401844594286633" target="_blank">Discord Campaign Logs Forum</a>
+                </li>
+                <li>
+                  <a href="/campaign/pdfr/map" target="_blank">View World Map <small>(House Rule: 6 mile hexes)</small></a>
+                </li>
+                <li>
+                  <a href="https://drive.google.com/file/d/0B8XAiXpOfz9cMWt1RTBicmpmUDg/view?resourcekey=0-ceHUken0_UhQ3Apa6g4SJA" target="_blank">Sane Magical Item Prices</a>
+                </li>
+                <li>
+                  <a href="https://drive.google.com/file/d/0B8XAiXpOfz9cMWt1RTBicmpmUDg/view?resourcekey=0-ceHUken0_UhQ3Apa6g4SJA" target="_blank">Sane Magical Item Prices</a>
+                </li>
+                <li>
+                  <a href="https://forgottenrealms.fandom.com/wiki" target="_blank">Forgotten Realms Fandom Wiki</a>
+                </li>
+              </ul>
+              <div className="flex flex-grid gap-2">
+                {parties?.filter((party: any) => (party.campaign === '0' && !party.parentParty && party.active))?.map((party: any) => (
+                  <PartyCard partyId={party?.id} parties={parties} characters={characters} player={player} className="flex-1"/>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+          <Card id="overview">
+            <CardHeader>Overview</CardHeader>
+            <CardContent>
+              <p>
+                We'll start new players at <strong>level 15</strong> for this campaign. You may respec a character from a previous game, or build a new character per the rules in "Character Creation" (see <a className="underline" href="https://discord.com/channels/1002008886137589771/1217970853644599357" target="_blank">https://discord.com/channels/1002008886137589771/1217970853644599357</a>). This is 100% your choice. During Session Zero, we'll discuss expectations, lines & veils, general safety, feature & spell mechanics, and more. We'll set everything up in the VTT during Session Zero as well. 
+              </p>
+              <p>
+                In this campaign, you can go anywhere on the Toril CFG-XXII World Map (also in this Player's Guide) at any time. I'll use a combination of source books and the Forgotten Realms Fandom Wiki for content. That said, I'll expect to know your party's travel plans a session or two in advance so I can prepare a proper session with side quests, NPCs, and encounters.
+              </p>
             </CardContent>
           </Card>
           <Card id="code-of-conduct">
@@ -88,40 +148,26 @@ const Page = async () => {
               </ol>
             </CardContent>
           </Card>
-          <Card id="campaign-links" className="overflow:hidden">
-            <CardHeader>Campaign Links</CardHeader>
-            <CardContent>
-              <ul className="underline">
-                <li>
-                  <a href="https://discord.com/channels/1002008886137589771/1175910585020448768" target="_blank">Discord Voice Chat</a>
-                </li>
-                <li>
-                  <a href="https://discord.com/channels/1002008886137589771/1305943118796947528" target="_blank">Discord Campaign Chat Thread</a>
-                </li>
-                <li>
-                  <a href="https://discord.com/channels/1002008886137589771/1072401844594286633" target="_blank">Discord Campaign Logs Forum</a>
-                </li>
-                <li>
-                  <a href="/campaign/pdfr/map" target="_blank">View World Map <small>(House Rule: 6 mile hexes)</small></a>
-                </li>
-                <li>
-                  <a href="https://drive.google.com/file/d/0B8XAiXpOfz9cMWt1RTBicmpmUDg/view?resourcekey=0-ceHUken0_UhQ3Apa6g4SJA" target="_blank">Sane Magical Item Prices</a>
-                </li>
-                <li>
-                  <a href="https://drive.google.com/file/d/0B8XAiXpOfz9cMWt1RTBicmpmUDg/view?resourcekey=0-ceHUken0_UhQ3Apa6g4SJA" target="_blank">Sane Magical Item Prices</a>
-                </li>
-                <li>
-                  <a href="https://forgottenrealms.fandom.com/wiki" target="_blank">Forgotten Realms Fandom Wiki</a>
-                </li>
-              </ul>
+          <Card id="roll20-performance">
+            <CardHeader>Roll20 Performance</CardHeader>
+            <CardContent className="flex flex-col gap-2">
+              <p>
+                If you do not meet the following requirements, then expect to have frequent problems during gameplay. It would be a good idea to select a proxy player with a beefier computer to control your token and stream into Discord if you are having issues running the VTT. If frustrations from these problems become disruptive to the rest of the group, you will be asked to log off or mute. Mobile play is not recommended.
+              </p><p>
+                **Minimum System Requirements**
+              </p><ul>
+                <li>Windows 10, Mac OS Mojave or newer, or Linux operating system with support for 64 bit architecture.</li>
+                <li>A GPU with Hardware Acceleration and full WebGL support</li>
+                <li>8GB of RAM (16GB recommended)</li>
+                <li>A display resolution of at least 1080p (1440p recommended)</li>
+                <li>Chrome or Firefox browser with the most recent stable release.</li>
+                <li>Discord Client</li>
+                <li>A consistent Broadband Internet connection</li>
+              </ul><p>
+                If the VTT starts to have issues due to the large amount of content in this campaign, I may move some handouts out of the Roll20 journal and into some other platform or document. I will not be using Discord as a quest log or otherwise during this campaign, but you can feel free to post in this campaign's forum channel if you'd like. I'll try to keep the battle maps to a manageable size, but a few of them are quite large. If you are having issues, we can switch from dynamic lighting to fog-of-war, another player can stream into Discord, or I can send you a screenshot on your turn.
+              </p>
             </CardContent>
           </Card>
-
-          <div className="flex flex-grid gap-2">
-            {parties?.filter((party: any) => (party.campaign === '0' && !party.parentParty && party.active))?.map((party: any) => (
-              <PartyCard partyId={party?.id} parties={parties} characters={characters} player={player} className="flex-1"/>
-            ))}
-          </div>
         </div>
       </div>
     </div>
