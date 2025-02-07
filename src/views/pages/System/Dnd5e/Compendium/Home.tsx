@@ -32,7 +32,7 @@ const PageInner: React.FC<Dnd5eHomePageInnerProps> = ({ compendium, ...props }) 
         <h3>D&D5e SRD</h3>
         <ol>
         {compendium?.['rule-sections']?.results?.map((section) => (
-          <li>
+          <li key={section.index}>
             <a
               key={section.index}
               href={`#${section.index}`}
