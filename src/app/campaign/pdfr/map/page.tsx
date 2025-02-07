@@ -4,7 +4,7 @@ import { getCompendiumPageProps } from "@/controllers/Dnd5eController";
 import Dnd5eHomePage from "@/views/pages/System/Dnd5e/Compendium/Home";
 import { useRef } from "react";
 
-const Page = async () => {
+const Page = () => {
   const iframeRef = useRef(null);
 
   return (<iframe style={{
