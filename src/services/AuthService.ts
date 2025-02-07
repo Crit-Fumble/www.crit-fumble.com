@@ -65,7 +65,7 @@ const config = {
         token.discordProfile = (profile as DiscordProfile);
       }
 
-      return Promise.resolve(token);
+      return token;
     },
   },
 };
