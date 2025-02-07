@@ -28,29 +28,24 @@ const PageInner: React.FC<Dnd5eHomePageInnerProps> = ({ compendium, ...props }) 
 
   return (
     <div className="flex flex-row max-h-[calc(100vh-92px)]">
-      <div className="">
-        {/* <CardHeader className="text-center text-2xl font-bold">
-          Compendium Sections
-        </CardHeader> */}
-        <div className="flex flex-wrap gap-2">
-          <h3>D&D5e SRD</h3>
-          <ol>
-          {compendium?.['rule-sections']?.results?.map((section) => (
-            <li>
-              <a
-                key={section.index}
-                href={`#${section.index}`}
-                className="hover:underline"
-              >
-                <em>{section.name}</em>
-              </a>
-            </li>
-          ))}
-          </ol>
-        </div>
+      <div className="flex flex-col gap-2">
+        <h3>D&D5e SRD</h3>
+        <ol>
+        {compendium?.['rule-sections']?.results?.map((section) => (
+          <li>
+            <a
+              key={section.index}
+              href={`#${section.index}`}
+              className="hover:underline"
+            >
+              <em>{section.name}</em>
+            </a>
+          </li>
+        ))}
+        </ol>
       </div>
-      <div className="flex flex-col items-left">
-        <div className="w-full max-w-4xl overflow-y-auto">
+      <div className="w-full flex flex-col items-left overflow-y-auto">
+        <div className="max-w-6xl">
           {compendium?.['rule-sections']?.results?.map((section) => (
             <Card id={section.index} key={section.index} className="mb-4">
               <CardHeader className="text-xl font-semibold">
