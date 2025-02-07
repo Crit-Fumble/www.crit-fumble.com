@@ -81,7 +81,7 @@ const Page = async () => {
                   <a href="/campaign/pdfr/map" target="_blank">View World Map <small>(House Rule: 6 mile hexes)</small></a>
                 </li>
                 <li>
-                  <a href="https://drive.google.com/file/d/0B8XAiXpOfz9cMWt1RTBicmpmUDg/view?resourcekey=0-ceHUken0_UhQ3Apa6g4SJA" target="_blank">Sane Magical Item Prices</a>
+                  <a href="https://2014.5e.tools" target="_blank">(2014) 5e.tools</a>
                 </li>
                 <li>
                   <a href="https://drive.google.com/file/d/0B8XAiXpOfz9cMWt1RTBicmpmUDg/view?resourcekey=0-ceHUken0_UhQ3Apa6g4SJA" target="_blank">Sane Magical Item Prices</a>
