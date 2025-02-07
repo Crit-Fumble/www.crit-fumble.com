@@ -13,6 +13,7 @@ const UserProfileInner = ({ viewedUser, characters, ...props }: any) => {
   return (
     <div className="flex flex-col align-middle items-center gap-2">
       {viewedUser?.name}
+      <p>This User Profile is a placeholder. We will add more here soon.</p>
       {/* <div className="flex flex-grid align-middle items-center g-2"> */}
         <div className="flex flex-col align-middle items-center">
           <p>Characters</p>

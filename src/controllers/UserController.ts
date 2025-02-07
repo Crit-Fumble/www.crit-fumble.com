@@ -12,10 +12,7 @@ export const getUserProfilePageProps = async (userSlug: string) => {
     redirect("/auth/signin");
   }
 
-  const { user: sessionUser } = session;
-
-  // TODO: verify correct user for character
-
+  const sessionUser: any = await getUserByDiscordName(session?.user?.name);
   const viewedUser: any = await getUserBySlug(userSlug);
   // const user: any = await getUserByDiscordName(sessionUser?.name);
   const rawCharacters = await getCharactersByUserId(viewedUser.id);
@@ -43,21 +40,22 @@ export const getUserDashboardPageProps = async () => {
     redirect("/auth/signin");
   }
 
-  const { user: sessionUser } = session;
-  const user: any = await getUserByDiscordName(sessionUser?.name);
-  const rawCharacters = await getCharactersByUserId(user.id);
+  const sessionUser: any = await getUserByDiscordName(session?.user?.name);
+  const viewedUser: any = sessionUser;
+  const rawCharacters = await getCharactersByUserId(sessionUser.id);
 
   const characters: any = await Promise.all(
     rawCharacters?.map(async (character: any) => ({
       ...character,
-      party: await getPartyById(character?.party),
-      league: (character?.party?.parentParty && (await getPartyById(character?.party?.parentParty))) ?? undefined,
+      // party: await getPartyById(character?.party),
+      // league: (character?.party?.parentParty && (await getPartyById(character?.party?.parentParty))) ?? undefined,
     }))
   );
 
   return {
     session,
-    user,
+    viewedUser,
+    sessionUser,
     characters,
   }
 };

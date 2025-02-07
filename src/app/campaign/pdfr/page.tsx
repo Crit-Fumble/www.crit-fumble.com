@@ -11,7 +11,7 @@ const Page = async () => {
       <Card>
         <CardHeader>Parties Die in the Forgotten Realms</CardHeader>
         <CardContent>
-          <p>Welcome, {props?.player?.name}, to a Forgotten Realms-based campaign by Crit-Fumble Gaming!</p>
+          <p>Welcome, {props?.player?.name}, to a Forgotten Realms-based D&D5e campaign by Crit-Fumble Gaming!</p>
         </CardContent>
       </Card>
       <Card>

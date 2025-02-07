@@ -67,12 +67,6 @@ export const TopBarInner = () => {
       {isLoggedIn && '|' }
 
       {isLoggedIn && 
-        <a href="/campaign/pdfr"><button className="p-2 cursor-pointer">PDitFR</button></a>
-      }
-      
-      {isLoggedIn && '|' }
-
-      {isLoggedIn && 
         <a href="/system/dnd5e"><button className="p-2 cursor-pointer">D&D5e Rules</button></a>
       }
 

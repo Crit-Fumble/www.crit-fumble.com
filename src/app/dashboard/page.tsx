@@ -7,9 +7,9 @@ import UserDashboard from "@/views/pages/User/UserDashboard";
 
 
 const Page = async () => {
-  const { session, user, characters } = await getUserDashboardPageProps();
+  const { session, viewedUser, characters } = await getUserDashboardPageProps();
 
-  return (<UserDashboard session={session} user={session?.user} characters={characters}/>);
+  return (<UserDashboard session={session} viewedUser={viewedUser} characters={characters}/>);
 };
 
 export default Page;
