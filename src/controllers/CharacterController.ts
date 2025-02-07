@@ -7,10 +7,14 @@ import { getWorld } from '@/services/WorldAnvilService';
 import { redirect } from 'next/navigation';
 
 export const getCharacterPageProps = async ({ character: { slug: characterSlug }, ...incProps}: any) => {
+  if (!characterSlug) {
+    redirect("/");
+  }
   const session = await getServerSession();
 
   if (!session) {
-    redirect("/api/auth/signin");
+    // TODO: get url for redirect
+    redirect(`/api/auth/signin?redirect_uri=${encodeURIComponent(`/character/${characterSlug}`)}`);
   }
 
   // const user: any = await getUser(props?.user);
@@ -39,8 +43,6 @@ export const getCharacterPageProps = async ({ character: { slug: characterSlug }
     character,
     world,
   }
-
-  console.log(outProps);
 
   return outProps;
 };

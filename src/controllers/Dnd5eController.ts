@@ -14,7 +14,8 @@ export const getCompendiumPageProps = async () => {
   const session = await getServerSession();
 
   if (!session) {
-    redirect("/api/auth/signin");
+    // TODO: get url for redirect
+    redirect(`/api/auth/signin?redirect_uri=${encodeURIComponent(`/system/dnd5e`)}`);
   }
 
   const { user: user } = session;
@@ -57,8 +58,6 @@ export const getCompendiumPageProps = async () => {
     'skills': await srdApiHandler(`/play/dnd5e${baseCompendium?.['skills']}`),
     'weapon-properties': await srdApiHandler(`/play/dnd5e${baseCompendium?.['weapon-properties']}`),
   }
-
-  console.log(compendium);
 
   return {
     session,

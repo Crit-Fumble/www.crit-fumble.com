@@ -6,6 +6,24 @@ import { getBlockById, getBlockFoldersByWorldId, getBlocksByBlockFolderId, getWo
 import { redirect } from 'next/navigation';
 import yaml from 'yaml';
 
+export const getWorldPageProps = async (props: any) => {
+  const session = await getServerSession();
+
+  if (!session) {
+    // TODO: get url for redirect
+    redirect("/api/auth/signin");
+  }
+
+  const player: any = await getUserByDiscordName(session?.user?.name);
+  const world: any = await getWorld(props?.world);
+
+  return {
+    ...props,
+    player,
+    world,
+  }
+};
+
 const mapGetBlocksById = async (block: any) => {
   try {
     console.log(block);

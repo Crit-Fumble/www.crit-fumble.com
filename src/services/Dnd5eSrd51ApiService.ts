@@ -6,8 +6,6 @@ export const srdHandler = async (path: string) => {
 
   const apiPath = path.slice('/play/dnd5e/'.length);
 
-  console.log(apiPath);
-
   const rawResponse = await fetch(`${SRD_API_URL}${apiPath}`);
 
   const response = (await rawResponse?.json());

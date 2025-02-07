@@ -29,7 +29,9 @@ const PageInner: React.FC<Dnd5eHomePageInnerProps> = ({ compendium, ...props }) 
   return (
     <div className="flex flex-row max-h-[calc(100vh-92px)]">
       <div className="flex flex-col gap-2">
-        <h3>D&D5e SRD</h3>
+        <div>
+          <h3>D&D5e SRD</h3>
+        </div>
         <ol>
         {compendium?.['rule-sections']?.results?.map((section) => (
           <li key={section.index}>
@@ -43,6 +45,7 @@ const PageInner: React.FC<Dnd5eHomePageInnerProps> = ({ compendium, ...props }) 
           </li>
         ))}
         </ol>
+        <small><em>powered by <a className="underline"href="https://www.dnd5eapi.co/" target="_blank">dnd5eapi.co</a></em></small>
       </div>
       <div className="w-full flex flex-col items-left overflow-y-auto">
         <div className="max-w-6xl">

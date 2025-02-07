@@ -5,12 +5,12 @@ import DiscordProvider from "next-auth/providers/discord";
 import { discord } from "@/services/config";
 
 const config = { 
-    providers: [ 
-        DiscordProvider({
-          clientId: discord.authId,
-          clientSecret: discord.authSecret,
-        }),
-    ],
+  providers: [ 
+      DiscordProvider({
+        clientId: discord.authId,
+        clientSecret: discord.authSecret,
+      }),
+  ],
   callbacks: {
     session({ session, token, user } : any) {
       return Promise.resolve(session); // The return type will match the one returned in `useSession()`

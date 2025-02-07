@@ -1,20 +1,23 @@
-"use client";
-
+import { getCampaignPageProps } from "@/controllers/CampaignController";
+import { getServerSession } from "@/services/AuthService";
 import { Card, CardContent, CardHeader } from "@/views/components/blocks/Card";
 
-const Page = () => {
+const Page = async () => {
+  const props = await getCampaignPageProps({ campaign: { slug: 'pdfr' }});
+
+  console.log(props?.player);
 
   return (<div className="flex flex-col gap-4">
       <Card>
         <CardHeader>Parties Die in the Forgotten Realms</CardHeader>
         <CardContent>
-          <p>A Forgotten Realms-based campaign by Crit-Fumble Gaming.</p>
+          <p>Welcome, {props?.player?.name}, to a Forgotten Realms-based campaign by Crit-Fumble Gaming!</p>
         </CardContent>
       </Card>
       <Card>
         <CardHeader>Campaign Links</CardHeader>
         <CardContent>
-          <ul>
+          <ul className="underline">
             <li>
               <a href="https://discord.com/channels/1002008886137589771/1175910585020448768" target="_blank">Discord Voice Chat</a>
             </li>

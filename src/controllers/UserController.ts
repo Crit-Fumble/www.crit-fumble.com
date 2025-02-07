@@ -8,6 +8,7 @@ export const getUserPageProps = async () => {
   const session = await getServerSession();
 
   if (!session) {
+    // TODO: get url for redirect
     redirect("/auth/signin");
   }
 
