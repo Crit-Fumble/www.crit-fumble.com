@@ -25,7 +25,7 @@ const Page = ({ params: { apiPath }, searchParams }: { params:{ apiPath?: string
   return (<iframe style={{
     width: '100vw',
     height: 'calc(100vh - 92px)',
-  }} ref={iframeRef} src={`https://2014.5e.tools/`} />);
+  }} ref={iframeRef} src={`https://forgottenrealms.fandom.com/wiki/`} />);
 };
 
 export default Page;

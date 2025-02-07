@@ -83,7 +83,7 @@ export default [
     name: 'The Dungeon Asset Procurement Squad',
     slug: 'daps',
     parentParty: '4',
-    active: true,
+    active: false,
     discord: {
       sideChatThreadId: '1208444082054111302',
     },
