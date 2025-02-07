@@ -19,7 +19,6 @@ const config = {
   callbacks: {
     async session({ session, token } : any) {
       // The return type will match the one returned in `useSession()`
-      // add profile data here
       session.user = {
         ...session.user,
         id: token?.providerAccountId,
@@ -33,7 +32,7 @@ const config = {
         // console.log(`session 1`, session);
 
         if (!`${session?.profile?.id}`) {
-          return Promise.resolve(session);
+          return session;
         }
       }
 
@@ -42,16 +41,16 @@ const config = {
         session.parties = await getPartiesByPlayerId(session.profile?.id);
         session.campaigns = await getCampaignsByPlayerId(session.profile?.id);
         // console.log(`session 2`, session);
-        return Promise.resolve(session);
+        return session;
       }
 
       // TODO: get Profile
       // session.profile = 
 
-      return Promise.resolve(session);
+      return session;
     },
     jwt({ token, profile, account, trigger, session } : any) {
-      if (trigger === "update" && session?.name) {
+      if (session?.name) {
         token.providerUserName = session?.name
         token.providerImage = session?.image;
       }
