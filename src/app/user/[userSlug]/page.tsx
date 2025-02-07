@@ -1,15 +1,15 @@
 "use server";
 
+import { getUserProfilePageProps } from "@/controllers/UserController";
 import { getCharacterBySlug, getCharactersByUserId } from "@/services/CharacterService";
 import { getUserBySlug } from "@/services/UserService";
-import UserDashboard from "@/views/pages/User/UserDashboard";
+import UserProfile from "@/views/pages/User/UserProfile";
 
 
 const Page = async ({ params: { userSlug } }: any) => {
-  const user: any = await getUserBySlug(userSlug);
-  const characters = await getCharactersByUserId(user.id);
+  const { session, viewedUser, characters } = await getUserProfilePageProps(userSlug);
 
-  return (<UserDashboard user={user} characters={characters}/>);
+  return (<UserProfile session={session} viewedUser={viewedUser} characters={characters}/>);
 };
 
 export default Page;

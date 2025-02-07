@@ -20,8 +20,23 @@ export const getCampaignPageProps = async (props: { campaign: { slug: string }})
 
   const player: any = await getUserByDiscordName(session?.user?.name);
   const campaign: any = await getCampaignBySlug(campaignSlug);
-  const characters: any[] = await getCharactersByCampaignId(campaign.id);
-  const parties: any[] = await getPartiesByCampaignId(campaign.id);
+  const characters: any = await getCharactersByCampaignId(campaign.id);
+
+  if (!player) {
+    // TODO: some screen or endpoint that lets them join CFG; I really need a DB
+    redirect(`/`);
+  }
+  if (!characters?.find?.((character: any) => character.player === player.id)) {
+    // TODO: some screen that lets them create a character; I really need a DB
+    redirect(`/`);
+  }
+  if (!campaign) {
+    // TODO: some screen that lets them create a campaign; I really need a DB
+    redirect(`/`);
+  }
+
+
+  const parties: any = await getPartiesByCampaignId((await campaign).id);
   const world: any = await getWorld(campaign?.worldAnvil);
 
   return {

@@ -8,12 +8,22 @@ export default [
     gm: '0',
     slug: 'bom',
     name: 'Barrel of Mayhem',
+    active: true,
+    playtime: {
+      day: 'Every Tuesday',
+      times: ['7:30pm - 10:00pm CDT', '8:30pm - 11:00pm EDT', ],
+    },
     dndBeyond: { id: '5789654' },
-    roll20: { id: '17858042' },
+    roll20: { 
+      id: '17858042',
+      join: '17858042/E_iyPw',
+    },
     discord: {
       roleId: '1270594737211965551',
-      voiceChannelId: '1270594998894592000',
-      sideChatThreadId: '1270595656368787456',
+      voiceChannelId: '1175910585020448768',
+      sideChatThreadId: '1305939321186025513',
+      questLogThreadId: '1296206616525406409',
+      gameplayThreadId: '1306016948651429999',
     },
   },
 
@@ -24,12 +34,22 @@ export default [
     gm: '0',
     slug: 'tpks',
     name: 'The Total Party Knockouts',
+    active: true,
+    playtime: {
+      day: 'Every Other Saturday',
+      times: ['5:30pm - 10:00pm CDT', '6:30pm - 11:00pm EDT', ],
+    },
     dndBeyond: { id: '4820997'},
-    roll20: { id: '17353381' },
+    roll20: { 
+      id: '17353381',
+      join: '17353381/wX4-tw',
+    },
     discord: {
-      voiceChannelId: '1175910585020448768',
-      sideChatThreadId: '1175910620894351462',
       roleId: '1175901224785162391',
+      voiceChannelId: '1175910585020448768',
+      sideChatThreadId: '1305940098822570004',
+      questLogThreadId: '1296206495784112128',
+      gameplayThreadId: '1306016293811523686',
     },
   },
   {
@@ -39,6 +59,7 @@ export default [
     name: 'Blue Lily Alchemy',
     slug: 'blue-lily-alchemy',
     parentParty: '4',
+    active: true,
     discord: {
       sideChatThreadId: '1208506710206193664',
     },
@@ -50,6 +71,7 @@ export default [
     name: 'The Arcane Regiment',
     slug: 'arcane-regiment',
     parentParty: '4',
+    active: true,
     discord: {
       sideChatThreadId: '1208880481668440124',
     },
@@ -60,6 +82,8 @@ export default [
     gm: '0',
     name: 'The Dungeon Asset Procurement Squad',
     slug: 'daps',
+    parentParty: '4',
+    active: true,
     discord: {
       sideChatThreadId: '1208444082054111302',
     },
@@ -69,6 +93,7 @@ export default [
     campaign: '0',
     gm: '0',
     parentParty: '4',
+    active: true,
     name: 'Looking for Clues Detective Agency',
     slug: 'looking-for-clues',
     discord: {
@@ -80,6 +105,7 @@ export default [
     campaign: '0',
     gm: '0',
     parentParty: '4',
+    active: true,
     name: 'Undertale Ventures, Inc',
     slug: 'undertale-ventures-inc',
     discord: {
@@ -94,10 +120,14 @@ export default [
     gm: '0',
     name: 'The Coastal Commission',
     slug: 'cc',
-    discordRoleId: '1223108951005073418',
+    active: false,
+    playtime: 'Play-by-post Only',
     dndBeyond: { id: '3683948' },
     discord: {
-      sideChatThreadId: '1210861800476770326',
+      roleId: '1223108951005073418',
+      sideChatThreadId: '1305940098822570004',
+      questLogThreadId: '1296206495784112128',
+      gameplayThreadId: '1306016293811523686',
     },
   },
 

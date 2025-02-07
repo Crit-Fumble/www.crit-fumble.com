@@ -45,7 +45,7 @@ export const TopBarInner = () => {
         backgroundColor: isDark ? '#374151' : '#d1d5db',
       }}
     >
-      <div style={{
+      <a href="/dashboard"><div style={{
         display: 'flex',
         flexDirection: 'row',
         gap: '8px',
@@ -61,7 +61,7 @@ export const TopBarInner = () => {
           />
         )}
         {/* {data?.user?.name && <p className="p-2">Welcome, {data?.user?.name}!</p>} */}
-      </div>
+      </div></a>
       <a href="/"><button className="p-2 cursor-pointer">Home</button></a>
 
       {isLoggedIn && '|' }

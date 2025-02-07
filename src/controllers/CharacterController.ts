@@ -20,6 +20,7 @@ export const getCharacterPageProps = async ({ character: { slug: characterSlug }
   // const user: any = await getUser(props?.user);
   const player: any = await getUserByDiscordName(session?.user?.name);
   const character: any = await getCharacterBySlug(characterSlug);
+  
   // TODO: ensure character is in party
   const party: any = await getPartyById(character?.party);
   const parentParty: any = await getPartyById(party?.parentParty);

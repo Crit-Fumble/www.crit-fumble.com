@@ -1,75 +1,11 @@
 import { getCampaignPageProps } from "@/controllers/CampaignController";
-import { getServerSession } from "@/services/AuthService";
 import { Card, CardContent, CardHeader } from "@/views/components/blocks/Card";
-
-const PartyCard = ({partyId, parties, characters, player, children} : any) => {
-  const party = parties?.find((party: any) => party?.id === partyId);
-  const subParties = parties?.filter((party: any) => party?.parentParty === partyId);
-
-  const filteredCharacters = characters
-    ?.filter((character: any) => character.party === partyId) ?? [];
-
-  return (
-    <Card className="flex-1">
-      <CardHeader>{party.name}</CardHeader>
-      {children}
-      {(!!filteredCharacters?.length || !!subParties?.length) && <CardContent>
-        <Card>
-          <CardHeader>
-          Party Roster
-          </CardHeader>
-          <CardContent>
-            <ul>
-            {
-              filteredCharacters.map(
-                (character: any, idx: number) => {
-                  const { name, slug } = character;
-                  return (
-                    <li key={`${slug}-${idx}`} className="flex-1">
-                      {name}
-                    </li>
-                  );
-                }
-              )
-            }
-            </ul>
-
-            {!!subParties?.length && 
-              subParties.map(
-                (subParty: any, idx: number) => (
-                  <div key={`${idx}-${subParty?.id}`} className="flex-1">
-                    <p><strong>{subParty.name}</strong></p>
-                    <ul>
-                    {
-                      characters.filter((c: any) => c.party === subParty.id).map(
-                        (character: any, idx: number) => {
-                          const { name, slug } = character;
-                          return (
-                            <li key={`${slug}-${idx}`} className="flex-1">
-                              {name}
-                            </li>
-                          );
-                        }
-                      )
-                    }
-                    </ul>
-                  </div>
-                )
-              )
-            }
-          </CardContent>
-        </Card>
-      </CardContent>}
-    </Card>
-  );
-};
-
+import { PartyCard } from "@/views/components/blocks/PartyCard";
 
 const Page = async () => {
   const props = await getCampaignPageProps({ campaign: { slug: 'pdfr' }});
 
   const { characters, parties, player } = props;
-  console.log(characters);
 
   return (<div className="flex flex-col gap-4">
       <Card>
@@ -89,99 +25,22 @@ const Page = async () => {
               <a href="https://discord.com/channels/1002008886137589771/1305943118796947528" target="_blank">Discord Campaign Chat Thread</a>
             </li>
             <li>
-              <a href="https://discord.com/channels/1002008886137589771/1072401844594286633" target="_blank">Discord Quest Log Forum</a>
-            </li>
-            <li>
-              <a href="https://discord.com/channels/1002008886137589771/1111854956165734471" target="_blank">Discord Play-by-Post Channel</a>
+              <a href="https://discord.com/channels/1002008886137589771/1072401844594286633" target="_blank">Discord Campaign Logs Forum</a>
             </li>
             <li>
               <a href="https://forgottenrealms.fandom.com/wiki" target="_blank">Forgotten Realms Fandom Wiki</a>
+            </li>
+            <li>
+              <a href="https://uploads.worldanvil.com/uploads/maps/b3748138e95d767e87697da8f7e35c25.jpg" target="_blank">View World Map <small>(House Rule: 6 mile hexes)</small></a>
             </li>
           </ul>
         </CardContent>
       </Card>
 
       <div className="flex flex-grid gap-2">
-        
-        <PartyCard partyId={'3'} parties={parties} characters={characters} player={player} className="flex-1">
-          <CardContent>
-            <p>Every Tuesday</p>
-            <p>7:30pm - 10:00pm CDT</p>
-            <p>8:30pm - 11:00pm EDT</p>
-          </CardContent>
-          <CardContent>
-            <ul className="underline">
-              <li>
-                <a href="https://app.roll20.net/join/17858042/E_iyPw" target="_blank">Roll 20 Join Link</a>
-              </li>
-              <li>
-                <a href="https://discord.com/channels/1002008886137589771/1305939321186025513" target="_blank">Discord Side Chat Thread</a>
-              </li>
-              <li>
-                <a href="https://discord.com/channels/1002008886137589771/1296206616525406409" target="_blank">Discord Quest Log Post</a>
-              </li>
-              <li>
-                <a href="https://discord.com/channels/1002008886137589771/1306016948651429999" target="_blank">Discord Play-by-Post Thread</a>
-              </li>
-              <li>
-                <a href="https://www.dndbeyond.com/campaigns/join/48209972621760902" target="_blank">D&D Beyond Join link (Optional)</a>
-              </li>
-            </ul>
-          </CardContent>
-        </PartyCard>
-
-        <PartyCard partyId={'4'} parties={parties} characters={characters} player={player} className="flex-1">
-          <CardContent>
-            <p>Every other Saturday</p>
-            <p>5:30pm - 10:00pm CDT</p>
-            <p>6:30pm - 11:00pm EDT</p>
-          </CardContent>
-          <CardContent>
-            <ul className="underline">
-              <li>
-                <a href="https://app.roll20.net/join/17353381/wX4-tw" target="_blank">Roll 20 Join Link</a>
-              </li>
-              <li>
-                <a href="https://discord.com/channels/1002008886137589771/1305940098822570004" target="_blank">Discord Side Chat Thread</a>
-              </li>
-              <li>
-                <a href="https://discord.com/channels/1002008886137589771/1296206495784112128" target="_blank">Discord Quest Log Post</a>
-              </li>
-              <li>
-                <a href="https://discord.com/channels/1002008886137589771/1306016293811523686" target="_blank">Discord Play-by-Post Thread</a>
-              </li>
-              <li>
-                <a href="https://www.dndbeyond.com/campaigns/join/57896542422649808" target="_blank">D&D Beyond Join link (Optional)</a>
-              </li>
-            </ul>
-          </CardContent>
-        </PartyCard>
-        <PartyCard partyId={'6'} parties={parties} characters={characters} player={player} className="flex-1">
-          <CardContent>
-            <p>Play-by-post Only</p>
-          </CardContent>
-          <CardContent>
-            <ul className="underline">
-              <li>
-                <a href="https://discord.com/channels/1002008886137589771/1305940414339092480" target="_blank">Discord Side Chat Thread</a>
-              </li>
-              <li>
-                <a href="https://discord.com/channels/1002008886137589771/1296206820888674395" target="_blank">Discord Quest Log</a>
-              </li>
-              <li>
-                <a href="https://discord.com/channels/1002008886137589771/1275257832567996427" target="_blank">Discord Play-by-Post Thread</a>
-              </li>
-              <li>
-                <a href="https://www.dndbeyond.com/campaigns/join/36839482379429765" target="_blank">D&D Beyond Join link (Optional)</a>
-              </li>
-            </ul>
-          </CardContent>
-        </PartyCard>
-        {/* <PartyCard partyId={'5'} parties={parties} characters={characters} className="flex-1">
-          <CardContent>
-            <p>In-Person Group</p>
-          </CardContent>
-        </PartyCard> */}
+        {parties?.filter((party: any) => (party.campaign === '0' && !party.parentParty && party.active))?.map((party: any) => (
+          <PartyCard partyId={party?.id} parties={parties} characters={characters} player={player} className="flex-1"/>
+        ))}
       </div>
   </div>);
 
