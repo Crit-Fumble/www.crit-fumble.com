@@ -10,7 +10,7 @@ export const getCampaignPageProps = async (campaignSlug: string) => {
   if (!campaignSlug) {
     redirect(`/`);
   }
-  console.log(campaignSlug);
+  // console.log(campaignSlug);
 
   const session = await getServerSession();
   if (!session?.user?.id) {

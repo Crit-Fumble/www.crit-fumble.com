@@ -11,7 +11,7 @@ const Page = async ({ params: { worldSlug, blockId } }: any) => {
 
   const block = await getBlockById(blockId);
 
-  console.log(block);
+  // console.log(block);
 
   return (<WorldView {...props} />);
 };

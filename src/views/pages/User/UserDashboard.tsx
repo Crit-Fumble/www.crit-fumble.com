@@ -6,14 +6,8 @@ import { SessionProvider, useSession } from "next-auth/react";
 import { useMemo, useState } from "react";
 
 
-const UserDashboardInner = ({ viewedUser, characters, ...props }: any) => {
+const UserDashboardInner = ({ viewedUser }: any) => {
   const session = useSession();
-  const { data, status, update } = session;
-  const isLoading = useMemo(() => status === "loading", [status]);
-  console.log(characters);
-  const inPdfr = characters?.find((character: any) => {
-    return character.campaign === '0';
-  });
   
   return (
     <div className="flex flex-col align-middle items-center gap-2">

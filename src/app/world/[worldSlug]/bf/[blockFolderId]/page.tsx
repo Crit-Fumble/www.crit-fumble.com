@@ -11,7 +11,7 @@ const Page = async ({ params: { worldSlug, blockFolderId } }: any) => {
 
   const blocks = await getBlocksByBlockFolderId(blockFolderId);
 
-  console.log(blocks);
+  // console.log(blocks);
 
   return (<WorldView {...props} />);
 };

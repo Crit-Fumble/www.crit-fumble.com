@@ -30,7 +30,7 @@ const config = {
       if (token?.provider === 'discord') {
         session.user.discordProfile = token?.discordProfile;
         session.profile = await getUserByDiscordId(token?.providerAccountId);
-        console.log(`session 1`, session);
+        // console.log(`session 1`, session);
 
         if (!`${session?.profile?.id}`) {
           return Promise.resolve(session);
@@ -41,10 +41,7 @@ const config = {
         session.characters = await getCharactersByPlayerId(session.profile?.id);
         session.parties = await getPartiesByPlayerId(session.profile?.id);
         session.campaigns = await getCampaignsByPlayerId(session.profile?.id);
-        // session.campaigns = await getCampaignsByGmId(session?.profile?.id);
-        // session.parties = await getPartiesByCampaignId('3');
-        // session.parties = await getPartiesByCampaignId(token?.providerAccountId);
-        console.log(`session 2`, session);
+        // console.log(`session 2`, session);
         return Promise.resolve(session);
       }
 

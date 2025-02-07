@@ -26,13 +26,13 @@ export const getWorldPageProps = async (props: any) => {
 
 const mapGetBlocksById = async (block: any) => {
   try {
-    console.log(block);
+    // console.log(block);
 
     const newBlock = await getBlockById(block?.id);
 
     newBlock.data = yaml.parse(newBlock?.textualdata);
 
-    console.log(newBlock);
+    // console.log(newBlock);
 
     return newBlock;
   } catch (err) {
@@ -128,7 +128,7 @@ export const getWorldHomePageProps = async (props: any) => {
 
   const blockFolders = await getBlockFoldersByWorldId(world.id);
 
-  console.log(blockFolders);
+  // console.log(blockFolders);
 
   return {
     ...props,

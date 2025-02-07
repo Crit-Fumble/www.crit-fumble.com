@@ -8,10 +8,8 @@ import { useEffect, useRef } from "react";
 const Page = ({ params: { apiPath = '/' }, searchParams }: { params:{ apiPath?: string }, searchParams: { [key: string]: string | string[] | undefined } }) => {
   const iframeRef = useRef(null);
   const router = useRouter();
-  console.log(searchParams);
   const queryKeys = Object.keys(searchParams);
   const queryString = queryKeys.length ? `?${queryKeys?.map(k => `${k}=${searchParams[k]}`)?.join('&')}` : '';
-  console.log(queryString);
 
   // useEffect(() => {
   //   // window.removeEventListener('message');
@@ -41,7 +39,7 @@ const Page = ({ params: { apiPath = '/' }, searchParams }: { params:{ apiPath?: 
     //   //     return;
     //   // }
     // });
-    console.log('Loaded:', iframeRef?.current);
+    // console.log('Loaded:', iframeRef?.current);
     // if (iframeRef?.current?.contentWindow) {
     //   Object.keys(iframeRef.current.contentWindow).forEach(key => {
     //     if (/^on/.test(key)) {

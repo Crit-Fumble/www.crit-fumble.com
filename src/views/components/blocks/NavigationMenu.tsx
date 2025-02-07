@@ -8,8 +8,6 @@ import useDarkMode from '@/controllers/hooks/useDarkMode';
 const NavigationMenu = () => {
   const { data: session, status, update } = useSession();
   const { isDark, toggleDark } = useDarkMode();
-  // const { user, campaigns, characters, gmCampaigns, profile } = session;
-  console.log(session);
   const isLoading = useMemo(() => status === "loading", [status]);
   const isLoggedIn = useMemo(() => status === "authenticated", [status]);
   const campaigns = useMemo(() => session?.campaigns?.filter?.((campaign: any) => campaign?.active), [session?.campaigns]);
