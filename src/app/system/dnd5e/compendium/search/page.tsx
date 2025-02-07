@@ -1,6 +1,6 @@
 "use server";
 
-import { getUserPageProps } from "@/controllers/user";
+import { getUserPageProps } from "@/controllers/UserController";
 import Dnd5eCompendiumSearchView from "@/views/pages/System/Dnd5e/Compendium/Search";
 
 const Page = async () => {
