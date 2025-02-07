@@ -15,7 +15,7 @@ export default [
     id: "10010",
     player: "10",
     campaign: "0",
-    party: '13',
+    party: '3',
     name: "Crulk",
     slug: "crulk",
     foundryVtt: {
@@ -32,7 +32,7 @@ export default [
     id: "10030",
     player: "30",
     campaign: "0",
-    party: '13',
+    party: '3',
     name: "Yogito",
     slug: "yogito",
     foundryVtt: {
@@ -49,7 +49,7 @@ export default [
     id: "10020",
     player: "10",
     campaign: "0",
-    party: '23',
+    party: '3',
     name: "Cozu",
     slug: "cozu",
     foundryVtt: {
@@ -63,7 +63,7 @@ export default [
     id: "10040",
     player: "30",
     campaign: "0",
-    party: '23',
+    party: '3',
     name: "Nissa",
     slug: "nissa",
     foundryVtt: {
@@ -72,6 +72,38 @@ export default [
     },
     discord: {
       characterThreadId: '1278203694885900389',
+    },
+    // roll20: { id: '' },
+  },
+  {
+    id: "10050",
+    player: "3",
+    campaign: "0",
+    party: '3',
+    name: "Valas Xorlarrin",
+    slug: "valas",
+    foundryVtt: {
+      user: 'Valas',
+      password: '',
+    },
+    discord: {
+      characterThreadId: '',
+    },
+    // roll20: { id: '' },
+  },
+  {
+    id: "10060",
+    player: "2",
+    campaign: "0",
+    party: '3',
+    name: "Burzynea",
+    slug: "burzynea",
+    foundryVtt: {
+      user: 'Burzynea',
+      password: '',
+    },
+    discord: {
+      characterThreadId: '',
     },
     // roll20: { id: '' },
   },

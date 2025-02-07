@@ -14,7 +14,7 @@ export const getCharacterPageProps = async ({ character: { slug: characterSlug }
 
   if (!session) {
     // TODO: get url for redirect
-    redirect(`/api/auth/signin?redirect_uri=${encodeURIComponent(`/character/${characterSlug}`)}`);
+    redirect(`/api/auth/signin?callbackUrl=${encodeURIComponent(`/character/${characterSlug}`)}`);
   }
 
   // const user: any = await getUser(props?.user);

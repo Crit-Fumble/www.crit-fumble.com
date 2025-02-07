@@ -17,28 +17,6 @@ export default [
     },
   },
   {
-    id: '13',
-    campaign: '0',
-    gm: '0',
-    slug: 'cragmaw-hunters',
-    name: 'Cragmaw Hunters',
-    parentParty: '3',
-    discord: {
-      sideChatThreadId: '1276661660031123459',
-    },
-  },
-  {
-    id: '23',
-    campaign: '0',
-    gm: '0',
-    slug: 'neveren-hunters',
-    name: 'Neveren Hunters',
-    parentParty: '3',
-    discord: {
-      sideChatThreadId: '1276662026973876284',
-    },
-  },
-  {
     id: '4',
     campaign: '0',
     gm: '0',

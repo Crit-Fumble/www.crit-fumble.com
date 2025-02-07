@@ -12,11 +12,13 @@ export const getCampaignPageProps = async (props: { campaign: { slug: string }})
 
   const session = await getServerSession();
   if (!session) {
-    redirect(`/api/auth/signin?redirect_uri=${encodeURIComponent(`/campaign/${slug}`)}`);
+    redirect(`/api/auth/signin?callbackUrl=${encodeURIComponent(`/campaign/${slug}`)}`);
   }
 
   const player: any = await getUserByDiscordName(session?.user?.name);
   const campaign: any = await getCampaign(props?.campaign);
+
+  // TODO: is player in this campaign?
   const world: any = await getWorld(campaign?.worldAnvil);
 
   return {

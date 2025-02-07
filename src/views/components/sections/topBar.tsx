@@ -15,7 +15,7 @@ const handleLogout = async (): Promise<void> => {
 };
 
 const handleLogin = async (): Promise<void> => {
-  signIn();
+  signIn('Discord');
 };
 
 // const topBarStyle = (isDark: boolean) => ();

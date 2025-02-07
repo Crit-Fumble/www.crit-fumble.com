@@ -15,7 +15,7 @@ export const getCompendiumPageProps = async () => {
 
   if (!session) {
     // TODO: get url for redirect
-    redirect(`/api/auth/signin?redirect_uri=${encodeURIComponent(`/system/dnd5e`)}`);
+    redirect(`/api/auth/signin?callbackUrl=${encodeURIComponent(`/system/dnd5e`)}`);
   }
 
   const { user: user } = session;

@@ -5,8 +5,6 @@ import { Card, CardContent, CardHeader } from "@/views/components/blocks/Card";
 const Page = async () => {
   const props = await getCampaignPageProps({ campaign: { slug: 'pdfr' }});
 
-  console.log(props?.player);
-
   return (<div className="flex flex-col gap-4">
       <Card>
         <CardHeader>Parties Die in the Forgotten Realms</CardHeader>
