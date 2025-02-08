@@ -1,7 +1,7 @@
 "use client";
 
 import { signIn, signOut, useSession } from 'next-auth/react';
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Image from "next/image";
 import useDarkMode from '@/controllers/hooks/useDarkMode';
 
@@ -11,12 +11,17 @@ const NavigationMenu = () => {
   // const { user, campaigns, characters, gmCampaigns, profile } = session;
   console.log(session);
   const isLoading = useMemo(() => (status === "loading"), [status]);
-  const isLoggedIn = useMemo(() => (status === "authenticated"), [status, session?.profile?.id]);
+  const isLoggedIn = useMemo(() => (status === "authenticated"), [status]);
+  const isPlayer = useMemo(() => (!!session?.profile?.id), [session?.profile?.id]);
   const campaigns = useMemo(() => session?.campaigns?.filter?.((campaign: any) => campaign?.active), [session?.campaigns]);
   const profile = useMemo(() => session?.profile, [session?.profile]);
   // const parties = useMemo(() => session?.parties, [session?.parties]);
   const characters = useMemo(() => session?.characters, [session?.characters]);
   const [dropdownOpen, setDropdownOpen] = useState('');
+
+  useEffect(() => {
+    update();
+  }, []);
 
   const handleLogout = async (): Promise<void> => {
     signOut({ callbackUrl: "/" });
@@ -49,7 +54,7 @@ const NavigationMenu = () => {
     }}>
       <div className="container mx-auto flex justify-between items-center">
         <ul className="flex space-x-4 pl-4">
-          {isLoggedIn && <li className="relative">
+          {isPlayer && `${campaigns?.length}` && <li className="relative">
             <button
               className="text-white hover:text-gray-400"
               onClick={() => handleDropdown('campaigns')}
@@ -69,27 +74,7 @@ const NavigationMenu = () => {
               </ul>
             )}
           </li>}
-          {/* {isLoggedIn && <li className="relative">
-            <button
-              className="text-white hover:text-gray-400"
-              onClick={() => handleDropdown('parties')}
-            >
-              Parties
-            </button>
-            {dropdownOpen === 'parties' && (
-              <ul className={`${dropdownOpen === 'parties' ? '': 'hidden '}absolute bg-white dark:bg-black mt-3 shadow-lg`}>
-                {isLoading
-                  ? <li className="px-4 py-2 italic text-nowrap">Loading...</li>
-                  : parties 
-                    ? parties?.map?.((campaign: any) => (<li key={campaign?.id} className="px-4 py-2 hover:underline cursor-pointer text-nowrap">
-                    <a href={`/party/${campaign.slug}`}>{campaign?.name}</a> 
-                    </li>))
-                    : <li className="px-4 py-2 italic text-nowrap">No Parties Found</li>
-                  }
-              </ul>
-            )}
-          </li>} */}
-          {isLoggedIn && <li className="relative">
+          {isPlayer && <li className="relative">
             <button
               className="text-white hover:text-gray-400"
               onClick={() => handleDropdown('characters')}
@@ -128,7 +113,7 @@ const NavigationMenu = () => {
             margin: 0,
           }}
         >
-          {status === "authenticated" ? (
+          {isLoggedIn ? (
             <button
               style={{
                 height: '48px',
@@ -143,6 +128,8 @@ const NavigationMenu = () => {
             >
               <span className="hidden">User</span>
             </button>
+          ) : isLoading ? (
+            <span className="hidden">Loading</span>
           ) : (
               <button 
                 style={{
