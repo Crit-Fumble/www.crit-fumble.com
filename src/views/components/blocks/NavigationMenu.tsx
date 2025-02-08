@@ -10,8 +10,8 @@ const NavigationMenu = () => {
   const { isDark, toggleDark } = useDarkMode();
   // const { user, campaigns, characters, gmCampaigns, profile } = session;
   console.log(session);
-  const isLoading = useMemo(() => status === "loading", [status]);
-  const isLoggedIn = useMemo(() => status === "authenticated", [status]);
+  const isLoading = useMemo(() => (status === "loading"), [status]);
+  const isLoggedIn = useMemo(() => (status === "authenticated"), [status, session?.profile?.id]);
   const campaigns = useMemo(() => session?.campaigns?.filter?.((campaign: any) => campaign?.active), [session?.campaigns]);
   const profile = useMemo(() => session?.profile, [session?.profile]);
   // const parties = useMemo(() => session?.parties, [session?.parties]);
