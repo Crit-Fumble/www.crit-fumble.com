@@ -20,16 +20,16 @@ const UserProfileInner = ({ viewedUser, characters, campaigns, ...props }: any) 
         </CardContent>
         {/* <div className="flex flex-grid align-middle items-center g-2"> */}
       </Card>
-      <Card>
-        <CardHeader>Campaigns</CardHeader>
+      {/* <Card>
+        <CardHeader>Game Master</CardHeader>
         {campaigns ? <CardContent>
           {campaigns?.map(
             (campaign: any, idx: number) => (<p key={`${idx}-${campaign?.id}`}>{campaign.name}</p>)
           )}
         </CardContent> : <CardContent>
-          No campaigns found.
+          No game master campaigns found.
         </CardContent>}
-      </Card>
+      </Card> */}
       <Card>
         <CardHeader>Characters</CardHeader>
         {characters ? <CardContent>
