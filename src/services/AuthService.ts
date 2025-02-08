@@ -3,7 +3,7 @@
 import NextAuth, { getServerSession as _getServerSession } from "next-auth";
 import DiscordProvider, { DiscordProfile } from "next-auth/providers/discord";
 import { discord } from "@/services/config";
-import { getUserByDiscordId } from "./ProfileService";
+import { getUserByDiscordId, getUserByDiscordName } from "./ProfileService";
 import { getCharactersByPlayerId } from "./CharacterService";
 import { getPartiesByPlayerId } from "./PartyService";
 import { getCampaignsByPlayerId } from "./CampaignService";
@@ -26,27 +26,31 @@ const config = {
         token: token?.providerToken,
       };
 
-      if (token?.provider === 'discord') {
+      if (session.user.provider === 'discord') {
         session.user.discordProfile = token?.discordProfile;
-        session.profile = await getUserByDiscordId(token?.providerAccountId);
-        // console.log(`session 1`, session);
-
-        if (!`${session?.profile?.id}`) {
-          return session;
-        }
       }
 
-      if (session?.profile?.id) {
-        session.characters = await getCharactersByPlayerId(session.profile?.id);
-        session.parties = await getPartiesByPlayerId(session.profile?.id);
-        session.campaigns = await getCampaignsByPlayerId(session.profile?.id);
-        // console.log(`session 2`, session);
+      if (session.user.name) {
+        session.profile = await getUserByDiscordName(session.user.name);
+      }
+
+      if (!`${session?.profile?.id}`) {
+        // console.log(`session 1`, session);
+        
         return session;
       }
 
-      // TODO: get Profile
-      // session.profile = 
+      [
+        session.campaigns,
+        session.characters,
+        session.parties,
+      ] = [
+        await getCampaignsByPlayerId(session.profile?.id),
+        await getCharactersByPlayerId(session.profile?.id),
+        await getPartiesByPlayerId(session.profile?.id),
+      ];
 
+      // console.log(`session 2`, session);
       return session;
     },
     jwt({ token, profile, account, trigger, session } : any) {

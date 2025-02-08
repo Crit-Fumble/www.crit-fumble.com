@@ -1,4 +1,5 @@
 import { DiscordProfile } from "next-auth/providers/discord"
+import { User as _User } from "next-auth";
 
 export type User = {
   id: string,
@@ -8,6 +9,7 @@ export type User = {
   token?: string,
   discord?: DiscordProfile,
 };
+
 export type System = {
   id: string;
   name: string;
