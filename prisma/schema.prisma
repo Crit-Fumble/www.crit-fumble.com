@@ -98,7 +98,7 @@ model User {
   emailVerified  DateTime?
   image          String?
   createdAt      DateTime        @default(now())
-  updatedAt      DateTime
+  updatedAt      DateTime        @default(now())
   admin          Boolean?
   discord        String?
   roll20         String?

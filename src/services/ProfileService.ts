@@ -1,4 +1,4 @@
-import data from '../data/users';
+import DatabaseService from './DatabaseService';
 
 export const getUser = async ( user: any ) => {
   let result = {};
@@ -18,21 +18,36 @@ export const getUser = async ( user: any ) => {
 
 export const getUserBySlug = async ( slug: string ) => {
   if (!slug) return {};
-  const response = data.find((user: any) => user?.slug === slug);
+ 
+  const response = await DatabaseService.user.findFirst({
+    where: {
+      slug: slug
+    }
+  })
 
   return response ?? {};
 }
 
 export const getUserById = async ( id: string ) => {
   if (!id) return {};
-  const response = data.find((user: any) => user?.id === id);
+ 
+  const response = await DatabaseService.user.findFirst({
+    where: {
+      id: id
+    }
+  })
 
   return response ?? {};
 }
 export const getUserByDiscordId = async ( discordId: string ) => {
   if (!discordId) return {};
 
-  const response = data.find((user: any) => user?.discord?.id === discordId);
+ 
+  const response = await DatabaseService.user.findFirst({
+    where: {
+      discord: discordId
+    }
+  })
 
   return response ?? {};
 }
@@ -40,7 +55,13 @@ export const getUserByDiscordId = async ( discordId: string ) => {
 export const getUserByDiscordName = async ( discordName: string ) => {
   if (!discordName) return {} as any;
 
-  const response = data.find((user: any) => user?.discord?.name === discordName);
+  const response = await DatabaseService.user.findFirst({
+    where: {
+      UserDiscord: {
+        name: discordName,
+      }
+    }
+  })
 
   return response ?? {} as any;
 }
