@@ -115,10 +115,25 @@ model User {
 }
 
 model UserDiscord {
-  id          String  @id
-  name        String?
-  displayName String?
-  User        User[]
+  id            String   @id
+  name          String?
+  displayName   String?
+  username      String?
+  avatar        String?
+  discriminator String?
+  public_flags  BigInt?
+  banner        String?
+  accent_color  BigInt?
+  global_name   String?
+  banner_color  String?
+  mfa_enabled   Boolean?
+  locale        String?
+  premium_type  BigInt?
+  email         String?
+  verified      Boolean?
+  image_url     String?
+  flags         BigInt?
+  User          User[]
 }
 
 model UserDndBeyond {

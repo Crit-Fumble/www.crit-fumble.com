@@ -7,6 +7,7 @@ import { getUserByDiscordId, getUserByDiscordName } from "./ProfileService";
 import { getCharactersByPlayerId } from "./CharacterService";
 import { getPartiesByPlayerId } from "./PartyService";
 import { getCampaignsByPlayerId } from "./CampaignService";
+import DatabaseService from "./DatabaseService";
 // import { getUserByDiscordName } from "./UserService";
 
 const config = { 
@@ -17,7 +18,41 @@ const config = {
       }),
   ],
   callbacks: {
-    async session({ session, token } : any) {
+    async session({ session, token, trigger } : any) {
+      if (trigger === "update" && token?.provider === "discord") {
+        const profileUpdate = {
+          name: token?.providerUserName,
+          displayName: token?.providerUserName,
+          username: token?.discordProfile.username,
+          avatar: token?.discordProfile.avatar,
+          discriminator: token?.discordProfile.discriminator,
+          // public_flags: token?.discordProfile.public_flags,
+          // flags: token?.discordProfile.flags,
+          banner: token?.discordProfile.banner,
+          accent_color: token?.discordProfile.accent_color,
+          global_name: token?.discordProfile.global_name,
+          // avatar_decoration_data
+          banner_color: token?.discordProfile.banner_color,
+          mfa_enabled: token?.discordProfile.mfa_enabled,
+          locale: token?.discordProfile.locale,
+          // premium_type: token?.discordProfile.premium_type,
+          email: token?.discordProfile.email,
+          verified: token?.discordProfile.verified,
+          image_url: token?.discordProfile.image_url,
+        };
+
+        await DatabaseService.userDiscord.upsert({
+          where: {
+            id: token?.providerAccountId
+          },
+          update: profileUpdate,
+          create: {
+            id: token?.providerAccountId,
+            ...profileUpdate
+          }
+        });
+      }
+
       // The return type will match the one returned in `useSession()`
       session.user = {
         ...session.user,
@@ -25,10 +60,6 @@ const config = {
         provider: token?.provider,
         token: token?.providerToken,
       };
-
-      if (session.user.provider === 'discord') {
-        session.user.discordProfile = token?.discordProfile;
-      }
 
       if (session.user.name) {
         session.profile = await getUserByDiscordName(session.user.name);
@@ -66,7 +97,7 @@ const config = {
 
       if (account?.provider === 'discord') {
         token.providerAccountId = profile?.id;
-        token.discordProfile = (profile as DiscordProfile);
+        // token.discordProfile = (profile as DiscordProfile);
       }
 
       return token;
