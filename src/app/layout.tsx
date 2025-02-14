@@ -20,7 +20,7 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body className={`${inter.className}`}>
+      <body className={`${inter.className} dark`}>
         <main className={'min-h-[100vh] max-h-screen pt-[48px] w-full h-max flex flex-col items-stretch justify-between flex-1'}>
           {children}
           <BottomBarSession session={session} />
