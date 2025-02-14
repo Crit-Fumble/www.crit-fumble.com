@@ -1,4 +1,4 @@
-import { DEFAULT } from '@/views/config';
+import { DEFAULT } from '@/config/views';
 
 const Dnd5ePartyRoster = ({party, subParties, parentParty, characters, campaign, world}: any) => {
   const discordServerId = campaign?.discord?.id;

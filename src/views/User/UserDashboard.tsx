@@ -1,7 +1,7 @@
 "use client";
 
-import { Card, CardContent, CardHeader } from "@/views/components/blocks/Card";
-import { DEFAULT } from "@/views/config";
+import { Card, CardContent, CardHeader } from "@lib/components/blocks/Card";
+import { DEFAULT } from "@/config/views";
 import { SessionProvider, useSession } from "next-auth/react";
 import { useMemo, useState } from "react";
 

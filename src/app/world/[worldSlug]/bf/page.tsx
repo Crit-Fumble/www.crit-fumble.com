@@ -1,7 +1,7 @@
 "use server";
 
 import { getWorldViewPageProps } from "@/controllers/WorldController";
-import WorldView from "@/views/pages/World/WorldView";
+import WorldView from "@/views/World/WorldView";
 
 const Page = async ({ params: { worldSlug } }: any) => {
   const props = await getWorldViewPageProps({

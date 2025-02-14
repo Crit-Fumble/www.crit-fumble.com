@@ -1,7 +1,7 @@
 "use client";
 
-import Dnd5ePartyRoster from "@/views/components/blocks/CampaignView";
-import Dnd5eGmView from "@/views/components/blocks/GmView";
+import Dnd5ePartyRoster from "@lib/components/blocks/CampaignView";
+import Dnd5eGmView from "@lib/components/blocks/GmView";
 import { SessionProvider, useSession } from "next-auth/react";
 import { useMemo, useState } from "react";
 

@@ -1,6 +1,6 @@
 "use server";
 
-import { roll20 as config} from '@/services/config';
+import { roll20 as config} from '@/config/services';
 
 export {
   config,

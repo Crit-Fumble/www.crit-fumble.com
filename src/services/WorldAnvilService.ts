@@ -1,5 +1,5 @@
 "use server";
-import { worldAnvil as config} from '@/services/config';
+import { worldAnvil as config} from '@/config/services';
 import { getCampaignBySlug } from './CampaignService';
 
 type WorldAnvilId = string;

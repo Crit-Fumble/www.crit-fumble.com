@@ -1,7 +1,7 @@
 "use client";
 // import { usePathname } from 'next/navigation'
 import { useMemo } from "react";
-import useDarkMode from "@/controllers/hooks/useDarkMode";
+import useDarkMode from "@lib/hooks/useDarkMode";
 import { SessionProvider } from "@/controllers/AuthController";
 import NavigationMenu from "../blocks/NavigationMenu";
 import { Session } from "next-auth";

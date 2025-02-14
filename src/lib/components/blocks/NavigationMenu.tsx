@@ -3,7 +3,7 @@
 import { signIn, signOut, useSession } from 'next-auth/react';
 import React, { useEffect, useMemo, useState } from 'react';
 import Image from "next/image";
-import useDarkMode from '@/controllers/hooks/useDarkMode';
+import useDarkMode from '@lib/hooks/useDarkMode';
 
 const NavigationMenu = () => {
   const { data: session, status, update } = useSession();
@@ -40,16 +40,7 @@ const NavigationMenu = () => {
   };
 
   return (
-    <nav style={{
-      height: '48px',
-      padding: '0',
-      margin: '0',
-      display: 'flex',
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyItems: 'end',
-      backgroundColor: isDark ? '#374151' : '#d1d5db',
-    }}>
+    <nav className={`h-12 p-0 m-0 flex flex-row items-center justify-end ${isDark ? 'bg-gray-700' : 'bg-gray-300'}`}>
       <div className="container mx-auto flex justify-between items-center">
         <ul className="flex space-x-4 pl-4">
           {isPlayer && `${campaigns?.length}` && <li className="relative">
@@ -95,33 +86,15 @@ const NavigationMenu = () => {
         </ul>
       </div>
 
-      <div style={{
-        marginLeft: 'auto',
-        display: 'flex',
-        flexDirection: 'row',
-        gap: '8px',
-        alignItems: 'center',
-      }}>
+      <div className="ml-auto flex flex-row gap-2 items-center">
         <ul>
           <li 
-          style={{
-            height: '48px',
-            width: '48px',
-            padding: 0,
-            margin: 0,
-          }}
+          className="h-12 w-12 p-0 m-0"
         >
           {isLoggedIn ? (
             <button
-              style={{
-                height: '48px',
-                width: '48px',
-                padding: 0,
-                margin: 0,
-                backgroundImage: session?.user?.image ? `url(${session?.user?.image})` : '',
-                backgroundSize: '48px 48px',
-              }}
-              className="hover:underline cursor-pointer"
+              className="h-12 w-12 p-0 m-0 bg-cover bg-center hover:underline cursor-pointer"
+              style={{backgroundImage: session?.user?.image ? `url(${session?.user?.image})` : ''}}
               onClick={() => handleDropdown('user')}
             >
               <span className="hidden">User</span>
@@ -130,13 +103,7 @@ const NavigationMenu = () => {
             <span className="hidden">Loading</span>
           ) : (
               <button 
-                style={{
-                  height: '48px',
-                  width: '48px',
-                  padding: 0,
-                  margin: 0,
-                }}
-                className="hover:underline cursor-pointer"
+                className="h-12 w-12 p-0 m-0 hover:underline cursor-pointer"
                 onClick={() => {
                   handleLogin();
                 }}

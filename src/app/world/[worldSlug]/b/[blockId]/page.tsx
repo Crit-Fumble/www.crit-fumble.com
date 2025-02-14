@@ -2,7 +2,7 @@
 
 import { getWorldViewPageProps } from "@/controllers/WorldController";
 import { getBlockById } from "@/services/WorldAnvilService";
-import WorldView from "@/views/pages/World/WorldView";
+import WorldView from "@/views/World/WorldView";
 
 const Page = async ({ params: { worldSlug, blockId } }: any) => {
   const props = await getWorldViewPageProps({

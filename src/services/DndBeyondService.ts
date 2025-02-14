@@ -1,2 +1,2 @@
 "use server";
-import { dndBeyond as config} from '@/services/config';
+import { dndBeyond as config} from '@/config/services';

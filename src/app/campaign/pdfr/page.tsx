@@ -1,6 +1,6 @@
 import { getCampaignPageProps } from "@/controllers/CampaignController";
-import { Card, CardContent, CardHeader } from "@/views/components/blocks/Card";
-import { PartyCard } from "@/views/components/blocks/PartyCard";
+import { Card, CardContent, CardHeader } from "@lib/components/blocks/Card";
+import { PartyCard } from "@lib/components/blocks/PartyCard";
 
 const Page = async () => {
   const props = await getCampaignPageProps('pdfr');

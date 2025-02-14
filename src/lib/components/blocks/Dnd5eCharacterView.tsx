@@ -1,5 +1,5 @@
 "use client";
-import { DEFAULT } from "@/views/config";
+import { DEFAULT } from "@/config/views";
 import ButtonBlock from "./LinkButtonBlock";
 import { Card, CardContent, CardHeader } from "./Card";
 

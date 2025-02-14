@@ -2,7 +2,7 @@
 
 import NextAuth, { getServerSession as _getServerSession } from "next-auth";
 import DiscordProvider, { DiscordProfile } from "next-auth/providers/discord";
-import { discord } from "@/services/config";
+import { discord } from "@/config/services";
 import { getUserByDiscordId, getUserByDiscordName } from "./ProfileService";
 import { getCharactersByPlayerId } from "./CharacterService";
 import { getPartiesByPlayerId } from "./PartyService";

@@ -1,4 +1,4 @@
-import data from '../data/parties';
+import data from '@lib/data/parties';
 import { getCharactersByPlayerId } from './CharacterService';
 
 export const getParty = async ( party: any ) => {

@@ -3,8 +3,8 @@
 import { marked } from "marked";
 import { SessionProvider, useSession } from "next-auth/react";
 import React, { useMemo, useState } from "react";
-import { Card, CardHeader, CardContent } from '@/views/components/blocks/Card';
-import { Dropdown } from "@/views/components/blocks/Dropdown";
+import { Card, CardHeader, CardContent } from '@lib/components/blocks/Card';
+import { Dropdown } from "@lib/components/blocks/Dropdown";
 
 
 interface Dnd5eSpellsPageInnerProps {

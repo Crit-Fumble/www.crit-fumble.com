@@ -1,6 +1,6 @@
 "use client";
 
-import Dnd5eCompendiumSearch from "@/views/components/blocks/Dnd5eCompendiumSearch";
+import Dnd5eCompendiumSearch from "@lib/components/blocks/Dnd5eCompendiumSearch";
 import { SessionProvider, useSession } from "next-auth/react";
 import { useMemo, useState } from "react";
 

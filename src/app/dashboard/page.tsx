@@ -1,7 +1,7 @@
 "use server";
 
 import { getUserDashboardPageProps } from "@/controllers/UserController";
-import UserDashboard from "@/views/pages/User/UserDashboard";
+import UserDashboard from "@/views/User/UserDashboard";
 
 
 const Page = async () => {

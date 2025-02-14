@@ -1,4 +1,4 @@
-import { DEFAULT } from '@/views/config';
+import { DEFAULT } from '@/config/views';
 
 const GmView = ({party, subParties, parentParty, characters, campaign, world}: any) => {
   const dndBeyondId = party?.dndBeyond?.id ?? parentParty?.dndBeyond?.id;

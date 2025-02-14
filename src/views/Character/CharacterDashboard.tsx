@@ -1,7 +1,7 @@
 "use client";
 
-import Dnd5eCharacterView from "@/views/components/blocks/Dnd5eCharacterView";
-import { DEFAULT } from "@/views/config";
+import Dnd5eCharacterView from "@lib/components/blocks/Dnd5eCharacterView";
+import { DEFAULT } from "@/config/views";
 import { SessionProvider, useSession } from "next-auth/react";
 import { useMemo } from "react";
 

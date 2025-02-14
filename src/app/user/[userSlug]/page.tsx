@@ -1,7 +1,7 @@
 "use server";
 
 import { getUserProfilePageProps } from "@/controllers/UserController";
-import UserProfile from "@/views/pages/User/UserProfile";
+import UserProfile from "@/views/User/UserProfile";
 
 
 const Page = async ({ params: { userSlug } }: any) => {

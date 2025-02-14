@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { postgres } from './config';
+import { postgres } from '../config/services';
 
 const prisma = new PrismaClient({
   datasources: {

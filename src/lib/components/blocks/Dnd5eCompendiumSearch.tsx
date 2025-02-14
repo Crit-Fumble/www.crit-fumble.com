@@ -1,4 +1,4 @@
-import { DEFAULT } from "@/views/config";
+import { DEFAULT } from "@/config/views";
 import { useRef, useState } from "react";
 
 const Page = () => {

@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { Inter } from "next/font/google";
-import { TopBarSession } from "@/views/components/sections/topBar";
+import { TopBarSession } from "@lib/components/sections/topBar";
 import "./globals.css";
-import { BottomBarSession } from "@/views/components/sections/bottomBar";
+import { BottomBarSession } from "@lib/components/sections/bottomBar";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,7 +20,7 @@ export default async function RootLayout({
 
   return (
     <html lang="en">
-      <body className={`${inter.className} dark`}>
+      <body className={`${inter.className}`}>
         <main className={'min-h-[100vh] max-h-screen pt-[48px] w-full h-max flex flex-col items-stretch justify-between flex-1'}>
           {children}
           <BottomBarSession session={session} />
@@ -30,4 +30,3 @@ export default async function RootLayout({
     </html>
   );
 }
-
