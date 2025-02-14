@@ -1,6 +1,6 @@
 "use server";
-import campaigns from '../data/campaigns';
 import { worldAnvil as config} from '@/services/config';
+import { getCampaignBySlug } from './CampaignService';
 
 type WorldAnvilId = string;
 type Granularity = -1 | 0 | 1 | 2 | number;
@@ -60,7 +60,7 @@ export const patchUserById = async(id: WorldAnvilId, user: any) => {
 ////////////////////////////////////////////////////////////////////////////////
 export const getWorld = async (world: any, granularity: Granularity = -1) => getWorldById(world?.id, granularity);
 export const getWorldBySlug = async (slug: string, granularity: Granularity = -1) => {
-  const campaign = campaigns.find(campaign => campaign?.worldAnvil?.slug == slug);
+  const campaign = await getCampaignBySlug(slug);
 
   if (!campaign?.worldAnvil?.id) {
     return;

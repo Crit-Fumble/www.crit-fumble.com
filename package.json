@@ -10,6 +10,7 @@
     "test": "jest",
     "prisma:pull": "prisma db pull",
     "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev --create-only",
     "prisma:deploy": "prisma migrate deploy",
     "prisma:push": "prisma db push"
   },

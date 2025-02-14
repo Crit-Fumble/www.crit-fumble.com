@@ -1,5 +1,5 @@
-import data from '../data/campaigns';
 import { getCharactersByPlayerId } from './CharacterService';
+import DatabaseService from './DatabaseService';
 
 export const getCampaign = async ( campaign: any ) => {
   let result = {};
@@ -19,28 +19,50 @@ export const getCampaign = async ( campaign: any ) => {
 
 export const getCampaignBySlug = async ( slug: string ) => {
   if (!slug) return {};
-  const response = data.find(campaign => campaign?.slug === slug);
+  
+  const response = await DatabaseService.campaign.findFirst({
+    where: {
+      slug: slug
+    }
+  })
 
   return response ?? {};
 }
 
 export const getCampaignById = async ( id: string ) => {
   if (!id) return {};
-  const response = data.find(campaign => campaign?.id === id);
+
+  const response = await DatabaseService.campaign.findFirst({
+    where: {
+      id: id
+    }
+  })
 
   return response ?? {};
 }
 
 export const getCampaignByName = async ( name: string ) => {
   if (!name) return {};
-  const response = data.find(campaign => campaign?.name === name);
+
+  const response = await DatabaseService.campaign.findFirst({
+    where: {
+      name: name
+    }
+  })  
 
   return response ?? {};
 }
 
 export const getCampaignsByGmId = async ( id: string ) => {
   if (!id) return [];
-  const response = data.filter(campaign => campaign?.gms?.includes(id));
+
+  const response = await DatabaseService.campaign.findMany({
+    where: {
+      gms: {
+        has: id
+      }
+    }
+  });
 
   return response ?? [];
 }
@@ -48,7 +70,14 @@ export const getCampaignsByPlayerId = async ( id: string ) => {
   if (!id) return [];
   const characters = await getCharactersByPlayerId(id);
   const campaignIds = characters.map(char => char?.campaign);
-  const response = data.filter(campaign => campaignIds?.includes(campaign?.id) || campaign?.gms?.includes(id) );
+
+  const response = await DatabaseService.campaign.findMany({
+    where: {
+      id: {
+        in: campaignIds
+       }
+    }
+  });
 
   return response ?? [];
 }
