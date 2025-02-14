@@ -26,16 +26,13 @@ export default [
       name: 'hobdaytrain',
       displayName: 'Hob Daytrain',
     },
-    steam: {
-      slug: 'hobdaytrain',
-      name: "Hob Daytrain",
-    },
     worldAnvil: {
       name: "Hob Daytrain",
       slug: "hobdaytrain",
       id: "0816a407-350d-4866-bb91-4edde5a85d2f",
     },
     dndBeyond: {
+      id: "CritFumbleGaming",
       name: "CritFumbleGaming",
     },
     roll20: {
@@ -54,6 +51,7 @@ export default [
       name: 'mumbley81666',
     },
     dndbeyond: {
+      id: "Aleric_Brightstone",
       name: "Aleric_Brightstone",
     },
     roll20: {
@@ -88,12 +86,6 @@ export default [
     id: "10",
     name: "EisenElch",
     slug: "eisenelch",
-    // steam: {
-
-    // },
-    // worldAnvil: {
-
-    // },
     discord: {
       id: "1235921801737928819",
       name: 'eisen_stier',
@@ -249,15 +241,6 @@ export default [
     discord: { 
       id: "535171660656148481",
       name: 'spearsy23', 
-    },
-  },
-  {
-    id: "300",
-    name: "Whimsical Menace",
-    slug: "whimsicalmenace",
-    discord: { 
-      id: "1018937885392650341",
-      name: 'kimmykhaos', 
     },
   },
 ];

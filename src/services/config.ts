@@ -1,5 +1,3 @@
-import DiscordProvider from "next-auth/providers/discord";
-
 export const postgres = {
   url: process.env.POSTGRES_URL ?? '',
   url_no_ssl: process.env.POSTGRES_URL_NO_SSL ?? '',
