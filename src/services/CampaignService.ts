@@ -2,23 +2,21 @@ import { getCharactersByPlayerId } from './CharacterService';
 import DatabaseService from './DatabaseService';
 
 export const getCampaign = async ( campaign: any ) => {
-  let result = {};
-
   if (campaign?.id) {
-    result = await getCampaignById(campaign?.id);
+    return getCampaignById(campaign?.id);
   }
   if (campaign?.slug) {
-    result = await getCampaignById(campaign?.slug);
+    return getCampaignById(campaign?.slug);
   }
   if (campaign?.name) {
-    result = await getCampaignById(campaign?.name);
+    return getCampaignById(campaign?.name);
   }
 
-  return result;
+  return {} as any;
 }
 
 export const getCampaignBySlug = async ( slug: string ) => {
-  if (!slug) return {};
+  if (!slug) return {} as any;
   
   const response = await DatabaseService.campaign.findFirst({
     where: {
@@ -30,7 +28,7 @@ export const getCampaignBySlug = async ( slug: string ) => {
 }
 
 export const getCampaignById = async ( id: string ) => {
-  if (!id) return {};
+  if (!id) return {} as any;
 
   const response = await DatabaseService.campaign.findFirst({
     where: {
@@ -42,7 +40,7 @@ export const getCampaignById = async ( id: string ) => {
 }
 
 export const getCampaignByName = async ( name: string ) => {
-  if (!name) return {};
+  if (!name) return {} as any;
 
   const response = await DatabaseService.campaign.findFirst({
     where: {
@@ -50,11 +48,11 @@ export const getCampaignByName = async ( name: string ) => {
     }
   })  
 
-  return response ?? {};
+  return response ?? {} as any;
 }
 
 export const getCampaignsByGmId = async ( id: string ) => {
-  if (!id) return [];
+  if (!id) return [] as any;
 
   const response = await DatabaseService.campaign.findMany({
     where: {
@@ -64,10 +62,10 @@ export const getCampaignsByGmId = async ( id: string ) => {
     }
   });
 
-  return response ?? [];
+  return response ?? [] as any;
 }
 export const getCampaignsByPlayerId = async ( id: string ) => {
-  if (!id) return [];
+  if (!id) return [] as any;
   const characters = await getCharactersByPlayerId(id);
   const campaignIds = characters.map(char => char?.campaign);
 
@@ -79,5 +77,5 @@ export const getCampaignsByPlayerId = async ( id: string ) => {
     }
   });
 
-  return response ?? [];
+  return response ?? [] as any;
 }
