@@ -32,15 +32,8 @@ export type Campaign = {
     chronicleId?: string;
     chronicleSlug?: string;
   };
-  worldAnvilCampaign?: {
-    join: string;
-  };
-  foundryVtt?: {
-    url: string;
-    domain: string;
-  };
   discord?: {
-    serverId?: string;
+    id?: string;
     fumbleBotId?: string;
     playerRoles?: string[];
     botRoles?: string[];

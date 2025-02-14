@@ -2,7 +2,7 @@ import { DEFAULT } from '@/views/config';
 
 const GmView = ({party, subParties, parentParty, characters, campaign, world}: any) => {
   const dndBeyondId = party?.dndBeyond?.id ?? parentParty?.dndBeyond?.id;
-  const discordServerId = campaign?.discord?.serverId;
+  const discordServerId = campaign?.discord?.id;
   const sideChatThreadId = party?.discord?.sideChatThreadId ?? parentParty?.discord?.sideChatThreadId;
   const voiceChannelId = party?.discord?.voiceChannelId ?? parentParty?.discord?.voiceChannelId;
   const roll20Id = party?.roll20?.id ?? parentParty?.roll20?.id;

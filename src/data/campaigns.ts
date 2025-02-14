@@ -16,15 +16,8 @@ export default [
       chronicleId: '',
       chronicleSlug: 'parties-die-in-the-forgotten-realms-chronicle',
     },
-    foundryVtt: {
-      url: 'https://pdfr.foundryserver.com/game',
-      domain: 'pdfr.foundryserver.com'
-    },
-    worldAnvilCampaign: {
-      joinLink: 'http://www.worldanvil.com/epic/R3Nwbp06l65VzG58FUKxbxiYssSZNC/join/xZqj-6auN-MxzCEq',
-    },
     discord: {
-      serverId: '1002008886137589771',
+      id: '1002008886137589771',
       fumbleBotId: '1100433655668674671',
 
       playerRoles: ['1245156328561836064'],

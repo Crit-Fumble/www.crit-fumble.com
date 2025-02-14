@@ -22,7 +22,7 @@ export const worldAnvil = {
 };
 
 export const discord = {
-  serverId: '1002008886137589771',
+  id: '1002008886137589771',
   cfgAdminRole: '1056055558278479893',
   key: process.env.DISCORD_PUBLIC_KEY ?? '',
   appId: process.env.DISCORD_APP_ID ?? '',

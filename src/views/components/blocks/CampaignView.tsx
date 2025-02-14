@@ -1,7 +1,7 @@
 import { DEFAULT } from '@/views/config';
 
 const Dnd5ePartyRoster = ({party, subParties, parentParty, characters, campaign, world}: any) => {
-  const discordServerId = campaign?.discord?.serverId;
+  const discordServerId = campaign?.discord?.id;
   const voiceChannelId = party?.discord?.voiceChannelId ?? parentParty?.discord?.voiceChannelId;
   const sideChatThreadId = party?.discord?.sideChatThreadId ?? parentParty?.discord?.sideChatThreadId;
   const sideChatUrl = `https://discord.com/channels/${discordServerId}/${sideChatThreadId}`;

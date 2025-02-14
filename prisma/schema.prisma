@@ -148,3 +148,46 @@ model VerificationToken {
 
   @@unique([identifier, token])
 }
+
+model Campaign {
+  id                 String              @id
+  name               String?
+  slug               String?
+  system             String?
+  gms                String[]
+  active             Boolean?
+  world_anvil        String?
+  discord            String?
+  CampaignDiscord    CampaignDiscord?    @relation(fields: [discord], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "discord")
+  CampaignWorldAnvil CampaignWorldAnvil? @relation(fields: [world_anvil], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "world_anvil")
+}
+
+model CampaignDiscord {
+  id                  String     @id
+  fumbleBotId         String?
+  playerRoles         String[]
+  gmRoles             String[]
+  botRoles            String[]
+  forumChannelId      String?
+  playByPostChannelId String?
+  voiceChannelId      String?
+  Campaign            Campaign[]
+}
+
+model CampaignWorldAnvil {
+  id            String     @id
+  name          String?
+  slug          String?
+  worldMapId    String?
+  chronicleId   String?
+  chronicleSlug String?
+  Campaign      Campaign[]
+}
+
+model GameSystem {
+  id          String  @id
+  name        String?
+  slug        String?
+  description String?
+  srdApi      String?
+}

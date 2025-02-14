@@ -4,7 +4,7 @@ import ButtonBlock from "./LinkButtonBlock";
 import { Card, CardContent, CardHeader } from "./Card";
 
 const Dnd5eCharacterView = ({ player, campaign, party, parentParty, character, world }: any) => {
-  const discordServerId = campaign?.discord?.serverId;
+  const discordServerId = campaign?.discord?.id;
   const characterThreadId = character?.discord?.characterThreadId;
   const voiceChannelId = party?.discord?.voiceChannelId ?? parentParty?.discord?.voiceChannelId;
   const sideChatThreadId = party?.discord?.sideChatThreadId ?? parentParty?.discord?.sideChatThreadId;
