@@ -54,67 +54,45 @@ const AdminDashboardInner = ({ viewedUser, users, userDiscords }: AdminDashboard
       </div>
 
       <div className="flex flex-row gap-2 align-middle items-center justify-center">
-        {/* <Card >
-          <CardHeader>Users</CardHeader>
-          <CardContent>
-            <table className="min-w-full">
-              <thead>
-                <tr className="w-full">
-                  <th className="py-2 px-4 border-b">Name</th>
-                  <th className="py-2 px-4 border-b">Discord</th>
-                  <th className="py-2 px-4 border-b">Role</th>
-                </tr>
-              </thead>
-              <tbody>
-                {users ? users.map((user: any) => (
-                  <tr key={user.id} className="hover:bg-gray-400 hover:dark:bg-gray-700">
-                    <td className="py-2 px-4 border-b">{user.name}</td>
-                    <td className="py-2 px-4 border-b">{user.discord}</td>
-                    <td className="py-2 px-4 border-b">{user.admin ? 'Admin' : 'User'}</td>
-                  </tr>
-                )) : <tr><td colSpan={4} className="py-2 px-4 border-b">Loading...</td></tr>}
-              </tbody>
-            </table>
-          </CardContent>
-        </Card> */}
         <Card>
           <CardHeader>Discord Sign-ins</CardHeader>
           <CardContent>
             <table className="min-w-full">
               <thead>
                 <tr className="w-full">
-                <th className="py-2 px-4 border-b">Id</th>
-                <th className="py-2 px-4 border-b">Name</th>
-                <th className="py-2 px-4 border-b">Display Name</th>
+                  <th className="py-2 px-4 border-b">Discord Id</th>
+                  <th className="py-2 px-4 border-b">Discord Name</th>
+                  <th className="py-2 px-4 border-b">Display Name</th>
+                  <th className="py-2 px-4 border-b">CFG Id</th>
+                  <th className="py-2 px-4 border-b">CFG Name</th>
+                  <th className="py-2 px-4 border-b">CFG Admin</th>
+                  <th className="py-2 px-4 border-b">Roll20 Id</th>
+                  <th className="py-2 px-4 border-b">World Anvil Id</th>
+                  <th className="py-2 px-4 border-b">D&D Beyond Id</th>
                 </tr>
               </thead>
               <tbody>
-                {userDiscords ? userDiscords.map((userDiscord: any) => (
-                  <tr key={userDiscord.id} className="hover:bg-gray-400 hover:dark:bg-gray-700">
-                    <td className="py-2 px-4 border-b">{userDiscord.id}</td>
-                    <td className="py-2 px-4 border-b">{userDiscord.name}</td>
-                    <td className="py-2 px-4 border-b">{userDiscord.displayName}</td>
-                  </tr>
-                )) : <tr><td colSpan={4} className="py-2 px-4 border-b">Loading...</td></tr>}
+                {userDiscords ? userDiscords.map((userDiscord: any) => {
+                  const user = users.find((user: any) => user.discord === userDiscord.id);
+
+                  return (
+                    <tr key={userDiscord.id} className="hover:bg-gray-400 hover:dark:bg-gray-700">
+                      <td className="py-2 px-4 border-b">{userDiscord.id}</td>
+                      <td className="py-2 px-4 border-b">{userDiscord.name}</td>
+                      <td className="py-2 px-4 border-b">{userDiscord.displayName}</td>
+                      <td className="py-2 px-4 border-b">{user?.id}</td>
+                      <td className="py-2 px-4 border-b">{user?.name}</td>
+                      <td className="py-2 px-4 border-b">{user?.admin ? "True" : "False"}</td>
+                      <td className="py-2 px-4 border-b">{user?.roll20}</td>
+                      <td className="py-2 px-4 border-b">{user?.world_anvil}</td>
+                      <td className="py-2 px-4 border-b">{user?.dd_beyond}</td>
+                    </tr>
+                  )}) : <tr><td colSpan={4} className="py-2 px-4 border-b">Loading...</td></tr>}
               </tbody>
             </table>
           </CardContent>
         </Card>
       </div>
-
-      {/* <Card>
-        <CardHeader>Add User</CardHeader>
-        <CardContent>
-          <form onSubmit={handleSubmit} className="mb-4">
-            <input type="text" name="name" value={newUser.name} onChange={handleInputChange} placeholder="Name" required className="border p-2 mr-2" />
-            <input type="text" name="discord" value={newUser.discord} onChange={handleInputChange} placeholder="Discord Profile" required className="border p-2 mr-2" />
-            <label>
-              <input type="checkbox" name="admin" checked={newUser.admin} onChange={handleInputChange} /> Admin
-            </label>
-            <button type="submit" className="bg-blue-500 text-white p-2 ml-2">Add User</button>
-          </form>
-        </CardContent>
-      </Card> */}
     </div>
   );
 };
