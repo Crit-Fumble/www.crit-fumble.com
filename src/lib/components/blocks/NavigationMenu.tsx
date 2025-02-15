@@ -123,6 +123,9 @@ const NavigationMenu = () => {
                 {profile?.slug && <li className="px-4 py-2 hover:underline cursor-pointer">
                   <a href={`/user/${profile?.slug}`}>Profile</a>
                 </li>}
+                {profile?.admin && <li className="px-4 py-2 hover:underline cursor-pointer">
+                  <a href={`/admin/${profile?.slug}`}>Admin</a>
+                </li>}
                 <hr/>
                 <li className="px-4 py-2 cursor-pointer">
                   <a style={{padding: '2px'}} className="cursor-pointer" onClick={toggleDark}>
