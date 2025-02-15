@@ -22,17 +22,15 @@ export const getAdminDashboardPageProps = async (userSlug: string) => {
   const characters = await getCharactersByPlayerId(viewedUser.id);
 
   const users = await DatabaseService.user.findMany();
+  const userDiscords = await DatabaseService.userDiscord.findMany();
 
-  console.log(users);
-
-  // You can add more admin-specific data here
   return {
     session,
     viewedUser,
     sessionUser,
     characters,
     users,
-    // Add additional admin data as needed
+    userDiscords,
   };
 };
 

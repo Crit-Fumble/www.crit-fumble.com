@@ -8,13 +8,15 @@ interface AdminDashboardProps {
   session: any;
   viewedUser: any;
   users: any;
+  userDiscords: any;
 }
 interface AdminDashboardInnerProps {
   viewedUser: any;
   users: any;
+  userDiscords: any;
 }
 
-const AdminDashboardInner = ({ viewedUser, users }: AdminDashboardInnerProps) => {
+const AdminDashboardInner = ({ viewedUser, users, userDiscords }: AdminDashboardInnerProps) => {
   const { data: sessionData, status } = useSession();
   const isLoading = useMemo(() => (status === "loading"), [status]);
   const [newUser, setNewUser] = useState({ name: '', discord: '', admin: false });
@@ -51,37 +53,54 @@ const AdminDashboardInner = ({ viewedUser, users }: AdminDashboardInnerProps) =>
         </ul>
       </div>
 
-      <Card >
-        <CardHeader>Users</CardHeader>
-        <CardContent>
-          <table className="min-w-full">
-            <thead>
-              <tr className="w-full">
-                <th className="py-2 px-4 border-b">Name</th>
-                <th className="py-2 px-4 border-b">Discord</th>
-                <th className="py-2 px-4 border-b">Role</th>
-                {/* <th className="py-2 px-4 border-b">Actions</th> */}
-              </tr>
-            </thead>
-            <tbody>
-              {users ? users.map((user: any) => (
-                <tr key={user.id} className="hover:bg-gray-400 hover:dark:bg-gray-700">
-                  <td className="py-2 px-4 border-b">{user.name}</td>
-                  {/* TODO: show profile preview in the right hand side when discord id clicked */}
-                  <td className="py-2 px-4 border-b">{user.discord}</td>
-                  <td className="py-2 px-4 border-b">{user.admin ? 'Admin' : 'User'}</td>
-                  {/* <td className="py-2 px-4 border-b">
-                    <div className="flex gap-2">
-                      <button className="text-blue-500 dark:text-blue-300 hover:underline">Edit</button>
-                      <button className="text-red-500 dark:text-red-300 hover:underline">Delete</button>
-                    </div>
-                  </td> */}
+      <div className="flex flex-row gap-2 align-middle items-center justify-center">
+        {/* <Card >
+          <CardHeader>Users</CardHeader>
+          <CardContent>
+            <table className="min-w-full">
+              <thead>
+                <tr className="w-full">
+                  <th className="py-2 px-4 border-b">Name</th>
+                  <th className="py-2 px-4 border-b">Discord</th>
+                  <th className="py-2 px-4 border-b">Role</th>
                 </tr>
-              )) : <tr><td colSpan={4} className="py-2 px-4 border-b">Loading...</td></tr>}
-            </tbody>
-          </table>
-        </CardContent>
-      </Card>
+              </thead>
+              <tbody>
+                {users ? users.map((user: any) => (
+                  <tr key={user.id} className="hover:bg-gray-400 hover:dark:bg-gray-700">
+                    <td className="py-2 px-4 border-b">{user.name}</td>
+                    <td className="py-2 px-4 border-b">{user.discord}</td>
+                    <td className="py-2 px-4 border-b">{user.admin ? 'Admin' : 'User'}</td>
+                  </tr>
+                )) : <tr><td colSpan={4} className="py-2 px-4 border-b">Loading...</td></tr>}
+              </tbody>
+            </table>
+          </CardContent>
+        </Card> */}
+        <Card>
+          <CardHeader>Discord Sign-ins</CardHeader>
+          <CardContent>
+            <table className="min-w-full">
+              <thead>
+                <tr className="w-full">
+                <th className="py-2 px-4 border-b">Id</th>
+                <th className="py-2 px-4 border-b">Name</th>
+                <th className="py-2 px-4 border-b">Display Name</th>
+                </tr>
+              </thead>
+              <tbody>
+                {userDiscords ? userDiscords.map((userDiscord: any) => (
+                  <tr key={userDiscord.id} className="hover:bg-gray-400 hover:dark:bg-gray-700">
+                    <td className="py-2 px-4 border-b">{userDiscord.id}</td>
+                    <td className="py-2 px-4 border-b">{userDiscord.name}</td>
+                    <td className="py-2 px-4 border-b">{userDiscord.displayName}</td>
+                  </tr>
+                )) : <tr><td colSpan={4} className="py-2 px-4 border-b">Loading...</td></tr>}
+              </tbody>
+            </table>
+          </CardContent>
+        </Card>
+      </div>
 
       {/* <Card>
         <CardHeader>Add User</CardHeader>
