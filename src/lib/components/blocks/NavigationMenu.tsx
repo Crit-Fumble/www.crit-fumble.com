@@ -45,7 +45,7 @@ const NavigationMenu = () => {
         <ul className="flex space-x-4 pl-4">
           {isPlayer && `${campaigns?.length}` && <li className="relative">
             <button
-              className="text-white hover:text-gray-400"
+              className="hover:underline"
               onClick={() => handleDropdown('campaigns')}
             >
               Campaigns
@@ -65,7 +65,7 @@ const NavigationMenu = () => {
           </li>}
           {isPlayer && <li className="relative">
             <button
-              className="text-white hover:text-gray-400"
+              className="hover:underline"
               onClick={() => handleDropdown('characters')}
             >
               Characters
