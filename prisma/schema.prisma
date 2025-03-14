@@ -186,6 +186,7 @@ model CampaignDiscord {
   forumChannelId      String?
   playByPostChannelId String?
   voiceChannelId      String?
+  serverId            String?
   Campaign            Campaign[]
 }
 
@@ -205,4 +206,49 @@ model GameSystem {
   slug        String?
   description String?
   srdApi      String?
+}
+
+model Character {
+  id        String  @id
+  player    String?
+  campaign  String?
+  party     String?
+  name      String?
+  slug      String?
+  dd_beyond String?
+  discord   String?
+  roll20    String?
+}
+
+model CharacterDndBeyond {
+  id String @id
+}
+
+model GameSession {
+  id    String   @id(map: "PartySession_pkey")
+  day   String?
+  times String[]
+}
+
+model Party {
+  id        String   @id
+  campaign  String?
+  gm        String?
+  slug      String?
+  name      String?
+  active    Boolean?
+  session   String?
+  dd_beyond String?
+  roll20    String?
+  discord   String?
+}
+
+model PartyDndBeyond {
+  id   String  @id
+  join String?
+}
+
+model PartyRoll20 {
+  id   String  @id
+  join String?
 }

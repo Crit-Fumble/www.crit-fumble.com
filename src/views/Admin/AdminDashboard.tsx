@@ -106,6 +106,8 @@ const AdminDashboardInner = ({ viewedUser, users, userDiscords }: AdminDashboard
                     : value
               , 2)}
             </pre>
+          </CardContent>
+          <CardContent>
             <pre>
               {selectedUser?.discord && JSON.stringify(userDiscords
                 .find((userDiscord: any) => userDiscord.id === selectedUser.discord)

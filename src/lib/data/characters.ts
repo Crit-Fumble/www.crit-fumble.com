@@ -33,10 +33,10 @@ export default [
     player: "30",
     campaign: "0",
     party: '3',
-    name: "Yogito",
-    slug: "yogito",
+    name: "Yujito",
+    slug: "yujito",
     foundryVtt: {
-      user: 'Yogito',
+      user: 'Yujito',
       password: '',
     },
     dndBeyond: { id: '66206768' },
@@ -47,7 +47,7 @@ export default [
   },
   {
     id: "10020",
-    player: "10",
+    player: "20",
     campaign: "0",
     party: '3',
     name: "Cozu",
@@ -108,7 +108,7 @@ export default [
     // roll20: { id: '' },
   },
   {
-    id: "11060",
+    id: "11070",
     player: "60",
     campaign: "0",
     name: "Nari",
@@ -122,7 +122,7 @@ export default [
     // roll20: { id:'' },
   },
   {
-    id: "11050",
+    id: "11071",
     player: "50",
     party: '14',
     campaign: "0",
@@ -136,7 +136,7 @@ export default [
     // roll20: { id:'' },
   },
   {
-    id: "11070",
+    id: "11080",
     player: "70",
     party: '24',
     campaign: "0",
@@ -153,7 +153,7 @@ export default [
     // roll20: { id: '' },
   },
   {
-    id: "11080",
+    id: "11100",
     player: "80",
     campaign: "0",
     party: '24',
@@ -170,7 +170,7 @@ export default [
     // roll20: { id: '' },
   },
   {
-    id: "11010",
+    id: "11110",
     player: "10",
     campaign: "0",
     party: '44',
@@ -186,7 +186,7 @@ export default [
     },
   },
   {
-    id: "11020",
+    id: "11120",
     player: "20",
     campaign: "0",
     party: '54',
@@ -199,7 +199,7 @@ export default [
     dndBeyond: { id: '63614831' },
   },
   {
-    id: "11060",
+    id: "11130",
     player: "100",
     campaign: "0",
     party: "5",
@@ -215,7 +215,7 @@ export default [
     // roll20: { id:'' },
   },
   {
-    id: "11060",
+    id: "11160",
     player: "200",
     campaign: "0",
     party: "5",
