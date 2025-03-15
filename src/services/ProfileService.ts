@@ -46,6 +46,9 @@ export const getUserByDiscordId = async ( discordId: string ) => {
   const response = await DatabaseService.user.findFirst({
     where: {
       discord: discordId
+    },
+    include: {
+      UserDiscord: true
     }
   })
 

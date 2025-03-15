@@ -94,7 +94,7 @@ export const getPartiesByPlayerId = async ( playerId: string ) => {
   
   // Get character data to determine which parties the player is in
   const characters = await getCharactersByPlayerId(playerId);
-  const partyIds = characters.map((char: any) => char?.party);
+  const partyIds = characters.map((char: any) => char?.party).filter(id => id !== null && id !== undefined);
   
   // Only query for parties if we have party IDs
   if (!partyIds.length) return [];

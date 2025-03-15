@@ -1,6 +1,6 @@
 "use server";
 
-import NextAuth, { getServerSession as _getServerSession } from "next-auth";
+import NextAuth, { getServerSession as _getServerSession, AuthOptions } from "next-auth";
 import DiscordProvider, { DiscordProfile } from "next-auth/providers/discord";
 import { discord } from "@/config/services";
 import { getUserByDiscordId, getUserByDiscordName } from "./ProfileService";
@@ -10,7 +10,7 @@ import { getCampaignsByPlayerId } from "./CampaignService";
 import DatabaseService from "./DatabaseService";
 // import { getUserByDiscordName } from "./UserService";
 
-const config = { 
+const config: AuthOptions = { 
   providers: [ 
       DiscordProvider({
         clientId: discord.authId,
@@ -165,4 +165,8 @@ const config = {
 };
 
 export const handler = NextAuth(config);
-export const getServerSession: (typeof _getServerSession) = () => _getServerSession(config);
+
+// Export the getServerSession function for use in other places
+export async function getServerSession() {
+  return _getServerSession(config);
+}
