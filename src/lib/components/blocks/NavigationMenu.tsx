@@ -13,6 +13,7 @@ const NavigationMenu = () => {
   const isLoading = useMemo(() => (status === "loading"), [status]);
   const isLoggedIn = useMemo(() => (status === "authenticated"), [status]);
   const isPlayer = useMemo(() => (!!session?.profile?.id), [session?.profile?.id]);
+  const isAdmin = useMemo(() => (!!session?.profile?.admin), [session?.profile?.admin]);
   const campaigns = useMemo(() => session?.campaigns?.filter?.((campaign: any) => campaign?.active), [session?.campaigns]);
   const profile = useMemo(() => session?.profile, [session?.profile]);
   
@@ -153,6 +154,11 @@ const NavigationMenu = () => {
                         ))
                       : <li className="px-4 py-2 italic text-nowrap">No Campaigns Found.</li>
                   }
+                  {isAdmin && (
+                    <li className="px-4 py-2 hover:underline cursor-pointer text-nowrap border-t">
+                      <a href="/campaign/create">Create New Campaign</a>
+                    </li>
+                  )}
                 </ul>
               )}
             </li>

@@ -8,6 +8,7 @@ import { getCharactersByPlayerId } from "./CharacterService";
 import { getPartiesByPlayerId } from "./PartyService";
 import { getCampaignsByPlayerId } from "./CampaignService";
 import DatabaseService from "./DatabaseService";
+import { randomUUID } from "node:crypto";
 // import { getUserByDiscordName } from "./UserService";
 
 const config: AuthOptions = { 
@@ -103,15 +104,13 @@ const config: AuthOptions = {
           (async () => {
             try {
               // First check if user exists or needs to be created
-              let user = await DatabaseService.user.findUnique({
-                where: { id: profile.id }
-              });
+              let user = await getUserByDiscordId(profile.id);
               
               // If user doesn't exist, create it
-              if (!user) {
+              if (user === null || user === undefined) {
                 user = await DatabaseService.user.create({
                   data: {
-                    id: profile.id,
+                    id: randomUUID(),
                     name: profile.global_name || profile.username,
                     email: profile.email || null,
                     image: profile.image_url || `https://cdn.discordapp.com/avatars/${profile.id}/${profile.avatar}.png`,
