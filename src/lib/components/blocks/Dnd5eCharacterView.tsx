@@ -47,7 +47,7 @@ const Dnd5eCharacterView = ({ player, campaign, party, parentParty, character, w
   const roll20Id = party?.roll20?.id ?? parentParty?.roll20?.id;
   const roll20VttUrl = roll20Id ? 
     `https://app.roll20.net/editor/setcampaign/${roll20Id}?desiredrole=player` : null;
-  const dndBeyondId = character?.dndBeyond?.id;
+  const dndBeyondId = character?.DndBeyond?.dd_beyond_id;
   const ddbSheetUrl = dndBeyondId ? 
     `https://www.dndbeyond.com/characters/${dndBeyondId}` : null;
   const FIVEE_TOOLS_URL = `https://2014.5e.tools`;
@@ -57,13 +57,7 @@ const Dnd5eCharacterView = ({ player, campaign, party, parentParty, character, w
     <div className="flex flex-col gap-2 items-center justify-middle">
       <Card className="flex flex-col gap-2 justify-start text-center w-full max-w-2xl">
         {character?.name && <CardHeader>{character.name}</CardHeader>}
-        <CardContent>
-          {character?.race && character?.class && (
-            <p className="text-lg mb-2">
-              {character.race} {character.class} {character.level ? `(Level ${character.level})` : ''}
-            </p>
-          )}
-          
+        <CardContent>          
           {/* Party information with enhanced fallback handling */}
           {(party && party.name) ? (
             <p className="my-1">Member of <strong>{party.name}</strong></p>

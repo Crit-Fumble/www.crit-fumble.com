@@ -1,7 +1,6 @@
 "use client";
 
 import Dnd5eCharacterView from "@lib/components/blocks/Dnd5eCharacterView";
-import { DEFAULT } from "@/config/views";
 import { SessionProvider, useSession } from "next-auth/react";
 import { useMemo } from "react";
 import { Card, CardContent, CardHeader } from "@lib/components/blocks/Card";
@@ -67,8 +66,26 @@ const CharacterDashboardInner = ({ error, ...props }: any) => {
     campaignData: props.campaign ? `Campaign found with ID ${props.campaign.id}` : "No campaign data"
   });
 
+  // Check if the current user is the owner of the character
+  const isOwner = props.character && props.player && props.character.player === props.player.id;
+
   return (
-    <div className="flex flex-col gap-2">
+    <div className="flex flex-col gap-4">
+      {/* {isOwner && (
+        <Card className="w-full">
+          <CardHeader>Character Menu</CardHeader>
+          <CardContent>
+            <div className="flex gap-2">
+              <Link 
+                href={`/character/${props.character.slug}/edit`}
+                className="px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+              >
+                Edit Character
+              </Link>
+            </div>
+          </CardContent>
+        </Card>
+      )} */}
       <Dnd5eCharacterView {...props} />
     </div>
   )

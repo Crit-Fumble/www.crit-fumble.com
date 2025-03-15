@@ -22,7 +22,10 @@ export const getCharacterBySlug = async ( slug: string ) => {
   
   // @ts-ignore - Prisma client has this model at runtime
   const response = await prisma.character.findFirst({
-    where: { slug }
+    where: { slug },
+    include: {
+      DndBeyond: true
+    }
   });
 
   return response ?? {};
@@ -39,10 +42,7 @@ export const getCharacterWithRelations = async (slug: string) => {
     const character = await prisma.character.findFirst({
       where: { slug },
       include: {
-        // Include any related entities that are directly connected to the character
-        // These will depend on your Prisma schema
-        // Example: parties: true,
-        // Example: campaigns: true,
+        DndBeyond: true
       }
     });
     
@@ -60,7 +60,10 @@ export const getCharacterById = async ( id: string ) => {
   
   // @ts-ignore - Prisma client has this model at runtime
   const response = await prisma.character.findUnique({
-    where: { id }
+    where: { id },
+    include: {
+      DndBeyond: true
+    }
   });
 
   return response ?? {};
@@ -71,7 +74,10 @@ export const getCharactersByPlayerId = async ( userId: string ) => {
   
   // @ts-ignore - Prisma client has this model at runtime
   const response = await prisma.character.findMany({
-    where: { player: userId }
+    where: { player: userId },
+    include: {
+      DndBeyond: true
+    }
   });
 
   return response ?? [];
@@ -82,7 +88,10 @@ export const getCharactersByCampaignId = async ( campaignId: string ) => {
 
   // @ts-ignore - Prisma client has this model at runtime
   const response = await prisma.character.findMany({
-    where: { campaign: campaignId }
+    where: { campaign: campaignId },
+    include: {
+      DndBeyond: true
+    }
   });
 
   return response ?? [];
@@ -97,6 +106,9 @@ export const getCharactersByPartyIds = async ( partyIds: string[] ) => {
       party: { 
         in: partyIds 
       } 
+    },
+    include: {
+      DndBeyond: true
     }
   });
 
@@ -128,7 +140,7 @@ export const createCharacterDndBeyond = async (dndBeyondId: string) => {
     
     // @ts-ignore - Prisma client has this model at runtime
     const dndBeyondCharacter = await prisma.characterDndBeyond.create({
-      data: createData
+      data: createData,
     });
     
     console.log('CharacterDndBeyond record created successfully:', dndBeyondCharacter);
@@ -187,7 +199,10 @@ export const createCharacter = async (characterData: any, userId: string) => {
     
     // @ts-ignore - Prisma client has this model at runtime
     const newCharacter = await prisma.character.create({
-      data: characterCreateData
+      data: characterCreateData,
+      include: {
+        DndBeyond: true
+      }
     });
     
     console.log('Character created successfully:', newCharacter);
@@ -205,7 +220,10 @@ export const updateCharacter = async (id: string, characterData: any, userId: st
     // First check if the character exists
     // @ts-ignore - Prisma client has this model at runtime
     const existingCharacter = await prisma.character.findUnique({
-      where: { id }
+      where: { id },
+      include: {
+        DndBeyond: true
+      }
     });
     
     if (!existingCharacter) {
@@ -227,6 +245,9 @@ export const updateCharacter = async (id: string, characterData: any, userId: st
       data: {
         ...characterData,
         updatedAt: new Date()
+      },
+      include: {
+        DndBeyond: true
       }
     });
     
@@ -244,7 +265,10 @@ export const deleteCharacter = async (id: string, userId: string) => {
     // First check if the character exists
     // @ts-ignore - Prisma client has this model at runtime
     const existingCharacter = await prisma.character.findUnique({
-      where: { id }
+      where: { id },
+      include: {
+        DndBeyond: true
+      }
     });
     
     if (!existingCharacter) {
@@ -260,12 +284,26 @@ export const deleteCharacter = async (id: string, userId: string) => {
       return false;
     }
     
-    // @ts-ignore - Prisma client has this model at runtime
-    await prisma.character.delete({
-      where: { id }
-    });
-    
-    return true;
+    try {
+      // First delete the DndBeyond record if it exists
+      if (existingCharacter.DndBeyond && existingCharacter.dd_beyond) {
+        // @ts-ignore - Prisma client has this model at runtime
+        await prisma.characterDndBeyond.delete({
+          where: { id: existingCharacter.dd_beyond }
+        });
+      }
+      
+      // Then delete the character
+      // @ts-ignore - Prisma client has this model at runtime
+      await prisma.character.delete({
+        where: { id }
+      });
+      
+      return true;
+    } catch (error) {
+      console.error('Error deleting character and related records:', error);
+      return false;
+    }
   } catch (error) {
     console.error('Error deleting character:', error);
     return false;
@@ -285,6 +323,9 @@ export const isGameMasterForCharacter = async (characterId: string, userId: stri
         id: true,
         campaign: true,
         party: true
+      },
+      include: {
+        DndBeyond: true
       }
     });
     

@@ -12,6 +12,7 @@ import { getUserByDiscordId } from '@/services/ProfileService';
 import { getWorld } from '@/services/WorldAnvilService';
 import { redirect } from 'next/navigation';
 import { NextResponse } from 'next/server';
+import { Character } from '@prisma/client';
 import prisma from '@/services/DatabaseService'; // Fixed import for prisma
 
 export const getCharacterPageProps = async ({ character: { slug: characterSlug }, ...incProps}: any) => {
