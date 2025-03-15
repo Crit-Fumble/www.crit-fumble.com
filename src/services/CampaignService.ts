@@ -67,7 +67,7 @@ export const getCampaignsByGmId = async ( id: string ) => {
 export const getCampaignsByPlayerId = async ( id: string ) => {
   if (!id) return [] as any;
   const characters = await getCharactersByPlayerId(id);
-  const campaignIds = characters.map(char => char?.campaign);
+  const campaignIds = characters.map(char => char?.campaign).filter(id => id !== null) as string[];
 
   const response = await DatabaseService.campaign.findMany({
     where: {

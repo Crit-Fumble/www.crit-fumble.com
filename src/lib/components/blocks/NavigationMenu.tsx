@@ -19,6 +19,7 @@ const NavigationMenu = () => {
 
   useEffect(() => {
     update();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleLogout = async (): Promise<void> => {

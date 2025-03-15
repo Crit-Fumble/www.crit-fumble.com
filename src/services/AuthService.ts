@@ -65,7 +65,7 @@ const config = {
         session.profile = await getUserByDiscordName(session.user.name);
       }
 
-      if (!`${session?.profile?.id}`) {
+      if (!session?.profile?.id) {
         // console.log(`session 1`, session);
         
         return session;
@@ -76,9 +76,9 @@ const config = {
         session.characters,
         session.parties,
       ] = [
-        await getCampaignsByPlayerId(session.profile?.id),
-        await getCharactersByPlayerId(session.profile?.id),
-        await getPartiesByPlayerId(session.profile?.id),
+        await getCampaignsByPlayerId(session.profile.id),
+        await getCharactersByPlayerId(session.profile.id),
+        await getPartiesByPlayerId(session.profile.id),
       ];
 
       // console.log(`session 2`, session);
