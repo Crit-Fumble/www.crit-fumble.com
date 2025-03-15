@@ -1,4 +1,4 @@
-import data from '@lib/data/parties';
+import prisma from './DatabaseService';
 import { getCharactersByPlayerId } from './CharacterService';
 
 export const getParty = async ( party: any ) => {
@@ -8,10 +8,10 @@ export const getParty = async ( party: any ) => {
     result = await getPartyById(party?.id);
   }
   if (party?.slug) {
-    result = await getPartyById(party?.slug);
+    result = await getPartyBySlug(party?.slug);
   }
   if (party?.name) {
-    result = await getPartyById(party?.name);
+    result = await getPartyByName(party?.name);
   }
 
   return result;
@@ -20,44 +20,93 @@ export const getParty = async ( party: any ) => {
 export const getPartyBySlug = async ( slug: string ) => {
   if (!slug) return {};
   
-  const response = data.find(party => party?.slug === slug);
+  // @ts-ignore - Prisma client has this model at runtime
+  const response = await prisma.party.findFirst({
+    where: { slug }
+  });
 
   return response ?? {};
 }
 
 export const getPartyById = async ( id: string ) => {
-  if (!id) return {};
-  const response = data.find(party => party?.id === id);
+  if (!id) {
+    console.log("PartyService: getPartyById called with empty ID");
+    return {};
+  }
+  
+  try {
+    console.log(`PartyService: Attempting to get party with ID: ${id}`);
+    
+    // @ts-ignore - Prisma client has this model at runtime
+    const response = await prisma.party.findUnique({
+      where: { id }
+    });
 
-  return response ?? {};
+    if (!response) {
+      console.log(`PartyService: No party found with ID: ${id}`);
+      return {};
+    }
+    
+    console.log(`PartyService: Successfully retrieved party with ID: ${id}`, 
+               { name: response.name, id: response.id });
+    return response;
+  } catch (error) {
+    console.error(`PartyService: Error retrieving party with ID: ${id}`, error);
+    return {};
+  }
 }
 
 export const getPartyByName = async ( name: string ) => {
   if (!name) return {};
-  const response = data.find(party => party?.name === name);
+  
+  // @ts-ignore - Prisma client has this model at runtime
+  const response = await prisma.party.findFirst({
+    where: { name }
+  });
 
   return response ?? {};
 }
 
 export const getPartiesByCampaignId = async ( campaignId: string ) => {
   if (!campaignId) return [];
-  const response = data.filter(party => party?.campaign === campaignId);
+  
+  // @ts-ignore - Prisma client has this model at runtime
+  const response = await prisma.party.findMany({
+    where: { campaign: campaignId }
+  });
 
   return response ?? [];
 }
 
 export const getPartiesByParentPartyId = async ( parentParty: string ) => {
-  if (!parentParty) return {};
-  const response = data.filter(party => party?.parentParty === parentParty);
+  if (!parentParty) return [];
+  
+  // @ts-ignore - Prisma client has this model at runtime
+  const response = await prisma.party.findMany({
+    where: { parentParty }
+  });
 
-  return response ?? {};
+  return response ?? [];
 }
 
 export const getPartiesByPlayerId = async ( playerId: string ) => {
   if (!playerId) return [];
+  
+  // Get character data to determine which parties the player is in
   const characters = await getCharactersByPlayerId(playerId);
-  const partyIds = characters.map(char => char?.party);
-  const response = data.filter(party => partyIds.includes(party?.id));
+  const partyIds = characters.map((char: any) => char?.party);
+  
+  // Only query for parties if we have party IDs
+  if (!partyIds.length) return [];
+  
+  // @ts-ignore - Prisma client has this model at runtime
+  const response = await prisma.party.findMany({
+    where: { 
+      id: {
+        in: partyIds
+      }
+    }
+  });
 
   return response ?? [];
 }

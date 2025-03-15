@@ -95,6 +95,7 @@ export type Character = {
   };
   dndBeyond: {
     id: string;
+    dndBeyondId: string;
   };
   image?: string;
   system: string;

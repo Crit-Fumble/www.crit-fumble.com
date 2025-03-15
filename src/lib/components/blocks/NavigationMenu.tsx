@@ -75,11 +75,14 @@ const NavigationMenu = () => {
                 {isLoading
                   ? <li className="px-4 py-2 italic text-nowrap">Loading...</li>
                   : characters 
-                    ? characters?.map?.((campaign: any) => (<li key={campaign?.id} className="px-4 py-2 hover:underline cursor-pointer text-nowrap">
-                    <a href={`/character/${campaign.slug}`}>{campaign?.name}</a> 
+                    ? characters?.map?.((character: any) => (<li key={character?.id} className="px-4 py-2 hover:underline cursor-pointer text-nowrap">
+                    <a href={`/character/${character.slug}`}>{character?.name}</a> 
                     </li>))
                     : <li className="px-4 py-2 italic text-nowrap">No Characters Found.</li>
                   }
+                <li className="px-4 py-2 hover:underline cursor-pointer text-nowrap border-t">
+                  <a href="/character/create">Create New Character</a>
+                </li>
               </ul>
             )}
           </li>}

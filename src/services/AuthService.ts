@@ -97,7 +97,66 @@ const config = {
 
       if (account?.provider === 'discord') {
         token.providerAccountId = profile?.id;
-        // token.discordProfile = (profile as DiscordProfile);
+        
+        // Create or update Account record for Discord login
+        if (account && profile) {
+          (async () => {
+            try {
+              // First check if user exists or needs to be created
+              let user = await DatabaseService.user.findUnique({
+                where: { id: profile.id }
+              });
+              
+              // If user doesn't exist, create it
+              if (!user) {
+                user = await DatabaseService.user.create({
+                  data: {
+                    id: profile.id,
+                    name: profile.global_name || profile.username,
+                    email: profile.email || null,
+                    image: profile.image_url || `https://cdn.discordapp.com/avatars/${profile.id}/${profile.avatar}.png`,
+                    discord: profile.id
+                  }
+                });
+              }
+              
+              // Now create or update the Account record
+              await DatabaseService.account.upsert({
+                where: {
+                  provider_providerAccountId: {
+                    provider: account.provider,
+                    providerAccountId: profile.id
+                  }
+                },
+                update: {
+                  access_token: account.access_token,
+                  expires_at: account.expires_at,
+                  refresh_token: account.refresh_token,
+                  token_type: account.token_type,
+                  scope: account.scope,
+                  id_token: account.id_token,
+                  session_state: account.session_state
+                },
+                create: {
+                  id: profile.id,
+                  userId: profile.id,
+                  type: "oauth",
+                  provider: account.provider,
+                  providerAccountId: profile.id,
+                  access_token: account.access_token,
+                  expires_at: account.expires_at,
+                  refresh_token: account.refresh_token,
+                  token_type: account.token_type,
+                  scope: account.scope,
+                  id_token: account.id_token,
+                  session_state: account.session_state
+                }
+              });
+            } catch (error) {
+              console.error("Error creating/updating Account record:", error);
+            }
+          })();
+        }
       }
 
       return token;

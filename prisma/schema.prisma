@@ -209,19 +209,22 @@ model GameSystem {
 }
 
 model Character {
-  id        String  @id
-  player    String?
-  campaign  String?
-  party     String?
-  name      String?
-  slug      String?
-  dd_beyond String?
-  discord   String?
-  roll20    String?
+  id           String             @id
+  player       String?
+  campaign     String?
+  party        String?
+  name         String?
+  slug         String?
+  dd_beyond    String?
+  discord      String?
+  roll20       String?
+  DndBeyond    CharacterDndBeyond? @relation(fields: [dd_beyond], references: [id])
 }
 
 model CharacterDndBeyond {
-  id String @id
+  id           String     @id
+  dd_beyond_id String?
+  Character    Character[]
 }
 
 model GameSession {
@@ -231,16 +234,17 @@ model GameSession {
 }
 
 model Party {
-  id        String   @id
-  campaign  String?
-  gm        String?
-  slug      String?
-  name      String?
-  active    Boolean?
-  session   String?
-  dd_beyond String?
-  roll20    String?
-  discord   String?
+  id          String   @id
+  campaign    String?
+  gm          String?
+  slug        String?
+  name        String?
+  active      Boolean?
+  session     String?
+  dd_beyond   String?
+  roll20      String?
+  discord     String?
+  parentParty String?
 }
 
 model PartyDndBeyond {
@@ -251,4 +255,13 @@ model PartyDndBeyond {
 model PartyRoll20 {
   id   String  @id
   join String?
+}
+
+model PartyDiscord {
+  id               String  @id
+  roleId           String?
+  voiceChannelId   String?
+  sideChatThreadId String?
+  questLogThreadId String?
+  gameplayThreadId String?
 }
