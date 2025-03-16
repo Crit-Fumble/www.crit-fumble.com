@@ -1,9 +1,9 @@
 "use client";
 
 import Dnd5eCompendiumSearch from "@lib/components/blocks/Dnd5eCompendiumSearch";
-import { SessionProvider, useSession } from "next-auth/react";
-import { useMemo, useState } from "react";
-
+import { useSession } from "next-auth/react";
+import { useMemo } from "react";
+import { Providers } from "@/controllers/providers";
 
 const PageInner = ({ player, characters, ...props }: any) => {
   const session = useSession();
@@ -20,9 +20,9 @@ const PageInner = ({ player, characters, ...props }: any) => {
 const Page = ({ session, ...props }: any) => {
 
   return (
-    <SessionProvider session={session}>
+    <Providers session={session}>
       <PageInner {...props} />
-    </SessionProvider>
+    </Providers>
   );
 };
 

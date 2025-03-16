@@ -23,7 +23,7 @@ export async function GET(request: NextRequest) {
     console.log(`API: Fetching characters for user ID: ${userId}`);
     const characters = await getCharactersByPlayerId(userId);
     console.log(`API: Found ${characters.length} characters:`, 
-      characters.map(char => ({ id: char.id, name: char.name, slug: char.slug }))
+      characters.map((char: any) => ({ id: char.id, name: char.name, slug: char.slug }))
     );
     
     return NextResponse.json({ characters });

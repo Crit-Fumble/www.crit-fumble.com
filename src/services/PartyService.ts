@@ -99,7 +99,7 @@ export const getPartiesByPlayerId = async ( playerId: string ) => {
     // In Character model, party relationship uses party_id
     const partyIds = characters
       .map((char: any) => char?.party_id)
-      .filter(id => id !== null && id !== undefined);
+      .filter((id: any) => id !== null && id !== undefined);
     
     // Only query for parties if we have party IDs
     if (!partyIds.length) return [];

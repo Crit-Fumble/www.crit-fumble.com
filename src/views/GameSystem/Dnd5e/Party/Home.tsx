@@ -1,10 +1,11 @@
 "use client";
 
 import Dnd5ePartyRoster from "@lib/components/blocks/CampaignView";
-import { SessionProvider, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { useMemo, useState } from "react";
+import { Providers } from "@/controllers/providers";
 
-const PageInner = ({ ...props }: any) => {
+const PartyHomeInner = ({ ...props }: any) => {
   const session = useSession();
   const { data, status, update } = session;
   const isLoading = useMemo(() => status === "loading", [status]);
@@ -16,13 +17,13 @@ const PageInner = ({ ...props }: any) => {
   )
 }
 
-const Page = ({ session, ...props }: any) => {
+const PartyHome = ({ session, ...props }: any) => {
 
   return (
-    <SessionProvider session={session}>
-      <PageInner {...props} />
-    </SessionProvider>
+    <Providers session={session}>
+      <PartyHomeInner {...props} />
+    </Providers>
   );
 };
 
-export default Page;
+export default PartyHome;

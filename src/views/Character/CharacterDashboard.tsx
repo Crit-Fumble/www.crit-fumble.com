@@ -1,10 +1,11 @@
 "use client";
 
 import Dnd5eCharacterView from "@lib/components/blocks/Dnd5eCharacterView";
-import { SessionProvider, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { useMemo } from "react";
 import { Card, CardContent, CardHeader } from "@lib/components/blocks/Card";
 import Link from "next/link";
+import { Providers } from "@/controllers/providers";
 
 // TODO: determine game systems, and load appropriate view for each character sheet
 // TODO: characters can have more that one sheet per character, for use in different systems
@@ -93,11 +94,11 @@ const CharacterDashboardInner = ({ error, ...props }: any) => {
 
 const CharacterDashboard = ({ session, ...props }: any) => {
   return (
-    <SessionProvider session={session}>
+    <Providers session={session}>
       <div className="container mx-auto py-8 px-4">
         <CharacterDashboardInner {...props} />
       </div>
-    </SessionProvider>
+    </Providers>
   );
 };
 

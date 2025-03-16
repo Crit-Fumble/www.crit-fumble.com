@@ -1,12 +1,13 @@
 "use client";
-import { SessionProvider } from "next-auth/react"
+import { Providers } from "@/controllers/providers"
+
 export default function Session({
   children,
   pageProps: { session, ...pageProps },
 }: any) {
   return (
-    <SessionProvider session={session}>
+    <Providers session={session}>
       {children ?? undefined}
-    </SessionProvider>
+    </Providers>
   )
 }

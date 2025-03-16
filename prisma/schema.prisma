@@ -112,6 +112,7 @@ model User {
   UserDiscord    UserDiscord?    @relation(fields: [discord], references: [id], onDelete: Cascade, map: "discord")
   UserRoll20     UserRoll20?     @relation(fields: [roll20], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "roll20")
   UserWorldAnvil UserWorldAnvil? @relation(fields: [world_anvil], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "world_anvil")
+  sheet_data     Json?
 }
 
 model UserDiscord {
@@ -176,6 +177,7 @@ model Campaign {
   CampaignDiscord    CampaignDiscord?    @relation(fields: [discord], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "discord")
   CampaignWorldAnvil CampaignWorldAnvil? @relation(fields: [world_anvil], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "world_anvil")
   characters         Character[]
+  sheet_data         Json?
 }
 
 model CampaignDiscord {
@@ -208,6 +210,7 @@ model GameSystem {
   description String?
   srdApi      String?
   characters  Character[]
+  sheet_data  Json?
 }
 
 model Character {
@@ -233,6 +236,7 @@ model GameSession {
   id    String   @id(map: "PartySession_pkey")
   day   String?
   times String[]
+  sheet_data  Json?
 }
 
 model Party {
@@ -248,6 +252,7 @@ model Party {
   discord     String?
   parentParty String?
   characters  Character[]
+  sheet_data  Json?
 }
 
 model PartyDndBeyond {

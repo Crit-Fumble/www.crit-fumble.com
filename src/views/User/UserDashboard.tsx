@@ -2,9 +2,9 @@
 
 import { Card, CardContent, CardHeader } from "@lib/components/blocks/Card";
 import { DEFAULT } from "@/config/views";
-import { SessionProvider, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { useMemo, useState } from "react";
-
+import { Providers } from "@/controllers/providers";
 
 const UserDashboardInner = ({ viewedUser }: any) => {
   const session = useSession();
@@ -24,9 +24,9 @@ const UserDashboardInner = ({ viewedUser }: any) => {
 const UserDashboard = ({ session, ...props }: any) => {
 
   return (
-    <SessionProvider session={session}>
+    <Providers session={session}>
       <UserDashboardInner {...props}/>
-    </SessionProvider>
+    </Providers>
   );
 };
 

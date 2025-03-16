@@ -1,10 +1,10 @@
 "use client";
 
-import { SessionProvider, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { useMemo, useState } from "react";
+import { Providers } from "@/controllers/providers";
 
-
-const PageInner = ({ player, characters, ...props }: any) => {
+const ForgottenRealmsFandomWikiInner = ({ player, characters, ...props }: any) => {
   const session = useSession();
   const { data, status, update } = session;
   const isLoading = useMemo(() => status === "loading", [status]);
@@ -21,13 +21,13 @@ const PageInner = ({ player, characters, ...props }: any) => {
   )
 }
 
-const Page = ({ session, ...props }: any) => {
+const ForgottenRealmsFandomWikiPage = ({ session, ...props }: any) => {
 
   return (
-    <SessionProvider session={session}>
-      <PageInner {...props} />
-    </SessionProvider>
+    <Providers session={session}>
+      <ForgottenRealmsFandomWikiInner {...props} />
+    </Providers>
   );
 };
 
-export default Page;
+export default ForgottenRealmsFandomWikiPage;

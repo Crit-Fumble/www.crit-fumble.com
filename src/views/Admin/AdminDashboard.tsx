@@ -1,8 +1,9 @@
 "use client";
 
 import { Card, CardContent, CardHeader } from "@lib/components/blocks/Card";
-import { SessionProvider, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { useMemo, useState } from "react";
+import { Providers } from "@/controllers/providers";
 
 interface AdminDashboardProps {
   session: any;
@@ -130,11 +131,11 @@ const AdminDashboardInner = ({ viewedUser, users, userDiscords }: AdminDashboard
   );
 };
 
-const AdminDashboard = ({ session, ...props }: AdminDashboardProps) => {
+const AdminDashboard = ({ session, ...props }: any) => {
   return (
-    <SessionProvider session={session}>
+    <Providers session={session}>
       <AdminDashboardInner {...props} />
-    </SessionProvider>
+    </Providers>
   );
 };
 

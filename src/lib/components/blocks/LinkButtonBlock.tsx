@@ -6,7 +6,7 @@ const getOpenWindowHandler = (...args: any) => () => {
 
 const ButtonBlock = ({title, url, target = '', options = 'height=1080, width=1152'}: {title: string, url: string, target?: string, options?: string}) => {
 
-  return (<>
+  return (<div className="flex flex-col gap-2">
     <div>
       {title}
     </div>
@@ -25,7 +25,7 @@ const ButtonBlock = ({title, url, target = '', options = 'height=1080, width=115
         Open Tab
       </a>
     </div>
-  </>);
+  </div>);
 }
 
 export default ButtonBlock;

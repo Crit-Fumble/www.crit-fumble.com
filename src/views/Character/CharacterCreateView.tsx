@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { SessionProvider, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { Card, CardContent, CardHeader } from "@lib/components/blocks/Card";
 import { slugify } from '@lib/utils/textUtils';
+import { Providers } from "@/controllers/providers";
 
 // Character Create Form Component
 const CharacterCreateForm = () => {
@@ -178,15 +179,15 @@ const CharacterCreateForm = () => {
   );
 };
 
-// Character Create View with Session Provider
+// Character Create View with Providers
 const CharacterCreateView = ({ session }: { session: any }) => {
   return (
-    <SessionProvider session={session}>
+    <Providers session={session}>
       <div className="container mx-auto py-8 px-4">
         <h1 className="text-2xl font-bold mb-6 text-center">Create New Character</h1>
         <CharacterCreateForm />
       </div>
-    </SessionProvider>
+    </Providers>
   );
 };
 

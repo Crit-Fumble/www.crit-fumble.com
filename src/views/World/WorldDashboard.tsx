@@ -1,10 +1,10 @@
 "use client";
 
-import { SessionProvider, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { useMemo, useState } from "react";
+import { Providers } from "@/controllers/providers";
 
-
-const PageInner = ({ world, ...props }: any) => {
+const WorldDashboardInner = ({ world, ...props }: any) => {
   const session = useSession();
   const { data, status, update } = session;
   const isLoading = useMemo(() => status === "loading", [status]);
@@ -19,14 +19,14 @@ const PageInner = ({ world, ...props }: any) => {
   )
 }
 
-const Page = ({ session, ...props }: any) => {
+const WorldDashboardPage = ({ session, ...props }: any) => {
   const [iframeUrl, setIframeUrl] = useState()
 
   return (
-    <SessionProvider session={session}>
-      <PageInner {...props} />
-    </SessionProvider>
+    <Providers session={session}>
+      <WorldDashboardInner {...props} />
+    </Providers>
   );
 };
 
-export default Page;
+export default WorldDashboardPage;

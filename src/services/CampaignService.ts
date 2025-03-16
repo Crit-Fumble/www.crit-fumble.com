@@ -1,5 +1,5 @@
 import { getCharactersByPlayerId } from './CharacterService';
-import DatabaseService from './DatabaseService';
+import DatabaseService, { withDb } from './DatabaseService';
 import { randomUUID } from 'crypto';
 import { slugify } from '@/utils/stringUtils';
 
@@ -53,40 +53,46 @@ export const getCampaignByName = async ( name: string ) => {
   return response ?? {} as any;
 }
 
-export const getCampaignsByGmId = async ( id: string ) => {
+export const getCampaignsByGmId = async (id: string) => {
   if (!id) return [] as any;
 
-  const response = await DatabaseService.campaign.findMany({
-    where: {
-      gms: {
-        has: id
+  return await withDb(async () => {
+    const response = await DatabaseService.campaign.findMany({
+      where: {
+        gms: {
+          has: id
+        }
       }
-    }
-  });
+    });
 
-  return response ?? [] as any;
+    return response ?? [] as any;
+  });
 }
-export const getCampaignsByPlayerId = async ( id: string ) => {
+
+export const getCampaignsByPlayerId = async (id: string) => {
   if (!id) return [] as any;
-  const characters = await getCharactersByPlayerId(id);
-  const campaignIds = characters
-    .map(char => char?.campaign_id)
-    .filter(id => id !== null && id !== undefined) as string[];
   
-  // If there are no campaign IDs, return an empty array
-  if (campaignIds.length === 0) {
-    return [] as any;
-  }
-
-  const response = await DatabaseService.campaign.findMany({
-    where: {
-      id: {
-        in: campaignIds
-       }
+  return await withDb(async () => {
+    const characters = await getCharactersByPlayerId(id);
+    const campaignIds = characters
+      .map((char: any) => char?.campaign_id)
+      .filter((campaignId: any) => campaignId !== null && campaignId !== undefined) as string[];
+    
+    // If there are no campaign IDs, return an empty array
+    if (campaignIds.length === 0) {
+      return [] as any;
     }
-  });
 
-  return response ?? [] as any;
+    const response = await DatabaseService.campaign.findMany({
+      where: {
+        id: {
+          in: campaignIds
+        }
+      }
+    });
+
+    return response ?? [] as any;
+  });
 }
 
 export const createCampaign = async (campaignData: any): Promise<any> => {

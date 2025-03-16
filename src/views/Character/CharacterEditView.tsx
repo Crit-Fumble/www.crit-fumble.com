@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { SessionProvider, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { Card, CardContent, CardHeader } from "@lib/components/blocks/Card";
 import { slugify } from '@lib/utils/textUtils';
+import { Providers } from "@/controllers/providers";
 
 // Character Edit Form Component
 const CharacterEditForm = ({ characterData }: { characterData: any }) => {
@@ -230,15 +231,15 @@ const CharacterEditForm = ({ characterData }: { characterData: any }) => {
   );
 };
 
-// Character Edit View with Session Provider
+// Character Edit View with Providers
 const CharacterEditView = ({ session, character }: { session: any, character: any }) => {
   return (
-    <SessionProvider session={session}>
+    <Providers session={session}>
       <div className="container mx-auto py-8 px-4">
         <h1 className="text-2xl font-bold mb-6 text-center">Edit Character</h1>
         <CharacterEditForm characterData={character} />
       </div>
-    </SessionProvider>
+    </Providers>
   );
 };
 

@@ -7,9 +7,8 @@ import { getUserByDiscordId, getUserByDiscordName } from "./ProfileService";
 import { getCharactersByPlayerId } from "./CharacterService";
 import { getPartiesByPlayerId } from "./PartyService";
 import { getCampaignsByPlayerId } from "./CampaignService";
-import DatabaseService from "./DatabaseService";
+import prisma from "./DatabaseService";
 import { randomUUID } from "node:crypto";
-// import { getUserByDiscordName } from "./UserService";
 
 const config: AuthOptions = { 
   providers: [ 
@@ -20,135 +19,106 @@ const config: AuthOptions = {
   ],
   callbacks: {
     async session({ session, token, trigger } : any) {
-      if (trigger === "update" && token?.provider === "discord") {
-        const profileUpdate = {
-          name: token?.providerUserName,
-          displayName: token?.providerUserName,
-          username: token?.discordProfile.username,
-          avatar: token?.discordProfile.avatar,
-          discriminator: token?.discordProfile.discriminator,
-          // public_flags: token?.discordProfile.public_flags,
-          // flags: token?.discordProfile.flags,
-          banner: token?.discordProfile.banner,
-          accent_color: token?.discordProfile.accent_color,
-          global_name: token?.discordProfile.global_name,
-          // avatar_decoration_data
-          banner_color: token?.discordProfile.banner_color,
-          mfa_enabled: token?.discordProfile.mfa_enabled,
-          locale: token?.discordProfile.locale,
-          // premium_type: token?.discordProfile.premium_type,
-          email: token?.discordProfile.email,
-          verified: token?.discordProfile.verified,
-          image_url: token?.discordProfile.image_url,
-        };
+      if (!session?.user) {
+        return session;
+      }
 
-        await DatabaseService.userDiscord.upsert({
-          where: {
-            id: token?.providerAccountId
-          },
-          update: profileUpdate,
-          create: {
-            id: token?.providerAccountId,
-            ...profileUpdate
+      // Basic session user data
+      // Ensure we properly handle 0 as a valid ID
+      const providerAccountId = token?.providerAccountId;
+      if (providerAccountId !== undefined && providerAccountId !== null) {
+        session.user.id = providerAccountId;
+      }
+      session.user.provider = token?.provider || 'discord';
+      
+      try {
+        // Check for existing Discord user record
+        let discordUser = null;
+        
+        if (token?.providerAccountId) {
+          console.log(`Looking up Discord user with ID: ${token.providerAccountId}`);
+          discordUser = await prisma.userDiscord.findUnique({
+            where: { id: token.providerAccountId }
+          });
+          
+          if (discordUser) {
+            console.log(`Found Discord user record for ID: ${token.providerAccountId}`);
+            
+            // Set avatar if available
+            if (discordUser.avatar) {
+              session.user.image = `https://cdn.discordapp.com/avatars/${discordUser.id}/${discordUser.avatar}.png`;
+            }
+            
+            // Find the User record that links to this Discord profile
+            const userRecord = await prisma.user.findFirst({
+              where: { discord: discordUser.id }
+            });
+            
+            if (userRecord) {
+              console.log(`Found main User record linked to Discord ID: ${discordUser.id}`);
+              // Update session with additional user info from our database
+              session.user = {
+                ...session.user,
+                dbId: userRecord.id, // Keep the database ID separate from the Discord ID
+                name: userRecord.name || session.user.name,
+                slug: userRecord.slug
+              };
+            } else {
+              console.log(`No User record found that links to Discord ID: ${discordUser.id}`);
+            }
+          } else {
+            console.log(`No Discord user record found for ID: ${token.providerAccountId}`);
           }
-        });
-      }
-
-      // The return type will match the one returned in `useSession()`
-      session.user = {
-        ...session.user,
-        id: token?.providerAccountId,
-        provider: token?.provider,
-        token: token?.providerToken,
-      };
-
-      if (session.user.name) {
-        // Get the user profile and merge it with the session.user object
-        const userProfile = await getUserByDiscordName(session.user.name);
-        if (userProfile) {
-          session.user = {
-            ...session.user,
-            ...userProfile
-          };
         }
+      } catch (error) {
+        console.error("Error retrieving user data for session:", error);
       }
-
-      // Remove loading of character, campaign, and party data from session
-      // This data will be fetched directly from the API when needed
-
+      
+      console.log("Session after augmentation:", { 
+        id: session.user.id,
+        name: session.user.name,
+        image: session.user.image,
+        dbId: session.user.dbId
+      });
+      
       return session;
     },
     jwt({ token, profile, account, trigger, session } : any) {
-      if (session?.name) {
-        token.providerUserName = session?.name
-        token.providerImage = session?.image;
+      // Basic token management
+      if (account) {
+        token.provider = account.provider;
+        token.providerAccountId = account.providerAccountId;
       }
 
-      if (profile) {
-        token.provider = account?.provider;
-        token.providerToken = account?.access_token;
-      }
-
-      if (account?.provider === 'discord') {
-        token.providerAccountId = profile?.id;
+      // Discord-specific handling
+      if (account?.provider === 'discord' && profile) {
+        const discordProfile = profile as DiscordProfile;
+        token.providerAccountId = profile.id;
         
-        // Create or update Account record for Discord login
-        if (account && profile) {
-          (async () => {
-            try {
-              // First check if user exists or needs to be created
-              let user = await getUserByDiscordId(profile.id);
-              
-              // If user doesn't exist, create it
-              if (user === null || user === undefined) {
-                user = await DatabaseService.user.create({
-                  data: {
-                    id: randomUUID(),
-                    name: profile.global_name || profile.username,
-                    email: profile.email || null,
-                    image: profile.image_url || `https://cdn.discordapp.com/avatars/${profile.id}/${profile.avatar}.png`,
-                    discord: profile.id
-                  }
-                });
+        // Store Discord profile information
+        (async () => {
+          try {
+            // Update Discord user data
+            const profileData = {
+              name: profile.global_name || profile.username,
+              username: profile.username,
+              avatar: profile.avatar,
+              email: profile.email,
+              image_url: profile.image_url || `https://cdn.discordapp.com/avatars/${profile.id}/${profile.avatar}.png`
+            };
+            
+            await prisma.userDiscord.upsert({
+              where: { id: profile.id },
+              update: profileData,
+              create: {
+                id: profile.id,
+                ...profileData
               }
-              
-              // Now create or update the Account record
-              await DatabaseService.account.upsert({
-                where: {
-                  provider_providerAccountId: {
-                    provider: account.provider,
-                    providerAccountId: profile.id
-                  }
-                },
-                update: {
-                  access_token: account.access_token,
-                  expires_at: account.expires_at,
-                  refresh_token: account.refresh_token,
-                  token_type: account.token_type,
-                  scope: account.scope,
-                  id_token: account.id_token,
-                  session_state: account.session_state
-                },
-                create: {
-                  id: profile.id,
-                  userId: profile.id,
-                  type: "oauth",
-                  provider: account.provider,
-                  providerAccountId: profile.id,
-                  access_token: account.access_token,
-                  expires_at: account.expires_at,
-                  refresh_token: account.refresh_token,
-                  token_type: account.token_type,
-                  scope: account.scope,
-                  id_token: account.id_token,
-                  session_state: account.session_state
-                }
-              });
-            } catch (error) {
-              console.error("Error creating/updating Account record:", error);
-            }
-          })();
-        }
+            });
+          } catch (error) {
+            console.error("Error updating Discord profile:", error);
+          }
+        })();
       }
 
       return token;

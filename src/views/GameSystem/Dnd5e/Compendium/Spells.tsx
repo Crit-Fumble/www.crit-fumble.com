@@ -1,11 +1,11 @@
 "use client";
 
 import { marked } from "marked";
-import { SessionProvider, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import React, { useMemo, useState } from "react";
 import { Card, CardHeader, CardContent } from '@lib/components/blocks/Card';
 import { Dropdown } from "@lib/components/blocks/Dropdown";
-
+import { Providers } from "@/controllers/providers";
 
 interface Dnd5eSpellsPageInnerProps {
   player: any;
@@ -71,9 +71,9 @@ const Dnd5eSpellsPageInner: React.FC<Dnd5eSpellsPageInnerProps> = ({ compendium,
 const Dnd5eSpellsPage = ({ session, ...props }: any) => {
 
   return (
-    <SessionProvider session={session}>
+    <Providers session={session}>
       <Dnd5eSpellsPageInner {...props} />
-    </SessionProvider>
+    </Providers>
   );
 };
 

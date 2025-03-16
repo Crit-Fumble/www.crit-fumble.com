@@ -1,4 +1,4 @@
-import prisma from '@/services/DatabaseService';
+import prisma, { withDb } from '@/services/DatabaseService';
 import { randomUUID } from 'node:crypto';
 
 export const getCharacter = async ( character: any ) => {
@@ -60,20 +60,22 @@ export const getCharacterById = async ( id: string ) => {
   return response ?? {};
 }
 
-export const getCharactersByPlayerId = async ( userId: string ) => {
-  if (!userId) return [];
-  
-  try {
-    // @ts-ignore - Prisma client has this model at runtime
+export const getCharactersByPlayerId = async (userId: string) => {
+  if (!userId) return [] as any;
+
+  return await withDb(async () => {
+    // Based on the schema, we only have the 'player' field, not 'creator'
     const response = await prisma.character.findMany({
-      where: { player: userId }
+      where: {
+        player: userId
+      },
+      orderBy: {
+        name: 'asc'
+      }
     });
 
-    return response ?? [];
-  } catch (error) {
-    console.error('Error in getCharactersByPlayerId:', error);
-    return [];
-  }
+    return response ?? [] as any;
+  });
 }
 
 export const getCharactersByCampaignId = async ( campaignId: string ) => {
