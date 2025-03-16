@@ -76,18 +76,17 @@ export async function GET(request: NextRequest) {
         let discordProfile = discordUser;  // We already have the Discord profile
         
         // Fetch all user data in parallel for better performance
-        const [characters, campaignsAsGm, campaignsAsPlayer, parties] = await Promise.all([
+        const [characters, campaignsAsGm, parties] = await Promise.all([
           getCharactersByPlayerId(userRecord.id),  // Use the database User ID, not the Discord ID
           getCampaignsByGmId(userRecord.id),
-          getCampaignsByPlayerId(userRecord.id),
           getPartiesByPlayerId(userRecord.id)
         ]);
         
-        console.log(`API: Fetched ${characters.length} characters, ${campaignsAsGm.length} campaigns as GM, ${campaignsAsPlayer.length} campaigns as player, ${parties.length} parties`);
+        console.log(`API: Fetched ${characters.length} characters, ${campaignsAsGm.length} campaigns as GM, ${parties.length} parties`);
         
         // Combine and deduplicate campaigns
         const campaignMap = new Map();
-        [...campaignsAsGm, ...campaignsAsPlayer].forEach(campaign => {
+        [...campaignsAsGm, ...parties].forEach(campaign => {
           if (!campaignMap.has(campaign.id)) {
             campaignMap.set(campaign.id, {
               ...campaign,
