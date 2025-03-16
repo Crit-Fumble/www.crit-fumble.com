@@ -9,17 +9,17 @@ export async function GET(request: NextRequest) {
     console.log("API: Session data:", JSON.stringify({
       hasSession: !!session,
       hasUser: !!session?.user,
-      hasProfile: !!session?.profile,
-      profileId: session?.profile?.id,
-      characters: session?.characters?.length,
+      hasProfile: !!session?.user,
+      profileId: session?.user?.id,
+      characters: 0, // Will be populated after query
     }));
     
-    if (!session || !session.profile?.id) {
+    if (!session || !session.user?.id) {
       console.log("API: No authenticated user found");
       return NextResponse.json({ error: "Authentication required" }, { status: 401 });
     }
     
-    const userId = session.profile.id;
+    const userId = session.user.id;
     console.log(`API: Fetching characters for user ID: ${userId}`);
     const characters = await getCharactersByPlayerId(userId);
     console.log(`API: Found ${characters.length} characters:`, 

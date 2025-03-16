@@ -5,7 +5,7 @@ export const PartyCard = ({partyId, parties, characters, player, children} : any
   const subParties = parties?.filter((party: any) => (party?.parentParty === partyId && party?.active));
 
   const filteredCharacters = characters
-    ?.filter((character: any) => character.party === partyId) ?? [];
+    ?.filter((character: any) => character.party_id === partyId) ?? [];
 
   return (
     <Card className="flex-1">
@@ -66,7 +66,7 @@ export const PartyCard = ({partyId, parties, characters, player, children} : any
                     <p><strong>{subParty.name}</strong></p>
                     <ul>
                     {
-                      characters.filter((c: any) => c.party === subParty.id).map(
+                      characters.filter((c: any) => c.party_id === subParty.id).map(
                         (character: any, idx: number) => {
                           const { name, slug } = character;
                           return (

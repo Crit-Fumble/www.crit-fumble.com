@@ -13,13 +13,13 @@ const Dnd5eCharacterView = ({ player, campaign, party, parentParty, character, w
     console.log("Campaign data:", campaign);
     
     // More detailed debug info
-    if (character && character.party) {
-      console.log(`Character has party ID: ${character.party}`);
+    if (character && character.party_id) {
+      console.log(`Character has party ID: ${character.party_id}`);
       
       if (party && party.id) {
         console.log(`Party data successfully loaded with ID: ${party.id}`);
       } else {
-        console.error(`Party data not loaded properly for ID: ${character.party}`);
+        console.error(`Party data not loaded properly for ID: ${character.party_id}`);
       }
     } else {
       console.log("Character has no party ID assigned");
@@ -65,7 +65,7 @@ const Dnd5eCharacterView = ({ player, campaign, party, parentParty, character, w
             <p className="my-1">Member of <strong>{party.name}</strong></p>
           ) : (parentParty && parentParty.name) ? (
             <p className="my-1">Member of <strong>{parentParty.name}</strong></p>
-          ) : (character && character.party) ? (
+          ) : (character && character.party_id) ? (
             <p className="my-1">Member of a party <em>(party details unavailable)</em></p>
           ) : null}
           

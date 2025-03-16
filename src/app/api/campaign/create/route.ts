@@ -11,18 +11,18 @@ export async function POST(request: NextRequest) {
     console.log("API: Session data:", JSON.stringify({
       hasSession: !!session,
       hasUser: !!session?.user,
-      hasProfile: !!session?.profile,
-      profileId: session?.profile?.id,
-      isAdmin: !!session?.profile?.admin
+      hasProfile: !!session?.user,
+      profileId: session?.user?.id,
+      isAdmin: !!session?.user?.admin
     }));
     
     // Ensure user is authenticated and has admin privileges
-    if (!session || !session.profile?.id) {
+    if (!session || !session.user?.id) {
       console.log("API: No authenticated user found");
       return NextResponse.json({ error: "Authentication required" }, { status: 401 });
     }
     
-    if (!session.profile.admin) {
+    if (!session.user.admin) {
       console.log("API: User is not an admin");
       return NextResponse.json({ error: "Admin privileges required" }, { status: 403 });
     }
@@ -37,7 +37,7 @@ export async function POST(request: NextRequest) {
     }
     
     // Add admin as a GM by default
-    const adminId = session.profile.id;
+    const adminId = session.user.id;
     campaignData.gms = [adminId];
     
     // Create the campaign

@@ -63,7 +63,14 @@ const config: AuthOptions = {
       };
 
       if (session.user.name) {
-        session.profile = await getUserByDiscordName(session.user.name);
+        // Get the user profile and merge it with the session.user object
+        const userProfile = await getUserByDiscordName(session.user.name);
+        if (userProfile) {
+          session.user = {
+            ...session.user,
+            ...userProfile
+          };
+        }
       }
 
       // Remove loading of character, campaign, and party data from session

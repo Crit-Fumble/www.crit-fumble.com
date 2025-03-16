@@ -59,7 +59,7 @@ const CharacterDashboardInner = ({ error, ...props }: any) => {
 
   // Debug props being passed to Dnd5eCharacterView
   console.log("Props being passed to character view:", {
-    characterHasParty: props.character && !!props.character.party,
+    characterHasParty: props.character && !!props.character.party_id,
     partyData: props.party ? `Party found with ID ${props.party.id}` : "No party data",
     partyObjectType: props.party ? typeof props.party : "N/A",
     partyKeys: props.party ? Object.keys(props.party) : [],

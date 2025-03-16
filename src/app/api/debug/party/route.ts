@@ -35,10 +35,10 @@ export async function GET(request: Request) {
       }
 
       // Use the character's party ID if it exists
-      if (character.party) {
+      if (character.party_id) {
         // @ts-ignore - Prisma client has this model at runtime
         party = await prisma.party.findUnique({
-          where: { id: character.party }
+          where: { id: character.party_id }
         });
       }
     } else if (id) {

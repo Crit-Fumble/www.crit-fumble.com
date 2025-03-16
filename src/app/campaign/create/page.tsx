@@ -17,7 +17,7 @@ export default function CreateCampaignPage() {
 
   // Check if user is admin, redirect if not
   useEffect(() => {
-    if (status === "authenticated" && !session?.profile?.admin) {
+    if (status === "authenticated" && !session?.user?.admin) {
       toast.error("You must be an admin to create campaigns");
       router.push("/dashboard");
     }
