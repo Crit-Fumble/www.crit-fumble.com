@@ -53,7 +53,7 @@ const NavigationMenu = () => {
                   href={`/campaign/${campaign.slug}`}
                   className="block px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700"
                 >
-                  {campaign.name} {campaign.isGm && <span className="text-xs text-green-600 dark:text-green-400 ml-1">(GM)</span>}
+                  {campaign.name}
                 </a>
               </li>
             ))}
@@ -136,7 +136,7 @@ const NavigationMenu = () => {
           {/* Campaign and Character elements - only shown when logged in and data is loaded */}
           {isLoggedIn && !isLoadingUserData && userData && (
             <>
-              {campaignElements}
+              {/* {campaignElements} */}
               {characterElements}
             </>
           )}

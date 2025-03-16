@@ -2,8 +2,9 @@
 
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { toast } from "react-hot-toast";
+import { Card, CardContent, CardHeader } from "@lib/components/blocks/Card";
 
 export default function CreateCampaignPage() {
   const { data: session, status } = useSession();
@@ -12,16 +13,9 @@ export default function CreateCampaignPage() {
   const [formData, setFormData] = useState({
     name: "",
     system: "D&D 5E", // Default value
-    active: true
   });
 
-  // Check if user is admin, redirect if not
-  useEffect(() => {
-    if (status === "authenticated" && !session?.user?.admin) {
-      toast.error("You must be an admin to create campaigns");
-      router.push("/dashboard");
-    }
-  }, [status, session, router]);
+  // Remove admin check - allow any authenticated user to create campaigns
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) => {
     const { name, value, type } = e.target;
@@ -89,72 +83,69 @@ export default function CreateCampaignPage() {
   }
 
   return (
-    <div className="container mx-auto max-w-3xl py-8 px-4">
-      <h1 className="text-3xl font-bold mb-6">Create New Campaign</h1>
+    <div className="container mx-auto py-8 px-4">
+      <h1 className="text-2xl font-bold mb-6 text-center">Create New Campaign</h1>
       
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="space-y-2">
-          <label htmlFor="name" className="block font-medium">
-            Campaign Name*
-          </label>
-          <input
-            id="name"
-            name="name"
-            type="text"
-            required
-            value={formData.name}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border rounded-md"
-            placeholder="Enter campaign name"
-          />
-        </div>
-        
-        <div className="space-y-2">
-          <label htmlFor="system" className="block font-medium">
-            Game System
-          </label>
-          <select
-            id="system"
-            name="system"
-            value={formData.system}
-            onChange={handleChange}
-            className="w-full px-3 py-2 border rounded-md"
-          >
-            <option value="D&D 5E">D&D 5E</option>
-            <option value="Pathfinder">Pathfinder</option>
-            <option value="Call of Cthulhu">Call of Cthulhu</option>
-            <option value="Vampire: The Masquerade">Vampire: The Masquerade</option>
-            <option value="Star Wars">Star Wars</option>
-            <option value="Other">Other</option>
-          </select>
-        </div>
-        
-        <div className="flex items-center space-x-2">
-          <input
-            id="active"
-            name="active"
-            type="checkbox"
-            checked={formData.active}
-            onChange={handleChange}
-            className="h-4 w-4"
-          />
-          <label htmlFor="active" className="font-medium">
-            Active Campaign
-          </label>
-        </div>
-        
-        <div className="pt-4">
-          <button
-            type="submit"
-            disabled={isSubmitting}
-            className={`w-full py-2 px-4 rounded-md text-white font-medium ${
-              isSubmitting ? "bg-gray-400" : "bg-blue-600 hover:bg-blue-700"
-            }`}
-          >
-            {isSubmitting ? "Creating..." : "Create Campaign"}
-          </button>
-        </div>
-      </form>
+      <Card className="w-full max-w-2xl mx-auto">
+        <CardHeader>Create New Campaign</CardHeader>
+        <CardContent>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <div className="flex flex-col">
+              <label htmlFor="name" className="mb-1 font-medium">
+                Campaign Name*
+              </label>
+              <input
+                id="name"
+                name="name"
+                type="text"
+                required
+                value={formData.name}
+                onChange={handleChange}
+                className="px-3 py-2 border rounded-md dark:bg-gray-800 dark:border-gray-700"
+                placeholder="Enter campaign name"
+              />
+            </div>
+            
+            <div className="flex flex-col">
+              <label htmlFor="system" className="mb-1 font-medium">
+                Game System
+              </label>
+              <select
+                id="system"
+                name="system"
+                value={formData.system}
+                onChange={handleChange}
+                className="px-3 py-2 border rounded-md dark:bg-gray-800 dark:border-gray-700"
+              >
+                <option value="D&D 5E">D&D 5E</option>
+                <option value="Pathfinder">Pathfinder</option>
+                <option value="Call of Cthulhu">Call of Cthulhu</option>
+                <option value="Vampire: The Masquerade">Vampire: The Masquerade</option>
+                <option value="Star Wars">Star Wars</option>
+                <option value="Other">Other</option>
+              </select>
+            </div>
+            
+            
+            <div className="flex justify-end gap-2 pt-4">
+              <button 
+                type="button" 
+                onClick={() => router.back()}
+                className="px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium dark:text-gray-200 bg-gray-50 dark:bg-gray-800 hover:bg-gray-100 dark:hover:bg-gray-700"
+              >
+                Cancel
+              </button>
+              <button
+                type="submit"
+                disabled={isSubmitting}
+                className="px-4 py-2 bg-blue-600 border border-transparent rounded-md shadow-sm text-sm font-medium text-white hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500 disabled:opacity-50"
+              >
+                {isSubmitting ? "Creating..." : "Create Campaign"}
+              </button>
+            </div>
+          </form>
+        </CardContent>
+      </Card>
     </div>
   );
 }

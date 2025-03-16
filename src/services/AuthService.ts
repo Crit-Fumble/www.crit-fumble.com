@@ -61,7 +61,8 @@ const config: AuthOptions = {
                 ...session.user,
                 dbId: userRecord.id, // Keep the database ID separate from the Discord ID
                 name: userRecord.name || session.user.name,
-                slug: userRecord.slug
+                slug: userRecord.slug,
+                admin: userRecord.admin || false
               };
             } else {
               console.log(`No User record found that links to Discord ID: ${discordUser.id}`);
