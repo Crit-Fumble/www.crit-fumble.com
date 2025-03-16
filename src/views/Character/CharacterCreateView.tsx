@@ -63,8 +63,8 @@ const CharacterCreateForm = () => {
           // Extract character ID from URL like https://www.dndbeyond.com/characters/12345
           const match = submissionData.dndBeyondUrl.match(/\/characters\/(\d+)/);
           if (match && match[1]) {
-            // Add the extracted ID as dndBeyondId
-            submissionData.dndBeyondId = match[1];
+            // Add the extracted ID directly to dnd_beyond_id to match database field
+            submissionData.dnd_beyond_id = match[1];
           } else {
             throw new Error('Invalid D&D Beyond URL format');
           }

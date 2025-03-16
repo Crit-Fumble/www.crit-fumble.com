@@ -1,7 +1,8 @@
 import { DEFAULT } from '@/config/views';
 
 const GmView = ({party, subParties, parentParty, characters, campaign, world}: any) => {
-  const dndBeyondId = party?.dndBeyond?.id ?? parentParty?.dndBeyond?.id;
+  // Access the D&D Beyond ID directly from the party if available
+  const DndBeyondId = party?.dnd_beyond_id ?? parentParty?.dnd_beyond_id;
   const discordServerId = campaign?.discord?.id;
   const sideChatThreadId = party?.discord?.sideChatThreadId ?? parentParty?.discord?.sideChatThreadId;
   const voiceChannelId = party?.discord?.voiceChannelId ?? parentParty?.discord?.voiceChannelId;

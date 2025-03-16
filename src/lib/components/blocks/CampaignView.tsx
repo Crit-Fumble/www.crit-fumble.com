@@ -8,8 +8,10 @@ const Dnd5ePartyRoster = ({party, subParties, parentParty, characters, campaign,
   const voiceChatUrl = `https://discord.com/channels/${discordServerId}/${voiceChannelId}`;
   const roll20Id = party?.roll20?.id ?? parentParty?.roll20?.id;
   const roll20CampaignUrl = `https://app.roll20.net/campaigns/${roll20Id}?desiredrole=player`;
-  const dndBeyondId = party?.dndBeyond?.id ?? parentParty?.dndBeyond?.id;
-  const ddbCampaignUrl = `https://www.dndbeyond.com/characters/${dndBeyondId}`;
+  
+  // Access the D&D Beyond ID directly from the party if available
+  const DndBeyondId = party?.dnd_beyond_id ?? parentParty?.dnd_beyond_id;
+  const ddbCampaignUrl = `https://www.dndbeyond.com/campaigns/${DndBeyondId}`;
   const FIVEE_TOOLS_URL = `https://5etools.crit-fumble.com`;
   const FR_WIKI_URL = `https://forgottenrealms.fandom.com/wiki`;
 
@@ -60,7 +62,7 @@ const Dnd5ePartyRoster = ({party, subParties, parentParty, characters, campaign,
 
       <div className="flex flex-grid flex-wrap justify-middle align-middle items-middle gap-2 text-center">
         {roll20Id && <a className={DEFAULT.TW_CLASSES.LINK}  href={`https://app.roll20.net/editor/setcampaign/${roll20Id}?desiredrole=player`} target="_blank">Open Roll20 Campaign</a>}
-        {dndBeyondId && <a className={DEFAULT.TW_CLASSES.LINK}  href={`https://www.dndbeyond.com/campaigns/${dndBeyondId}`} target="_blank">Open D&D Beyond Campaign</a>}
+        {DndBeyondId && <a className={DEFAULT.TW_CLASSES.LINK}  href={`https://www.dndbeyond.com/campaigns/${DndBeyondId}`} target="_blank">Open D&D Beyond Campaign</a>}
         {world?.url && <a className={DEFAULT.TW_CLASSES.LINK} href={world.url} target="_blank">Open {world.title} World Anvil</a>}
         {voiceChannelId && <a className={DEFAULT.TW_CLASSES.LINK}  href={`https://discord.com/channels/${discordServerId}/${voiceChannelId}`} target="_blank">
           Open Discord Voice

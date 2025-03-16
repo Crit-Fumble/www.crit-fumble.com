@@ -1,15 +1,12 @@
 import NextAuth from "next-auth"
-import {Auth, User as _User, Profile, Campaign, Character} from './cfg';
+import { User } from './cfg'
 import { DiscordProfile } from "next-auth/providers/discord"
 
-export interface User extends _User {
-  id: string,
-  name: string,
-  email?: string,
-  image?: string,
-  token?: string,
-  discord?: DiscordProfile,
-};
+// NextAuth specific user type extending our base User type
+interface NextAuthUser extends User {
+  token?: string;
+  discord?: DiscordProfile;
+}
 
 declare module "next-auth" {
   /**
@@ -18,10 +15,7 @@ declare module "next-auth" {
   
   interface Session {
     expires: ISODateString;
-    user?: User;
+    user?: NextAuthUser;
     darkMode?: boolean;
-    profile?: Profile;
-    campaigns?: Campaigns[];
-    characters?: Character[];
   }
 }

@@ -316,7 +316,7 @@ async function main() {
       gm: '0',
       name: 'Barrel of Mayhem',
       active: true,
-      session: mondaySession.id,
+      session: 'monday_evening',
       dd_beyond: partyDnDBeyond1.id,
       roll20: partyRoll201.id,
       discord: 'discord_bom',
@@ -328,7 +328,7 @@ async function main() {
       gm: '0',
       name: 'The Total Party Knockouts',
       active: true,
-      session: fridaySession.id,
+      session: 'friday_evening',
       dd_beyond: partyDnDBeyond2.id,
       roll20: partyRoll202.id,
       discord: 'discord_tpks',
@@ -341,7 +341,6 @@ async function main() {
       slug: 'bla',
       active: false,
       discord: 'discord_bla',
-      parentParty: '3', // child of Barrel of Mayhem
     },
     {
       id: '6',
@@ -442,16 +441,6 @@ async function main() {
 
   // Create a test character for Eric
   // @ts-ignore - Adding ts-ignore to get past TypeScript errors while keeping proper Prisma model names
-  const characterDndBeyond = await prisma.characterDndBeyond.upsert({
-    where: { id: 'char-dndbeyond-1' },
-    update: {},
-    create: {
-      id: 'char-dndbeyond-1',
-      dd_beyond_id: '121937317',
-    },
-  });
-
-  // @ts-ignore - Adding ts-ignore to get past TypeScript errors while keeping proper Prisma model names
   const character = await prisma.character.upsert({
     where: { id: 'character-1' },
     update: {},
@@ -460,9 +449,9 @@ async function main() {
       name: 'Thorne Ironheart',
       slug: 'thorne-ironheart',
       player: '2', // Eric
-      campaign: '0',
-      party: '4', // The Total Party Knockouts
-      dd_beyond: characterDndBeyond.id,
+      campaign_id: '0',
+      party_id: '4', // The Total Party Knockouts
+      dnd_beyond_id: '121937317', // Direct field instead of relation
     },
   });
   console.log(`Created character with id: ${character.id}`);

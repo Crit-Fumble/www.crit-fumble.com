@@ -11,13 +11,9 @@ interface Character {
   party?: string | null;
   name?: string | null;
   slug?: string | null;
-  dd_beyond?: string | null;
+  dnd_beyond_id?: string | null;
   discord?: string | null;
   roll20?: string | null;
-  DndBeyond?: {
-    id: string;
-    dd_beyond_id?: string | null;
-  } | null;
 }
 
 export default async function CharacterEditPage({ params }: { params: { characterSlug: string } }) {

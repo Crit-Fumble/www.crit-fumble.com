@@ -34,6 +34,8 @@ export async function GET(request: Request) {
     let parentParty = null;
     let campaign = null;
 
+    // Check if character is associated with a party
+    // Note: Using party rather than party_id as that's what the current DB schema uses
     if (character.party) {
       // @ts-ignore - Prisma client has this model at runtime
       party = await prisma.party.findUnique({
@@ -53,6 +55,15 @@ export async function GET(request: Request) {
           where: { id: party.campaign }
         });
       }
+    }
+    
+    // Also check for direct campaign relation
+    // Note: Using campaign rather than campaign_id as that's what the current DB schema uses
+    if (!campaign && character.campaign) {
+      // @ts-ignore - Prisma client has this model at runtime
+      campaign = await prisma.campaign.findUnique({
+        where: { id: character.campaign }
+      });
     }
 
     return NextResponse.json({ 

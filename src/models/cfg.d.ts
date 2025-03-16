@@ -1,32 +1,57 @@
+/**
+ * Central type definitions for the application
+ * These types extend the Prisma-generated types with additional fields needed for the frontend
+ */
 import { DiscordProfile } from "next-auth/providers/discord"
-import { User as _User } from "next-auth";
+import { 
+  User as PrismaUser,
+  Character as PrismaCharacter,
+  Campaign as PrismaCampaign,
+  CampaignWorldAnvil as PrismaCampaignWorldAnvil,
+  CampaignDiscord as PrismaCampaignDiscord,
+  Party as PrismaParty,
+  PartyDiscord as PrismaPartyDiscord,
+  PartyDndBeyond as PrismaPartyDndBeyond,
+  PartyRoll20 as PrismaPartyRoll20,
+  GameSystem,
+  GameSession,
+  UserDiscord,
+  UserDndBeyond,
+  UserRoll20,
+  UserWorldAnvil
+} from '@prisma/client';
 
-export type User = {
-  id: string,
-  name: string,
-  email?: string,
-  image?: string,
-  token?: string,
-  discord?: DiscordProfile,
+// Re-export Prisma types for convenience
+export type {
+  PrismaUser,
+  PrismaCharacter,
+  PrismaCampaign,
+  PrismaCampaignWorldAnvil,
+  PrismaCampaignDiscord,
+  PrismaParty,
+  PrismaPartyDiscord,
+  PrismaPartyDndBeyond,
+  PrismaPartyRoll20,
+  GameSystem,
+  GameSession,
+  UserDiscord,
+  UserDndBeyond,
+  UserRoll20,
+  UserWorldAnvil
 };
 
-export type System = {
-  id: string;
-  name: string;
-  slug: string;
-  description?: string;
-  // image?: string;
-}
+// Extending types with frontend-specific properties
+export type User = PrismaUser & {
+  token?: string;
+  discord?: DiscordProfile;
+};
 
-export type Campaign = {
-  id: string;
-  system: string;
-  name: string;
-  slug: string;
-  gms: string[];
-  worldAnvil: {
+export type System = GameSystem;
+
+export type Campaign = PrismaCampaign & {
+  worldAnvil?: {
     id: string;
-    name: string,
+    name: string;
     slug: string;
     worldMapId?: string;
     chronicleId?: string;
@@ -44,20 +69,10 @@ export type Campaign = {
     playByPostChannelId?: string;
     playByPostThreadId?: string;
   };
-  // image?: string;
-  // description?: string;
-  // sheet?: any;
-  // data?: any;
-}
+};
 
-export type Party = {
-  id: string;
-  campaign: string;
-  gm: string;
-  slug: string;
-  name: string;
-  active: boolean;
-  playtime: {
+export type Party = PrismaParty & {
+  playtime?: {
     day: string;
     times?: string[];
   };
@@ -68,71 +83,21 @@ export type Party = {
   roll20?: {
     id: string;
     join?: string;
-  }
-  discord: {
+  };
+  discord?: {
     roleId: string;
     voiceChannelId: string;
     sideChatThreadId: string;
     questLogThreadId: string;
     gameplayThreadId: string;
-  },
-  // image?: string;
-  // system: string;
-  // description?: string;
-  // sheet?: any;
-}
+  };
+};
 
-export type Character = {
-  id: string;
-  player: string;
-  campaign: string;
-  party: string;
-  name: string;
-  slug: string;
-  foundryVtt?: {
-    user?: string;
-    password?: string;
-  };
-  dndBeyond: {
-    id: string;
-    dndBeyondId: string;
-  };
-  image?: string;
-  system: string;
-  description: string;
-  sheet: any;
-  data: any;
-}
-
-export type Profile = {
-  id: string;
-  name: string;
-  image?: string;
-  slug: string;
-  pronouns?: string;
-  discord?: {
-    id: string;
-    name: string;
-    displayName: string;
-  };
-  steam?: {
-    slug: string;
-    name: string;
-  };
-  worldAnvil?: {
-    id: string;
-    slug: string;
-    name: string;
-  };
-  dndBeyond?: {
-    name: string;
-  };
-  roll20?: {
-    id: string;
-    slug: string;
-    name: string;
-  };
-  admin?: boolean;
-}
-
-
+// The Character model doesn't have createdAt/updatedAt fields in Prisma schema
+export type Character = PrismaCharacter & {
+  // Characters use direct fields in the database:
+  // - dnd_beyond_id: String field for D&D Beyond IDs
+  // - world_anvil_id: String field for World Anvil IDs
+  // - pdf_url: String field for PDF URLs
+  // - sheet_data: JSON field for storing flexible data
+};

@@ -66,23 +66,9 @@ const config: AuthOptions = {
         session.profile = await getUserByDiscordName(session.user.name);
       }
 
-      if (!session?.profile?.id) {
-        // console.log(`session 1`, session);
-        
-        return session;
-      }
+      // Remove loading of character, campaign, and party data from session
+      // This data will be fetched directly from the API when needed
 
-      [
-        session.campaigns,
-        session.characters,
-        session.parties,
-      ] = [
-        await getCampaignsByPlayerId(session.profile.id),
-        await getCharactersByPlayerId(session.profile.id),
-        await getPartiesByPlayerId(session.profile.id),
-      ];
-
-      // console.log(`session 2`, session);
       return session;
     },
     jwt({ token, profile, account, trigger, session } : any) {

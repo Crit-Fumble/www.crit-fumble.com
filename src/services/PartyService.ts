@@ -92,21 +92,28 @@ export const getPartiesByParentPartyId = async ( parentParty: string ) => {
 export const getPartiesByPlayerId = async ( playerId: string ) => {
   if (!playerId) return [];
   
-  // Get character data to determine which parties the player is in
-  const characters = await getCharactersByPlayerId(playerId);
-  const partyIds = characters.map((char: any) => char?.party).filter(id => id !== null && id !== undefined);
-  
-  // Only query for parties if we have party IDs
-  if (!partyIds.length) return [];
-  
-  // @ts-ignore - Prisma client has this model at runtime
-  const response = await prisma.party.findMany({
-    where: { 
-      id: {
-        in: partyIds
+  try {
+    // Get character data to determine which parties the player is in
+    const characters = await getCharactersByPlayerId(playerId);
+    
+    // In Character model, party relationship uses party_id
+    const partyIds = characters
+      .map((char: any) => char?.party_id)
+      .filter(id => id !== null && id !== undefined);
+    
+    // Only query for parties if we have party IDs
+    if (!partyIds.length) return [];
+    
+    // @ts-ignore - Prisma client has this model at runtime
+    const response = await prisma.party.findMany({
+      where: {
+        id: { in: partyIds }
       }
-    }
-  });
-
-  return response ?? [];
+    });
+    
+    return response ?? [];
+  } catch (error) {
+    console.error('Error in getPartiesByPlayerId:', error);
+    return [];
+  }
 }

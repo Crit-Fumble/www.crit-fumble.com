@@ -47,7 +47,9 @@ const Dnd5eCharacterView = ({ player, campaign, party, parentParty, character, w
   const roll20Id = party?.roll20?.id ?? parentParty?.roll20?.id;
   const roll20VttUrl = roll20Id ? 
     `https://app.roll20.net/editor/setcampaign/${roll20Id}?desiredrole=player` : null;
-  const dndBeyondId = character?.DndBeyond?.dd_beyond_id;
+
+  // Access the D&D Beyond ID directly from the character
+  const dndBeyondId = character?.dnd_beyond_id;
   const ddbSheetUrl = dndBeyondId ? 
     `https://www.dndbeyond.com/characters/${dndBeyondId}` : null;
   const FIVEE_TOOLS_URL = `https://2014.5e.tools`;

@@ -12,8 +12,8 @@ import { getUserByDiscordId } from '@/services/ProfileService';
 import { getWorld } from '@/services/WorldAnvilService';
 import { redirect } from 'next/navigation';
 import { NextResponse } from 'next/server';
-import { Character } from '@prisma/client';
-import prisma from '@/services/DatabaseService'; // Fixed import for prisma
+import { Character } from '@/models/cfg';
+import prisma from '@/services/DatabaseService';
 
 export const getCharacterPageProps = async ({ character: { slug: characterSlug }, ...incProps}: any) => {
   if (!characterSlug) {
@@ -57,9 +57,9 @@ export const getCharacterPageProps = async ({ character: { slug: characterSlug }
     let world: any = {};
     
     // First check for direct campaign association
-    if (character?.campaign) {
-      console.log(`Character ${characterSlug} has direct campaign ID: ${character.campaign}`);
-      campaign = await getCampaignById(character.campaign);
+    if (character?.campaign_id) {
+      console.log(`Character ${characterSlug} has direct campaign ID: ${character.campaign_id}`);
+      campaign = await getCampaignById(character.campaign_id);
       console.log(`Direct campaign data:`, campaign);
       
       if (campaign?.worldAnvil) {
@@ -68,27 +68,27 @@ export const getCharacterPageProps = async ({ character: { slug: characterSlug }
     }
     
     // Then check for party and its associated campaign
-    if (character?.party) {
-      console.log(`Character ${characterSlug} has party ID: ${character.party}`);
+    if (character?.party_id) {
+      console.log(`Character ${characterSlug} has party ID: ${character.party_id}`);
       
       try {
-        party = await getPartyById(character.party);
+        party = await getPartyById(character.party_id);
         console.log(`Party data for ${characterSlug}:`, party ? JSON.stringify(party) : 'null');
         
         // Check if we actually got party data back
         if (!party || !party.id) {
-          console.log(`WARNING: Failed to retrieve party with ID ${character.party}`);
+          console.log(`WARNING: Failed to retrieve party with ID ${character.party_id}`);
           // Try direct database query as fallback
           // @ts-ignore - Prisma client has this model at runtime
           const directPartyQuery = await prisma.party.findUnique({
-            where: { id: character.party }
+            where: { id: character.party_id }
           });
           
           if (directPartyQuery) {
             console.log(`Successfully retrieved party data via direct query:`, directPartyQuery);
             party = directPartyQuery;
           } else {
-            console.error(`Party with ID ${character.party} not found in database`);
+            console.error(`Party with ID ${character.party_id} not found in database`);
           }
         }
         
@@ -101,20 +101,20 @@ export const getCharacterPageProps = async ({ character: { slug: characterSlug }
             console.log(`WARNING: Failed to retrieve parent party with ID ${party.parentParty}`);
           }
         } else {
-          console.log(`No parent party found for party ID: ${character.party}`);
+          console.log(`No parent party found for party ID: ${character.party_id}`);
         }
         
         // Only look for campaign through party if we don't already have one
-        if (party?.campaign && !campaign?.id) {
-          console.log(`Party has campaign ID: ${party.campaign}`);
-          campaign = await getCampaignById(party.campaign);
+        if (party?.campaign_id && !campaign?.id) {
+          console.log(`Party has campaign ID: ${party.campaign_id}`);
+          campaign = await getCampaignById(party.campaign_id);
           console.log(`Campaign data from party:`, campaign ? JSON.stringify(campaign) : 'null');
           
           if (campaign?.worldAnvil) {
             world = await getWorld(campaign.worldAnvil);
           }
         } else if (!campaign?.id) {
-          console.log(`No campaign found for party ID: ${character.party}`);
+          console.log(`No campaign found for party ID: ${character.party_id}`);
         }
       } catch (error) {
         console.error(`Error retrieving party data for character ${characterSlug}:`, error);
@@ -156,9 +156,12 @@ export const createCharacterHandler = async (request: Request) => {
 
   try {
     const characterData = await request.json();
+    
+    // Add the player ID to the character data
+    characterData.player = session.user.id;
 
     // Create the character
-    const newCharacter = await createCharacter(characterData, session.user.id);
+    const newCharacter = await createCharacter(characterData);
     
     if (!newCharacter) {
       return NextResponse.json({ error: 'Failed to create character' }, { status: 400 });
@@ -184,13 +187,31 @@ export const updateCharacterHandler = async (request: Request, { params }: { par
     const characterData = await request.json();
     const characterId = params.id;
     
-    // Update the character (service layer will verify if user is player or GM)
-    const updatedCharacter = await updateCharacter(characterId, characterData, session.user.id);
+    // Get the existing character to check ownership
+    const existingCharacter = await prisma.character.findUnique({
+      where: { id: characterId }
+    });
+    
+    // Check if the character exists and if the user is the owner
+    if (!existingCharacter) {
+      return NextResponse.json({ error: 'Character not found' }, { status: 404 });
+    }
+    
+    // Check if the user is the owner of the character
+    if (existingCharacter.player !== session.user.id) {
+      // TODO: Check if user is GM of the campaign/party
+      return NextResponse.json({ 
+        error: 'You do not have permission to edit this character. Only the character owner or a game master of the campaign/party can edit characters.' 
+      }, { status: 403 });
+    }
+    
+    // Update the character
+    const updatedCharacter = await updateCharacter(characterId, characterData);
     
     if (!updatedCharacter) {
       return NextResponse.json({ 
-        error: 'Character not found or you do not have permission to edit it. Only the character owner or a game master of the campaign/party can edit characters.' 
-      }, { status: 403 });
+        error: 'Failed to update character' 
+      }, { status: 400 });
     }
     
     return NextResponse.json({ character: updatedCharacter });
@@ -212,14 +233,26 @@ export const deleteCharacterHandler = async (request: Request, { params }: { par
   try {
     const characterId = params.id;
     
-    // Delete the character (service layer will verify if user is player or GM)
-    const success = await deleteCharacter(characterId, session.user.id);
+    // Get the existing character to check ownership
+    const existingCharacter = await prisma.character.findUnique({
+      where: { id: characterId }
+    });
     
-    if (!success) {
+    // Check if the character exists and if the user is the owner
+    if (!existingCharacter) {
+      return NextResponse.json({ error: 'Character not found' }, { status: 404 });
+    }
+    
+    // Check if the user is the owner of the character
+    if (existingCharacter.player !== session.user.id) {
+      // TODO: Check if user is GM of the campaign/party
       return NextResponse.json({ 
-        error: 'Character not found or you do not have permission to delete it. Only the character owner or a game master of the campaign/party can delete characters.' 
+        error: 'You do not have permission to delete this character. Only the character owner or a game master of the campaign/party can delete characters.' 
       }, { status: 403 });
     }
+    
+    // Delete the character
+    await deleteCharacter(characterId);
     
     return NextResponse.json({ success: true });
   } catch (error) {

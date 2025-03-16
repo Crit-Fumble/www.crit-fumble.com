@@ -16,16 +16,17 @@ const CharacterEditForm = ({ characterData }: { characterData: any }) => {
   const [formData, setFormData] = useState({
     id: characterData?.id || '',
     name: characterData?.name || '',
-    dndBeyondUrl: '',
+    dnd_beyond_id: characterData?.dnd_beyond_id || '',
+    dndBeyondUrl: '',  
     slug: characterData?.slug || ''
   });
 
   // If the character has a D&D Beyond association, set the URL
   useEffect(() => {
-    if (characterData?.DndBeyond?.dd_beyond_id) {
+    if (characterData?.dnd_beyond_id) {
       setFormData(prev => ({
         ...prev,
-        dndBeyondUrl: `https://www.dndbeyond.com/characters/${characterData.DndBeyond.dd_beyond_id}`
+        dndBeyondUrl: `https://www.dndbeyond.com/characters/${characterData.dnd_beyond_id}`
       }));
     }
   }, [characterData]);
@@ -76,8 +77,8 @@ const CharacterEditForm = ({ characterData }: { characterData: any }) => {
           // Extract character ID from URL like https://www.dndbeyond.com/characters/12345
           const match = submissionData.dndBeyondUrl.match(/\/characters\/(\d+)/);
           if (match && match[1]) {
-            // Add the extracted ID as dndBeyondId
-            submissionData.dndBeyondId = match[1];
+            // Add the extracted ID directly to dnd_beyond_id to match database field
+            submissionData.dnd_beyond_id = match[1];
           } else {
             throw new Error('Invalid D&D Beyond URL format');
           }
