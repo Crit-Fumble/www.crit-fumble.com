@@ -5,7 +5,7 @@ const nextConfig = {
             {
                 protocol: 'https',
                 hostname: 'cdn.discordapp.com',
-                pathname: '/avatars/*/**',
+                pathname: '/avatars/**',
             }
         ]
     }

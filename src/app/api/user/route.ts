@@ -7,6 +7,9 @@ import { Session } from "next-auth";
 import prisma from "@/services/DatabaseService";
 import { withDb } from "@/services/DatabaseService";
 
+// Configure this route as dynamic to prevent static rendering errors
+export const dynamic = 'force-dynamic';
+
 export async function GET(request: NextRequest) {
   try {
     console.log("API: Fetching user data including characters, campaigns, and parties");
