@@ -56,67 +56,64 @@ function UserDataProvider({ children }: { children: React.ReactNode }) {
     console.log('UserDataProvider status:', status);
     console.log('UserDataProvider session:', JSON.stringify(session, null, 2));
     
-    // Add a brief delay to ensure session is fully initialized
-    setTimeout(() => {
-      if (status !== "authenticated" || session?.user?.id === undefined || session?.user?.id === null) {
-        console.log('UserDataProvider: Not authenticated or missing user ID');
-        setUserData(null);
-        setIsLoading(false);
-        return;
+    if (status !== "authenticated" || session?.user?.id === undefined || session?.user?.id === null) {
+      console.log('UserDataProvider: Not authenticated or missing user ID');
+      setUserData(null);
+      setIsLoading(false);
+      return;
+    }
+    
+    console.log('UserDataProvider: Making fetch request to /api/user');
+    setIsLoading(true);
+    
+    // Use window.fetch to ensure browser context
+    window.fetch("/api/user", {
+      method: 'GET',
+      credentials: 'include', // Use 'include' to ensure cookies are sent
+      headers: {
+        'Content-Type': 'application/json',
+        'Cache-Control': 'no-cache'
       }
-      
-      console.log('UserDataProvider: Making fetch request to /api/user');
-      setIsLoading(true);
-      
-      // Use window.fetch to ensure browser context
-      window.fetch("/api/user", {
-        method: 'GET',
-        credentials: 'include', // Use 'include' to ensure cookies are sent
-        headers: {
-          'Content-Type': 'application/json',
-          'Cache-Control': 'no-cache'
+    })
+      .then(response => {
+        console.log("UserDataProvider: Response status:", response.status);
+        if (!response.ok) {
+          console.log("UserDataProvider: Response not OK", response.statusText);
+          throw new Error(`Failed to fetch user data: ${response.status}`);
         }
+        return response.json();
       })
-        .then(response => {
-          console.log("UserDataProvider: Response status:", response.status);
-          if (!response.ok) {
-            console.log("UserDataProvider: Response not OK", response.statusText);
-            throw new Error(`Failed to fetch user data: ${response.status}`);
+      .then(data => {
+        console.log("UserDataProvider: User data fetched successfully", JSON.stringify(data, null, 2));
+        
+        // Ensure we keep the session user data even if API returns different user data
+        const mergedUserData = {
+          ...data,
+          user: {
+            ...session.user,  // Start with session user data (has image URL)
+            ...(data.user || {})  // Add any additional user data from API
           }
-          return response.json();
-        })
-        .then(data => {
-          console.log("UserDataProvider: User data fetched successfully", JSON.stringify(data, null, 2));
-          
-          // Ensure we keep the session user data even if API returns different user data
-          const mergedUserData = {
-            ...data,
-            user: {
-              ...session.user,  // Start with session user data (has image URL)
-              ...(data.user || {})  // Add any additional user data from API
-            }
-          };
-          
-          console.log("UserDataProvider: Merged user data:", JSON.stringify(mergedUserData.user, null, 2));
-          setUserData(mergedUserData);
-          setError(null);
-          setIsLoading(false);
-        })
-        .catch(err => {
-          console.error("UserDataProvider: Error fetching user data", err);
-          // If API fails, still keep session user data
-          if (session?.user) {
-            setUserData({
-              user: session.user,
-              characters: [],
-              campaigns: [],
-              parties: []
-            });
-          }
-          setError(err instanceof Error ? err : new Error("Unknown error"));
-          setIsLoading(false);
-        });
-    }, 100); // Small delay to ensure session is ready
+        };
+        
+        console.log("UserDataProvider: Merged user data:", JSON.stringify(mergedUserData.user, null, 2));
+        setUserData(mergedUserData);
+        setError(null);
+        setIsLoading(false);
+      })
+      .catch(err => {
+        console.error("UserDataProvider: Error fetching user data", err);
+        // If API fails, still keep session user data
+        if (session?.user) {
+          setUserData({
+            user: session.user,
+            characters: [],
+            campaigns: [],
+            parties: []
+          });
+        }
+        setError(err instanceof Error ? err : new Error("Unknown error"));
+        setIsLoading(false);
+      });
   }, [session, status]);
   
   // Fetch user data when session changes

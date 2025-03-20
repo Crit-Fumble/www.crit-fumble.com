@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
     }));
     
     // Ensure user is authenticated and has admin privileges
-    if (!session || !session.user?.id) {
+    if (!session || session.user?.id == undefined || session.user?.id == null) {
       console.log("API: No authenticated user found");
       return NextResponse.json({ error: "Authentication required" }, { status: 401 });
     }
