@@ -2,7 +2,7 @@
 
 import { SessionProvider, useSession } from "next-auth/react";
 import { Session } from "next-auth";
-import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
+import React, { createContext, useContext, useState, useEffect, useCallback, useRef } from "react";
 
 // Types for user data
 type UserData = {
@@ -34,6 +34,7 @@ function UserDataProvider({ children }: { children: React.ReactNode }) {
   const [userData, setUserData] = useState<UserData | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
+  const initialFetchDone = useRef(false);
   
   // Initialize userData with session data when session changes
   useEffect(() => {
@@ -56,7 +57,7 @@ function UserDataProvider({ children }: { children: React.ReactNode }) {
     console.log('UserDataProvider status:', status);
     console.log('UserDataProvider session:', JSON.stringify(session, null, 2));
     
-    if (status !== "authenticated" || session?.user?.id === undefined || session?.user?.id === null) {
+    if (status !== "authenticated" || !session?.user?.id) {
       console.log('UserDataProvider: Not authenticated or missing user ID');
       setUserData(null);
       setIsLoading(false);
@@ -66,13 +67,18 @@ function UserDataProvider({ children }: { children: React.ReactNode }) {
     console.log('UserDataProvider: Making fetch request to /api/user');
     setIsLoading(true);
     
+    // Add a timestamp query parameter to prevent caching
+    const timestamp = new Date().getTime();
+    
     // Use window.fetch to ensure browser context
-    window.fetch("/api/user", {
+    window.fetch(`/api/user?t=${timestamp}`, {
       method: 'GET',
       credentials: 'include', // Use 'include' to ensure cookies are sent
       headers: {
         'Content-Type': 'application/json',
-        'Cache-Control': 'no-cache'
+        'Cache-Control': 'no-cache, no-store, must-revalidate',
+        'Pragma': 'no-cache',
+        'Expires': '0'
       }
     })
       .then(response => {
@@ -99,6 +105,7 @@ function UserDataProvider({ children }: { children: React.ReactNode }) {
         setUserData(mergedUserData);
         setError(null);
         setIsLoading(false);
+        initialFetchDone.current = true;
       })
       .catch(err => {
         console.error("UserDataProvider: Error fetching user data", err);
@@ -113,12 +120,26 @@ function UserDataProvider({ children }: { children: React.ReactNode }) {
         }
         setError(err instanceof Error ? err : new Error("Unknown error"));
         setIsLoading(false);
+        initialFetchDone.current = true;
       });
   }, [session, status]);
   
+  // Initial fetch when component mounts
+  useEffect(() => {
+    if (!initialFetchDone.current && status === "authenticated" && session?.user?.id) {
+      console.log('UserDataProvider: Initial mount with authenticated session, fetching user data');
+      fetchUserData();
+    } else if (status === "unauthenticated") {
+      console.log('UserDataProvider: Session unauthenticated, clearing user data');
+      setUserData(null);
+      setIsLoading(false);
+      initialFetchDone.current = true;
+    }
+  }, [fetchUserData, session, status]);
+  
   // Fetch user data when session changes
   useEffect(() => {
-    if (status === "authenticated" && session?.user?.id !== undefined && session?.user?.id !== null) {
+    if (status === "authenticated" && session?.user?.id) {
       console.log('UserDataProvider: Session authenticated, fetching user data');
       fetchUserData();
     } else if (status === "unauthenticated") {

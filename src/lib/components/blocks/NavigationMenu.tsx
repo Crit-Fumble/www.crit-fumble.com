@@ -1,7 +1,7 @@
 "use client";
 
 import { signIn, signOut, useSession } from 'next-auth/react';
-import React, { useCallback, useMemo } from 'react';
+import React, { useCallback, useMemo, useEffect } from 'react';
 import useDarkMode from '@lib/hooks/useDarkMode';
 import { useUserData } from '@/controllers/providers';
 import Image from 'next/image';
@@ -17,9 +17,23 @@ const NavigationMenu = () => {
   // Log the user data in a more readable way
   console.log("NavigationMenu - User data:", userData ? JSON.stringify(userData, null, 2) : "No user data");
   console.log("NavigationMenu - User:", userData?.user ? JSON.stringify(userData.user, null, 2) : "No user object");
+  console.log("NavigationMenu - Loading state:", isLoadingUserData, status);
+
+  // Force refetch if needed - will trigger on initial component mount
+  useEffect(() => {
+    if (status === "authenticated" && !userData && !isLoadingUserData) {
+      console.log("NavigationMenu - Triggering user data refetch");
+      refetch();
+    }
+  }, [status, userData, isLoadingUserData, refetch]);
 
   // Memoize derived state to prevent recalculations on each render
-  const isLoading = useMemo(() => (status === "loading" || isLoadingUserData), [status, isLoadingUserData]);
+  const isLoading = useMemo(() => {
+    const loading = status === "loading" || isLoadingUserData;
+    console.log("NavigationMenu - Calculated isLoading:", loading);
+    return loading;
+  }, [status, isLoadingUserData]);
+  
   const isLoggedIn = useMemo(() => 
     status === "authenticated" && 
     session?.user &&

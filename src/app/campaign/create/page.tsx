@@ -117,11 +117,9 @@ export default function CreateCampaignPage() {
                 onChange={handleChange}
                 className="px-3 py-2 border rounded-md dark:bg-gray-800 dark:border-gray-700"
               >
-                <option value="D&D 5E">D&D 5E</option>
-                <option value="Pathfinder">Pathfinder</option>
-                <option value="Call of Cthulhu">Call of Cthulhu</option>
-                <option value="Vampire: The Masquerade">Vampire: The Masquerade</option>
-                <option value="Star Wars">Star Wars</option>
+                <option value="dnd5e">D&D 5E</option>
+                <option value="cypher">Cypher</option>
+                <option value="swade">Savage Worlds</option>
                 <option value="Other">Other</option>
               </select>
             </div>
