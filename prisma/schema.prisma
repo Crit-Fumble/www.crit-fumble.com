@@ -97,14 +97,13 @@ model User {
   email          String?         @unique
   emailVerified  DateTime?
   image          String?
-  bio            String?         @db.Text
   createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @updatedAt
+  updatedAt      DateTime        @default(now())
   admin          Boolean?        @default(false)
-  discord        String?         @unique
-  roll20         String?         @unique
-  dd_beyond      String?         @unique
-  world_anvil    String?         @unique
+  discord        String?
+  roll20         String?
+  dd_beyond      String?
+  world_anvil    String?
   Account        Account[]
   Post           Post[]
   Session        Session[]
