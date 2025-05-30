@@ -1,11 +1,12 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from "next-auth/react";
 import { Card, CardContent, CardHeader } from "@lib/components/blocks/Card";
 import { slugify } from '@lib/utils/textUtils';
 import { Providers } from "@/controllers/providers";
+import Link from 'next/link';
 
 // Character Edit Form Component
 const CharacterEditForm = ({ characterData }: { characterData: any }) => {
@@ -14,22 +15,48 @@ const CharacterEditForm = ({ characterData }: { characterData: any }) => {
   const [loading, setLoading] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [error, setError] = useState('');
+  const [fileUploading, setFileUploading] = useState(false);
+  const [fileUploadError, setFileUploadError] = useState('');
+  const [currentPdfUrl, setCurrentPdfUrl] = useState(characterData?.pdf_url || '');
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  
   const [formData, setFormData] = useState({
     id: characterData?.id || '',
     name: characterData?.name || '',
     dnd_beyond_id: characterData?.dnd_beyond_id || '',
     dndBeyondUrl: '',  
-    slug: characterData?.slug || ''
+    slug: characterData?.slug || '',
+    pdf_url: characterData?.pdf_url || ''
   });
 
-  // If the character has a D&D Beyond association, set the URL
+  // Set up the character data when component loads
   useEffect(() => {
+    console.log('Character data received in EditView:', characterData);
+    
+    // If the character has a D&D Beyond association, set the URL
     if (characterData?.dnd_beyond_id) {
       setFormData(prev => ({
         ...prev,
         dndBeyondUrl: `https://www.dndbeyond.com/characters/${characterData.dnd_beyond_id}`
       }));
     }
+    
+    // If the character has a PDF URL, make sure it's set correctly
+    if (characterData?.pdf_url) {
+      console.log('PDF URL found in character data:', characterData.pdf_url);
+      setCurrentPdfUrl(characterData.pdf_url);
+      setFormData(prev => ({
+        ...prev,
+        pdf_url: characterData.pdf_url
+      }));
+    } else {
+      console.log('No PDF URL found in character data');
+    }
+    
+    // Log the form data after initialization
+    setTimeout(() => {
+      console.log('Form data after initialization:', formData);
+    }, 100);
   }, [characterData]);
 
   // Fetch parties when component mounts
@@ -62,6 +89,55 @@ const CharacterEditForm = ({ characterData }: { characterData: any }) => {
       setFormData(prev => ({ ...prev, [name]: value }));
     }
   };
+  
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    
+    // Validate file is a PDF
+    if (file.type !== 'application/pdf') {
+      setFileUploadError('Only PDF files are allowed');
+      return;
+    }
+    
+    // Clear previous errors
+    setFileUploadError('');
+    setFileUploading(true);
+    
+    try {
+      // Create FormData object
+      const filename = file.name.replace(/\s+/g, '-').toLowerCase();
+      
+      // Upload file to Vercel Blob Storage
+      const response = await fetch(
+        `/api/character/upload?filename=${encodeURIComponent(filename)}&characterId=${formData.id}`,
+        {
+          method: 'POST',
+          body: file,
+        }
+      );
+      
+      const result = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to upload file');
+      }
+      
+      // Update form data with the PDF URL
+      setFormData(prev => ({ ...prev, pdf_url: result.url }));
+      setCurrentPdfUrl(result.url);
+      
+      // Reset file input
+      if (fileInputRef.current) {
+        fileInputRef.current.value = '';
+      }
+    } catch (err: any) {
+      console.error('Error uploading PDF:', err);
+      setFileUploadError(err.message || 'Failed to upload PDF');
+    } finally {
+      setFileUploading(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -71,6 +147,13 @@ const CharacterEditForm = ({ characterData }: { characterData: any }) => {
     try {
       // Process the form data before submission
       const submissionData: Record<string, any> = { ...formData };
+      
+      // Make sure the PDF URL is included
+      if (currentPdfUrl) {
+        submissionData.pdf_url = currentPdfUrl;
+      }
+      
+      console.log('Submitting form data:', submissionData);
       
       // Extract D&D Beyond character ID from URL if provided
       if (submissionData.dndBeyondUrl) {
@@ -196,6 +279,51 @@ const CharacterEditForm = ({ characterData }: { characterData: any }) => {
               onChange={handleChange}
               className="px-3 py-2 border rounded-md dark:bg-gray-800 dark:border-gray-700"
             />
+          </div>
+          
+          <div className="flex flex-col">
+            <label htmlFor="pdfUpload" className="mb-1 font-medium">Character Sheet PDF</label>
+            <div className="space-y-2">
+              {currentPdfUrl && (
+                <div className="flex items-center space-x-2">
+                  <Link 
+                    href={currentPdfUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 underline"
+                  >
+                    Current PDF
+                  </Link>
+                  <span className="text-sm text-gray-500">(Opens in new tab)</span>
+                </div>
+              )}
+              
+              <input
+                type="file"
+                id="pdfUpload"
+                ref={fileInputRef}
+                accept="application/pdf"
+                onChange={handleFileChange}
+                className="px-3 py-2 border rounded-md dark:bg-gray-800 dark:border-gray-700 w-full"
+                disabled={fileUploading}
+              />
+              
+              {fileUploading && (
+                <div className="text-sm text-gray-600 dark:text-gray-400">
+                  Uploading PDF... Please wait.
+                </div>
+              )}
+              
+              {fileUploadError && (
+                <div className="text-sm text-red-600 dark:text-red-400">
+                  {fileUploadError}
+                </div>
+              )}
+              
+              <p className="text-sm text-gray-500 mt-1">
+                Upload your character sheet as a PDF file. Maximum size: 10MB.
+              </p>
+            </div>
           </div>
 
           <div className="flex justify-between items-center pt-4">

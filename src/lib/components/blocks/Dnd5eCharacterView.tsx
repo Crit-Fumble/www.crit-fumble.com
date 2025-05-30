@@ -2,7 +2,7 @@
 import { DEFAULT } from "@/config/views";
 import ButtonBlock from "./LinkButtonBlock";
 import { Card, CardContent, CardHeader } from "./Card";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const Dnd5eCharacterView = ({ player, campaign, party, parentParty, character, world }: any) => {
   // Add debugging logs to see what party data is coming in
@@ -52,6 +52,9 @@ const Dnd5eCharacterView = ({ player, campaign, party, parentParty, character, w
   const dndBeyondId = character?.dnd_beyond_id;
   const ddbSheetUrl = dndBeyondId ? 
     `https://www.dndbeyond.com/characters/${dndBeyondId}` : null;
+    
+  // Access the PDF URL directly from the character
+  const pdfUrl = character?.pdf_url;
   const FIVEE_TOOLS_URL = `https://2014.5e.tools`;
   const FR_WIKI_URL = `https://forgottenrealms.fandom.com/wiki`;
 
@@ -83,11 +86,11 @@ const Dnd5eCharacterView = ({ player, campaign, party, parentParty, character, w
           )}
         </CardContent>
 
-        {(roll20Id || dndBeyondId || characterThreadId || voiceChannelId || sideChatThreadId) && (
+        {(roll20Id || dndBeyondId || characterThreadId || voiceChannelId || sideChatThreadId || pdfUrl) && (
           <CardContent>
-            <h3 className="text-sm font-medium mb-2">Character Resources</h3>
             <div className="flex flex-wrap gap-2 justify-center">
-              {roll20VttUrl && <ButtonBlock title={'Roll20 VTT'} target={'vtt'} options={'height=1080, width=1152'} url={roll20VttUrl} />}
+            {pdfUrl && <ButtonBlock title={'CFG Character PDF'} target={'pdf'} options={'height=800, width=800'} url={pdfUrl} />}
+              {roll20VttUrl && <ButtonBlock title={'Roll20 VTT'} target={'vtt'} options={'height=1080, width=1152'} url={roll20VttUrl} />}  
               {ddbSheetUrl && <ButtonBlock title={'D&D Beyond Character Sheet'} target={'ddb'} options={'height=1291, width=768'} url={ddbSheetUrl} />}
               {characterThreadUrl && <ButtonBlock title={'Discord Character Thread'} target={'discord'} options={'height=540, width=768'} url={characterThreadUrl} />}
               {voiceChatUrl && <ButtonBlock title={'Discord Voice Channel'} target={'discord-voice'} options={'height=540, width=768'} url={voiceChatUrl} />}

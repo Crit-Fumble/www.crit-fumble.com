@@ -6,6 +6,11 @@ const nextConfig = {
                 protocol: 'https',
                 hostname: 'cdn.discordapp.com',
                 pathname: '/avatars/**',
+            },
+            {
+                protocol: 'https',
+                hostname: '1qxvvbsathkgswhg.public.blob.vercel-storage.com',
+                pathname: '/character-sheets/**',
             }
         ]
     }

@@ -215,6 +215,12 @@ export const updateCharacter = async (id: string, characterData: any) => {
       updateData.dnd_beyond_id = characterData.dnd_beyond_id;
     }
     
+    // Update PDF URL if provided
+    if (characterData.pdf_url !== undefined) {
+      updateData.pdf_url = characterData.pdf_url;
+      console.log('Updating PDF URL to:', characterData.pdf_url);
+    }
+    
     // Update campaign relation if provided
     if (characterData.campaignId !== undefined) {
       updateData.campaign_id = characterData.campaignId;
@@ -236,8 +242,13 @@ export const updateCharacter = async (id: string, characterData: any) => {
     }
     
     // Update PDF URL if provided
-    if (characterData.pdfUrl !== undefined) {
+    if (characterData.pdf_url !== undefined) {
+      updateData.pdf_url = characterData.pdf_url;
+      console.log('Setting PDF URL in database to:', characterData.pdf_url);
+    } else if (characterData.pdfUrl !== undefined) {
+      // Also handle camelCase version for backward compatibility
       updateData.pdf_url = characterData.pdfUrl;
+      console.log('Setting PDF URL from camelCase pdfUrl to:', characterData.pdfUrl);
     }
     
     // Update sheet data if provided
