@@ -1,5 +1,5 @@
 import prisma, { withDb } from '@/services/DatabaseService';
-import { randomUUID } from 'node:crypto';
+import { randomUUID } from 'crypto';
 
 export const getCharacter = async ( character: any ) => {
   let result = {};

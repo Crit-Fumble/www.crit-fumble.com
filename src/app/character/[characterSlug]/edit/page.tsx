@@ -27,18 +27,37 @@ export default async function CharacterEditPage({ params }: { params: { characte
 
   // Get the character by slug
   const character = await getCharacterBySlug(characterSlug) as Character;
+  
+  console.log('Character data:', character);
+  console.log('Session user ID:', session.user.id);
 
   // Redirect if character not found
   if (!character || Object.keys(character).length === 0) {
+    console.log('Character not found, redirecting to dashboard');
     redirect('/dashboard');
   }
 
   // Check if user is allowed to edit this character
-  const isOwner = character.player === session.user.id;
+  console.log('Character data:', character);
+  console.log('Session user:', session.user);
+  
+  // Let's fetch the player record to compare properly
+  const getUserByDiscordId = await import('@/services/ProfileService').then(m => m.getUserByDiscordId);
+  const player = await getUserByDiscordId(session.user.id);
+  
+  console.log('Player record from Discord ID:', player);
+  console.log('Character player ID:', character.player);
+  
+  // Check if the player ID from the database matches the character's player field
+  // This is the correct way to check ownership - using proper type guards
+  const isOwner = player && typeof player === 'object' && 'id' in player && 
+                  player.id === character.player;
+  
+  console.log('Is owner check result:', isOwner);
   
   // If not the owner, redirect
   if (!isOwner) {
-    // TODO: Add GM permission check here if needed
+    console.log('User is not the owner of this character');
     redirect(`/character/${character.slug}`);
   }
 

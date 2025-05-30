@@ -197,8 +197,24 @@ export const updateCharacterHandler = async (request: Request, { params }: { par
       return NextResponse.json({ error: 'Character not found' }, { status: 404 });
     }
     
+    // Get the user profile to properly check ownership
+    const { getUserByDiscordId } = await import('@/services/ProfileService');
+    const userProfile = await getUserByDiscordId(session.user.id);
+    
+    console.log('Update permissions check:', {
+      characterPlayer: existingCharacter.player,
+      sessionUserId: session.user.id,
+      userProfileId: userProfile && typeof userProfile === 'object' && 'id' in userProfile ? userProfile.id : 'Not found'
+    });
+    
     // Check if the user is the owner of the character
-    if (existingCharacter.player !== session.user.id) {
+    // Compare with both session ID and profile ID to handle different ID formats
+    const isOwner = 
+      existingCharacter.player === session.user.id || 
+      (userProfile && typeof userProfile === 'object' && 'id' in userProfile && 
+       existingCharacter.player === userProfile.id);
+      
+    if (!isOwner) {
       // TODO: Check if user is GM of the campaign/party
       return NextResponse.json({ 
         error: 'You do not have permission to edit this character. Only the character owner or a game master of the campaign/party can edit characters.' 
