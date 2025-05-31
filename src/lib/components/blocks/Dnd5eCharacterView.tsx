@@ -62,7 +62,35 @@ const Dnd5eCharacterView = ({ player, campaign, party, parentParty, character, w
     <div className="flex flex-col gap-2 items-center justify-middle">
       <Card className="flex flex-col gap-2 justify-start text-center w-full max-w-2xl">
         {character?.name && <CardHeader>{character.name}</CardHeader>}
-        <CardContent>          
+        <CardContent>
+          {/* Character Portrait and Token */}
+          <div className="flex flex-wrap justify-center gap-4 mb-4">
+            {character?.portrait_url && (
+              <div className="flex flex-col items-center">
+                <div className="w-40 h-40 border rounded-md overflow-hidden">
+                  <img 
+                    src={character.portrait_url} 
+                    alt={`${character.name || 'Character'} Portrait`} 
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <span className="text-xs text-gray-500 mt-1">Character Portrait</span>
+              </div>
+            )}
+            {character?.token_url && (
+              <div className="flex flex-col items-center">
+                <div className="w-24 h-24 border rounded-full overflow-hidden">
+                  <img 
+                    src={character.token_url} 
+                    alt={`${character.name || 'Character'} Token`} 
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <span className="text-xs text-gray-500 mt-1">Character Token</span>
+              </div>
+            )}
+          </div>
+          
           {/* Party information with enhanced fallback handling */}
           {(party && party.name) ? (
             <p className="my-1">Member of <strong>{party.name}</strong></p>

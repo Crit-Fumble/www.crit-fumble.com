@@ -225,6 +225,8 @@ model Character {
   game_system_id String?
   party_id       String?
   pdf_url        String?
+  portrait_url   String?
+  token_url      String?
   sheet_data     Json?
   world_anvil_id String?
   campaign       Campaign?   @relation(fields: [campaign_id], references: [id])

@@ -16,9 +16,17 @@ const CharacterEditForm = ({ characterData }: { characterData: any }) => {
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [error, setError] = useState('');
   const [fileUploading, setFileUploading] = useState(false);
+  const [portraitUploading, setPortraitUploading] = useState(false);
+  const [tokenUploading, setTokenUploading] = useState(false);
   const [fileUploadError, setFileUploadError] = useState('');
+  const [portraitUploadError, setPortraitUploadError] = useState('');
+  const [tokenUploadError, setTokenUploadError] = useState('');
   const [currentPdfUrl, setCurrentPdfUrl] = useState(characterData?.pdf_url || '');
+  const [currentPortraitUrl, setCurrentPortraitUrl] = useState(characterData?.portrait_url || '');
+  const [currentTokenUrl, setCurrentTokenUrl] = useState(characterData?.token_url || '');
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const portraitInputRef = useRef<HTMLInputElement>(null);
+  const tokenInputRef = useRef<HTMLInputElement>(null);
   
   const [formData, setFormData] = useState({
     id: characterData?.id || '',
@@ -26,7 +34,9 @@ const CharacterEditForm = ({ characterData }: { characterData: any }) => {
     dnd_beyond_id: characterData?.dnd_beyond_id || '',
     dndBeyondUrl: '',  
     slug: characterData?.slug || '',
-    pdf_url: characterData?.pdf_url || ''
+    pdf_url: characterData?.pdf_url || '',
+    portrait_url: characterData?.portrait_url || '',
+    token_url: characterData?.token_url || ''
   });
 
   // Set up the character data when component loads
@@ -51,6 +61,28 @@ const CharacterEditForm = ({ characterData }: { characterData: any }) => {
       }));
     } else {
       console.log('No PDF URL found in character data');
+    }
+
+    // If the character has a portrait URL, make sure it's set correctly
+    if (characterData?.portrait_url) {
+      console.log('Portrait URL found in character data:', characterData.portrait_url);
+      setFormData(prev => ({
+        ...prev,
+        portrait_url: characterData.portrait_url
+      }));
+    } else {
+      console.log('No portrait URL found in character data');
+    }
+
+    // If the character has a token URL, make sure it's set correctly
+    if (characterData?.token_url) {
+      console.log('Token URL found in character data:', characterData.token_url);
+      setFormData(prev => ({
+        ...prev,
+        token_url: characterData.token_url
+      }));
+    } else {
+      console.log('No token URL found in character data');
     }
 
   }, [characterData]);
@@ -106,7 +138,7 @@ const CharacterEditForm = ({ characterData }: { characterData: any }) => {
       
       // Upload file to Vercel Blob Storage
       const response = await fetch(
-        `/api/character/upload?filename=${encodeURIComponent(filename)}&characterId=${formData.id}`,
+        `/api/character/upload?filename=${encodeURIComponent(filename)}&characterId=${formData.id}&type=pdf`,
         {
           method: 'POST',
           body: file,
@@ -132,6 +164,104 @@ const CharacterEditForm = ({ characterData }: { characterData: any }) => {
       setFileUploadError(err.message || 'Failed to upload PDF');
     } finally {
       setFileUploading(false);
+    }
+  };
+
+  const handlePortraitChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    
+    // Validate file is an image
+    if (!file.type.startsWith('image/')) {
+      setPortraitUploadError('Only image files are allowed');
+      return;
+    }
+    
+    // Clear previous errors
+    setPortraitUploadError('');
+    setPortraitUploading(true);
+    
+    try {
+      // Create FormData object
+      const filename = file.name.replace(/\s+/g, '-').toLowerCase();
+      
+      // Upload file to Vercel Blob Storage
+      const response = await fetch(
+        `/api/character/upload?filename=${encodeURIComponent(filename)}&characterId=${formData.id}&type=portrait`,
+        {
+          method: 'POST',
+          body: file,
+        }
+      );
+      
+      const result = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to upload portrait');
+      }
+      
+      // Update form data with the portrait URL
+      setFormData(prev => ({ ...prev, portrait_url: result.url }));
+      setCurrentPortraitUrl(result.url);
+      
+      // Reset file input
+      if (portraitInputRef.current) {
+        portraitInputRef.current.value = '';
+      }
+    } catch (err: any) {
+      console.error('Error uploading portrait:', err);
+      setPortraitUploadError(err.message || 'Failed to upload portrait');
+    } finally {
+      setPortraitUploading(false);
+    }
+  };
+
+  const handleTokenChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    
+    // Validate file is an image
+    if (!file.type.startsWith('image/')) {
+      setTokenUploadError('Only image files are allowed');
+      return;
+    }
+    
+    // Clear previous errors
+    setTokenUploadError('');
+    setTokenUploading(true);
+    
+    try {
+      // Create FormData object
+      const filename = file.name.replace(/\s+/g, '-').toLowerCase();
+      
+      // Upload file to Vercel Blob Storage
+      const response = await fetch(
+        `/api/character/upload?filename=${encodeURIComponent(filename)}&characterId=${formData.id}&type=token`,
+        {
+          method: 'POST',
+          body: file,
+        }
+      );
+      
+      const result = await response.json();
+      
+      if (!response.ok) {
+        throw new Error(result.error || 'Failed to upload token');
+      }
+      
+      // Update form data with the token URL
+      setFormData(prev => ({ ...prev, token_url: result.url }));
+      setCurrentTokenUrl(result.url);
+      
+      // Reset file input
+      if (tokenInputRef.current) {
+        tokenInputRef.current.value = '';
+      }
+    } catch (err: any) {
+      console.error('Error uploading token:', err);
+      setTokenUploadError(err.message || 'Failed to upload token');
+    } finally {
+      setTokenUploading(false);
     }
   };
 
@@ -318,6 +448,108 @@ const CharacterEditForm = ({ characterData }: { characterData: any }) => {
               
               <p className="text-sm text-gray-500 mt-1">
                 Upload your character sheet as a PDF file. Maximum size: 10MB.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex flex-col">
+            <label htmlFor="portraitUpload" className="mb-1 font-medium">Character Portrait</label>
+            <div className="space-y-2">
+              {currentPortraitUrl && (
+                <div className="flex items-center space-x-2">
+                  <div className="w-20 h-20 border rounded overflow-hidden">
+                    <img 
+                      src={currentPortraitUrl} 
+                      alt="Character Portrait" 
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <Link 
+                    href={currentPortraitUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 underline"
+                  >
+                    View Full Size
+                  </Link>
+                </div>
+              )}
+              
+              <input
+                type="file"
+                id="portraitUpload"
+                ref={portraitInputRef}
+                accept="image/*"
+                onChange={handlePortraitChange}
+                className="px-3 py-2 border rounded-md dark:bg-gray-800 dark:border-gray-700 w-full"
+                disabled={portraitUploading}
+              />
+              
+              {portraitUploading && (
+                <div className="text-sm text-gray-600 dark:text-gray-400">
+                  Uploading portrait... Please wait.
+                </div>
+              )}
+              
+              {portraitUploadError && (
+                <div className="text-sm text-red-600 dark:text-red-400">
+                  {portraitUploadError}
+                </div>
+              )}
+              
+              <p className="text-sm text-gray-500 mt-1">
+                Upload your character portrait. Recommended size: 500x500px.
+              </p>
+            </div>
+          </div>
+
+          <div className="flex flex-col">
+            <label htmlFor="tokenUpload" className="mb-1 font-medium">Character Token</label>
+            <div className="space-y-2">
+              {currentTokenUrl && (
+                <div className="flex items-center space-x-2">
+                  <div className="w-16 h-16 border rounded-full overflow-hidden">
+                    <img 
+                      src={currentTokenUrl} 
+                      alt="Character Token" 
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                  <Link 
+                    href={currentTokenUrl}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 underline"
+                  >
+                    View Full Size
+                  </Link>
+                </div>
+              )}
+              
+              <input
+                type="file"
+                id="tokenUpload"
+                ref={tokenInputRef}
+                accept="image/*"
+                onChange={handleTokenChange}
+                className="px-3 py-2 border rounded-md dark:bg-gray-800 dark:border-gray-700 w-full"
+                disabled={tokenUploading}
+              />
+              
+              {tokenUploading && (
+                <div className="text-sm text-gray-600 dark:text-gray-400">
+                  Uploading token... Please wait.
+                </div>
+              )}
+              
+              {tokenUploadError && (
+                <div className="text-sm text-red-600 dark:text-red-400">
+                  {tokenUploadError}
+                </div>
+              )}
+              
+              <p className="text-sm text-gray-500 mt-1">
+                Upload your character token for virtual tabletops. Recommended size: 256x256px.
               </p>
             </div>
           </div>
