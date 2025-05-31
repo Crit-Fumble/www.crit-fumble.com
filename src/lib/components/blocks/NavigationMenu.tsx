@@ -65,15 +65,6 @@ const NavigationMenu = () => {
   const isLoading = status === "loading" || isLoadingUserData;
   const isLoggedIn = status === "authenticated" && session?.user?.id != null;
   
-  // Debug logging in development only
-  if (process.env.NODE_ENV === 'development') {
-    useEffect(() => {
-      console.log("NavigationMenu - Session status:", status, !!session);
-      console.log("NavigationMenu - User data:", userData ? "Available" : "No user data");
-      console.log("NavigationMenu - Loading state:", { isLoading, status });
-    }, [status, session, userData, isLoading]);
-  }
-  
   // Refetch user data if session is authenticated but user data is missing
   useEffect(() => {
     const refetchData = async () => {

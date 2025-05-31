@@ -52,11 +52,7 @@ const CharacterEditForm = ({ characterData }: { characterData: any }) => {
     } else {
       console.log('No PDF URL found in character data');
     }
-    
-    // Log the form data after initialization
-    setTimeout(() => {
-      console.log('Form data after initialization:', formData);
-    }, 100);
+
   }, [characterData]);
 
   // Fetch parties when component mounts

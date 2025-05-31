@@ -102,7 +102,7 @@ const CharacterDashboardInner = ({ error, ...props }: any) => {
         <CardHeader>Character Not Found</CardHeader>
         <CardContent>
           <div className="flex flex-col gap-4 items-center justify-center text-center">
-            <p>The character you're looking for could not be found.</p>
+            <p>The character you&apos;re looking for could not be found.</p>
             <div className="flex gap-2">
               <Link href="/" className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
                 Return Home
