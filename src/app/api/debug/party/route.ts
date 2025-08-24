@@ -33,14 +33,6 @@ export async function GET(request: Request) {
       if (!character) {
         return NextResponse.json({ error: 'Character not found' }, { status: 404 });
       }
-
-      // Use the character's party ID if it exists
-      if (character.party_id) {
-        // @ts-ignore - Prisma client has this model at runtime
-        party = await prisma.party.findUnique({
-          where: { id: character.party_id }
-        });
-      }
     } else if (id) {
       // Direct party lookup by ID
       // @ts-ignore - Prisma client has this model at runtime

@@ -2,7 +2,7 @@
 
 import { getServerSession } from '@/services/AuthService';
 import { redirect } from 'next/navigation';
-import CharacterCreateView from '@/views/GameSystem/Dnd5e/Character/CharacterCreateView';
+import CharacterCreateView from '@/views/GameSystem/Base/Character/CharacterCreateView';
 
 const Page = async () => {
   const session = await getServerSession();

@@ -71,11 +71,9 @@ export const getPartiesByCampaignId = async ( campaignId: string ) => {
   if (!campaignId) return [];
   
   // @ts-ignore - Prisma client has this model at runtime
-  const response = await prisma.party.findMany({
-    where: { campaign: campaignId }
-  });
+  // TODO: get parties from campaign
 
-  return response ?? [];
+  return [];
 }
 
 export const getPartiesByParentPartyId = async ( parentParty: string ) => {

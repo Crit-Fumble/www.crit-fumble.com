@@ -76,7 +76,7 @@ export const handleDnd5eCharacterSheetSubmission = async (request: Request) => {
       return NextResponse.json({ error: 'Character not found' }, { status: 404 });
     }
 
-    if (character.player !== session.user.id) {
+    if (character.player !== session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
@@ -135,7 +135,7 @@ export const handleDeleteDnd5eCharacterSheet = async (request: Request) => {
       return NextResponse.json({ error: 'Character not found' }, { status: 404 });
     }
 
-    if (character.player !== session.user.id) {
+    if (character.player !== session?.user?.id) {
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 

@@ -12,7 +12,6 @@ import { getUserByDiscordId } from '@/services/ProfileService';
 import { getWorld } from '@/services/GameSystem/Base/World/WorldAnvilService';
 import { redirect } from 'next/navigation';
 import { NextResponse } from 'next/server';
-import { Character } from '@/models/cfg';
 import prisma from '@/services/DatabaseService';
 
 export const getCharacterPageProps = async ({ character: { slug: characterSlug }, ...incProps}: any) => {
@@ -175,7 +174,7 @@ export const createCharacterHandler = async (request: Request) => {
 };
 
 // Controller method to update an existing character
-export const updateCharacterHandler = async (request: Request, { params }: { params: { id: string } }) => {
+export const updateCharacterHandler = async (request: Request, { params }: { params: { characterSlug: string } }) => {
   const session = await getServerSession();
   
   // Verify authentication
@@ -185,7 +184,7 @@ export const updateCharacterHandler = async (request: Request, { params }: { par
   
   try {
     const characterData = await request.json();
-    const characterId = params.id;
+    const characterId = params.characterSlug;
     
     // Get the existing character to check ownership
     const existingCharacter = await prisma.character.findUnique({
@@ -238,7 +237,7 @@ export const updateCharacterHandler = async (request: Request, { params }: { par
 };
 
 // Controller method to delete a character
-export const deleteCharacterHandler = async (request: Request, { params }: { params: { id: string } }) => {
+export const deleteCharacterHandler = async (request: Request, { params }: { params: { characterSlug: string } }) => {
   const session = await getServerSession();
   
   // Verify authentication
@@ -247,7 +246,7 @@ export const deleteCharacterHandler = async (request: Request, { params }: { par
   }
   
   try {
-    const characterId = params.id;
+    const characterId = params.characterSlug;
     
     // Get the existing character to check ownership
     const existingCharacter = await prisma.character.findUnique({

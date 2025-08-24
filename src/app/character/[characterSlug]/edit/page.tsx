@@ -1,7 +1,7 @@
 import { getServerSession } from '@/services/AuthService';
 import { getCharacterBySlug } from '@/services/GameSystem/Base/Character/CharacterService';
 import { redirect } from 'next/navigation';
-import CharacterEditView from '@/views/GameSystem/Dnd5e/Character/CharacterEditView';
+import CharacterEditView from '@/views/GameSystem/Base/Character/CharacterEditView';
 
 // Define a Character type that matches your Prisma schema
 interface Character {

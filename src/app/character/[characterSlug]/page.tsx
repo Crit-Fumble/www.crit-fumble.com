@@ -1,7 +1,7 @@
 "use server";
 
 import { getCharacterPageProps } from "@/controllers/GameSystem/Base/Character/CharacterController";
-import CharacterDashboard from "@/views/GameSystem/Dnd5e/Character/CharacterDashboard";
+import CharacterDashboard from "@/views/GameSystem/Base/Character/CharacterDashboard";
 
 const Page = async ({ params: {characterSlug} }: any) => {
   const props = await getCharacterPageProps({

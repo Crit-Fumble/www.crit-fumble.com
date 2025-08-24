@@ -46,7 +46,6 @@ export const getCharacterSheetBySystem = async (characterId: string, gameSystemI
       where: {
         character_id: characterId,
         game_system_id: gameSystemId,
-        is_primary: true
       }
     });
     
@@ -79,21 +78,6 @@ export const createCharacterSheet = async (sheetData: any) => {
     // Generate a unique ID for the character sheet
     const id = sheetData.id || randomUUID();
     
-    // Check if this is the first sheet for this character in this system
-    // If so, make it primary
-    let isPrimary = sheetData.is_primary;
-    if (isPrimary === undefined) {
-      // @ts-ignore - Prisma client has this model at runtime
-    const existingSheets = await prisma.characterSheet.findMany({
-        where: {
-          character_id: sheetData.character_id,
-          game_system_id: sheetData.game_system_id
-        }
-      });
-      
-      isPrimary = existingSheets.length === 0;
-    }
-    
     const createData = {
       id,
       character_id: sheetData.character_id,
@@ -102,24 +86,7 @@ export const createCharacterSheet = async (sheetData: any) => {
       summary: sheetData.summary,
       description: sheetData.description,
       is_active: sheetData.is_active !== undefined ? sheetData.is_active : false,
-      is_primary: isPrimary
     };
-    
-    // If we're setting this sheet as primary, unset any other primary sheets for this character in this system
-    if (isPrimary) {
-      // @ts-ignore - Prisma client has this model at runtime
-      await prisma.characterSheet.updateMany({
-        where: {
-          character_id: sheetData.character_id,
-          game_system_id: sheetData.game_system_id,
-          is_primary: true,
-          id: { not: id }
-        },
-        data: {
-          is_primary: false
-        }
-      });
-    }
     
     // @ts-ignore - Prisma client has this model at runtime
     const characterSheet = await prisma.characterSheet.create({
@@ -168,11 +135,11 @@ export const updateCharacterSheet = async (id: string, sheetData: any) => {
             where: {
               character_id: sheet.character_id,
               game_system_id: sheet.game_system_id,
-              is_primary: true,
+              is_active: true,
               id: { not: id }
             },
             data: {
-              is_primary: false
+              is_active: false
             }
           });
         }
