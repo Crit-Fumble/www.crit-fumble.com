@@ -10,16 +10,8 @@ const nextConfig = {
       },
     ],
   },
-  // Ensure the correct favicon is served
-  async redirects() {
-    return [
-      {
-        source: '/favicon.ico',
-        destination: '/app/favicon.ico',
-        permanent: true,
-      },
-    ];
-  },
+  // Favicon should be automatically served from public or app directory
+  /* Removed incorrect redirect that was causing favicon issues */
   // Add other configuration options as needed
 };
 

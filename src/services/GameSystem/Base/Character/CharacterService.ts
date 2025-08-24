@@ -22,7 +22,16 @@ export const getCharacterBySlug = async ( slug: string ) => {
   
   // @ts-ignore - Prisma client has this model at runtime
   const response = await prisma.character.findFirst({
-    where: { slug }
+    where: { slug },
+    include: {
+      campaign: true,
+      party: true,
+      characterSheets: {
+        include: {
+          game_system: true
+        }
+      }
+    }
   });
 
   return response ?? {};

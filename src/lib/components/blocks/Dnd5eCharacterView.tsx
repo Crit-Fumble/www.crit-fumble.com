@@ -106,10 +106,21 @@ const Dnd5eCharacterView = ({ player, campaign, party, parentParty, character, w
             </p>
           )}
           
+          {character?.characterSheets?.[0]?.summary && (
+            <p className="my-2 font-medium text-lg">{character.characterSheets[0].summary}</p>
+          )}
+          
           {character?.description && (
             <div className="mt-4 p-4 bg-gray-50 dark:bg-gray-800 rounded-md">
               <h3 className="text-sm font-medium mb-2">Character Description</h3>
               <p className="italic text-gray-700 dark:text-gray-300">{character.description}</p>
+            </div>
+          )}
+          
+          {character?.characterSheets?.[0]?.description && (
+            <div className="mt-2 p-4 bg-gray-50 dark:bg-gray-800 rounded-md">
+              <h3 className="text-sm font-medium mb-2">Character Sheet Details</h3>
+              <p className="italic text-gray-700 dark:text-gray-300">{character.characterSheets[0].description}</p>
             </div>
           )}
         </CardContent>

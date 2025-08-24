@@ -104,6 +104,7 @@ model User {
   roll20         String?
   dd_beyond      String?
   world_anvil    String?
+  sheet_data     Json?
   Account        Account[]
   Post           Post[]
   Session        Session[]
@@ -112,7 +113,6 @@ model User {
   UserDiscord    UserDiscord?    @relation(fields: [discord], references: [id], onDelete: Cascade, map: "discord")
   UserRoll20     UserRoll20?     @relation(fields: [roll20], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "roll20")
   UserWorldAnvil UserWorldAnvil? @relation(fields: [world_anvil], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "world_anvil")
-  sheet_data     Json?
 }
 
 model UserDiscord {
@@ -169,15 +169,18 @@ model Campaign {
   id                 String              @id
   name               String?
   slug               String?             @unique
-  system             String?
+  game_system_id     String?
   gms                String[]
   active             Boolean?
   world_anvil        String?
   discord            String?
+  sheet_data         Json?
   CampaignDiscord    CampaignDiscord?    @relation(fields: [discord], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "discord")
   CampaignWorldAnvil CampaignWorldAnvil? @relation(fields: [world_anvil], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "world_anvil")
-  characters         Character[]
-  sheet_data         Json?
+  game_system        GameSystem?         @relation(fields: [game_system_id], references: [id])
+  parties            Party[]
+  character_sheets   CharacterSheet[]
+  characters         Character[] // Legacy relation, use character_sheets instead
 }
 
 model CampaignDiscord {
@@ -204,57 +207,61 @@ model CampaignWorldAnvil {
 }
 
 model GameSystem {
-  id          String      @id
-  name        String?
-  slug        String?     @unique
-  description String?
-  srdApi      String?
-  characters  Character[]
-  sheet_data  Json?
+  id               String           @id
+  name             String?
+  slug             String?          @unique
+  description      String?
+  srdApi           String?
+  sheet_data       Json?
+  campaigns        Campaign[]
+  character_sheets CharacterSheet[]
+  characters       Character[] // Legacy relation, use character_sheets instead
 }
 
 model Character {
-  id             String      @id
-  player         String?
-  name           String?
-  slug           String?     @unique
-  discord        String?
-  roll20         String?
-  campaign_id    String?
-  dnd_beyond_id  String?
-  game_system_id String?
-  party_id       String?
-  pdf_url        String?
-  portrait_url   String?
-  token_url      String?
-  sheet_data     Json?
-  world_anvil_id String?
-  campaign       Campaign?   @relation(fields: [campaign_id], references: [id])
-  game_system    GameSystem? @relation(fields: [game_system_id], references: [id])
-  party          Party?      @relation(fields: [party_id], references: [id])
+  id               String           @id
+  player           String?
+  name             String?
+  slug             String?          @unique
+  title            String?
+  summary          String?
+  description      String?          @db.Text
+  portrait_url     String?
+  token_url        String?
+  created_at       DateTime         @default(now())
+  updated_at       DateTime         @default(now())
+  character_sheets CharacterSheet[]
+  Campaign         Campaign?        @relation(fields: [campaignId], references: [id])
+  campaignId       String?
+  GameSystem       GameSystem?      @relation(fields: [gameSystemId], references: [id])
+  gameSystemId     String?
+  Party            Party?           @relation(fields: [partyId], references: [id])
+  partyId          String?
 }
 
 model GameSession {
-  id    String   @id(map: "PartySession_pkey")
-  day   String?
-  times String[]
-  sheet_data  Json?
+  id         String   @id(map: "PartySession_pkey")
+  day        String?
+  times      String[]
+  sheet_data Json?
 }
 
 model Party {
-  id          String      @id
-  campaign    String?
-  gm          String?
-  slug        String?     @unique
-  name        String?
-  active      Boolean?
-  session     String?
-  dd_beyond   String?
-  roll20      String?
-  discord     String?
-  parentParty String?
-  characters  Character[]
-  sheet_data  Json?
+  id               String           @id
+  campaign_id      String?
+  gm               String?
+  slug             String?          @unique
+  name             String?
+  active           Boolean?
+  session          String?
+  dd_beyond        String?
+  roll20           String?
+  discord          String?
+  parentParty      String?
+  sheet_data       Json?
+  campaign         Campaign?        @relation(fields: [campaign_id], references: [id])
+  characters       Character[] // Legacy relation, use character_sheets instead
+  character_sheets CharacterSheet[]
 }
 
 model PartyDndBeyond {
@@ -274,4 +281,39 @@ model PartyDiscord {
   sideChatThreadId String?
   questLogThreadId String?
   gameplayThreadId String?
+}
+
+model CharacterSheet {
+  id             String  @id @default(cuid())
+  character_id   String
+  game_system_id String
+  campaign_id    String?
+  party_id       String?
+
+  sheet_data       Json?
+  integration_data Json?
+  title            String?
+  summary          String?
+  description      String? @db.Text
+  bio              String? @db.Text
+  history          String? @db.Text
+
+  version       Int @default(1)
+  display_order Int @default(0)
+
+  is_active  Boolean @default(false)
+  admin_only Boolean @default(false)
+
+  last_played DateTime?
+  created_at  DateTime  @default(now())
+  updated_at  DateTime  @default(now())
+
+  character   Character  @relation(fields: [character_id], references: [id], onDelete: Cascade)
+  game_system GameSystem @relation(fields: [game_system_id], references: [id], onDelete: Cascade)
+  campaign    Campaign?  @relation(fields: [campaign_id], references: [id], onDelete: SetNull)
+  party       Party?     @relation(fields: [party_id], references: [id], onDelete: SetNull)
+
+  @@index([character_id], map: "CharacterSheet_character_id_idx")
+  @@index([game_system_id], map: "CharacterSheet_game_system_id_idx")
+  @@index([is_active], map: "CharacterSheet_is_active_idx")
 }
