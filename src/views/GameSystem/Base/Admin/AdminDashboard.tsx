@@ -1,7 +1,7 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import { Providers } from "@/controllers/providers";
+import { Providers } from "@lib/next/controllers/providers";
 
 const AdminDashboard = ({ session, viewedUser, users, userDiscords }: {
   session: any;

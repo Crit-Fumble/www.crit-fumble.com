@@ -1,6 +1,6 @@
 "use server";
 
-import { getUserProfilePageProps } from "@/controllers/UserController";
+import { getUserProfilePageProps } from "@lib/next/controllers/UserController";
 import UserProfile from "@/views/User/UserProfile";
 
 

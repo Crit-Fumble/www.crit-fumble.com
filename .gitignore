@@ -1,4 +1,9 @@
 .env
+.env.app
+.env.bot
+.env.local
+
+scripts/raw/
 
 # Logs
 logs

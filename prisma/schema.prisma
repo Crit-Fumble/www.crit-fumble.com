@@ -231,12 +231,8 @@ model Character {
   created_at       DateTime         @default(now())
   updated_at       DateTime         @default(now())
   character_sheets CharacterSheet[]
-  Campaign         Campaign?        @relation(fields: [campaignId], references: [id])
-  campaignId       String?
   GameSystem       GameSystem?      @relation(fields: [gameSystemId], references: [id])
   gameSystemId     String?
-  Party            Party?           @relation(fields: [partyId], references: [id])
-  partyId          String?
 }
 
 model GameSession {

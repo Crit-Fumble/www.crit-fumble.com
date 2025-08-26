@@ -9,7 +9,7 @@
 
 import { useSession } from "next-auth/react";
 import { useMemo, useState } from "react";
-import { Providers } from "@/controllers/providers";
+import { Providers } from "@lib/next/controllers/providers";
 
 const PageInner = ({ world, ...props }: any) => {
   const session = useSession();

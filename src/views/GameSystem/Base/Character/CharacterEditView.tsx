@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useSession } from "next-auth/react";
 import { Card, CardContent, CardHeader } from "@lib/components/blocks/Card";
 import { slugify } from '@lib/utils/textUtils';
-import { Providers } from "@/controllers/providers";
+import { Providers } from "@lib/next/controllers/providers";
 import Link from 'next/link';
 
 // Character Edit Form Component
@@ -15,13 +15,10 @@ const CharacterEditForm = ({ characterData }: { characterData: any }) => {
   const [loading, setLoading] = useState(false);
   const [deleteLoading, setDeleteLoading] = useState(false);
   const [error, setError] = useState('');
-  const [fileUploading, setFileUploading] = useState(false);
   const [portraitUploading, setPortraitUploading] = useState(false);
   const [tokenUploading, setTokenUploading] = useState(false);
-  const [fileUploadError, setFileUploadError] = useState('');
   const [portraitUploadError, setPortraitUploadError] = useState('');
   const [tokenUploadError, setTokenUploadError] = useState('');
-  const [currentPdfUrl, setCurrentPdfUrl] = useState(characterData?.pdf_url || '');
   const [currentPortraitUrl, setCurrentPortraitUrl] = useState(characterData?.portrait_url || '');
   const [currentTokenUrl, setCurrentTokenUrl] = useState(characterData?.token_url || '');
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -31,10 +28,10 @@ const CharacterEditForm = ({ characterData }: { characterData: any }) => {
   const [formData, setFormData] = useState({
     id: characterData?.id || '',
     name: characterData?.name || '',
-    dnd_beyond_id: characterData?.dnd_beyond_id || '',
-    dndBeyondUrl: '',  
     slug: characterData?.slug || '',
-    pdf_url: characterData?.pdf_url || '',
+    title: characterData?.title || '',
+    summary: characterData?.summary || '',
+    description: characterData?.description || '',
     portrait_url: characterData?.portrait_url || '',
     token_url: characterData?.token_url || ''
   });
@@ -43,26 +40,6 @@ const CharacterEditForm = ({ characterData }: { characterData: any }) => {
   useEffect(() => {
     console.log('Character data received in EditView:', characterData);
     
-    // If the character has a D&D Beyond association, set the URL
-    if (characterData?.dnd_beyond_id) {
-      setFormData(prev => ({
-        ...prev,
-        dndBeyondUrl: `https://www.dndbeyond.com/characters/${characterData.dnd_beyond_id}`
-      }));
-    }
-    
-    // If the character has a PDF URL, make sure it's set correctly
-    if (characterData?.pdf_url) {
-      console.log('PDF URL found in character data:', characterData.pdf_url);
-      setCurrentPdfUrl(characterData.pdf_url);
-      setFormData(prev => ({
-        ...prev,
-        pdf_url: characterData.pdf_url
-      }));
-    } else {
-      console.log('No PDF URL found in character data');
-    }
-
     // If the character has a portrait URL, make sure it's set correctly
     if (characterData?.portrait_url) {
       console.log('Portrait URL found in character data:', characterData.portrait_url);
@@ -87,25 +64,6 @@ const CharacterEditForm = ({ characterData }: { characterData: any }) => {
 
   }, [characterData]);
 
-  // Fetch parties when component mounts
-  useEffect(() => {
-    const fetchParties = async () => {
-      try {
-        const response = await fetch('/api/party/list');
-        if (response.ok) {
-          const data = await response.json();
-          // Handle parties data if needed
-        }
-      } catch (err) {
-        console.error('Error fetching parties:', err);
-      }
-    };
-
-    if (session?.user?.id) {
-      fetchParties();
-    }
-  }, [session?.user?.id]);
-
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     
@@ -115,55 +73,6 @@ const CharacterEditForm = ({ characterData }: { characterData: any }) => {
       setFormData(prev => ({ ...prev, [name]: value, slug: newSlug }));
     } else {
       setFormData(prev => ({ ...prev, [name]: value }));
-    }
-  };
-  
-  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const file = e.target.files?.[0];
-    if (!file) return;
-    
-    // Validate file is a PDF
-    if (file.type !== 'application/pdf') {
-      setFileUploadError('Only PDF files are allowed');
-      return;
-    }
-    
-    // Clear previous errors
-    setFileUploadError('');
-    setFileUploading(true);
-    
-    try {
-      // Create FormData object
-      const filename = file.name.replace(/\s+/g, '-').toLowerCase();
-      
-      // Upload file to Vercel Blob Storage
-      const response = await fetch(
-        `/api/character/upload?filename=${encodeURIComponent(filename)}&characterId=${formData.id}&type=pdf`,
-        {
-          method: 'POST',
-          body: file,
-        }
-      );
-      
-      const result = await response.json();
-      
-      if (!response.ok) {
-        throw new Error(result.error || 'Failed to upload file');
-      }
-      
-      // Update form data with the PDF URL
-      setFormData(prev => ({ ...prev, pdf_url: result.url }));
-      setCurrentPdfUrl(result.url);
-      
-      // Reset file input
-      if (fileInputRef.current) {
-        fileInputRef.current.value = '';
-      }
-    } catch (err: any) {
-      console.error('Error uploading PDF:', err);
-      setFileUploadError(err.message || 'Failed to upload PDF');
-    } finally {
-      setFileUploading(false);
     }
   };
 
@@ -273,12 +182,7 @@ const CharacterEditForm = ({ characterData }: { characterData: any }) => {
     try {
       // Process the form data before submission
       const submissionData: Record<string, any> = { ...formData };
-      
-      // Make sure the PDF URL is included
-      if (currentPdfUrl) {
-        submissionData.pdf_url = currentPdfUrl;
-      }
-      
+
       console.log('Submitting form data:', submissionData);
       
       // Extract D&D Beyond character ID from URL if provided
@@ -305,7 +209,7 @@ const CharacterEditForm = ({ characterData }: { characterData: any }) => {
       }
 
       const response = await fetch(`/api/character/${formData.id}`, {
-        method: 'PUT',
+        method: 'POST', // Using POST as the API expects POST for updates
         headers: {
           'Content-Type': 'application/json'
         },
@@ -318,8 +222,15 @@ const CharacterEditForm = ({ characterData }: { characterData: any }) => {
         throw new Error(data.error || 'Failed to update character');
       }
 
-      // Redirect to the character page
-      router.push(`/character/${data.character.slug}`);
+      // Extract character from the response and redirect to its page
+      if (data.character) {
+        console.log('Character updated successfully:', data.character);
+        router.push(`/character/${data.character.slug}`);
+      } else {
+        // Handle unexpected response format
+        console.error('Unexpected response format:', data);
+        throw new Error('Invalid server response format');
+      }
     } catch (err: any) {
       setError(err.message || 'An error occurred while updating the character');
     } finally {
@@ -380,22 +291,6 @@ const CharacterEditForm = ({ characterData }: { characterData: any }) => {
           </div>
 
           <div className="flex flex-col">
-            <label htmlFor="dndBeyondUrl" className="mb-1 font-medium">D&D Beyond URL</label>
-            <input
-              type="text"
-              id="dndBeyondUrl"
-              name="dndBeyondUrl"
-              value={formData.dndBeyondUrl}
-              onChange={handleChange}
-              placeholder="https://www.dndbeyond.com/characters/12345"
-              className="px-3 py-2 border rounded-md dark:bg-gray-800 dark:border-gray-700"
-            />
-            <p className="text-sm text-gray-500 mt-1">
-              Format: https://www.dndbeyond.com/characters/XXXX
-            </p>
-          </div>
-
-          <div className="flex flex-col">
             <label htmlFor="slug" className="mb-1 font-medium">URL Slug</label>
             <input
               type="text"
@@ -405,51 +300,6 @@ const CharacterEditForm = ({ characterData }: { characterData: any }) => {
               onChange={handleChange}
               className="px-3 py-2 border rounded-md dark:bg-gray-800 dark:border-gray-700"
             />
-          </div>
-          
-          <div className="flex flex-col">
-            <label htmlFor="pdfUpload" className="mb-1 font-medium">Character Sheet PDF</label>
-            <div className="space-y-2">
-              {currentPdfUrl && (
-                <div className="flex items-center space-x-2">
-                  <Link 
-                    href={currentPdfUrl}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-blue-600 hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300 underline"
-                  >
-                    Current PDF
-                  </Link>
-                  <span className="text-sm text-gray-500">(Opens in new tab)</span>
-                </div>
-              )}
-              
-              <input
-                type="file"
-                id="pdfUpload"
-                ref={fileInputRef}
-                accept="application/pdf"
-                onChange={handleFileChange}
-                className="px-3 py-2 border rounded-md dark:bg-gray-800 dark:border-gray-700 w-full"
-                disabled={fileUploading}
-              />
-              
-              {fileUploading && (
-                <div className="text-sm text-gray-600 dark:text-gray-400">
-                  Uploading PDF... Please wait.
-                </div>
-              )}
-              
-              {fileUploadError && (
-                <div className="text-sm text-red-600 dark:text-red-400">
-                  {fileUploadError}
-                </div>
-              )}
-              
-              <p className="text-sm text-gray-500 mt-1">
-                Upload your character sheet as a PDF file. Maximum size: 10MB.
-              </p>
-            </div>
           </div>
 
           <div className="flex flex-col">
@@ -552,6 +402,41 @@ const CharacterEditForm = ({ characterData }: { characterData: any }) => {
                 Upload your character token for virtual tabletops. Recommended size: 256x256px.
               </p>
             </div>
+          </div>
+
+          <div className="flex flex-col gap-4 items-center justify-middle">
+            <label htmlFor="title">Title</label>
+            <p className="text-sm text-gray-500 mt-1">The title for this character's profile. Usually includes their name.</p>
+            <input
+              type="text"
+              id="title"
+              name="title"
+              value={formData.title}
+              onChange={handleChange}
+              className="px-3 py-2 border rounded-md dark:bg-gray-800 dark:border-gray-700 w-full"
+            />
+          </div>
+
+          <div className="flex flex-col gap-4 items-center justify-middle">
+            <label htmlFor="summary">Summary</label>
+            <textarea
+              id="summary"
+              name="summary"
+              value={formData.summary}
+              onChange={handleChange}
+              className="px-3 py-2 border rounded-md dark:bg-gray-800 dark:border-gray-700 w-full"
+            />
+          </div>
+
+          <div className="flex flex-col gap-4 items-center justify-middle">
+            <label htmlFor="description">Description</label>
+            <textarea
+              id="description"
+              name="description"
+              value={formData.description}
+              onChange={handleChange}
+              className="px-3 py-2 border rounded-md dark:bg-gray-800 dark:border-gray-700 w-full"
+            />
           </div>
 
           <div className="flex justify-between items-center pt-4">

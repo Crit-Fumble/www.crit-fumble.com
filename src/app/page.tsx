@@ -1,4 +1,4 @@
-import { getServerSession } from "@/controllers/UserController";
+import { getServerSession } from "@lib/next/controllers/UserController";
 import { Card, CardContent, CardHeader } from "@lib/components/blocks/Card";
 import { DEFAULT } from "@/config/views";
 import { Metadata } from "next";

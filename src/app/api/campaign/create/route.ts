@@ -1,6 +1,5 @@
+import { createCampaign, getServerSession } from "@lib/next/services";
 import { NextRequest, NextResponse } from "next/server";
-import { getServerSession } from "@/services/AuthService";
-import { createCampaign } from "@/services/GameSystem/Base/Campaign/CampaignService";
 
 export async function POST(request: NextRequest) {
   try {

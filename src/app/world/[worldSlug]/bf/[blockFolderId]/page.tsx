@@ -1,6 +1,6 @@
 "use server";
 
-import { getWorldViewPageProps } from "@/controllers/GameSystem/Base/World/WorldController";
+import { getWorldViewPageProps } from "@lib/next/controllers/GameSystem/Base/World/WorldController";
 import { getBlockById, getBlocksByBlockFolderId } from "@/services/GameSystem/Base/World/WorldAnvilService";
 import WorldView from "@/views/GameSystem/Base/World/WorldView";
 

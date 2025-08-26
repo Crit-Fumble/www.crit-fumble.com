@@ -1,0 +1,80 @@
+{
+    "title": "SWADE Animated",
+    "description": "Animation for SWADE",
+    "version": "placeholder",
+    "authors": [
+      {
+        "name": "Snagov",
+        "flags": {}
+      }
+    ],
+    "styles": [
+      "scripts/configuration/tooltip.css"
+    ],
+    "bugs": "https://github.com/mrcomac/swade-animated/issues",
+    "media": [
+      {
+        "type": "setup",
+        "url": "https://savageuniverse.com/assets/img/SW_LOGO_FP.webp",
+        "thumbnail": "https://savageuniverse.com/assets/img/SW_LOGO_FP.webp"
+      }
+    ],
+    "languages": [
+      {
+        "lang": "en",
+        "name": "English",
+        "path": "lang/en.json",
+        "flags": {}
+      }
+    ],
+    "esmodules": [
+      "./scripts/init.js"
+    ],
+    "socket": true,
+    "url": "placeholder",
+    "manifest": "placeholder",
+    "download": "placeholder",
+    "id": "swade-animated",
+    "protected": false,
+    "coreTranslation": false,
+    "library": false,
+    "relationships": {
+      "requires": [
+        {
+          "id": "sequencer",
+          "type": "module",
+          "manifest": "https://github.com/Haxxer/FoundryVTT-Sequencer/releases/latest/download/module.json",
+          "compatibility": {}
+        },
+        {
+          "id": "socketlib",
+          "type": "module",
+          "compatibility": {}
+        },
+        {
+          "id": "tokenmagic",
+          "manifest": "https://raw.githubusercontent.com/Feu-Secret/Tokenmagic/master/tokenmagic/module.json",
+          "compatibility": {},
+          "type": "module"
+        },
+        {
+          "id": "lib-wrapper",
+          "manifest": "https://github.com/ruipin/fvtt-lib-wrapper/releases/latest/download/module.json",
+          "compatibility": {},
+          "type": "module"
+        }
+      ],
+      "systems": [
+        {
+          "id": "swade",
+          "type": "system",
+          "compatibility": {}
+        }
+      ]
+    },
+    "compatibility": {
+      "minimum": "10",
+      "verified": "11.315",
+      "maximum": ""
+    }
+  }

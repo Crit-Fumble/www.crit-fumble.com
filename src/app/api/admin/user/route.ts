@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import DatabaseService from '@/services/DatabaseService';
-import { getServerSession } from '@/controllers/UserController';
+import { getServerSession } from '@lib/next/controllers/UserController';
 
 export async function GET(request: NextRequest) {
   const session = await getServerSession();

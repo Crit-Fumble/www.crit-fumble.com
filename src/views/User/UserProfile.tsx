@@ -3,7 +3,7 @@
 import { Card, CardContent, CardHeader } from "@lib/components/blocks/Card";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
-import { updateUserInfo } from "@/controllers/UserController";
+import { updateUserInfo } from "@lib/next/controllers/UserController";
 import { toast } from "react-hot-toast";
 
 interface UserProfileProps {

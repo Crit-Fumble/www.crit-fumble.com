@@ -1,1 +1,0 @@
-// TODO: manage VTT control layer, facilitate communication between VTT views and services

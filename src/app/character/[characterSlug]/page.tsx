@@ -1,6 +1,6 @@
 "use server";
 
-import { getCharacterPageProps } from "@/controllers/GameSystem/Base/Character/CharacterController";
+import { getCharacterPageProps } from "@lib/next/controllers/Character/CharacterController";
 import CharacterDashboard from "@/views/GameSystem/Base/Character/CharacterDashboard";
 
 const Page = async ({ params: {characterSlug} }: any) => {

@@ -1,4 +1,4 @@
-import { createCharacterHandler } from "@/controllers/GameSystem/Base/Character/CharacterController";
+import { createCharacterHandler } from "@lib/next/controllers/Character/CharacterController";
 import { NextRequest } from "next/server";
 
 // POST endpoint to create a new character

@@ -1,0 +1,49 @@
+{
+    "title": "Dungeons & Dragons 5th Edition",
+    "version": "5.2.0",
+    "sheets": {
+        "fantasyGrounds": {
+            "version": "0.0.0",
+            "url": "",
+            "manifest": "",
+            "download": "",
+            "local": "/dnd5e/sheets/fantasyGrounds/CharacterSheet_DND5E.xsl"
+        }
+    },
+    "vtts": {
+        "dndBeyond": {
+            "version": "5.1.3",
+            "url": "https://github.com/foundryvtt/dnd5e/",
+            "manifest": "https://raw.githubusercontent.com/foundryvtt/dnd5e/master/system.json",
+            "download": "https://github.com/foundryvtt/dnd5e/releases/download/release-5.1.3/dnd5e-release-5.1.3.zip"
+        },
+        "roll20": [{
+            "version": "0.0.0",
+            "url": "",
+            "manifest": "",
+            "download": ""
+        }],
+        "foundryVtt": [
+            {
+                "version": "5.1.3",
+                "url": "https://github.com/foundryvtt/dnd5e/",
+                "manifest": "https://raw.githubusercontent.com/foundryvtt/dnd5e/master/system.json",
+                "download": "https://github.com/foundryvtt/dnd5e/releases/download/release-5.1.3/dnd5e-release-5.1.3.zip"
+            }
+        ],
+        "fantasyGrounds": [{
+            "version": "0.0.0",
+            "url": "",
+            "manifest": "",
+            "download": ""
+        }]
+    },
+    "crpgs": [
+        {
+            "version": "0.0.0",
+            "url": "",
+            "manifest": "",
+            "download": ""
+        }
+    ]
+}

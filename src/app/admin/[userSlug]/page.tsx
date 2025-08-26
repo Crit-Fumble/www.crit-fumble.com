@@ -1,7 +1,7 @@
 "use server";
 
 import AdminDashboard from "@/views/GameSystem/Base/Admin/AdminDashboard";
-import { getAdminDashboardPageProps } from "@/controllers/GameSystem/Base/Admin/AdminController";
+import { getAdminDashboardPageProps } from "@lib/next/controllers/AdminController";
 
 
 const Page = async ({ params: { userSlug } }: any) => {

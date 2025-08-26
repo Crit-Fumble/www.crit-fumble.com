@@ -4,7 +4,7 @@ import { Inter } from "next/font/google";
 import { TopBarSession } from "@lib/components/sections/topBar";
 import "./globals.css";
 import { BottomBarSession } from "@lib/components/sections/bottomBar";
-import { Providers } from "../controllers/providers";
+import { Providers } from "../lib/next/controllers/providers";
 
 const inter = Inter({ subsets: ["latin"] });
 

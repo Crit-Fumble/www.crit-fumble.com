@@ -5,8 +5,9 @@ import { useSession } from "next-auth/react";
 import { useMemo } from "react";
 import { Card, CardContent, CardHeader } from "@lib/components/blocks/Card";
 import Link from "next/link";
-import { Providers } from "@/controllers/providers";
+import { Providers } from "@lib/next/controllers/providers";
 import { LinkButton } from "@lib/components/ui/Button";
+import CharacterView from "./CharacterView";
 
 // TODO: determine game systems, and load appropriate view for each character sheet
 // TODO: characters can have more that one sheet per character, for use in different systems
@@ -64,9 +65,6 @@ const CharacterDashboardInner = ({ error, ...props }: any) => {
   if (props.character) {
     return (
       <div className="space-y-6">
-        <div>
-          <pre>{JSON.stringify(props.character, null, 2)}</pre>
-        </div>
         <div className="flex justify-between items-center">
           <Card className="w-full">
             <CardContent className="w-full gap-4 flex items-center">
@@ -82,51 +80,19 @@ const CharacterDashboardInner = ({ error, ...props }: any) => {
               >
                 Edit Character Bio
               </LinkButton>
-              {props.character.game_system === 'cypher' && <LinkButton 
-                href={`/character/${props.character.slug || props.character.id}/cypher/edit`}
-                variant="primary"
-                size="md"
-                icon={
-                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                  </svg>
-                }
-              >
-                Edit Cypher Sheet
-              </LinkButton>}
-              {props.character.game_system === 'sw' && <LinkButton 
-                href={`/character/${props.character.slug || props.character.id}/cypher/edit`}
-                variant="primary"
-                size="md"
-                icon={
-                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                  </svg>
-                }
-              >
-                Edit SW Sheet
-              </LinkButton>}
-              {props.character.game_system === 'dnd5e' && <LinkButton 
-                href={`/character/${props.character.slug || props.character.id}/dnd5e/edit`}
-                variant="primary"
-                size="md"
-                icon={
-                  <svg className="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
-                  </svg>
-                }
-              >
-                Edit D&D5e Sheet
-              </LinkButton>}
             </CardContent>
           </Card>
         </div>
         <div className="flex justify-between items-center">
           <Card className="w-full">
             <CardContent className="p-6">
-              <Dnd5eCharacterView character={props.character} />
+              <CharacterView character={props.character} />
             </CardContent>
           </Card>
+        </div>
+        
+        <div>
+          <pre>{JSON.stringify(props.character, null, 2)}</pre>
         </div>
       </div>
     );
@@ -134,7 +100,7 @@ const CharacterDashboardInner = ({ error, ...props }: any) => {
 
   // Debug props being passed to Dnd5eCharacterView
   console.log("Props being passed to character view:", {
-    characterHasParty: props.character && !!props.character.party_id,
+    characterHasParty: props.character && props.party && !!props.party.id,
     partyData: props.party ? `Party found with ID ${props.party.id}` : "No party data",
     partyObjectType: props.party ? typeof props.party : "N/A",
     partyKeys: props.party ? Object.keys(props.party) : [],

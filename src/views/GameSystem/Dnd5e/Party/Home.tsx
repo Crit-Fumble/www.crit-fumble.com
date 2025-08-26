@@ -3,7 +3,7 @@
 import Dnd5ePartyRoster from "@lib/components/blocks/CampaignView";
 import { useSession } from "next-auth/react";
 import { useMemo, useState } from "react";
-import { Providers } from "@/controllers/providers";
+import { Providers } from "@lib/next/controllers/providers";
 
 const PartyHomeInner = ({ ...props }: any) => {
   const session = useSession();

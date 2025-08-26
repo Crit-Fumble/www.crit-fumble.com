@@ -1,6 +1,6 @@
 "use server";
 
-import { getUserDashboardPageProps } from "@/controllers/UserController";
+import { getUserDashboardPageProps } from "@lib/next/controllers/UserController";
 import UserDashboard from "@/views/User/UserDashboard";
 
 

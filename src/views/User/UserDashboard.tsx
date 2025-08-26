@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader } from "@lib/components/blocks/Card";
 import { DEFAULT } from "@/config/views";
 import { useSession } from "next-auth/react";
 import { useMemo, useState } from "react";
-import { Providers } from "@/controllers/providers";
+import { Providers } from "@lib/next/controllers/providers";
 
 const UserDashboardInner = ({ viewedUser }: any) => {
   const session = useSession();

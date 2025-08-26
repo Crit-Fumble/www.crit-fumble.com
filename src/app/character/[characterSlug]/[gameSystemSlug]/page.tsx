@@ -1,4 +1,4 @@
-import { getDnd5eCharacterSheetPageProps } from '@/controllers/GameSystem/Dnd5e/Character/Dnd5eCharacterSheetController';
+import { getDnd5eCharacterSheetPageProps } from '@lib/next/controllers/Character/Dnd5eCharacterSheetController';
 import { getCharacterBySlug } from '@/services/GameSystem/Base/Character/CharacterService';
 import { getCharacterSheetBySystem } from '@/services/GameSystem/Base/CharacterSheet/CharacterSheetService';
 import { getServerSession } from '@/services/AuthService';

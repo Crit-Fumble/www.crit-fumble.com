@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { useSession } from "next-auth/react";
 import { Card, CardContent, CardHeader } from "@lib/components/blocks/Card";
 import { slugify } from '@lib/utils/textUtils';
-import { Providers } from "@/controllers/providers";
+import { Providers } from "@lib/next/controllers/providers";
 
 // Character Create Form Component
 const CharacterCreateForm = () => {
