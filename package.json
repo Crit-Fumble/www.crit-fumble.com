@@ -30,7 +30,7 @@
     "@vercel/blob": "^1.1.1",
     "bulletin-board-code": "^1.0.2",
     "marked": "^14.1.2",
-    "next": "^14.2.14",
+    "next": "^14.2.32",
     "next-auth": "^4.24.11",
     "node-fetch": "^3.3.2",
     "npm": "^10.5.1",
