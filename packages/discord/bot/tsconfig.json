@@ -1,0 +1,28 @@
+{
+  "extends": "../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../../dist/discord/bot",
+    "rootDir": ".",
+    "baseUrl": ".",
+    "paths": {
+      "@cfg/*": ["../../lib/*"],
+      "@discord/*": ["../*"],
+      "@discord/bot/*": ["./*"]
+    }
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.js",
+    "**/*.tsx",
+    "**/*.jsx"
+  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/*.test.ts",
+    "**/*.test.js"
+  ],
+  "references": [
+    { "path": "../../lib" }
+  ]
+}

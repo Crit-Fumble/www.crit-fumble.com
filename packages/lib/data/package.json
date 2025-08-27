@@ -1,0 +1,39 @@
+{
+    "name": "@cfg/data",
+    "version": "0.1.0",
+    "description": "Shared data for Crit-Fumble applications",
+    "type": "module",
+    "main": "index.js",
+    "types": "index.d.ts",
+    "exports": {
+        ".": {
+            "import": "./index.js",
+            "types": "./index.d.ts"
+        },
+        "./prisma": {
+            "import": "./prisma.js",
+            "types": "./prisma.d.ts"
+        }
+    },
+    "keywords": [
+        "crit-fumble",
+        "shared",
+        "data"
+    ],
+    "author": "Crit-Fumble",
+    "license": "MIT",
+    "dependencies": {
+        "@prisma/client": "^6.8.2"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.28.3",
+        "@babel/preset-env": "^7.28.3",
+        "@types/node": "^20.17.24",
+        "@types/jest": "^29.5.14",
+        "eslint": "^8",
+        "jest": "^29.7.0",
+        "prisma": "^6.8.2",
+        "ts-node": "^10.9.2",
+        "typescript": "^5.8.2"
+    }
+}

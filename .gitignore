@@ -1,6 +1,6 @@
 .env
-.env.app
-.env.bot
+.env.web
+.env.discord
 .env.local
 
 scripts/raw/

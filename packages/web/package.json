@@ -1,0 +1,42 @@
+{
+  "name": "www.crit-fumble.com",
+  "version": "0.2.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "test": "jest --config=../../jest.app.config.js"
+  },
+  "dependencies": {
+    "@prisma/client": "^6.8.2",
+    "@trpc/client": "^11.0.0-rc.354",
+    "@vercel/blob": "^1.1.1",
+    "bulletin-board-code": "^1.0.2",
+    "cfg-lib": "0.1.0",
+    "cfg-discord": "0.1.0",
+    "marked": "^14.1.2",
+    "next": "^14.2.14",
+    "next-auth": "^4.24.11",
+    "react": "^18",
+    "react-dom": "^18",
+    "react-hook-form": "^7.51.2",
+    "react-hot-toast": "^2.5.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.28.3",
+    "@babel/preset-env": "^7.28.3",
+    "@types/node": "^20.17.24",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "autoprefixer": "^10.0.1",
+    "babel-jest": "^30.0.5",
+    "eslint": "^8",
+    "eslint-config-next": "14.1.4",
+    "postcss": "^8",
+    "tailwindcss": "^3.3.0",
+    "typescript": "^5.8.2"
+  }
+}

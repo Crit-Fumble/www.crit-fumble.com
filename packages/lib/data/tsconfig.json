@@ -1,0 +1,20 @@
+{
+  "extends": "../../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../../dist/lib/data",
+    "rootDir": ".",
+    "baseUrl": ".",
+    "paths": {
+      "@cfg/data": ["."]
+    }
+  },
+  "include": [
+    "./**/*.ts",
+    "./**/*.tsx",
+    "./**/*.js",
+    "./**/*.jsx"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}

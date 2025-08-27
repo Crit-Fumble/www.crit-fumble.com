@@ -1,0 +1,31 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "outDir": "../../dist/discord",
+    "rootDir": ".",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
+    "target": "ES2022",
+    "declaration": true,
+    "sourceMap": true,
+    "composite": true,
+    "noEmit": false,
+    "paths": {
+      "@cfg/*": ["../lib/*"],
+      "@discord/*": ["./*"]
+    }
+  },
+  "include": [
+    "**/*.ts",
+    "**/*.tsx"
+, "activity/index.js", "activity/server.js", "app/index.js", "app/server.js"  ],
+  "exclude": [
+    "node_modules",
+    "dist",
+    "**/*.test.ts",
+    "**/*.test.js"
+  ],
+  "references": [
+    { "path": "../lib" }
+  ]
+}

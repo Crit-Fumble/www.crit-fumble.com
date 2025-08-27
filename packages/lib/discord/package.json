@@ -1,0 +1,12 @@
+{
+    "name": "@cfg/discord-lib",
+    "version": "0.0.0",
+    "description": "Discord utils for the Crit-Fumble web application",
+    "main": "index.js",
+    "keywords": [
+        "crit-fumble",
+        "discord"
+    ],
+    "author": "Crit-Fumble",
+    "license": "MIT"
+}

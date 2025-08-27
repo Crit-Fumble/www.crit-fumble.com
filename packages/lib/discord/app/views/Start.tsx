@@ -1,0 +1,1 @@
+// Initial screen, allows GM to select GM or Player view before proceeding. Directs GM to go to the website to update campaign or other game info.

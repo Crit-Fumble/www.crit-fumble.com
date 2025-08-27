@@ -1,0 +1,39 @@
+{
+    "name": "@cfg/discord-base",
+    "version": "0.1.0",
+    "description": "Discord bot and utilities for the Crit-Fumble web application",
+    "type": "module",
+    "main": "index.js",
+    "scripts": {
+        "start": "node bot/index.js",
+        "dev": "nodemon bot/index.js",
+        "test": "jest --config=../../jest.config.bot.cjs"
+    },
+    "keywords": [
+        "crit-fumble",
+        "discord",
+        "bot",
+        "rpg",
+        "tabletop"
+    ],
+    "author": "Crit-Fumble",
+    "license": "MIT",
+    "dependencies": {
+        "@napi-rs/canvas": "^0.1.44",
+        "discord.js": "^14.14.1",
+        "dotenv": "^16.3.1",
+        "node-cron": "^3.0.3",
+        "node-fetch": "^3.3.2",
+        "cfg-lib": "0.1.0"
+    },
+    "devDependencies": {
+        "@babel/core": "^7.28.3",
+        "@babel/preset-env": "^7.28.3",
+        "@types/node": "^20.17.24",
+        "@types/jest": "^29.5.14",
+        "eslint": "^8",
+        "jest": "^29.7.0",
+        "nodemon": "^3.0.2",
+        "typescript": "^5.8.2"
+    }
+}
