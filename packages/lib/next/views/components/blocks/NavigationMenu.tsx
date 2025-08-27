@@ -2,10 +2,17 @@
 
 import { signIn, signOut, useSession } from 'next-auth/react';
 import React, { useCallback, useMemo, useEffect, useState } from 'react';
-import useDarkMode from '@/lib/hooks/useDarkMode';
-import { useUserData } from '@cfg/next/controllers/providers';
-import useUserPersistence from '@/lib/hooks/useUserPersistence';
-import createLogger from '@/lib/utils/logger';
+import type { UserData, User } from '../../../../models/User/User';
+
+// Extended interface for persisted user data with additional properties
+interface PersistedUserData extends Partial<UserData> {
+  campaignsCount?: number;
+  hasAdmin?: boolean;
+}
+import useDarkMode from '../../../controllers/hooks/useDarkMode';
+import { useUserData } from '../../../controllers/providers';
+import useUserPersistence from '../../../controllers/hooks/useUserPersistence';
+import createLogger from '../../../../utils/logger';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -65,12 +72,12 @@ const DropdownMenuItem = ({ href, onClick, className, children }: {
 
 const NavigationMenu = () => {
   const { data: session, status } = useSession();
-  const { userData, isLoading: isLoadingUserData, refetch } = useUserData();
+  const { userData, isLoading: isLoadingUserData, refetch } = useUserData() as { userData: UserData | null, isLoading: boolean, refetch: () => Promise<any> };
   const { getEssentialUserData } = useUserPersistence();
   const { isDark, toggleDark } = useDarkMode();
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
-  const [persistedUserData, setPersistedUserData] = useState<any>(null);
+  const [persistedUserData, setPersistedUserData] = useState<PersistedUserData | null>(null);
   
   // Memoize derived state to prevent recalculations on each render
   const isLoading = status === "loading" || isLoadingUserData;
@@ -171,8 +178,8 @@ const NavigationMenu = () => {
         <span className="py-2 hover:underline cursor-pointer font-medium flex items-center">Characters</span>
         <div className="hidden group-hover:block absolute left-0 top-10 w-48 bg-white dark:bg-gray-800 shadow-lg z-50 rounded">
           <ul className="py-1">
-            {userData.characters?.length > 0 ? (
-              userData.characters.map((character: any) => (
+            {(userData?.characters && userData.characters.length > 0) ? (
+              userData?.characters?.map((character: any) => (
                 <li key={character.id}>
                   <DropdownMenuItem href={`/character/${character.slug}`}>
                     {character.name}
@@ -258,7 +265,7 @@ const NavigationMenu = () => {
               isInitialLoad ? (
                 persistedUserData ? (
                   <>
-                    {persistedUserData.campaignsCount > 0 && (
+                    {persistedUserData?.campaignsCount && persistedUserData.campaignsCount > 0 && (
                       <li className="group relative flex items-baseline">
                         <span className="py-2 hover:underline cursor-pointer font-medium flex items-center h-10">Campaigns</span>
                       </li>
@@ -328,7 +335,7 @@ const NavigationMenu = () => {
                             <span className="ml-1">Refreshing data...</span>
                           </p>
                         )}
-                        {persistedUserData?.hasAdmin && !userData?.user?.admin && (
+                        {persistedUserData?.hasAdmin === true && !userData?.user?.admin && (
                           <span className="inline-block mt-1 text-xs px-2 py-1 bg-blue-100 text-blue-800 dark:bg-blue-800 dark:text-blue-100 rounded">
                             Admin
                           </span>

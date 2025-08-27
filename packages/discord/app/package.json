@@ -10,7 +10,7 @@
     "author": "Crit-Fumble",
     "license": "MIT",
     "scripts": {
-        "build": "npx tsc --outDir dist src/**/*.ts",
+        "build": "npx tsc --outDir dist packages/**/*.ts",
         "deploy": "node deploy.js"
     }
 }

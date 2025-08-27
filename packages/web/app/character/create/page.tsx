@@ -1,8 +1,8 @@
 "use server";
 
-import { getServerSession } from '@/services/AuthService';
+import { getServerSession } from '@cfg/next/services/AuthService';
 import { redirect } from 'next/navigation';
-import CharacterCreateView from '@cfg/next/views/GameSystem/Base/Character/CharacterCreateView';
+import CharacterCreateView from '@cfg/next/views/Character/CharacterCreateView';
 
 const Page = async () => {
   const session = await getServerSession();

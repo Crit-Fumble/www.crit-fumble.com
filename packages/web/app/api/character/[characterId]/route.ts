@@ -14,7 +14,7 @@
 import { createCharacterHandler, deleteCharacterHandler, getCharacterHandler, updateCharacterHandler } from '@cfg/next/controllers/Character/CharacterController';
 import { NextRequest, NextResponse } from 'next/server';
 import { Character } from '@cfg/models/Character/Character';
-import { getServerSession } from '@/services/AuthService';
+import { getServerSession } from '@cfg/next/services/AuthService';
 
 export async function GET(
   request: NextRequest,

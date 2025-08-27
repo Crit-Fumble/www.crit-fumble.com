@@ -17,7 +17,7 @@ import {
   handleDeleteDnd5eCharacterSheet 
 } from '@cfg/next/controllers/Character/Dnd5eCharacterSheetController';
 import { NextRequest, NextResponse } from 'next/server';
-import { getCharacterById } from '@/services/GameSystem/Base/Character/CharacterService';
+import { getCharacterById } from '@cfg/next/services/GameSystem/Base/Character/CharacterService';
 import { Character } from '@cfg/models/Character/Character';
 
 export async function GET(

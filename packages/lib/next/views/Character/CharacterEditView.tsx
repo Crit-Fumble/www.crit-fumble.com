@@ -3,7 +3,7 @@
 import { useState, useEffect, useRef } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from "next-auth/react";
-import { Card, CardContent, CardHeader } from "@cfg/components/blocks/Card";
+import { Card, CardContent, CardHeader } from "@cfg/next/views/components/blocks/Card";
 import { slugify } from '@cfg/utils/textUtils';
 import { Providers } from "@cfg/next/controllers/providers";
 import Link from 'next/link';

@@ -1,5 +1,5 @@
-import prisma from '@/services/DatabaseService';
-import { getCharactersByPlayerId } from '@/services/GameSystem/Base/Character/CharacterService';
+import prisma from '@cfg/next/services/DatabaseService';
+import { getCharactersByPlayerId } from '@cfg/next/services/GameSystem/Base/Character/CharacterService';
 
 export const getParty = async ( party: any ) => {
   let result = {};

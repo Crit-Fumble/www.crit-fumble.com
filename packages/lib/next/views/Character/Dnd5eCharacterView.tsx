@@ -1,5 +1,5 @@
 "use client";
-import { DEFAULT } from "@/web/config/views";
+import { DEFAULT } from "@cfg-web/config/views";
 import ButtonBlock from "./LinkButtonBlock";
 import { Card, CardContent, CardHeader } from "./Card";
 import { useEffect, useState } from "react";

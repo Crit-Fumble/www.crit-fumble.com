@@ -1,4 +1,4 @@
-import prisma from '@/services/DatabaseService';
+import prisma from '@cfg/next/services/DatabaseService';
 import { randomUUID } from 'crypto';
 
 export const getCharacterSheetById = async (id: string) => {

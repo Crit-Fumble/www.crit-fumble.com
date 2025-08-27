@@ -1,6 +1,6 @@
 "use client";
 
-import { Card, CardContent, CardHeader } from "@cfg/components/blocks/Card";
+import { Card, CardContent, CardHeader } from "@cfg/next/views/components/blocks/Card";
 import { useSession } from "next-auth/react";
 import { useState } from "react";
 import { updateUserInfo } from "@cfg/next/controllers/UserController";

@@ -1,21 +1,28 @@
-"use server";
-
 import NextAuth, { getServerSession as _getServerSession, AuthOptions } from "next-auth";
 import DiscordProvider, { DiscordProfile } from "next-auth/providers/discord";
-import { discord } from "@/web/config/services";
-import { getUserByDiscordId, getUserByDiscordName } from "./ProfileService";
-import { getCharactersByPlayerId } from "./Character/CharacterService";
 import prisma from "./DatabaseService";
 import { randomUUID } from "node:crypto";
 
-const config: AuthOptions = { 
-  providers: [ 
+/**
+ * Interface for Discord authentication configuration
+ */
+export interface DiscordAuthConfig {
+  clientId: string;
+  clientSecret: string;
+}
+
+/**
+ * Creates an AuthOptions configuration object with provided Discord credentials
+ */
+export function createAuthConfig(discordConfig: DiscordAuthConfig): AuthOptions {
+  return {
+    providers: [
       DiscordProvider({
-        clientId: discord.authId,
-        clientSecret: discord.authSecret,
+        clientId: discordConfig.clientId,
+        clientSecret: discordConfig.clientSecret,
       }),
-  ],
-  callbacks: {
+    ],
+    callbacks: {
     async session({ session, token, trigger } : any) {
       if (!session?.user) {
         return session;
@@ -154,12 +161,32 @@ const config: AuthOptions = {
 
       return token;
     },
-  },
-};
+    },
+  };
+}
 
-export const handler = NextAuth(config);
+/**
+ * Creates a NextAuth handler with the provided configuration
+ */
+export function createAuthHandler(authConfig: AuthOptions) {
+  return NextAuth(authConfig);
+}
 
-// Export the getServerSession function for use in other places
+/**
+ * Creates a getServerSession function with the provided configuration
+ */
+export function createServerSessionGetter(authConfig: AuthOptions) {
+  return async () => _getServerSession(authConfig);
+}
+
+// Default implementations using environment variables for backward compatibility
+const defaultConfig = createAuthConfig({
+  clientId: process.env.AUTH_DISCORD_ID ?? '',
+  clientSecret: process.env.AUTH_DISCORD_SECRET ?? '',
+});
+
+export const handler = createAuthHandler(defaultConfig);
+
 export async function getServerSession() {
-  return _getServerSession(config);
+  return _getServerSession(defaultConfig);
 }

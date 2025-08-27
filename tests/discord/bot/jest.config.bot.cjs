@@ -17,11 +17,11 @@ module.exports = {
   },
   
   // Look for test files in the bot test directory
-  testMatch: ['**/tests/bot/**/*.test.js'],
+  testMatch: ['**/tests/discord/bot/**/*.test.js'],
   
   // Files to collect coverage from
   collectCoverageFrom: [
-    '**/src/bot/**/*.js',
+    '**/packages/discord/bot/**/*.js',
     '!**/node_modules/**',
     '!**/vendor/**'
   ],

@@ -6,16 +6,16 @@ export default {
   testEnvironment: 'jsdom',
   moduleNameMapper: {
     '^(\\.{1,2}/.*)\\.js$': '$1',
-    '^@/(.*)$': '<rootDir>/src/$1'
+    '^@/(.*)$': '<rootDir>/packages/$1'
   },
-  testMatch: ['**/tests/app/**/*.test.(js|jsx|ts|tsx)'],
+  testMatch: ['**/tests/web/**/*.test.(js|jsx|ts|tsx)'],
   collectCoverageFrom: [
-    '**/src/app/**/*.(js|jsx|ts|tsx)',
+    '**/packages/web/**/*.(js|jsx|ts|tsx)',
     '!**/node_modules/**',
     '!**/vendor/**',
   ],
   coverageReporters: ['text', 'lcov'],
   verbose: true,
   // Setup for Next.js components
-  setupFilesAfterEnv: ['<rootDir>/tests/app/setup.js'],
+  setupFilesAfterEnv: ['<rootDir>/tests/web/setup.js'],
 };

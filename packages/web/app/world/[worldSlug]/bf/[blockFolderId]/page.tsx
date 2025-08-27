@@ -1,8 +1,8 @@
 "use server";
 
 import { getWorldViewPageProps } from "@cfg/next/controllers/GameSystem/Base/World/WorldController";
-import { getBlockById, getBlocksByBlockFolderId } from "@/services/GameSystem/Base/World/WorldAnvilService";
-import WorldView from "@cfg/next/views/GameSystem/Base/World/WorldView";
+import { getBlockById, getBlocksByBlockFolderId } from "@cfg/next/services/GameSystem/Base/World/WorldAnvilService";
+import WorldView from "@cfg/next/views/World/WorldView";
 
 const Page = async ({ params: { worldSlug, blockFolderId } }: any) => {
   const props = await getWorldViewPageProps({

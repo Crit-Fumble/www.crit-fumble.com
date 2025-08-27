@@ -20,7 +20,13 @@
       {
         "name": "next"
       }
-    ]
+    ],
+    "paths": {
+      "@cfg/*": ["../../packages/lib/*"],
+      "@cfg-web/*": ["../*"],
+      "@cfg-discord/*": ["../../packages/discord/*"],
+      "@lib/*": ["../lib/*"]
+    }
   },
   "include": [
     "next-env.d.ts",

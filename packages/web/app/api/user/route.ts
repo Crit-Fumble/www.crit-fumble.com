@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getServerSession } from "@/services/AuthService";
-import { getCharactersByPlayerId } from "@/services/GameSystem/Base/Character/CharacterService";
-import { getCampaignsByGmId, getCampaignsByPlayerId } from "@/services/GameSystem/Base/Campaign/CampaignService";
-import { getPartiesByPlayerId } from "@/services/GameSystem/Base/Party/PartyService";
+import { getServerSession } from "@cfg/next/services/AuthService";
+import { getCharactersByPlayerId } from "@cfg/next/services/GameSystem/Base/Character/CharacterService";
+import { getCampaignsByGmId, getCampaignsByPlayerId } from "@cfg/next/services/GameSystem/Base/Campaign/CampaignService";
+import { getPartiesByPlayerId } from "@cfg/next/services/GameSystem/Base/Party/PartyService";
 import { Session } from "next-auth";
-import prisma from "@/services/DatabaseService";
-import { withDb } from "@/services/DatabaseService";
-import { DndBeyondService } from "@/services/GameSystem/Dnd5e/Player/DndBeyondPlayerService";
-import createLogger from "@/lib/utils/logger";
+import prisma from "@cfg/next/services/DatabaseService";
+import { withDb } from "@cfg/next/services/DatabaseService";
+import { DndBeyondService } from "@cfg/next/services/GameSystem/Dnd5e/Player/DndBeyondPlayerService";
+import createLogger from "@cfg/utils/logger";
 
 const logger = createLogger('api:user');
 

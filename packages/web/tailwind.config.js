@@ -4,7 +4,11 @@ export default {
     './app/**/*.{js,ts,jsx,tsx,mdx}',
     './pages/**/*.{js,ts,jsx,tsx,mdx}',
     './components/**/*.{js,ts,jsx,tsx,mdx}',
-    '../lib/**/*.{js,ts,jsx,tsx,mdx}',
+    './lib/**/*.{js,ts,jsx,tsx,mdx}',
+    '../../packages/lib/**/*.{js,ts,jsx,tsx,mdx}',
+    '../../packages/components/**/*.{js,ts,jsx,tsx,mdx}',
+    '../../packages/lib/**/*.{js,ts,jsx,tsx,mdx}',
+    '../../packages/web/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
     extend: {

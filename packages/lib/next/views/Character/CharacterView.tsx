@@ -1,7 +1,7 @@
 // // FUTURE:  add character sheets
 import Image from "next/image";
 import { Character } from "@prisma/client";
-import { Card, CardContent, CardHeader } from "@cfg/components/blocks/Card";
+import { Card, CardContent, CardHeader } from "@cfg/next/views/components/blocks/Card";
 
 // TODO: add all character fields
 export default function CharacterView({ character }: { character: Character }) {

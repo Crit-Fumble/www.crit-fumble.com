@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { useUserData } from '@cfg/next/controllers/providers';
+import { useUserData } from '../providers';
 import { useSession } from 'next-auth/react';
 
 /**

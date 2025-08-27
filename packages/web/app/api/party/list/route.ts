@@ -1,5 +1,5 @@
-import { getServerSession } from '@/services/AuthService';
-import { getPartiesByPlayerId } from '@/services/GameSystem/Base/Party/PartyService';
+import { getServerSession } from '@cfg/next/services/AuthService';
+import { getPartiesByPlayerId } from '@cfg/next/services/GameSystem/Base/Party/PartyService';
 import { NextResponse } from 'next/server';
 
 // GET endpoint to list parties accessible to the current user

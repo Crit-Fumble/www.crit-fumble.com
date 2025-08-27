@@ -1,6 +1,6 @@
 "use server";
 
-import AdminDashboard from "@cfg/next/views/GameSystem/Base/Admin/AdminDashboard";
+import AdminDashboard from "@cfg/next/views/Admin/AdminDashboard";
 import { getAdminDashboardPageProps } from "@cfg/next/controllers/AdminController";
 
 

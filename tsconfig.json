@@ -18,11 +18,16 @@
       }
     ],
     "paths": {
-      "@cfg/*": ["./packages/lib/*"],
       "@cfg-web/*": ["./packages/web/*"],
       "@cfg-discord/*": ["./packages/discord/*"],
+      "@cfg/discord/*": ["./packages/lib/discord/*"],
+      "@cfg/models": ["./packages/lib/models"],
+      "@cfg/data": ["./packages/lib/data"],
+      "@cfg/next/*": ["./packages/lib/next/*"],
+      "@cfg/utils/*": ["./packages/lib/utils/*"],
+      "@cfg/*": ["./packages/lib/*"],
     }
   },
-  "include": ["./packages/web/next-env.d.ts", "**/*.ts", "**/*.tsx", "./.next/types/**/*.ts", "packages/discord/activity/index.js", "packages/discord/activity/server.js", "packages/discord/app/index.js", "packages/discord/app/server.js"],
+  "include": ["./packages/web/next-env.d.ts", "**/*.ts", "**/*.tsx", "./.next/types/**/*.ts"],
   "exclude": ["node_modules"]
 }

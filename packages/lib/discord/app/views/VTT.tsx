@@ -1,1 +1,0 @@
-// FUTURE: VTT view, loads in VTT of choice for the campaign, or a link to open it

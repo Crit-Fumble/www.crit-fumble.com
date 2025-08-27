@@ -1,4 +1,4 @@
-import prisma, { withDb } from '@/services/DatabaseService';
+import prisma, { withDb } from '@cfg/next/services/DatabaseService';
 import { randomUUID } from 'crypto';
 import { Character } from '@cfg/models/Character/Character';
 

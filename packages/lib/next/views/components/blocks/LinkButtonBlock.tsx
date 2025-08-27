@@ -1,4 +1,4 @@
-import { DEFAULT } from "@/web/config/views";
+import { DEFAULT } from "@cfg-web/config/views";
 
 const getOpenWindowHandler = (...args: any) => () => {
   window.open(...args);

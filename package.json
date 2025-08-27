@@ -13,31 +13,85 @@
     "build": "npm run build --workspace=packages/web",
     "start": "npm run start --workspace=packages/web",
     "lint": "eslint .",
+
     "test": "jest",
     "test:web": "jest --config=jest.app.config.js",
     "test:discord": "jest --config=jest.config.bot.cjs",
     "test:lib": "jest --config=jest.lib.config.js",
-    "prisma:pull": "prisma db pull",
-    "prisma:generate": "prisma generate",
-    "prisma:dev": "prisma migrate dev",
-    "prisma:create": "prisma migrate dev --create-only",
-    "prisma:deploy": "prisma migrate deploy",
-    "prisma:reset": "prisma migrate reset",
-    "prisma:push": "prisma db push",
-    "prisma:seed": "prisma db seed"
+
+    "data:install": "npm install --workspace=packages/lib/data",
+    "data:pull": "npm run pull --workspace=packages/lib/data",
+    "data:generate": "npm run generate --workspace=packages/lib/data",
+    "data:dev": "npm run dev --workspace=packages/lib/data",
+    "data:deploy": "npm run deploy --workspace=packages/lib/data",
+    "data:reset": "npm run reset --workspace=packages/lib/data",
+    "data:push": "npm run push --workspace=packages/lib/data",
+    "data:seed": "npm run seed --workspace=packages/lib/data",
+
+    "web:install": "npm install --workspace=packages/web",
+    "web:dev": "npm run dev --workspace=packages/web",
+    "web:build": "npm run build --workspace=packages/web",
+    "web:start": "npm run start --workspace=packages/web",
+    "web:lint": "npm run lint --workspace=packages/web",
+    "web:test": "npm run test --workspace=tests/web",
+
+    "discord:install": "npm install --workspace=packages/discord",
+    "discord:bot:dev": "npm run dev --workspace=packages/discord/bot",
+    "discord:bot:build": "npm run build --workspace=packages/discord/bot",
+    "discord:bot:start": "npm run start --workspace=packages/discord/bot",
+    "discord:bot:lint": "npm run lint --workspace=packages/discord/bot",
+    "discord:bot:test": "npm run test --workspace=tests/discord/bot",
+    "discord:app:dev": "npm run dev --workspace=packages/discord/app",
+    "discord:app:build": "npm run build --workspace=packages/discord/app",
+    "discord:app:start": "npm run start --workspace=packages/discord/app",
+    "discord:app:lint": "npm run lint --workspace=packages/discord/app",
+    "discord:app:test": "npm run test --workspace=tests/discord/app",
+    "discord:activity:dev": "npm run dev --workspace=packages/discord/activity",
+    "discord:activity:build": "npm run build --workspace=packages/discord/activity",
+    "discord:activity:start": "npm run start --workspace=packages/discord/activity",
+    "discord:activity:lint": "npm run lint --workspace=packages/discord/activity",
+    "discord:activity:test": "npm run test --workspace=tests/discord/activity",
+
+    "lib:install": "npm install --workspace=packages/lib",
+    "lib:build": "npm run build --workspace=packages/lib",
+    "lib:lint": "npm run lint --workspace=packages/lib",
+    "lib:test": "npm run test --workspace=tests/lib",
+
+    "lib:discord:install": "npm install --workspace=packages/lib/discord",
+    "lib:discord:build": "npm run build --workspace=packages/lib/discord",
+    "lib:discord:dev": "npm run dev --workspace=packages/lib/discord",
+    "lib:discord:lint": "npm run lint --workspace=packages/lib/discord",
+    "lib:discord:test": "npm run test --workspace=packages/lib/discord",
+
+    "lib:discord:bot:install": "npm install --workspace=packages/lib/discord/bot",
+    "lib:discord:bot:build": "npm run build --workspace=packages/lib/discord/bot",
+    "lib:discord:bot:dev": "npm run dev --workspace=packages/lib/discord/bot",
+    "lib:discord:bot:start": "npm run start --workspace=packages/lib/discord/bot",
+    "lib:discord:bot:lint": "npm run lint --workspace=packages/lib/discord/bot",
+    "lib:discord:bot:test": "npm run test --workspace=packages/lib/discord/bot",
+
+    "lib:discord:app:install": "npm install --workspace=packages/lib/discord/app",
+    "lib:discord:app:build": "npm run build --workspace=packages/lib/discord/app",
+    "lib:discord:app:dev": "npm run dev --workspace=packages/lib/discord/app",
+    "lib:discord:app:start": "npm run start --workspace=packages/lib/discord/app",
+    "lib:discord:app:lint": "npm run lint --workspace=packages/lib/discord/app",
+    "lib:discord:app:test": "npm run test --workspace=packages/lib/discord/app",
+
+    "lib:discord:activity:install": "npm install --workspace=packages/lib/discord/activity",
+    "lib:discord:activity:build": "npm run build --workspace=packages/lib/discord/activity",
+    "lib:discord:activity:dev": "npm run dev --workspace=packages/lib/discord/activity",
+    "lib:discord:activity:start": "npm run start --workspace=packages/lib/discord/activity",
+    "lib:discord:activity:lint": "npm run lint --workspace=packages/lib/discord/activity",
+    "lib:discord:activity:test": "npm run test --workspace=packages/lib/discord/activity"
   },
   "prisma": {
     "seed": "ts-node scripts/seed.ts"
-  },
-  "dependencies": {
-    "@prisma/client": "^6.8.2"
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",
     "@types/node": "^20.17.24",
     "eslint": "^8",
     "jest": "^29.7.0",
-    "prisma": "^6.8.2",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.2"
   }

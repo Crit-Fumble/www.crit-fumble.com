@@ -11,19 +11,8 @@
     "test": "jest --config=../../jest.app.config.js"
   },
   "dependencies": {
-    "@prisma/client": "^6.8.2",
-    "@trpc/client": "^11.0.0-rc.354",
-    "@vercel/blob": "^1.1.1",
-    "bulletin-board-code": "^1.0.2",
-    "cfg-lib": "0.1.0",
-    "cfg-discord": "0.1.0",
-    "marked": "^14.1.2",
-    "next": "^14.2.14",
-    "next-auth": "^4.24.11",
-    "react": "^18",
-    "react-dom": "^18",
-    "react-hook-form": "^7.51.2",
-    "react-hot-toast": "^2.5.2"
+    "@cfg/next": "^0.2.0"
+    
   },
   "devDependencies": {
     "@babel/core": "^7.28.3",

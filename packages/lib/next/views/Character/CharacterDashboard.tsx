@@ -1,12 +1,12 @@
 "use client";
 
-import Dnd5eCharacterView from "@cfg/components/blocks/Dnd5eCharacterView";
+import Dnd5eCharacterView from "@cfg/next/views/components/blocks/Dnd5eCharacterView";
 import { useSession } from "next-auth/react";
 import { useMemo } from "react";
-import { Card, CardContent, CardHeader } from "@cfg/components/blocks/Card";
+import { Card, CardContent, CardHeader } from "@cfg/next/views/components/blocks/Card";
 import Link from "next/link";
 import { Providers } from "@cfg/next/controllers/providers";
-import { LinkButton } from "@cfg/components/ui/Button";
+import { LinkButton } from "@cfg/next/views/components/ui/Button";
 import CharacterView from "./CharacterView";
 
 // TODO: determine game systems, and load appropriate view for each character sheet

@@ -1,5 +1,5 @@
 import { randomUUID } from 'crypto';
-import { slugify } from '@/lib/utils/textUtils';
+import { slugify } from '@cfg/utils/textUtils';
 import DatabaseService, { withDb } from '@cfg/next/services/DatabaseService';
 
 export const getCampaign = async ( campaign: any ) => {

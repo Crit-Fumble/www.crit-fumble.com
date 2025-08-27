@@ -3,7 +3,7 @@
 // child classes may be derived from this one, for specific systems
 
 "use server";
-import { worldAnvil as config} from '@/web/config/services';
+import { worldAnvil as config} from '@cfg-web/config/services';
 import { getCampaignBySlug } from '../Campaign/CampaignService';
 
 type WorldAnvilId = string;

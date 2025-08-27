@@ -1,6 +1,28 @@
-import { DEFAULT } from '@/web/config/views';
+// Accept UI config through props instead of direct import
+interface TwClasses {
+  LINK: string;
+  [key: string]: string;
+}
 
-const Dnd5ePartyRoster = ({party, subParties, parentParty, characters, campaign, world}: any) => {
+interface Dnd5ePartyRosterProps {
+  party: any;
+  subParties?: any[];
+  parentParty?: any;
+  characters?: any[];
+  campaign?: any;
+  world?: any;
+  twClasses: TwClasses;
+}
+
+const Dnd5ePartyRoster = ({
+  party,
+  subParties,
+  parentParty,
+  characters,
+  campaign,
+  world,
+  twClasses
+}: Dnd5ePartyRosterProps) => {
   const discordServerId = campaign?.discord?.id;
   const voiceChannelId = party?.discord?.voiceChannelId ?? parentParty?.discord?.voiceChannelId;
   const sideChatThreadId = party?.discord?.sideChatThreadId ?? parentParty?.discord?.sideChatThreadId;
@@ -22,7 +44,7 @@ const Dnd5ePartyRoster = ({party, subParties, parentParty, characters, campaign,
 
       {parentParty?.name && (
         <div className="border-t-2 p-6">
-          <span><a className={DEFAULT.TW_CLASSES.LINK} href={`/play/dnd5e/${parentParty?.slug}`}>View {parentParty?.name}</a></span>
+          <span><a className={twClasses.LINK} href={`/play/dnd5e/${parentParty?.slug}`}>View {parentParty?.name}</a></span>
           {/* {parentParty?.description && <p>{parentParty?.description}</p>} */}
         </div>
       )} 
@@ -33,7 +55,7 @@ const Dnd5ePartyRoster = ({party, subParties, parentParty, characters, campaign,
           (character: any) => (
             <div key={character?.slug}>
               <p>
-                <a className={DEFAULT.TW_CLASSES.LINK} key={character.id} href={`/play/dnd5e/${character?.party?.slug}/${character?.slug}`}>
+                <a className={twClasses.LINK} key={character.id} href={`/play/dnd5e/${character?.party?.slug}/${character?.slug}`}>
                   View {character.name}
                 </a>
               </p>
@@ -44,12 +66,12 @@ const Dnd5ePartyRoster = ({party, subParties, parentParty, characters, campaign,
         {subParties?.map((subParty: any) => (
           <div key={subParty?.slug} className="p-2">
             <div className="flex flex-col align-middle items-center p-4 gap-4">
-              <a className={DEFAULT.TW_CLASSES.LINK} key={subParty.id} href={`/play/dnd5e/${subParty?.slug}`}>
+              <a className={twClasses.LINK} key={subParty.id} href={`/play/dnd5e/${subParty?.slug}`}>
                 View {subParty?.name}
               </a>
               {characters?.filter((character: any) => character?.party?.id === subParty?.id)?.map(
                 (character: any) => (
-                  <a className={DEFAULT.TW_CLASSES.LINK} key={character.id} href={`/play/dnd5e/${character?.party?.slug}/${character?.slug}`}>
+                  <a className={twClasses.LINK} key={character.id} href={`/play/dnd5e/${character?.party?.slug}/${character?.slug}`}>
                     View {character.name}
                   </a>
                 )
@@ -61,13 +83,13 @@ const Dnd5ePartyRoster = ({party, subParties, parentParty, characters, campaign,
 
 
       <div className="flex flex-grid flex-wrap justify-middle align-middle items-middle gap-2 text-center">
-        {roll20Id && <a className={DEFAULT.TW_CLASSES.LINK}  href={`https://app.roll20.net/editor/setcampaign/${roll20Id}?desiredrole=player`} target="_blank">Open Roll20 Campaign</a>}
-        {DndBeyondId && <a className={DEFAULT.TW_CLASSES.LINK}  href={`https://www.dndbeyond.com/campaigns/${DndBeyondId}`} target="_blank">Open D&D Beyond Campaign</a>}
-        {world?.url && <a className={DEFAULT.TW_CLASSES.LINK} href={world.url} target="_blank">Open {world.title} World Anvil</a>}
-        {voiceChannelId && <a className={DEFAULT.TW_CLASSES.LINK}  href={`https://discord.com/channels/${discordServerId}/${voiceChannelId}`} target="_blank">
+        {roll20Id && <a className={twClasses.LINK}  href={`https://app.roll20.net/editor/setcampaign/${roll20Id}?desiredrole=player`} target="_blank">Open Roll20 Campaign</a>}
+        {DndBeyondId && <a className={twClasses.LINK}  href={`https://www.dndbeyond.com/campaigns/${DndBeyondId}`} target="_blank">Open D&D Beyond Campaign</a>}
+        {world?.url && <a className={twClasses.LINK} href={world.url} target="_blank">Open {world.title} World Anvil</a>}
+        {voiceChannelId && <a className={twClasses.LINK}  href={`https://discord.com/channels/${discordServerId}/${voiceChannelId}`} target="_blank">
           Open Discord Voice
         </a>}
-        {sideChatThreadId && <a className={DEFAULT.TW_CLASSES.LINK}  href={`https://discord.com/channels/${discordServerId}/${sideChatThreadId}`} target="_blank">
+        {sideChatThreadId && <a className={twClasses.LINK}  href={`https://discord.com/channels/${discordServerId}/${sideChatThreadId}`} target="_blank">
           Open Discord Side Chat
         </a>}
       </div>

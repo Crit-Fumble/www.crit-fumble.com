@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import { getServerSession } from '@/web/config/auth';
+import { getServerSession } from '@cfg-web/config/auth';
 import { redirect } from 'next/navigation';
 import BotDashboard from './components/BotDashboard';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';

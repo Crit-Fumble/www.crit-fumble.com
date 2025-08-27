@@ -25,6 +25,18 @@
     "dependencies": {
         "@prisma/client": "^6.8.2"
     },
+    "scripts": {
+        "pull": "prisma db pull",
+        "generate": "prisma generate",
+        "dev": "prisma migrate dev",
+        "deploy": "prisma migrate deploy",
+        "reset": "prisma migrate reset",
+        "push": "prisma db push",
+        "seed": "prisma db seed"
+    },
+    "prisma": {
+        "seed": "ts-node prisma/seed.ts"
+    },
     "devDependencies": {
         "@babel/core": "^7.28.3",
         "@babel/preset-env": "^7.28.3",

@@ -4,7 +4,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "react-hot-toast";
-import { Card, CardContent, CardHeader } from "@cfg/components/blocks/Card";
+import { Card, CardContent, CardHeader } from "@cfg/next/views/components/blocks/Card";
 
 export default function CreateCampaignPage() {
   const { data: session, status } = useSession();

@@ -1,5 +1,5 @@
-import { getServerSession } from '@/services/AuthService';
-import prisma from '@/services/DatabaseService';
+import { getServerSession } from '@cfg/next/services/AuthService';
+import prisma from '@cfg/next/services/DatabaseService';
 import { NextResponse } from 'next/server';
 
 // GET endpoint to debug party data directly from the database

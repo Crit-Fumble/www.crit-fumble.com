@@ -1,6 +1,6 @@
 "use client";
 
-import Dnd5ePartyRoster from "@cfg/components/blocks/CampaignView";
+import Dnd5ePartyRoster from "@cfg/next/views/Campaign/CampaignView";
 import { useSession } from "next-auth/react";
 import { useMemo, useState } from "react";
 import { Providers } from "@cfg/next/controllers/providers";

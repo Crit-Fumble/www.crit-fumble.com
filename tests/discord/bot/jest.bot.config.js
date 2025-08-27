@@ -7,9 +7,9 @@ export default {
   moduleNameMapper: {
     '^(\\.{1,2}/.*)\\.js$': '$1',
   },
-  testMatch: ['**/tests/bot/**/*.test.js'],
+  testMatch: ['**/tests/discord/bot/**/*.test.js'],
   collectCoverageFrom: [
-    '**/src/bot/**/*.js',
+    '**/packages/discord/bot/**/*.js',
     '!**/node_modules/**',
     '!**/vendor/**',
   ],
@@ -18,5 +18,5 @@ export default {
   // Important for proper sourcemap support
   transformIgnorePatterns: [],
   // Setup file for bot tests
-  setupFilesAfterEnv: ['<rootDir>/tests/bot/setup.js'],
+  setupFilesAfterEnv: ['<rootDir>/tests/discord/bot/setup.js'],
 };

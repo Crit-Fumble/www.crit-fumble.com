@@ -1,7 +1,7 @@
 "use client";
 
-import { Card, CardContent, CardHeader } from "@cfg/components/blocks/Card";
-import { DEFAULT } from "@/web/config/views";
+import { Card, CardContent, CardHeader } from "@cfg/next/views/components/blocks/Card";
+import { DEFAULT } from "@cfg-web/config/views";
 import { useSession } from "next-auth/react";
 import { useMemo, useState } from "react";
 import { Providers } from "@cfg/next/controllers/providers";

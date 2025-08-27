@@ -17,8 +17,8 @@ const chalk = require('chalk');
 
 // Configuration
 const ROOT_DIR = path.resolve(__dirname, '..');
-const SRC_DIR = path.join(ROOT_DIR, 'src', 'bot');
-const DIST_DIR = path.join(ROOT_DIR, 'dist', 'bot');
+const SRC_DIR = path.join(ROOT_DIR, 'packages', 'discord', 'bot');
+const DIST_DIR = path.join(ROOT_DIR, 'dist', 'discord', 'bot');
 const DEPLOY_CONFIG = path.join(ROOT_DIR, 'pipeline', 'deploy-bot.toml');
 
 // Ensure the script is run from the project root

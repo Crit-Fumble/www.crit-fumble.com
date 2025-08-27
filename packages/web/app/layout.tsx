@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { Inter } from "next/font/google";
-import { TopBarSession } from "@cfg/components/sections/topBar";
+import { TopBarSession } from "@cfg/next/views/components/sections/topBar";
 import "./globals.css";
-import { BottomBarSession } from "@cfg/components/sections/bottomBar";
-import { Providers } from "../lib/next/controllers/providers";
+import { BottomBarSession } from "@cfg/next/views/components/sections/bottomBar";
+import { UserDataProvider } from "@cfg/next/controllers/providers";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -22,13 +22,13 @@ export default async function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={`${inter.className} dark min-h-screen overflow-x-hidden flex flex-col`} suppressHydrationWarning>
-        <Providers session={session}>
+        <UserDataProvider session={session}>
           <TopBarSession />
           <main className={'flex-grow pt-16 w-full flex flex-col items-stretch'}>
             {children}
           </main>
           <BottomBarSession />
-        </Providers>
+        </UserDataProvider>
       </body>
     </html>
   );

@@ -6,11 +6,11 @@ export default {
   testEnvironment: 'node',
   moduleNameMapper: {
     '^(\\.{1,2}/.*)\\.js$': '$1',
-    '^@/lib/(.*)$': '<rootDir>/src/lib/$1'
+    '^@/lib/(.*)$': '<rootDir>/packages/lib/$1'
   },
   testMatch: ['**/tests/lib/**/*.test.(js|ts)'],
   collectCoverageFrom: [
-    '**/src/lib/**/*.(js|ts)',
+    '**/packages/lib/**/*.(js|ts)',
     '!**/node_modules/**',
     '!**/vendor/**',
   ],

@@ -1,7 +1,7 @@
 import { put } from '@vercel/blob';
 import { NextResponse } from 'next/server';
-import { getServerSession } from '@/services/AuthService';
-import prisma from '@/services/DatabaseService';
+import { getServerSession } from '@cfg/next/services/AuthService';
+import prisma from '@cfg/next/services/DatabaseService';
 
 export async function POST(request: Request) {
   // Check authentication

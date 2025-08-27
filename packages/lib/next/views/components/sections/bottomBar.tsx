@@ -2,7 +2,7 @@
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import { useMemo } from "react";
-import useDarkMode from "@/lib/hooks/useDarkMode";
+import useDarkMode from "@cfg/next/controllers/hooks/useDarkMode";
 
 export const BottomBarInner = () => {
   const session = useSession();

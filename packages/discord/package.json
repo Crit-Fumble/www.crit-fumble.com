@@ -19,12 +19,7 @@
     "author": "Crit-Fumble",
     "license": "MIT",
     "dependencies": {
-        "@napi-rs/canvas": "^0.1.44",
-        "discord.js": "^14.14.1",
-        "dotenv": "^16.3.1",
-        "node-cron": "^3.0.3",
-        "node-fetch": "^3.3.2",
-        "cfg-lib": "0.1.0"
+        "@cfg/discord": "^0.2.0"
     },
     "devDependencies": {
         "@babel/core": "^7.28.3",

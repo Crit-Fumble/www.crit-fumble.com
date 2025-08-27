@@ -1,7 +1,7 @@
-import { handler as _authHandler, getServerSession as _getServerSession } from '@/lib/next/services/AuthService'
-import { getCharactersByPlayerId } from "@/lib/next/services/Character/CharacterService";
-import { getPartyById } from "@/lib/next/services/Party/PartyService";
-import { getUserByDiscordId, getUserBySlug } from "@/lib/next/services/ProfileService";
+import { createAuthHandler, createServerSessionGetter, createAuthConfig } from '../services/AuthService';
+import { getCharactersByPlayerId } from "@cfg/next/services/Character/CharacterService";
+import { getPartyById } from "@cfg/next/services/Party/PartyService";
+import { getUserByDiscordId, getUserBySlug } from "@cfg/next/services/ProfileService";
 import { redirect } from "next/navigation";
 
 export const getUserProfilePageProps = async (userSlug: string) => {
@@ -93,5 +93,11 @@ export const updateUserInfo = async (updateData: {
   }
 };
 
-export const authHandler = _authHandler;
-export const getServerSession = _getServerSession;
+// Using default config from environment variables
+const defaultAuthConfig = createAuthConfig({
+  clientId: process.env.AUTH_DISCORD_ID ?? '',
+  clientSecret: process.env.AUTH_DISCORD_SECRET ?? '',
+});
+
+export const authHandler = createAuthHandler(defaultAuthConfig);
+export const getServerSession = createServerSessionGetter(defaultAuthConfig);

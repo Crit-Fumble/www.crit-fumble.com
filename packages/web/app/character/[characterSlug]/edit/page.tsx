@@ -1,7 +1,7 @@
-import { getServerSession } from '@/services/AuthService';
-import { getCharacterBySlug } from '@/services/GameSystem/Base/Character/CharacterService';
+import { getServerSession } from '@cfg/next/services/AuthService';
+import { getCharacterBySlug } from '@cfg/next/services/GameSystem/Base/Character/CharacterService';
 import { redirect } from 'next/navigation';
-import CharacterEditView from '@cfg/next/views/GameSystem/Base/Character/CharacterEditView';
+import CharacterEditView from '@cfg/next/views/Character/CharacterEditView';
 
 // Define a Character type that matches your Prisma schema
 interface Character {
@@ -47,7 +47,7 @@ export default async function CharacterEditPage({ params }: { params: { characte
   console.log('Session user:', session.user);
   
   // Let's fetch the player record to compare properly
-  const getUserByDiscordId = await import('@/services/ProfileService').then(m => m.getUserByDiscordId);
+  const getUserByDiscordId = await import('@cfg/next/services/ProfileService').then(m => m.getUserByDiscordId);
   const player = await getUserByDiscordId(session.user.id);
   
   console.log('Player record from Discord ID:', player);

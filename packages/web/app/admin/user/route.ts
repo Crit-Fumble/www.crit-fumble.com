@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import DatabaseService from '@/services/DatabaseService';
+import DatabaseService from '@cfg/next/services/DatabaseService';
 import { getServerSession } from '@cfg/next/controllers/UserController';
 
 export async function GET(request: NextRequest) {

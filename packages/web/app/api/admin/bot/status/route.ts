@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { getServerSession } from '@/web/config/auth';
+import { getServerSession } from '@cfg-web/config/auth';
 import fetch from 'node-fetch';
 
 // This endpoint provides the current status of the Discord bot
