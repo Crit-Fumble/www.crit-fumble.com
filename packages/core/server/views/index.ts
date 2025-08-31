@@ -1,0 +1,1 @@
+// NOTE: no Next.js or React in these views; pure HTML, CSS, JS only

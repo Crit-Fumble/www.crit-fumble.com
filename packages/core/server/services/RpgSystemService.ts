@@ -1,0 +1,1 @@
+// FUTURE: CFG custom RPG System table and handling

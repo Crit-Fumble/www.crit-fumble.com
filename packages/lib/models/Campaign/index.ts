@@ -1,2 +1,0 @@
-// FUTURE: campaign model
-export {};

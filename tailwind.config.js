@@ -4,7 +4,7 @@ export default {
     './packages/app/**/*.{js,ts,jsx,tsx,mdx}',
     './packages/pages/**/*.{js,ts,jsx,tsx,mdx}',
     './packages/components/**/*.{js,ts,jsx,tsx,mdx}',
-    './packages/lib/**/*.{js,ts,jsx,tsx,mdx}',
+    './packages/**/*.{js,ts,jsx,tsx,mdx}',
     './packages/views/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {

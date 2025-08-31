@@ -1,0 +1,20 @@
+{
+    "name": "@cfg/next",
+    "version": "14.2.14",
+    "description": "Next.js utils for the Crit-Fumble web application",
+    "main": "index.js",
+    "keywords": [
+        "crit-fumble",
+        "next"
+    ],
+    "author": "Crit-Fumble",
+    "license": "MIT",
+    "dependencies": {
+        "next": "^14.2.14",
+        "next-auth": "^4.24.11",
+        "react": "^18",
+        "react-dom": "^18",
+        "react-hook-form": "^7.51.2",
+        "react-hot-toast": "^2.5.2"
+    }
+}

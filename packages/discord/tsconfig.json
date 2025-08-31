@@ -1,31 +1,10 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "../../dist/discord",
+    "outDir": "dist",
     "rootDir": ".",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
-    "target": "ES2022",
-    "declaration": true,
-    "sourceMap": true,
-    "composite": true,
-    "noEmit": false,
-    "paths": {
-      "@cfg/*": ["../lib/*"],
-      "@discord/*": ["./*"]
-    }
+    "declaration": true
   },
-  "include": [
-    "**/*.ts",
-    "**/*.tsx"
-, "activity/index.js", "activity/server.js", "app/index.js", "app/server.js"  ],
-  "exclude": [
-    "node_modules",
-    "dist",
-    "**/*.test.ts",
-    "**/*.test.js"
-  ],
-  "references": [
-    { "path": "../lib" }
-  ]
+  "include": ["models/**/*", "server/**/*", "client/**/*", "controllers/**/*", "services/**/*", "client/views/**/*", "index.ts", "../discord-bot/server/services/index.ts", "../discord-bot/server/services/HandleScheduledEvents.js", "../discord-bot/server/services/openAiHelpers.js", "../discord-bot/server/services/managers"],
+  "exclude": ["node_modules", "dist", "**/__tests__/**"]
 }

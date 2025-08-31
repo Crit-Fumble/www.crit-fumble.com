@@ -1,0 +1,19 @@
+{
+    "name": "@cfg/discord-app",
+    "version": "14.14.1",
+    "description": "Discord app for the Crit-Fumble web application",
+    "main": "index.js",
+    "keywords": [
+        "crit-fumble",
+        "discord"
+    ],
+    "author": "Crit-Fumble",
+    "license": "MIT",
+    "dependencies": {
+        "@cfg/core": "^6.8.2"
+    },
+    "scripts": {
+        "build": "npx tsc --outDir dist packages/**/*.ts",
+        "deploy": "node deploy.js"
+    }
+}

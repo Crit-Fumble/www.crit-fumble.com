@@ -1,7 +1,9 @@
 .env
+.env.local
 .env.web
 .env.discord
-.env.local
+.env.data
+
 
 scripts/raw/
 

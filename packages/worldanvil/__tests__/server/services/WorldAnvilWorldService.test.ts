@@ -1,0 +1,266 @@
+/**
+ * Tests for WorldAnvilWorldService
+ */
+
+import { WorldAnvilWorldService, WorldListOptions, WorldListResponse } from '../../../server/services/WorldAnvilWorldService';
+import { WorldAnvilApiService } from '../../../server/services/WorldAnvilApiService';
+import { WorldAnvilApiClient } from '../../../server/clients/WorldAnvilApiClient';
+import { WorldAnvilWorld, WorldAnvilWorldResponse } from '../../../models/WorldAnvilWorld';
+
+// Mock dependencies
+jest.mock('../../../server/services/WorldAnvilApiService');
+jest.mock('../../../server/clients/WorldAnvilApiClient');
+
+describe('WorldAnvilWorldService', () => {
+  // Mock data
+  const mockWorldResponse: WorldAnvilWorldResponse = {
+    id: 'world-123',
+    title: 'Test World',
+    slug: 'test-world',
+    description: 'A test world for unit tests',
+    creation_date: '2023-01-01T12:00:00Z',
+    tags: ['fantasy', 'medieval'],
+    genres: ['rpg'],
+    image_url: 'https://worldanvil.com/world-image.jpg',
+    visibility: 'public',
+    owner: {
+      id: 'user-456',
+      username: 'testuser'
+    }
+  };
+
+  const mockWorld: WorldAnvilWorld = {
+    id: 'world-123',
+    title: 'Test World',
+    slug: 'test-world',
+    description: 'A test world for unit tests',
+    creation_date: '2023-01-01T12:00:00Z',
+    tags: ['fantasy', 'medieval'],
+    genres: ['rpg'],
+    image_url: 'https://worldanvil.com/world-image.jpg',
+    visibility: 'public',
+    owner_id: 'user-456',
+    is_author_world: false
+  };
+
+  const mockWorldListResponse: WorldListResponse = {
+    worlds: [mockWorldResponse, {
+      ...mockWorldResponse,
+      id: 'world-456',
+      title: 'Another World',
+      slug: 'another-world'
+    }],
+    total: 2,
+    page: 1,
+    pages: 1
+  };
+
+  // Mock client and service
+  let mockApiClient: jest.Mocked<WorldAnvilApiClient>;
+  let mockApiService: jest.Mocked<WorldAnvilApiService>;
+  let service: WorldAnvilWorldService;
+
+  beforeEach(() => {
+    jest.clearAllMocks();
+
+    // Set up the mock client
+    mockApiClient = {
+      get: jest.fn(),
+      post: jest.fn(),
+      put: jest.fn(),
+      delete: jest.fn(),
+      setApiKey: jest.fn(),
+      setAccessToken: jest.fn(),
+      getCurrentUser: jest.fn(),
+      getMyWorlds: jest.fn(),
+      getWorldById: jest.fn(),
+      handleApiError: jest.fn()
+    } as unknown as jest.Mocked<WorldAnvilApiClient>;
+
+    // Set up the mock service
+    mockApiService = {
+      getClient: jest.fn().mockReturnValue(mockApiClient),
+      setApiKey: jest.fn(),
+      setAccessToken: jest.fn(),
+      get: jest.fn(),
+      post: jest.fn(),
+      put: jest.fn(),
+      delete: jest.fn(),
+      // Add the private apiClient property
+      apiClient: mockApiClient
+    } as unknown as jest.Mocked<WorldAnvilApiService>;
+
+    // Create instance of service under test
+    service = new WorldAnvilWorldService(mockApiService);
+  });
+
+  describe('constructor', () => {
+    it('should initialize with the provided API service', () => {
+      expect(mockApiService.getClient).toHaveBeenCalled();
+    });
+  });
+
+  describe('getMyWorlds', () => {
+    it('should get worlds owned by the authenticated user with default options', async () => {
+      // Setup
+      mockApiClient.get.mockResolvedValue(mockWorldListResponse);
+
+      // Execute
+      const result = await service.getMyWorlds();
+
+      // Verify
+      expect(mockApiClient.get).toHaveBeenCalledWith('/user/worlds', { params: {} });
+      expect(result).toEqual({
+        worlds: [
+          mockWorld,
+          {
+            ...mockWorld,
+            id: 'world-456',
+            title: 'Another World',
+            slug: 'another-world'
+          }
+        ],
+        pagination: {
+          total: 2,
+          page: 1,
+          pages: 1
+        }
+      });
+    });
+
+    it('should get worlds with custom options', async () => {
+      // Setup
+      const options: WorldListOptions = {
+        page: 2,
+        limit: 10,
+        sort: 'title',
+        order: 'asc'
+      };
+      mockApiClient.get.mockResolvedValue(mockWorldListResponse);
+
+      // Execute
+      const result = await service.getMyWorlds(options);
+
+      // Verify
+      expect(mockApiClient.get).toHaveBeenCalledWith('/user/worlds', { params: options });
+      expect(result.pagination).toEqual({
+        total: 2,
+        page: 1,
+        pages: 1
+      });
+    });
+  });
+
+  describe('getWorldsByUser', () => {
+    it('should get worlds owned by a specific user with default options', async () => {
+      // Setup
+      const userId = 'user-456';
+      mockApiClient.get.mockResolvedValue(mockWorldListResponse);
+
+      // Execute
+      const result = await service.getWorldsByUser(userId);
+
+      // Verify
+      expect(mockApiClient.get).toHaveBeenCalledWith(`/user/${userId}/worlds`, { params: {} });
+      expect(result.worlds).toHaveLength(2);
+      expect(result.worlds[0].id).toBe('world-123');
+      expect(result.worlds[1].id).toBe('world-456');
+    });
+
+    it('should get worlds with custom options', async () => {
+      // Setup
+      const userId = 'user-456';
+      const options: WorldListOptions = {
+        page: 2,
+        limit: 10,
+        sort: 'creation_date',
+        order: 'desc'
+      };
+      mockApiClient.get.mockResolvedValue(mockWorldListResponse);
+
+      // Execute
+      const result = await service.getWorldsByUser(userId, options);
+
+      // Verify
+      expect(mockApiClient.get).toHaveBeenCalledWith(`/user/${userId}/worlds`, { params: options });
+      expect(result.pagination).toEqual({
+        total: 2,
+        page: 1,
+        pages: 1
+      });
+    });
+  });
+
+  describe('getWorldById', () => {
+    it('should get a world by ID', async () => {
+      // Setup
+      const worldId = 'world-123';
+      mockApiClient.get.mockResolvedValue(mockWorldResponse);
+
+      // Execute
+      const result = await service.getWorldById(worldId);
+
+      // Verify
+      expect(mockApiClient.get).toHaveBeenCalledWith(`/world/${worldId}`);
+      expect(result).toEqual(mockWorld);
+    });
+  });
+
+  describe('getWorldBySlug', () => {
+    it('should get a world by slug', async () => {
+      // Setup
+      const slug = 'test-world';
+      mockApiClient.get.mockResolvedValue(mockWorldResponse);
+
+      // Execute
+      const result = await service.getWorldBySlug(slug);
+
+      // Verify
+      expect(mockApiClient.get).toHaveBeenCalledWith(`/world/slug/${slug}`);
+      expect(result).toEqual(mockWorld);
+    });
+  });
+
+  describe('mapWorldResponse', () => {
+    it('should properly map API response to internal model', async () => {
+      // Setup - we need to call a public method to test the private mapWorldResponse
+      mockApiClient.get.mockResolvedValue(mockWorldResponse);
+      
+      // Execute
+      const result = await service.getWorldById('world-123');
+      
+      // Verify the mapping logic
+      expect(result).toEqual({
+        id: mockWorldResponse.id,
+        title: mockWorldResponse.title,
+        slug: mockWorldResponse.slug,
+        description: mockWorldResponse.description,
+        creation_date: mockWorldResponse.creation_date,
+        tags: mockWorldResponse.tags,
+        genres: mockWorldResponse.genres,
+        image_url: mockWorldResponse.image_url,
+        visibility: mockWorldResponse.visibility as 'public' | 'private' | 'unlisted',
+        owner_id: mockWorldResponse.owner?.id,
+        is_author_world: false
+      });
+    });
+
+    it('should correctly set is_author_world flag when owner is author', async () => {
+      // Setup - response with author username
+      const authorWorldResponse = {
+        ...mockWorldResponse,
+        owner: {
+          id: 'author-123',
+          username: 'author'
+        }
+      };
+      mockApiClient.get.mockResolvedValue(authorWorldResponse);
+      
+      // Execute
+      const result = await service.getWorldById('world-123');
+      
+      // Verify the mapping logic
+      expect(result.is_author_world).toBe(true);
+    });
+  });
+});
