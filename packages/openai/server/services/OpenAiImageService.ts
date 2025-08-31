@@ -1,17 +1,19 @@
 import { OpenAiImageGenerationRequest, OpenAiImageGenerationResponse } from '../../models/OpenAiResponses';
 import { getOpenAiConfig } from '../configs';
 import { OpenAiApiService } from './OpenAiApiService';
+import { OpenAiApiClient } from '../clients/OpenAiApiClient';
 
 /**
  * OpenAI Image Service
  * Service for interacting with OpenAI's image generation endpoints
  */
 export class OpenAiImageService {
-  private apiService: OpenAiApiService;
+  private apiClient: OpenAiApiClient;
   private config = getOpenAiConfig();
 
   constructor() {
-    this.apiService = OpenAiApiService.getInstance();
+    const apiService = OpenAiApiService.getInstance();
+    this.apiClient = apiService.getApiClient();
   }
 
   /**
@@ -20,8 +22,6 @@ export class OpenAiImageService {
    * @returns Image generation response
    */
   public async generateImage(request: Partial<OpenAiImageGenerationRequest>): Promise<OpenAiImageGenerationResponse> {
-    const client = this.apiService.getClient();
-    
     const imageRequest: OpenAiImageGenerationRequest = {
       prompt: request.prompt || '',
       n: request.n || 1,
@@ -29,8 +29,8 @@ export class OpenAiImageService {
       response_format: request.response_format || 'url',
     };
     
-    const response = await client.images.generate(imageRequest as any);
-    return response as any as OpenAiImageGenerationResponse;
+    // Use the apiClient's generateImage method
+    return await this.apiClient.generateImage(imageRequest);
   }
 
   /**

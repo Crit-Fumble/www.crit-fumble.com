@@ -1,20 +1,19 @@
 import { OpenAiChatCompletionRequest, OpenAiChatCompletionResponse, OpenAiFunctionDefinition } from '../../models/OpenAiResponses';
 import { getOpenAiConfig } from '../configs';
+import { OpenAiApiClient } from '../clients/OpenAiApiClient';
 import { OpenAiApiService } from './OpenAiApiService';
-import { OpenAiTextService } from './OpenAiTextService';
 
 /**
  * OpenAI Function Service
  * Service for working with OpenAI function calling capabilities
  */
 export class OpenAiFunctionService {
-  private apiService: OpenAiApiService;
-  private textService: OpenAiTextService;
+  private apiClient: OpenAiApiClient;
   private config = getOpenAiConfig();
 
   constructor() {
-    this.apiService = OpenAiApiService.getInstance();
-    this.textService = new OpenAiTextService();
+    const apiService = OpenAiApiService.getInstance();
+    this.apiClient = apiService.getApiClient();
   }
 
   /**
@@ -36,7 +35,7 @@ export class OpenAiFunctionService {
       ...(forceFunctionCall && { function_call: { name: forceFunctionCall } }),
     };
     
-    return await this.textService.createChatCompletion(request);
+    return await this.apiClient.createChatCompletion(request);
   }
 
   /**

@@ -1,0 +1,1 @@
+// TODO: follow same conventions as openai and worldanvil packages to wrap the existing (preferred) or create a new (if no existing) Discord API client

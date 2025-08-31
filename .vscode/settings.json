@@ -7,7 +7,10 @@
         "blocktemplateparts",
         "blocktemplates",
         "Boromir",
+        "chatcmpl",
         "chrono",
+        "cmpl",
+        "davinci",
         "manuscipt",
         "markergroup",
         "markergroups",
@@ -20,6 +23,7 @@
         "rpgsystems",
         "Subscribergroup",
         "subscribergroups",
+        "testuser",
         "variablecollections",
         "worldanvil",
         "worldbuilding"

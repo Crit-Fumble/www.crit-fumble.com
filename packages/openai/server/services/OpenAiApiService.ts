@@ -1,4 +1,4 @@
-import OpenAI from 'openai';
+import { OpenAiApiClient, IOpenAIClient } from '../clients/OpenAiApiClient';
 import { getOpenAiConfig } from '../configs';
 
 /**
@@ -7,13 +7,17 @@ import { getOpenAiConfig } from '../configs';
  */
 export class OpenAiApiService {
   private static instance: OpenAiApiService;
-  private client: OpenAI;
+  private apiClient: OpenAiApiClient;
 
   private constructor() {
     const config = getOpenAiConfig();
-    this.client = new OpenAI({
+    this.apiClient = new OpenAiApiClient({
       apiKey: config.apiKey,
       organization: config.organization,
+      defaultChatModel: config.defaultChatModel,
+      defaultTemperature: config.defaultTemperature,
+      defaultMaxTokens: config.defaultMaxTokens,
+      defaultImageSize: config.defaultImageSize
     });
   }
 
@@ -30,7 +34,14 @@ export class OpenAiApiService {
   /**
    * Get the OpenAI client instance
    */
-  public getClient(): OpenAI {
-    return this.client;
+  public getClient(): IOpenAIClient {
+    return this.apiClient.getRawClient();
+  }
+  
+  /**
+   * Get the OpenAI API client instance
+   */
+  public getApiClient(): OpenAiApiClient {
+    return this.apiClient;
   }
 }

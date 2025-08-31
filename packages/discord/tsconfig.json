@@ -5,6 +5,6 @@
     "rootDir": ".",
     "declaration": true
   },
-  "include": ["models/**/*", "server/**/*", "client/**/*", "controllers/**/*", "services/**/*", "client/views/**/*", "index.ts", "../discord-bot/server/services/index.ts", "../discord-bot/server/services/HandleScheduledEvents.js", "../discord-bot/server/services/openAiHelpers.js", "../discord-bot/server/services/managers"],
+  "include": ["models/**/*", "server/**/*", "client/**/*", "controllers/**/*", "services/**/*", "client/views/**/*"],
   "exclude": ["node_modules", "dist", "**/__tests__/**"]
 }

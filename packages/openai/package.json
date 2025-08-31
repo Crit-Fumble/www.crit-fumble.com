@@ -9,8 +9,17 @@
     "build": "tsc",
     "dev": "tsc --watch",
     "test": "jest",
-    "lint": "eslint '{models,server,client}/**/*.ts'",
-    "clean": "rimraf dist"
+    "lint": "eslint --config eslint.config.js models/**/*.ts server/**/*.ts client/**/*.ts",
+    "clean": "rimraf dist",
+    "prepublishOnly": "npm run test && npm run lint && npm run build"
+  },
+  "files": [
+    "dist",
+    "README.md",
+    "LICENSE"
+  ],
+  "publishConfig": {
+    "access": "public"
   },
   "exports": {
     ".": {
@@ -38,13 +47,15 @@
   "author": "Crit-Fumble",
   "license": "MIT",
   "dependencies": {
-    "@crit-fumble/core": "workspace:^6.8.2",
     "openai": "^5.16.0"
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",
     "@types/node": "^20.17.24",
+    "@typescript-eslint/eslint-plugin": "^8.41.0",
+    "@typescript-eslint/parser": "^8.41.0",
     "eslint": "^8",
+    "globals": "^16.3.0",
     "jest": "^29.7.0",
     "rimraf": "^5.0.0",
     "ts-jest": "^29.1.0",

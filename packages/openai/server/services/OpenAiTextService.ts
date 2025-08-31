@@ -1,17 +1,20 @@
 import { OpenAiChatCompletionRequest, OpenAiChatCompletionResponse, OpenAiCompletionRequest, OpenAiCompletionResponse, OpenAiMessage } from '../../models/OpenAiResponses';
 import { getOpenAiConfig } from '../configs';
 import { OpenAiApiService } from './OpenAiApiService';
+import { OpenAiApiClient } from '../clients/OpenAiApiClient';
 
 /**
  * OpenAI Text Service
  * Service for interacting with OpenAI's text-based endpoints
  */
 export class OpenAiTextService {
-  private apiService: OpenAiApiService;
+  private apiClient: OpenAiApiClient;
   private config = getOpenAiConfig();
 
   constructor() {
-    this.apiService = OpenAiApiService.getInstance();
+    // Get the API client from the API service
+    const apiService = OpenAiApiService.getInstance();
+    this.apiClient = apiService.getApiClient();
   }
 
   /**
@@ -20,7 +23,7 @@ export class OpenAiTextService {
    * @returns Chat completion response
    */
   public async createChatCompletion(request: Partial<OpenAiChatCompletionRequest>): Promise<OpenAiChatCompletionResponse> {
-    const client = this.apiService.getClient();
+    // Use the apiClient directly
     
     const completionRequest: OpenAiChatCompletionRequest = {
       model: request.model || this.config.defaultChatModel,
@@ -31,8 +34,8 @@ export class OpenAiTextService {
       ...(request.function_call && { function_call: request.function_call }),
     };
     
-    const response = await client.chat.completions.create(completionRequest as any);
-    return response as any as OpenAiChatCompletionResponse;
+    // Use the apiClient's createChatCompletion method
+    return await this.apiClient.createChatCompletion(completionRequest);
   }
 
   /**
@@ -71,8 +74,6 @@ export class OpenAiTextService {
    * @returns Completion response
    */
   public async createCompletion(request: Partial<OpenAiCompletionRequest>): Promise<OpenAiCompletionResponse> {
-    const client = this.apiService.getClient();
-    
     const completionRequest: OpenAiCompletionRequest = {
       model: request.model || 'text-davinci-003', // Legacy model
       prompt: request.prompt || '',
@@ -80,7 +81,7 @@ export class OpenAiTextService {
       temperature: request.temperature ?? this.config.defaultTemperature,
     };
     
-    const response = await client.completions.create(completionRequest as any);
-    return response as any as OpenAiCompletionResponse;
+    // Use the apiClient's createCompletion method
+    return await this.apiClient.createCompletion(completionRequest);
   }
 }
