@@ -1,5 +1,5 @@
 /**
- * @cfg/core main exports
+ * @crit-fumble/core main exports
  */
 
 // Core database exports
@@ -17,6 +17,6 @@ export * as client from './client/index';
 export * as server from './server';
 
 // Specialized package exports
-export * as discord from '@cfg/discord';
-export * as worldanvil from '@cfg/worldanvil';
-export * as openai from '@cfg/openai';
+export * as discord from '@crit-fumble/discord';
+export * as worldanvil from '@crit-fumble/worldanvil';
+export * as openai from '@crit-fumble/openai';

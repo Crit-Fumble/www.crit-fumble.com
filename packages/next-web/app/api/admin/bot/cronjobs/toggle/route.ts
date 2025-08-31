@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getServerSession } from '@cfg/core/server/config/auth';
+import { getServerSession } from '@crit-fumble/core/server/config/auth';
 import fetch from 'node-fetch';
 
 export async function POST(request: NextRequest) {

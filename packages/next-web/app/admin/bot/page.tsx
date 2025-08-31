@@ -1,5 +1,5 @@
 import { Suspense } from 'react';
-import { getServerSession } from '@cfg/core/server/config/auth';
+import { getServerSession } from '@crit-fumble/core/server/config/auth';
 import { redirect } from 'next/navigation';
 import BotDashboard from './components/BotDashboard';
 import LoadingSpinner from '@/components/ui/LoadingSpinner';

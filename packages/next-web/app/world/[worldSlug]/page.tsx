@@ -1,6 +1,6 @@
 "use server";
 
-import { getWorldViewPageProps } from "@cfg/next/controllers/World/WorldController";
+import { getWorldViewPageProps } from "@crit-fumble/next/controllers/World/WorldController";
 import WorldView from "../../../../next/views/World/WorldView";
 
 const Page = async ({ params: { worldSlug } }: any) => {

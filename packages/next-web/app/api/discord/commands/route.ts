@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import type { ApiResponse, CommandOptions } from '@cfg/models/Discord/types';
+import type { ApiResponse, CommandOptions } from '@crit-fumble/models/Discord/types';
 
 /**
  * API route for Discord slash commands management

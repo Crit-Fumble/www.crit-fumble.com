@@ -1,5 +1,5 @@
 {
-  "name": "@cfg/next-web",
+  "name": "@crit-fumble/next-web",
   "version": "0.2.0",
   "private": true,
   "type": "module",
@@ -23,8 +23,8 @@
     "db:seed": "npx dotenv-cli -e .env.web -- npx prisma db seed --schema=../core/prisma/schema.prisma"
   },
   "dependencies": {
-    "@cfg/core": "^6.8.2",
-    "@cfg/next": "^14.2.14"
+    "@crit-fumble/core": "^6.8.2",
+    "@crit-fumble/next": "^14.2.14"
   },
   "devDependencies": {
     "@babel/core": "^7.28.3",

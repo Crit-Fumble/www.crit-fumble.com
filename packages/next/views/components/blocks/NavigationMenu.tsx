@@ -2,7 +2,7 @@
 
 import { signIn, signOut, useSession } from 'next-auth/react';
 import React, { useCallback, useMemo, useEffect, useState } from 'react';
-import type { UserData, User } from '@cfg/core/models/user';
+import type { UserData, User } from '@crit-fumble/core/models/user';
 
 // Extended interface for persisted user data with additional properties
 interface PersistedUserData extends Partial<UserData> {

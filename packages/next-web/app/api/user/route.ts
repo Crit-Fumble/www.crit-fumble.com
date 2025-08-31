@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { getServerSession } from "../../../../next/services/AuthService";
-import { getCharactersByPlayerId } from "@cfg/next/services/GameSystem/Base/Character/CharacterService";
-import { getCampaignsByGmId, getCampaignsByPlayerId } from "@cfg/next/services/GameSystem/Base/Campaign/CampaignService";
-import { getPartiesByPlayerId } from "@cfg/next/services/GameSystem/Base/Party/PartyService";
+import { getCharactersByPlayerId } from "@crit-fumble/next/services/GameSystem/Base/Character/CharacterService";
+import { getCampaignsByGmId, getCampaignsByPlayerId } from "@crit-fumble/next/services/GameSystem/Base/Campaign/CampaignService";
+import { getPartiesByPlayerId } from "@crit-fumble/next/services/GameSystem/Base/Party/PartyService";
 import { Session } from "next-auth";
 import prisma from "../../../../next/services/DatabaseService";
 import { withDb } from "../../../../next/services/DatabaseService";
-import { DndBeyondService } from "@cfg/next/services/GameSystem/Dnd5e/Player/DndBeyondPlayerService";
-import createLogger from "@cfg/core/utils/ClientLogger";
+import { DndBeyondService } from "@crit-fumble/next/services/GameSystem/Dnd5e/Player/DndBeyondPlayerService";
+import createLogger from "@crit-fumble/core/utils/ClientLogger";
 
 const logger = createLogger('api:user');
 

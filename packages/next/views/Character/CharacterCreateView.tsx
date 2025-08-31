@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useSession } from "next-auth/react";
 import { Card, CardContent, CardHeader } from "../components/blocks/Card";
-import { slugify } from '@cfg/core/utils/textUtils';
+import { slugify } from '@crit-fumble/core/utils/textUtils';
 
 // Character Create Form Component
 const CharacterCreateForm = () => {

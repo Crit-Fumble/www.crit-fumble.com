@@ -18,9 +18,9 @@
       }
     ],
     "paths": {
-      "@cfg/core/*": ["./packages/core/*"],
-      "@cfg/next/*": ["./packages/next/*"],
-      "@cfg/discord/*": ["./packages/discord/*"],
+      "@crit-fumble/core/*": ["./packages/core/*"],
+      "@crit-fumble/next/*": ["./packages/next/*"],
+      "@crit-fumble/discord/*": ["./packages/discord/*"],
     }
   },
   "include": ["./packages/next-web/next-env.d.ts", "**/*.ts", "**/*.tsx", "./.next/types/**/*.ts"],

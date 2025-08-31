@@ -2,7 +2,7 @@
  * ConfigRegistry - Central configuration management for Crit-Fumble packages
  *
  * This singleton class provides centralized access to environment variables
- * and configuration values across all @cfg packages.
+ * and configuration values across all @crit-fumble packages.
  */
 
 import { ConfigOptions, ConfigSource, ConfigValidationError, ConfigValue, InitializeOptions } from '../../models/config/Config.d';

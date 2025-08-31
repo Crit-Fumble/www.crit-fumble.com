@@ -10,7 +10,7 @@ module.exports = {
     '^.+\\.jsx?$': 'babel-jest',
   },
   moduleNameMapper: {
-    '^@cfg/(.*)$': '<rootDir>/packages/$1',
+    '^@crit-fumble/(.*)$': '<rootDir>/packages/$1',
   },
   bail: 1,
   verbose: true

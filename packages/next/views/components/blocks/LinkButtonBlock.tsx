@@ -1,4 +1,4 @@
-import { DEFAULT } from "@cfg/core/server/config/views";
+import { DEFAULT } from "@crit-fumble/core/server/config/views";
 
 const getOpenWindowHandler = (...args: any) => () => {
   window.open(...args);

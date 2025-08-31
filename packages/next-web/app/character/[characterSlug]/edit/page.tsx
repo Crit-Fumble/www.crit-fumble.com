@@ -1,5 +1,5 @@
 import { getServerSession } from '../../../../../next/services/AuthService';
-import { getCharacterBySlug } from '@cfg/next/services/GameSystem/Base/Character/CharacterService';
+import { getCharacterBySlug } from '@crit-fumble/next/services/GameSystem/Base/Character/CharacterService';
 import { redirect } from 'next/navigation';
 import CharacterEditView from '../../../../../next/views/Character/CharacterEditView';
 

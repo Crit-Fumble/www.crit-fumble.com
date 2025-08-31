@@ -1,11 +1,11 @@
-import { getDnd5eCharacterSheetPageProps } from '@cfg/next/controllers/Character/Dnd5eCharacterSheetController';
-import { getCharacterBySlug } from '@cfg/next/services/GameSystem/Base/Character/CharacterService';
-import { getCharacterSheetBySystem } from '@cfg/next/services/GameSystem/Base/CharacterSheet/CharacterSheetService';
+import { getDnd5eCharacterSheetPageProps } from '@crit-fumble/next/controllers/Character/Dnd5eCharacterSheetController';
+import { getCharacterBySlug } from '@crit-fumble/next/services/GameSystem/Base/Character/CharacterService';
+import { getCharacterSheetBySystem } from '@crit-fumble/next/services/GameSystem/Base/CharacterSheet/CharacterSheetService';
 import { getServerSession } from '../../../../../next/services/AuthService';
 import { Card, CardContent, CardHeader } from '../../../../../next/views/components/blocks/Card';
 import { LinkButton } from '../../../../../next/views/components/ui/Button';
 import { redirect } from 'next/navigation';
-import Dnd5eCharacterView from '@cfg/next/views/components/blocks/Dnd5eCharacterView';
+import Dnd5eCharacterView from '@crit-fumble/next/views/components/blocks/Dnd5eCharacterView';
 
 interface CharacterSheetPageProps {
   params: {

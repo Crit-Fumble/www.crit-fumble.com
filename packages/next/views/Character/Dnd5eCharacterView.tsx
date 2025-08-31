@@ -1,5 +1,5 @@
 "use client";
-import { DEFAULT } from "@cfg/core/server/config/views";
+import { DEFAULT } from "@crit-fumble/core/server/config/views";
 import ButtonBlock from "./LinkButtonBlock";
 import { Card, CardContent, CardHeader } from "./Card";
 import { useEffect, useState } from "react";

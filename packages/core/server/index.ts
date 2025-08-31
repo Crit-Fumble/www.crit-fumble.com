@@ -1,5 +1,5 @@
 /**
- * @cfg/core server exports
+ * @crit-fumble/core server exports
  * Contains Node.js server utilities and modules
  */
 

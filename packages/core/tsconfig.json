@@ -5,7 +5,7 @@
     "rootDir": ".",
     "baseUrl": ".",
     "paths": {
-      "@cfg/core": ["."]
+      "@crit-fumble/core": ["."]
     }
   },
   "include": [

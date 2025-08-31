@@ -4,7 +4,7 @@
  * This script parses the World Anvil OpenAPI specification and downloads
  * all referenced YML files to their corresponding local paths.
  * 
- * Uses packages from @cfg/worldanvil package.json:
+ * Uses packages from @crit-fumble/worldanvil package.json:
  * - axios for HTTP requests
  * - yaml for YAML parsing
  */

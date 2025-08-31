@@ -15,10 +15,10 @@
 import { 
   handleDnd5eCharacterSheetSubmission, 
   handleDeleteDnd5eCharacterSheet 
-} from '@cfg/next/controllers/Character/Dnd5eCharacterSheetController';
+} from '@crit-fumble/next/controllers/Character/Dnd5eCharacterSheetController';
 import { NextRequest, NextResponse } from 'next/server';
-import { getCharacterById } from '@cfg/next/services/GameSystem/Base/Character/CharacterService';
-import { Character } from '@cfg/models/Character/Character';
+import { getCharacterById } from '@crit-fumble/next/services/GameSystem/Base/Character/CharacterService';
+import { Character } from '@crit-fumble/models/Character/Character';
 
 export async function GET(
   request: NextRequest,

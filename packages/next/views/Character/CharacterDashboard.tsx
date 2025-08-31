@@ -1,6 +1,6 @@
 "use client";
 
-import Dnd5eCharacterView from "@cfg/next/views/components/blocks/Dnd5eCharacterView";
+import Dnd5eCharacterView from "@crit-fumble/next/views/components/blocks/Dnd5eCharacterView";
 import { useSession } from "next-auth/react";
 import { useMemo } from "react";
 import { Card, CardContent, CardHeader } from "../components/blocks/Card";

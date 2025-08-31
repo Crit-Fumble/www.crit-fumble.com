@@ -3,7 +3,7 @@
 // child classes may be derived from this one, for specific systems
 
 "use server";
-import { worldAnvil as config} from '@cfg/core/server/config/services';
+import { worldAnvil as config} from '@crit-fumble/core/server/config/services';
 import { getCampaignBySlug } from '../Campaign/CampaignService';
 
 type WorldAnvilId = string;

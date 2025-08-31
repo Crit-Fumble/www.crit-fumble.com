@@ -1,5 +1,5 @@
 /**
- * @cfg/core client exports
+ * @crit-fumble/core client exports
  * Contains browser-safe utilities and modules
  */
 

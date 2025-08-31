@@ -1,20 +1,20 @@
 ## Current Architecture
 ### packages/next-web: Main web application
-- uses @cfg/core and @cfg/next
+- uses @crit-fumble/core and @crit-fumble/next
 - deploys to vercel
 ### packages/discord-bot: Discord bot
-- uses @cfg/core
+- uses @crit-fumble/core
 - deploys to a Fly.io instance
 ### packages/discord-app: Discord app
-- uses @cfg/core
+- uses @crit-fumble/core
 - deployment details pending
 ### packages/discord-activity: Discord activity
-- uses @cfg/core
+- uses @crit-fumble/core
 - deployment details pending
 ### packages/core: Core models, utils, and Prisma wrapper
 - reads environment variables from .env files of the package it's installed into
 - wraps @prisma/client, @vercel/blob, and other shared packages
-- imports and re-exports @cfg/discord, @cfg/worldanvil, and @cfg/openai
+- imports and re-exports @crit-fumble/discord, @crit-fumble/worldanvil, and @crit-fumble/openai
 - used by all other packages
 - defines models for all other packages
 - contains server-side utils, services, and controllers for all other packages
@@ -28,21 +28,21 @@
 - contains views (/w components), controllers (/w hooks, providers), services, and utils which wrap Next.js functionality or content
 - environment variables are ONLY read by configs, which are ONLY read by server-side services
 - used by web packages
-- minimal back end dependencies; prefer @cfg/core
+- minimal back end dependencies; prefer @crit-fumble/core
 ### packages/discord: Discord integration library
 - reads environment variables from .env files of the package it's installed into
 - wraps discord.js
-- imported into @cfg/core and re-exported
+- imported into @crit-fumble/core and re-exported
 - minimal dependencies; only ones required for discord packages
 ### packages/worldanvil: World Anvil integration library
 - wraps World Anvil API
 - provides models, services, and controllers for World Anvil integration
-- imported into @cfg/core and re-exported
+- imported into @crit-fumble/core and re-exported
 - minimal dependencies; only uses axios and yaml
 ### packages/openai: OpenAI integration library
 - wraps OpenAI API
 - provides services for AI-powered features
-- imported into @cfg/core and re-exported
+- imported into @crit-fumble/core and re-exported
 - minimal dependencies; only those required for OpenAI functionality
 
 ## TODO List
@@ -62,20 +62,20 @@
 ### Common Analysis & Setup (Completed)
 - [COMPLETED] Review each package.json to document current dependencies
   - **Updated Packages Structure:**
-    - **@cfg/core (v6.8.2)**: Dependencies: @prisma/client, @vercel/blob, @cfg/discord, @cfg/worldanvil, @cfg/openai
-    - **@cfg/next (v14.2.14)**: Dependencies: next, next-auth, react, react-dom, react-hook-form, react-hot-toast
-    - **@cfg/discord (v14.14.1)**: Dependencies: discord.js, @napi-rs/canvas, dotenv, node-cron, node-fetch
-    - **@cfg/worldanvil (v0.1.0)**: Dependencies: axios, yaml
-    - **@cfg/openai (v0.1.0)**: Not yet implemented
-    - **@cfg/next-web (v0.2.0)**: Dependencies: @cfg/core, @cfg/next
-    - **Discord packages (@cfg/discord-*)**: All depend only on @cfg/core
+    - **@crit-fumble/core (v6.8.2)**: Dependencies: @prisma/client, @vercel/blob, @crit-fumble/discord, @crit-fumble/worldanvil, @crit-fumble/openai
+    - **@crit-fumble/next (v14.2.14)**: Dependencies: next, next-auth, react, react-dom, react-hook-form, react-hot-toast
+    - **@crit-fumble/discord (v14.14.1)**: Dependencies: discord.js, @napi-rs/canvas, dotenv, node-cron, node-fetch
+    - **@crit-fumble/worldanvil (v0.1.0)**: Dependencies: axios, yaml
+    - **@crit-fumble/openai (v0.1.0)**: Not yet implemented
+    - **@crit-fumble/next-web (v0.2.0)**: Dependencies: @crit-fumble/core, @crit-fumble/next
+    - **Discord packages (@crit-fumble/discord-*)**: All depend only on @crit-fumble/core
 - [COMPLETED] Identify dependency violations (packages using deps not in their package.json)
 - [COMPLETED] Map out the correct dependency flow between packages
 - [COMPLETED] Create a dependency graph to visualize package relationships
-- [COMPLETED] Update package naming to use consistent `@cfg/` namespace
-- [COMPLETED] Update architecture to have specialized packages imported into @cfg/core
+- [COMPLETED] Update package naming to use consistent `@crit-fumble/` namespace
+- [COMPLETED] Update architecture to have specialized packages imported into @crit-fumble/core
 
-### @cfg/core
+### @crit-fumble/core
 - [COMPLETED] Implement config registry
   - Set up proper config type definitions
   - Create centralized registry for config access
@@ -87,23 +87,23 @@
   - Added `openai`: Used for AI integration in various commands
 - [COMPLETED] Add the following missing dependencies:
   - `chrono-node`: For date parsing in timestamp.js and event.js
-- [COMPLETED] Add dependency on @cfg/worldanvil package
-- [COMPLETED] Add dependency on @cfg/discord package
-- [COMPLETED] Add dependency on @cfg/openai package (placeholder for now)
+- [COMPLETED] Add dependency on @crit-fumble/worldanvil package
+- [COMPLETED] Add dependency on @crit-fumble/discord package
+- [COMPLETED] Add dependency on @crit-fumble/openai package (placeholder for now)
 - [FUTURE] Create schema validation for config types
 - [FUTURE] Check for and fix circular dependencies
 
-### @cfg/worldanvil
+### @crit-fumble/worldanvil
 - [COMPLETED] Create package structure with models/server/client pattern
 - [COMPLETED] Implement World Anvil API client
 - [COMPLETED] Implement World Anvil models
 - [COMPLETED] Implement World Anvil services
 - [COMPLETED] Implement World Anvil controllers
-- [COMPLETED] Update exports for proper integration with @cfg/core
+- [COMPLETED] Update exports for proper integration with @crit-fumble/core
 - [FUTURE] Implement remaining API endpoints
 - [FUTURE] Add comprehensive test coverage
 
-### @cfg/openai
+### @crit-fumble/openai
 - [TODO] Create new package with proper structure
 - [TODO] Implement OpenAI API client
 - [TODO] Implement models for OpenAI responses
@@ -111,33 +111,33 @@
 - [TODO] Create basic controllers for common OpenAI operations
 - [TODO] Set up environment variables and configs
 
-### @cfg/discord
+### @crit-fumble/discord
 - [FUTURE] Update path aliases for clean and consistent imports
 - [FUTURE] Add the following missing dependencies:
   - `@discordjs/voice`: Used in audio.js for voice channel functionality
-- [FUTURE] Fix import path in discord-bot/server.js (from `@cfg/discord/services/managers/...` to `@cfg/discord/services/managers/...`)
-- [FUTURE] Set up eslint-plugin-import with restrictions (can only import from @cfg/core)
+- [FUTURE] Fix import path in discord-bot/server.js (from `@crit-fumble/discord/services/managers/...` to `@crit-fumble/discord/services/managers/...`)
+- [FUTURE] Set up eslint-plugin-import with restrictions (can only import from @crit-fumble/core)
 
-### @cfg/next
-- [FUTURE] Fix circular reference in CharacterDashboard (currently imports from `@cfg/next/views/...` which is a self-reference)
-- [FUTURE] Fix imports referencing `@cfg/core/config/...` which doesn't exist in the package.json
-- [FUTURE] Set up eslint-plugin-import with restrictions (can only import from @cfg/core)
+### @crit-fumble/next
+- [FUTURE] Fix circular reference in CharacterDashboard (currently imports from `@crit-fumble/next/views/...` which is a self-reference)
+- [FUTURE] Fix imports referencing `@crit-fumble/core/config/...` which doesn't exist in the package.json
+- [FUTURE] Set up eslint-plugin-import with restrictions (can only import from @crit-fumble/core)
 - [FUTURE] Configure tsconfig.json to extend from root configuration
 
-### @cfg/next-web
+### @crit-fumble/next-web
 - [FUTURE] Fix any import violations in the codebase
 - [FUTURE] Configure tsconfig.json to extend from root configuration
 
-### @cfg/discord-bot
+### @crit-fumble/discord-bot
 - [BOT-TODO] Fix import paths that don't match actual file locations
 - [FUTURE] Configure tsconfig.json to extend from root configuration
 - [FUTURE] Set up CI checks to prevent future violations
 
-### @cfg/discord-app
+### @crit-fumble/discord-app
 - [FUTURE] Configure tsconfig.json to extend from root configuration
 - [FUTURE] Set up CI checks to prevent future violations
 
-### @cfg/discord-activity
+### @crit-fumble/discord-activity
 - [FUTURE] Configure tsconfig.json to extend from root configuration
 - [FUTURE] Set up CI checks to prevent future violations
 

@@ -1,5 +1,5 @@
 /**
- * @cfg/openai package
+ * @crit-fumble/openai package
  * Provides OpenAI API integration for Crit-Fumble
  */
 

@@ -1,11 +1,11 @@
-# @cfg/worldanvil
+# @crit-fumble/worldanvil
 
 A TypeScript client library for the World Anvil API, designed for Crit-Fumble applications.
 
 ## Installation
 
 ```bash
-npm install @cfg/worldanvil
+npm install @crit-fumble/worldanvil
 ```
 
 ## Features
@@ -21,7 +21,7 @@ npm install @cfg/worldanvil
 ### Authentication
 
 ```typescript
-import { WorldAnvilUserService } from '@cfg/worldanvil';
+import { WorldAnvilUserService } from '@crit-fumble/worldanvil';
 
 const userService = new WorldAnvilUserService();
 
@@ -36,7 +36,7 @@ const tokens = await userService.getAccessToken('auth-code-from-redirect', 'your
 ### Fetching User Data
 
 ```typescript
-import { WorldAnvilUserService } from '@cfg/worldanvil';
+import { WorldAnvilUserService } from '@crit-fumble/worldanvil';
 
 const userService = new WorldAnvilUserService();
 const user = await userService.getUser('access-token');
@@ -46,7 +46,7 @@ console.log(`Hello, ${user.username}!`);
 ### Fetching Worlds
 
 ```typescript
-import { WorldAnvilWorldService } from '@cfg/worldanvil';
+import { WorldAnvilWorldService } from '@crit-fumble/worldanvil';
 
 const worldService = new WorldAnvilWorldService();
 
@@ -63,7 +63,7 @@ const worldBySlug = await worldService.getWorldBySlug('access-token', 'world-slu
 ### Direct API Access
 
 ```typescript
-import { WorldAnvilApiService } from '@cfg/worldanvil';
+import { WorldAnvilApiService } from '@crit-fumble/worldanvil';
 
 const apiService = new WorldAnvilApiService('access-token');
 const response = await apiService.get('/user');

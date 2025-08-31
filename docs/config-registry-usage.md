@@ -14,7 +14,7 @@ import {
   ConfigSchema,         // Schema for typed configurations
   EnvironmentConfig,    // Application environment requirements
   ConfigValidationError // Validation error structure
-} from '@cfg/core/models';
+} from '@crit-fumble/core/models';
 ```
 
 ## Initialization
@@ -22,7 +22,7 @@ import {
 The ConfigRegistry now supports more flexible initialization options:
 
 ```typescript
-import { initializeConfig } from '@cfg/core/server/config';
+import { initializeConfig } from '@crit-fumble/core/server/config';
 
 // Simple initialization
 initializeConfig();
@@ -41,7 +41,7 @@ In your Next.js application, initialize the ConfigRegistry in your app's entry p
 
 ```typescript
 // app/layout.tsx or equivalent
-import { initializeConfig, verifyRequiredConfig, REQUIRED_CONFIG } from '@cfg/core/config';
+import { initializeConfig, verifyRequiredConfig, REQUIRED_CONFIG } from '@crit-fumble/core/config';
 
 // Initialize at application startup
 export function RootLayout({ children }: { children: React.ReactNode }) {
@@ -70,7 +70,7 @@ In your Discord bot, initialize at the entry point:
 
 ```typescript
 // index.js or server.js
-import { initializeConfig, verifyRequiredConfig, REQUIRED_CONFIG } from '@cfg/core/config';
+import { initializeConfig, verifyRequiredConfig, REQUIRED_CONFIG } from '@crit-fumble/core/config';
 
 // Initialize before starting the bot
 initializeConfig();
@@ -87,7 +87,7 @@ verifyRequiredConfig(REQUIRED_CONFIG.DISCORD_BOT);
 The ConfigRegistry provides robust error handling for validation:
 
 ```typescript
-import { verifyRequiredConfig, REQUIRED_CONFIG } from '@cfg/core/server/config';
+import { verifyRequiredConfig, REQUIRED_CONFIG } from '@crit-fumble/core/server/config';
 
 // Get validation errors without throwing
 const errors = verifyRequiredConfig(REQUIRED_CONFIG.NEXT_WEB, false);
@@ -108,7 +108,7 @@ try {
 Retrieve configuration filtered by environment:
 
 ```typescript
-import { ConfigRegistry } from '@cfg/core/server/config';
+import { ConfigRegistry } from '@crit-fumble/core/server/config';
 
 // Get all development-prefixed config with prefix removed
 const devConfig = ConfigRegistry.getInstance().getAll('development');
@@ -119,7 +119,7 @@ const devConfig = ConfigRegistry.getInstance().getAll('development');
 
 ```typescript
 // Import specific services
-import { discord, postgres, openAi } from '@cfg/core/config';
+import { discord, postgres, openAi } from '@crit-fumble/core/config';
 
 // Example: Connect to database
 async function connectToDb() {
@@ -144,7 +144,7 @@ const client = new Discord.Client({
 
 ```typescript
 import NextAuth from 'next-auth';
-import { authConfig } from '@cfg/core/config';
+import { authConfig } from '@crit-fumble/core/config';
 
 // Use the auth config directly
 export const { handlers, auth, signIn, signOut } = NextAuth(authConfig);
@@ -155,7 +155,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth(authConfig);
 For specialized cases, you can access the registry directly:
 
 ```typescript
-import { ConfigRegistry } from '@cfg/core/config';
+import { ConfigRegistry } from '@crit-fumble/core/config';
 
 // Get with fallback
 const apiKey = ConfigRegistry.getInstance().get('CUSTOM_API_KEY', 'default-key');
@@ -174,7 +174,7 @@ const allAwsConfig = ConfigRegistry.getInstance().getSection('AWS_');
 You can define typed schemas for your configuration:
 
 ```typescript
-import { ConfigSchema } from '@cfg/core/models';
+import { ConfigSchema } from '@crit-fumble/core/models';
 
 // Define a schema for database configuration
 interface DatabaseConfigSchema extends ConfigSchema {
@@ -203,7 +203,7 @@ function getDatabaseConfig(): DatabaseConfigSchema {
 The ConfigRegistry makes testing easier by allowing you to mock configuration:
 
 ```typescript
-import { ConfigRegistry } from '@cfg/core/config';
+import { ConfigRegistry } from '@crit-fumble/core/config';
 
 describe('My Service', () => {
   beforeEach(() => {

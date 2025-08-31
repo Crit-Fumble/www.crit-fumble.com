@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import type { ApiResponse } from '@cfg/models/Discord/types';
+import type { ApiResponse } from '@crit-fumble/models/Discord/types';
 
 /**
  * Main API route for Discord integration

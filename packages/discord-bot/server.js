@@ -1,12 +1,12 @@
 import {
   Client as DiscordClient, GatewayIntentBits, Partials, ActivityType,
 } from 'discord.js';
-import { EventManager } from '@cfg/discord/services/managers/EventManager.js';
-import { CommandManager } from '@cfg/discord/services/managers/CommandManager.js';
-import { DatabaseManager } from '@cfg/discord/services/managers/DatabaseManager.js';
-import { CronJobManager } from '@cfg/discord/services/managers/CronJobManager.js';
-import { createWinstonLogger } from '@cfg/core/utils/Logger.js';
-import { ApiManager } from '@cfg/discord/services/managers/ApiManager.js';
+import { EventManager } from '@crit-fumble/discord/services/managers/EventManager.js';
+import { CommandManager } from '@crit-fumble/discord/services/managers/CommandManager.js';
+import { DatabaseManager } from '@crit-fumble/discord/services/managers/DatabaseManager.js';
+import { CronJobManager } from '@crit-fumble/discord/services/managers/CronJobManager.js';
+import { createWinstonLogger } from '@crit-fumble/core/utils/Logger.js';
+import { ApiManager } from '@crit-fumble/discord/services/managers/ApiManager.js';
 
 export class DiscordBotServer extends DiscordClient {
   constructor() {

@@ -75,7 +75,7 @@ module.exports = {
             position: "before"
           },
           {
-            pattern: "@cfg/**",
+            pattern: "@crit-fumble/**",
             group: "internal",
             position: "after"
           }

@@ -1,4 +1,4 @@
 "use server";
-import { discord as config} from '@cfg/core/server/config/services';
+import { discord as config} from '@crit-fumble/core/server/config/services';
 
 // https://discord.com/developers/docs/reference

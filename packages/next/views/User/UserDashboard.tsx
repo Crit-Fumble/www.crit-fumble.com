@@ -1,7 +1,7 @@
 "use client";
 
 import { Card, CardContent, CardHeader } from "../components/blocks/Card";
-import { DEFAULT } from "@cfg/core/server/config/views";
+import { DEFAULT } from "@crit-fumble/core/server/config/views";
 import { useSession } from "next-auth/react";
 import { useMemo, useState } from "react";
 import { Providers } from "../../client/controllers/providers";

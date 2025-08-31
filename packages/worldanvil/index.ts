@@ -1,5 +1,5 @@
 /**
- * @cfg/worldanvil package
+ * @crit-fumble/worldanvil package
  * Provides World Anvil API integration for Crit-Fumble
  */
 

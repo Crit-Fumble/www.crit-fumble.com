@@ -1,6 +1,6 @@
-# Publishing @cfg/worldanvil to npm
+# Publishing @crit-fumble/worldanvil to npm
 
-This guide covers the process of publishing the @cfg/worldanvil package to the npm registry.
+This guide covers the process of publishing the @crit-fumble/worldanvil package to the npm registry.
 
 ## Prerequisites
 
@@ -11,7 +11,7 @@ This guide covers the process of publishing the @cfg/worldanvil package to the n
 
 2. If this is an organization package, make sure you're a member of the organization:
    ```
-   npm org ls @cfg
+   npm org ls @crit-fumble
    ```
 
 ## Before Publishing
@@ -87,17 +87,17 @@ These scripts will automatically:
 
 2. Update dependent packages to use the new version:
    ```
-   npm update @cfg/worldanvil
+   npm update @crit-fumble/worldanvil
    ```
 
 ## Using the Published Package
 
 In other projects, install the package:
 ```
-npm install @cfg/worldanvil
+npm install @crit-fumble/worldanvil
 ```
 
 For development, you can use the local version:
 ```
-npm install --workspace=@cfg/worldanvil
+npm install --workspace=@crit-fumble/worldanvil
 ```

@@ -1,6 +1,6 @@
 import { prisma } from '../../data';
 
-// Using the centralized Prisma client from @cfg/core
+// Using the centralized Prisma client from @crit-fumble/core
 
 /**
  * Wrapper for database operations to ensure proper connection handling

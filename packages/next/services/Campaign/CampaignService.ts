@@ -1,5 +1,5 @@
 import { randomUUID } from 'crypto';
-import { slugify } from '@cfg/core/utils/textUtils';
+import { slugify } from '@crit-fumble/core/utils/textUtils';
 import DatabaseService, { withDb } from '../DatabaseService';
 
 export const getCampaign = async ( campaign: any ) => {

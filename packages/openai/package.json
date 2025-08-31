@@ -1,5 +1,5 @@
 {
-  "name": "@cfg/openai",
+  "name": "@crit-fumble/openai",
   "version": "0.1.0",
   "description": "OpenAI API integration for Crit-Fumble",
   "type": "module",
@@ -38,7 +38,7 @@
   "author": "Crit-Fumble",
   "license": "MIT",
   "dependencies": {
-    "@cfg/core": "workspace:^6.8.2",
+    "@crit-fumble/core": "workspace:^6.8.2",
     "openai": "^5.16.0"
   },
   "devDependencies": {

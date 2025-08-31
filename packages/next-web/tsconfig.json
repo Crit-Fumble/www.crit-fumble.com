@@ -22,9 +22,9 @@
       }
     ],
     "paths": {
-      "@cfg/*": ["../../packages/*"],
-      "@cfg-web/*": ["../*"],
-      "@cfg-discord/*": ["../../packages/discord/*"],
+      "@crit-fumble/*": ["../../packages/*"],
+      "@crit-fumble-web/*": ["../*"],
+      "@crit-fumble-discord/*": ["../../packages/discord/*"],
       "@lib/*": ["../*"]
     }
   },

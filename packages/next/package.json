@@ -1,5 +1,5 @@
 {
-    "name": "@cfg/next",
+    "name": "@crit-fumble/next",
     "version": "14.2.14",
     "description": "Next.js utils for the Crit-Fumble web application",
     "main": "index.js",

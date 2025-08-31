@@ -1,4 +1,4 @@
-import { CronJob } from '@cfg/core/models/Discord/DiscordBotCronJob.js';
+import { CronJob } from '@crit-fumble/discord/models/DiscordBotCronJob.js';
 import { GuildScheduledEventStatus } from 'discord.js';
 
 const MINUTE = 1000 * 60;

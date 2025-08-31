@@ -11,9 +11,9 @@
  * as it provides a stable identifier that won't change if the character's
  * name or other properties are updated.
  */
-import { createCharacterHandler, deleteCharacterHandler, getCharacterHandler, updateCharacterHandler } from '@cfg/next/controllers/Character/CharacterController';
+import { createCharacterHandler, deleteCharacterHandler, getCharacterHandler, updateCharacterHandler } from '@crit-fumble/next/controllers/Character/CharacterController';
 import { NextRequest, NextResponse } from 'next/server';
-import { Character } from '@cfg/models/Character/Character';
+import { Character } from '@crit-fumble/models/Character/Character';
 import { getServerSession } from '../../../../../next/services/AuthService';
 
 export async function GET(
