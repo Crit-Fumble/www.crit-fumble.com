@@ -1,30 +1,14 @@
-import { getOpenAiConfig } from '../../../server/configs';
+import { getOpenAiConfig, setOpenAiConfig, resetOpenAiConfigForTests, REQUIRED_OPENAI_CONFIG_KEYS } from '../../../server/configs';
 
 describe('OpenAI Config', () => {
-  const originalEnv = process.env;
-
+  // Reset config to default before each test
   beforeEach(() => {
-    jest.resetModules();
-    process.env = { ...originalEnv };
-  });
-
-  afterEach(() => {
-    process.env = originalEnv;
+    resetOpenAiConfigForTests();
   });
 
   describe('getOpenAiConfig', () => {
-    it('should return default configuration when no environment variables are set', () => {
-      // Clear any OpenAI-related environment variables
-      delete process.env.OPENAI_API_KEY;
-      delete process.env.OPENAI_KEY;
-      delete process.env.OPENAI_CHAT_MODEL;
-      delete process.env.OPENAI_EMBEDDING_MODEL;
-      delete process.env.OPENAI_TEMPERATURE;
-      delete process.env.OPENAI_MAX_TOKENS;
-      delete process.env.OPENAI_IMAGE_SIZE;
-      delete process.env.OPENAI_ORGANIZATION;
-
-      // Spy on console.warn
+    it('should return default configuration initially', () => {
+      // Spy on console.warn to check for missing API key warning
       const consoleWarnSpy = jest.spyOn(console, 'warn').mockImplementation();
 
       const config = getOpenAiConfig();
@@ -39,31 +23,21 @@ describe('OpenAI Config', () => {
         organization: undefined,
       });
 
-      expect(consoleWarnSpy).toHaveBeenCalledWith('OpenAI API key not found in environment variables');
+      expect(consoleWarnSpy).toHaveBeenCalledWith('Missing required OpenAI config keys: apiKey');
       consoleWarnSpy.mockRestore();
     });
 
-    it('should use OPENAI_API_KEY environment variable', () => {
-      process.env.OPENAI_API_KEY = 'test-api-key';
-      const config = getOpenAiConfig();
-      expect(config.apiKey).toBe('test-api-key');
-    });
-
-    it('should fall back to OPENAI_KEY if OPENAI_API_KEY is not set', () => {
-      delete process.env.OPENAI_API_KEY;
-      process.env.OPENAI_KEY = 'fallback-key';
-      const config = getOpenAiConfig();
-      expect(config.apiKey).toBe('fallback-key');
-    });
-
-    it('should use custom environment variable values when provided', () => {
-      process.env.OPENAI_API_KEY = 'test-api-key';
-      process.env.OPENAI_CHAT_MODEL = 'gpt-3.5-turbo';
-      process.env.OPENAI_EMBEDDING_MODEL = 'text-embedding-ada-002';
-      process.env.OPENAI_TEMPERATURE = '0.5';
-      process.env.OPENAI_MAX_TOKENS = '2000';
-      process.env.OPENAI_IMAGE_SIZE = '512x512';
-      process.env.OPENAI_ORGANIZATION = 'test-org';
+    it('should use configuration values set via setOpenAiConfig', () => {
+      // Set custom configuration
+      setOpenAiConfig({
+        apiKey: 'test-api-key',
+        defaultChatModel: 'gpt-3.5-turbo',
+        defaultEmbeddingModel: 'text-embedding-ada-002',
+        defaultTemperature: 0.5,
+        defaultMaxTokens: 2000,
+        defaultImageSize: '512x512',
+        organization: 'test-org',
+      });
 
       const config = getOpenAiConfig();
 
@@ -78,16 +52,27 @@ describe('OpenAI Config', () => {
       });
     });
 
-    it('should handle invalid numeric environment variables', () => {
-      process.env.OPENAI_API_KEY = 'test-api-key';
-      process.env.OPENAI_TEMPERATURE = 'not-a-number';
-      process.env.OPENAI_MAX_TOKENS = 'invalid';
+    it('should allow partial configuration updates', () => {
+      // First set a complete config
+      setOpenAiConfig({
+        apiKey: 'test-api-key',
+        defaultChatModel: 'gpt-3.5-turbo',
+        defaultTemperature: 0.7,
+      });
+
+      // Then update just one property
+      setOpenAiConfig({
+        defaultTemperature: 0.9,
+      });
 
       const config = getOpenAiConfig();
+      expect(config.apiKey).toBe('test-api-key');
+      expect(config.defaultChatModel).toBe('gpt-3.5-turbo');
+      expect(config.defaultTemperature).toBe(0.9);
+    });
 
-      // Should use the default values for invalid inputs
-      expect(config.defaultTemperature).toBe(NaN); // parseFloat returns NaN for invalid inputs
-      expect(config.defaultMaxTokens).toBe(NaN); // parseInt returns NaN for invalid inputs
+    it('should expose the required config keys', () => {
+      expect(REQUIRED_OPENAI_CONFIG_KEYS).toContain('apiKey');
     });
   });
 });

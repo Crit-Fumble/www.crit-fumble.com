@@ -917,8 +917,9 @@ export class WorldAnvilController {
   /**
    * Delete a variable
    * @param variableId The ID of the variable to delete
+   * @returns Success response
    */
-  async deleteVariable(variableId: string): Promise<void> {
+  async deleteVariable(variableId: string): Promise<{ success: boolean }> {
     return this.variableService.deleteVariable(variableId);
   }
 
@@ -960,8 +961,9 @@ export class WorldAnvilController {
   /**
    * Delete a variable collection
    * @param collectionId The ID of the collection to delete
+   * @returns Success response
    */
-  async deleteVariableCollection(collectionId: string): Promise<void> {
+  async deleteVariableCollection(collectionId: string): Promise<{ success: boolean }> {
     return this.variableService.deleteVariableCollection(collectionId);
   }
 

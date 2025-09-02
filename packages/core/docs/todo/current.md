@@ -63,7 +63,7 @@
 - [BOT-WIP] Implement remaining API endpoints
 - [BOT-WIP] finish controller implementation and bring in all user-facing service methods
 - [BOT-WIP] Add comprehensive test coverage
-- [BOT-TODO] remove all completed FUTURE: and TODO: comments
+- [BOT-TODO] remove all completed FUTURE: and TODO: comments in code base
 
 ### @crit-fumble/openai
 - [COMPLETED] Create new package with proper structure
@@ -74,8 +74,8 @@
 - [COMPLETED] Set up environment variables and configs
 - [COMPLETED] Add comprehensive test coverage
 - [BOT-TODO] update configs to simply accept a value instead of reading from .env
-- [BOT-TODO] implement SSO
-- [BOT-TODO] remove all completed FUTURE: and TODO: comments
+- [BOT-TODO] remove all completed FUTURE: and TODO: comments in code base
+- [FUTURE] implement SSO
 
 ### @crit-fumble/discord
 - [COMPLETED] update package structure to match openai and worldanvil libraries
@@ -84,7 +84,7 @@
 - [COMPLETED] Create basic controllers for common Discord operations
 - [COMPLETED] Set up environment variables and configs
 - [COMPLETED] Add comprehensive test coverage
-- [BOT-TODO] remove all completed FUTURE: and TODO: comments
+- [BOT-TODO] remove all completed FUTURE: and TODO: comments in code base
 
 ### @crit-fumble/core
 - [COMPLETED] Implement config registry
@@ -104,15 +104,15 @@
 - [BOT-TODO] link discord and worldanvil services in UserController, WorldController, and RpgSystemController in packages\core\server\controllers
 - [BOT-TODO] implement a "Marketplace" currency system "Crit-Coins" in packages\core\server\services\coinService.ts; the name of the  coins can be determined in a config we will pass in from the host project; we need methods to add and remove coins; we will build a wrapper package for stripe to handle the payment processing in the future, but we will want some methods we can use during the testing phase to give our coins for free
 - [BOT-TODO] create a server controller for the coinService in packages\core\server\controllers\coinController.ts
-- [FUTURE] Create schema validation for config types
-- [FUTURE] Check for and fix circular dependencies
-- [BOT-TODO] remove all completed FUTURE: and TODO: comments
+- [BOT-TODO] Create schema validation for config types
+- [BOT-TODO] Check for and fix circular dependencies
+- [BOT-TODO] remove all completed FUTURE: and TODO: comments in code base
 
 ### @crit-fumble/next
 - [BOT-TODO] update package structure to match other libraries
 - [BOT-TODO] Set up eslint-plugin-import with restrictions (can only import from @crit-fumble/core)
 - [BOT-TODO] Configure tsconfig.json to extend from root configuration
-- [BOT-TODO] remove all completed FUTURE: and TODO: comments
+- [BOT-TODO] remove all completed FUTURE: and TODO: comments in code base
 
 ### @crit-fumble/next-web
 - [BOT-TODO] Fix any import violations in the codebase
@@ -120,7 +120,7 @@
 - [BOT-TODO] Set up an api endpoint collection for use with the discord-bot we'll be updating later in packages\discord-bot
 - [BOT-TODO] Set up an api endpoint collection for use by a Discord App
 - [BOT-TODO] Set up a special view for the discord activity
-- [BOT-TODO] remove all completed FUTURE: and TODO: comments
+- [BOT-TODO] remove all completed FUTURE: and TODO: comments in code base
 
 ### @crit-fumble/discord-bot
 - [BOT-TODO] Fix import paths that don't match actual file locations
@@ -130,14 +130,14 @@
 - [BOT-TODO] Update bot to use website endpoints for user authentication
 - [BOT-TODO] Ensure persistent bot is processing scheduled cron tasks
 - [BOT-TODO] Set up CI checks to prevent future violations
-- [BOT-TODO] remove all completed FUTURE: and TODO: comments
+- [BOT-TODO] remove all completed FUTURE: and TODO: comments in code base
 
 ### Future Library Packages
 - [FUTURE] Scope out a package for wrapping Stripe payments
 - [FUTURE] Scope out package for Roll20 Integration
 - [FUTURE] Scope out a package for a FoundryVTT integration
-- [FUTURE] Scope out a Docker instance manager using Docker and either fly.io or vast.ai to deploy images
-- [FUTURE] Scope out a FoundryVTT instance manager using Docker
+- [FUTURE] Scope out a FoundryVTT instance manager package using Docker and either fly.io or vast.ai
+- [FUTURE] Scope out a Docker instance manager package using Docker and either fly.io or vast.ai to deploy SteamCMD servers
 - [FUTURE] Scope out package for Steam integration, with an instance manager using Docker for hosting game servers
 - [FUTURE] Scope out package for Twitch integration
 - [FUTURE] Scope out package for YouTube integration

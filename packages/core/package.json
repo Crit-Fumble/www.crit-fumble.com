@@ -40,9 +40,9 @@
     "author": "Crit-Fumble",
     "license": "MIT",
     "dependencies": {
-        "@crit-fumble/discord": "^14.14.1",
+        "@crit-fumble/discord": "^14.14.1-r1",
         "@crit-fumble/openai": "^5.16.0",
-        "@crit-fumble/worldanvil": "^0.1.0",
+        "@crit-fumble/worldanvil": "^2.0.0-r1",
         "@dice-roller/rpg-dice-roller": "^5.5.1",
         "@napi-rs/canvas": "^0.1.44",
         "@prisma/client": "^6.8.2",

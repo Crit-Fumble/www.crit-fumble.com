@@ -150,7 +150,7 @@ export class WorldAnvilVariableService {
    * List variables in a specific variable collection
    * @param collectionId The collection ID
    * @param options Pagination options
-   * @returns Array of variables in the collection (not the full response object)
+   * @returns Array of WorldAnvilVariable objects (not the full response object)
    * 
    * Based on docs/boromir/yml/parts/variable/variables-by-variable-collection.yml (listVariablesByVariableCollection)
    */
@@ -178,7 +178,7 @@ export class WorldAnvilVariableService {
 
   /**
    * Create a new variable collection
-   * @param collectionData The collection data (requires title and world)
+   * @param collectionData The collection data (requires name and world)
    * @returns Created variable collection reference
    * 
    * Based on docs/boromir/yml/parts/variable/variable-collection.yml (createVariableCollection)
@@ -219,7 +219,7 @@ export class WorldAnvilVariableService {
    * List variable collections in a specific world
    * @param worldId The world ID
    * @param options Pagination options
-   * @returns List of variable collections in the world
+   * @returns Array of WorldAnvilVariableCollection objects (not the full response object)
    * 
    * Based on docs/boromir/yml/parts/variable/world-variablecollections.yml (listVariableCollectionByWorld)
    */

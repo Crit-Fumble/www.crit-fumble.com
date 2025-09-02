@@ -37,18 +37,27 @@ const completion = await openai.createCompletion({
 console.log(completion.choices[0].message.content);
 ```ii
 
-### Using with Environment Variables
+### Using with Configuration
 
 ```typescript
-import { OpenAIClient } from '@crit-fumble/openai';
+import { OpenAiApiClient } from '@crit-fumble/openai/server';
+import { setOpenAiConfig } from '@crit-fumble/openai/server/configs';
 
-// Will read OPENAI_API_KEY from environment
-const openai = new OpenAIClient();
+// Configure OpenAI globally
+setOpenAiConfig({
+  apiKey: 'your-api-key',
+  defaultChatModel: 'gpt-4',
+  defaultTemperature: 0.7
+});
 
-// Or explicitly from ConfigRegistry
-import { ConfigRegistry } from '@crit-fumble/core';
-const apiKey = ConfigRegistry.getInstance().get('OPENAI_API_KEY');
-const openai = new OpenAIClient(apiKey);
+// Client will use the global configuration
+const openai = new OpenAiApiClient();
+
+// Or provide specific config just for this client
+const openai = new OpenAiApiClient({
+  apiKey: 'different-api-key',
+  defaultChatModel: 'gpt-3.5-turbo'
+});
 ```
 
 ### Advanced Configuration
@@ -69,11 +78,20 @@ const openai = new OpenAIClient(config);
 
 ## Configuration
 
-Configure the package by setting environment variables:
+Configure the package using the `setOpenAiConfig` function:
 
-```
-OPENAI_API_KEY=your-api-key
-OPENAI_ORGANIZATION=your-organization-id (optional)
+```typescript
+import { setOpenAiConfig } from '@crit-fumble/openai/server/configs';
+
+setOpenAiConfig({
+  apiKey: 'your-api-key',                      // Required
+  organization: 'your-organization-id',        // Optional
+  defaultChatModel: 'gpt-4',                   // Default model for chat completions
+  defaultEmbeddingModel: 'text-embedding-3-small', // Default model for embeddings
+  defaultTemperature: 0.7,                     // Default temperature for generations
+  defaultMaxTokens: 1000,                      // Default maximum tokens for responses
+  defaultImageSize: '1024x1024'                // Default size for image generations
+});
 ```
 
 ## License
