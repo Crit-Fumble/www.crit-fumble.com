@@ -14,15 +14,23 @@ import {
   WorldTimelinesResponse, WorldHistoriesResponse
 } from '../../models/WorldAnvilTimeline';
 import { 
-  SubscriberGroupInput,
-  SubscriberGroupListOptions, SubscriberGroupResponse
+  SubscriberGroupInput, SubscriberGroupUpdateInput,
+  SubscriberGroupListOptions, SubscriberGroupResponse, WorldSubscriberGroupsResponse
 } from '../../models/WorldAnvilSubscriberGroup';
 import { 
   WorldAnvilArticleInput, WorldAnvilArticleResponse, ArticleListOptions, ArticleListResponse
 } from '../../models/WorldAnvilArticle';
 import { 
-  ImageListOptions, ImageResponse, WorldImagesResponse
+  ImageListOptions, ImageResponse, ImageUpdateInput, WorldImagesResponse
 } from '../../models/WorldAnvilImage';
+
+// Define image input interface (not exported from the model file)
+interface ImageInput {
+  title: string;
+  description?: string;
+  world: { id: string };
+  [key: string]: any;
+}
 import { 
   BlockInput, BlockFolderListOptions, BlockResponse, BlockFolderBlocksResponse
 } from '../../models/WorldAnvilBlock';
@@ -33,10 +41,13 @@ import {
   CategoryInput, CategoryResponse
 } from '../../models/WorldAnvilCategory';
 import { 
-  ManuscriptInput, ManuscriptResponse
+  ManuscriptInput, ManuscriptResponse, ManuscriptUpdateInput, WorldManuscriptsResponse, ManuscriptListOptions
 } from '../../models/WorldAnvilManuscript';
 import { 
-  MapInput, MapResponse
+  MapInput, MapResponse, MapUpdateInput, WorldMapsResponse, MapListOptions,
+  LayerInput, LayerResponse, LayerUpdateInput, LayerRef, MapLayersResponse,
+  MarkerGroupInput, MarkerGroupResponse, MarkerGroupUpdateInput, MarkerGroupRef,
+  MapMarkerGroupsResponse, MapMarkersResponse, MarkerGroupMarkersResponse
 } from '../../models/WorldAnvilMap';
 import { 
   NotebookInput, NotebookResponse
@@ -44,6 +55,14 @@ import {
 import { 
   SecretInput, SecretResponse
 } from '../../models/WorldAnvilSecret';
+import {
+  WorldAnvilVariable, WorldAnvilVariableInput, WorldAnvilVariableUpdate,
+  WorldAnvilVariableCollection, WorldAnvilVariableCollectionInput, WorldAnvilVariableCollectionUpdate,
+  PaginationOptions
+} from '../services/WorldAnvilVariableService';
+import {
+  BlockTemplateRef, BlockTemplateListOptions, UserBlockTemplatesResponse
+} from '../services/WorldAnvilBlockTemplateService';
 
 export class WorldAnvilController {
   private apiClient: WorldAnvilApiClient;
@@ -54,6 +73,7 @@ export class WorldAnvilController {
   private rpgSystemService: services.WorldAnvilRpgSystemService;
   private articleService: services.WorldAnvilArticleService;
   private blockService: services.WorldAnvilBlockService;
+  private blockTemplateService: services.WorldAnvilBlockTemplateService;
   private canvasService: services.WorldAnvilCanvasService;
   private categoryService: services.WorldAnvilCategoryService;
   private imageService: services.WorldAnvilImageService;
@@ -63,6 +83,7 @@ export class WorldAnvilController {
   private secretService: services.WorldAnvilSecretService;
   private subscriberGroupService: services.WorldAnvilSubscriberGroupService;
   private timelineService: services.WorldAnvilTimelineService;
+  private variableService: services.WorldAnvilVariableService;
   // private campaignService: services.WorldAnvilCampaignService;
 
   constructor(customConfig?: WorldAnvilConfig) {
@@ -76,6 +97,7 @@ export class WorldAnvilController {
     this.rpgSystemService = new services.WorldAnvilRpgSystemService(_client);
     this.articleService = new services.WorldAnvilArticleService(_client);
     this.blockService = new services.WorldAnvilBlockService(_client);
+    this.blockTemplateService = new services.WorldAnvilBlockTemplateService(_client);
     this.canvasService = new services.WorldAnvilCanvasService(_client);
     this.categoryService = new services.WorldAnvilCategoryService(_client);
     this.imageService = new services.WorldAnvilImageService(_client);
@@ -85,6 +107,7 @@ export class WorldAnvilController {
     this.secretService = new services.WorldAnvilSecretService(_client);
     this.subscriberGroupService = new services.WorldAnvilSubscriberGroupService(_client);
     this.timelineService = new services.WorldAnvilTimelineService(_client);
+    this.variableService = new services.WorldAnvilVariableService(_client);
     // this.campaignService = new services.WorldAnvilCampaignService(_client);
   }
 
@@ -297,7 +320,7 @@ export class WorldAnvilController {
   /**
    * Update an image
    */
-  async updateImage(imageId: string, imageData: Record<string, any>): Promise<{ id: string; title: string }> {
+  async updateImage(imageId: string, imageData: ImageUpdateInput): Promise<{ id: string; title: string }> {
     return this.imageService.updateImage(imageId, imageData);
   }
 
@@ -313,6 +336,15 @@ export class WorldAnvilController {
    */
   async getImagesByWorld(worldId: string, options: ImageListOptions = {}): Promise<WorldImagesResponse> {
     return this.imageService.getImagesByWorld(worldId, options);
+  }
+  
+  /**
+   * Create a new image
+   * Note: According to the Boromir API documentation, image upload functionality is not available
+   */
+  async createImage(imageData: ImageInput): Promise<{ id: string; title: string }> {
+    // Note: Image upload via API is not yet supported by WorldAnvil
+    throw new Error('Image upload via API is not yet supported by WorldAnvil');
   }
 
   // Notebook methods
@@ -394,7 +426,7 @@ export class WorldAnvilController {
   /**
    * Update a subscriber group
    */
-  async updateSubscriberGroup(subscriberGroupId: string, subscriberGroupData: Record<string, any>): Promise<{ id: string; title: string }> {
+  async updateSubscriberGroup(subscriberGroupId: string, subscriberGroupData: SubscriberGroupUpdateInput): Promise<{ id: string; title: string }> {
     return this.subscriberGroupService.updateSubscriberGroup(subscriberGroupId, subscriberGroupData);
   }
 
@@ -443,9 +475,277 @@ export class WorldAnvilController {
   }
 
   /**
-   * Get timelines by world
+   * Get a list of timelines in a world
    */
   async getTimelinesByWorld(worldId: string, options: TimelineListOptions = {}): Promise<WorldTimelinesResponse> {
     return this.timelineService.getTimelinesByWorld(worldId, options);
   }
+
+  // Map methods
+
+  /**
+   * Get map by ID
+   */
+  async getMapById(mapId: string, granularity: '-1' | '0' | '2' = '0'): Promise<MapResponse> {
+    return this.mapService.getMapById(mapId, granularity);
+  }
+
+  /**
+   * Create a new map
+   */
+  async createMap(mapData: MapInput): Promise<{ id: string; title: string }> {
+    return this.mapService.createMap(mapData);
+  }
+
+  /**
+   * Update a map
+   */
+  async updateMap(mapId: string, mapData: MapUpdateInput): Promise<{ id: string; title: string }> {
+    return this.mapService.updateMap(mapId, mapData);
+  }
+
+  /**
+   * Delete a map
+   */
+  async deleteMap(mapId: string): Promise<{ success: boolean }> {
+    return this.mapService.deleteMap(mapId);
+  }
+
+  /**
+   * Get maps by world
+   * @param worldId The ID of the world
+   * @param options Options for pagination
+   */
+  async getMapsByWorld(worldId: string, options: MapListOptions = {}): Promise<WorldMapsResponse> {
+    return this.mapService.getMapsByWorld(worldId, options);
+  }
+
+  /**
+   * Get a layer by ID
+   */
+  async getLayerById(layerId: string, granularity: '-1' | '0' | '2' = '0'): Promise<LayerResponse> {
+    return this.mapService.getLayerById(layerId, granularity);
+  }
+
+  /**
+   * Create a new layer
+   */
+  async createLayer(layerData: LayerInput): Promise<LayerRef> {
+    return this.mapService.createLayer(layerData);
+  }
+
+  /**
+   * Update a layer
+   */
+  async updateLayer(layerId: string, layerData: LayerUpdateInput): Promise<LayerRef> {
+    return this.mapService.updateLayer(layerId, layerData);
+  }
+
+  /**
+   * Delete a layer
+   */
+  async deleteLayer(layerId: string): Promise<{ success: boolean }> {
+    return this.mapService.deleteLayer(layerId);
+  }
+
+  /**
+   * Get layers for a map
+   */
+  async getLayersByMap(mapId: string, options: MapListOptions = {}): Promise<MapLayersResponse> {
+    return this.mapService.getLayersByMap(mapId, options);
+  }
+
+  /**
+   * Get a marker group by ID
+   */
+  async getMarkerGroupById(markerGroupId: string, granularity: '-1' | '0' | '2' = '0'): Promise<MarkerGroupResponse> {
+    return this.mapService.getMarkerGroupById(markerGroupId, granularity);
+  }
+
+  /**
+   * Create a new marker group
+   */
+  async createMarkerGroup(markerGroupData: MarkerGroupInput): Promise<MarkerGroupRef> {
+    return this.mapService.createMarkerGroup(markerGroupData);
+  }
+
+  /**
+   * Update a marker group
+   */
+  async updateMarkerGroup(markerGroupId: string, markerGroupData: MarkerGroupUpdateInput): Promise<MarkerGroupRef> {
+    return this.mapService.updateMarkerGroup(markerGroupId, markerGroupData);
+  }
+
+  /**
+   * Delete a marker group
+   */
+  async deleteMarkerGroup(markerGroupId: string): Promise<{ success: boolean }> {
+    return this.mapService.deleteMarkerGroup(markerGroupId);
+  }
+
+  /**
+   * Get marker groups for a map
+   */
+  async getMarkerGroupsByMap(mapId: string, options: MapListOptions = {}): Promise<MapMarkerGroupsResponse> {
+    return this.mapService.getMarkerGroupsByMap(mapId, options);
+  }
+
+  /**
+   * Get markers for a map
+   */
+  async getMarkersByMap(mapId: string, options: MapListOptions = {}): Promise<MapMarkersResponse> {
+    return this.mapService.getMarkersByMap(mapId, options);
+  }
+
+  /**
+   * Get markers for a marker group
+   */
+  async getMarkersByMarkerGroup(markerGroupId: string, options: MapListOptions = {}): Promise<MarkerGroupMarkersResponse> {
+    return this.mapService.getMarkersByMarkerGroup(markerGroupId, options);
+  }
+
+  // Manuscript methods
+
+  /**
+   * Get manuscript by ID
+   */
+  async getManuscriptById(manuscriptId: string, granularity: '-1' | '0' | '1' | '2' = '0'): Promise<ManuscriptResponse> {
+    return this.manuscriptService.getManuscriptById(manuscriptId, granularity);
+  }
+
+  /**
+   * Create a new manuscript
+   */
+  async createManuscript(manuscriptData: ManuscriptInput): Promise<{ id: string; title: string }> {
+    return this.manuscriptService.createManuscript(manuscriptData);
+  }
+
+  /**
+   * Update a manuscript
+   */
+  async updateManuscript(manuscriptId: string, manuscriptData: ManuscriptUpdateInput): Promise<{ id: string; title: string }> {
+    return this.manuscriptService.updateManuscript(manuscriptId, manuscriptData);
+  }
+
+  /**
+   * Delete a manuscript
+   */
+  async deleteManuscript(manuscriptId: string): Promise<{ success: boolean }> {
+    return this.manuscriptService.deleteManuscript(manuscriptId);
+  }
+
+  /**
+   * Get manuscripts by world
+   */
+  async getManuscriptsByWorld(worldId: string, options: ManuscriptListOptions = {}): Promise<WorldManuscriptsResponse> {
+    return this.manuscriptService.getManuscriptsByWorld(worldId, options);
+  }
+
+  // Variable methods
+
+  /**
+   * Get a variable by ID
+   * @param variableId The ID of the variable to get
+   * @param granularity The detail level of the response
+   */
+  async getVariable(variableId: string, granularity: number = 0): Promise<WorldAnvilVariable> {
+    return this.variableService.getVariable(variableId, granularity);
+  }
+
+  /**
+   * Create a new variable
+   * @param variableData The variable data
+   */
+  async createVariable(variableData: WorldAnvilVariableInput): Promise<WorldAnvilVariable> {
+    return this.variableService.createVariable(variableData);
+  }
+
+  /**
+   * Update an existing variable
+   * @param variableId The ID of the variable to update
+   * @param variableData The updated variable data
+   */
+  async updateVariable(variableId: string, variableData: WorldAnvilVariableUpdate): Promise<WorldAnvilVariable> {
+    return this.variableService.updateVariable(variableId, variableData);
+  }
+
+  /**
+   * Delete a variable
+   * @param variableId The ID of the variable to delete
+   */
+  async deleteVariable(variableId: string): Promise<void> {
+    return this.variableService.deleteVariable(variableId);
+  }
+
+  /**
+   * List variables in a specific variable collection
+   * @param collectionId The collection ID
+   * @param options Pagination options
+   */
+  async listVariablesByCollection(collectionId: string, options: PaginationOptions = {}): Promise<WorldAnvilVariable[]> {
+    return this.variableService.listVariablesByCollection(collectionId, options);
+  }
+
+  /**
+   * Get a variable collection by ID
+   * @param collectionId The ID of the collection to get
+   * @param granularity The detail level of the response
+   */
+  async getVariableCollection(collectionId: string, granularity: number = 0): Promise<WorldAnvilVariableCollection> {
+    return this.variableService.getVariableCollection(collectionId, granularity);
+  }
+
+  /**
+   * Create a new variable collection
+   * @param collectionData The collection data
+   */
+  async createVariableCollection(collectionData: WorldAnvilVariableCollectionInput): Promise<WorldAnvilVariableCollection> {
+    return this.variableService.createVariableCollection(collectionData);
+  }
+
+  /**
+   * Update an existing variable collection
+   * @param collectionId The ID of the collection to update
+   * @param collectionData The updated collection data
+   */
+  async updateVariableCollection(collectionId: string, collectionData: WorldAnvilVariableCollectionUpdate): Promise<WorldAnvilVariableCollection> {
+    return this.variableService.updateVariableCollection(collectionId, collectionData);
+  }
+
+  /**
+   * Delete a variable collection
+   * @param collectionId The ID of the collection to delete
+   */
+  async deleteVariableCollection(collectionId: string): Promise<void> {
+    return this.variableService.deleteVariableCollection(collectionId);
+  }
+
+  /**
+   * List variable collections in a specific world
+   * @param worldId The world ID
+   * @param options Pagination options
+   */
+  async listVariableCollectionsByWorld(worldId: string, options: PaginationOptions = {}): Promise<WorldAnvilVariableCollection[]> {
+    return this.variableService.listVariableCollectionsByWorld(worldId, options);
+  }
+
+  // Block Template methods
+
+  /**
+   * Get block templates by user
+   * @param userId The ID of the user
+   * @param options Options for pagination
+   */
+  async getBlockTemplatesByUser(userId: string, options: BlockTemplateListOptions = {}): Promise<UserBlockTemplatesResponse> {
+    return this.blockTemplateService.getBlockTemplatesByUser(userId, options);
+  }
+
+  /**
+   * Get block templates for the current user
+   * @param options Options for pagination
+   */
+  async getMyBlockTemplates(options: BlockTemplateListOptions = {}): Promise<UserBlockTemplatesResponse> {
+    return this.blockTemplateService.getMyBlockTemplates(options);
+  }
 }
+

@@ -101,13 +101,21 @@ describe('WorldAnvilWorldService', () => {
   describe('getMyWorlds', () => {
     it('should get worlds owned by the authenticated user with default options', async () => {
       // Setup
-      mockApiClient.get.mockResolvedValue(mockWorldListResponse);
+      mockApiClient.get.mockImplementation((path) => {
+        if (path === '/identity') {
+          return Promise.resolve({ id: 'user-456' });
+        } else {
+          return Promise.resolve(mockWorldListResponse);
+        }
+      });
+      
+      mockApiClient.post.mockResolvedValue(mockWorldListResponse);
 
       // Execute
       const result = await service.getMyWorlds();
 
       // Verify
-      expect(mockApiClient.get).toHaveBeenCalledWith('/user/worlds', { params: {} });
+      expect(mockApiClient.post).toHaveBeenCalledWith('/user-worlds', {}, { params: { id: 'user-456' } });
       expect(result).toEqual({
         worlds: [
           mockWorld,
@@ -134,13 +142,21 @@ describe('WorldAnvilWorldService', () => {
         sort: 'title',
         order: 'asc'
       };
-      mockApiClient.get.mockResolvedValue(mockWorldListResponse);
+      mockApiClient.get.mockImplementation((path) => {
+        if (path === '/identity') {
+          return Promise.resolve({ id: 'user-456' });
+        } else {
+          return Promise.resolve(mockWorldListResponse);
+        }
+      });
+      
+      mockApiClient.post.mockResolvedValue(mockWorldListResponse);
 
       // Execute
       const result = await service.getMyWorlds(options);
 
       // Verify
-      expect(mockApiClient.get).toHaveBeenCalledWith('/user/worlds', { params: options });
+      expect(mockApiClient.post).toHaveBeenCalledWith('/user-worlds', options, { params: { id: 'user-456' } });
       expect(result.pagination).toEqual({
         total: 2,
         page: 1,
@@ -153,13 +169,23 @@ describe('WorldAnvilWorldService', () => {
     it('should get worlds owned by a specific user with default options', async () => {
       // Setup
       const userId = 'user-456';
-      mockApiClient.get.mockResolvedValue(mockWorldListResponse);
+      mockApiClient.post.mockResolvedValue({
+        worlds: [mockWorldResponse, {
+          ...mockWorldResponse,
+          id: 'world-456',
+          title: 'Another World',
+          slug: 'another-world'
+        }],
+        total: 2,
+        page: 1,
+        pages: 1
+      });
 
       // Execute
       const result = await service.getWorldsByUser(userId);
 
       // Verify
-      expect(mockApiClient.get).toHaveBeenCalledWith(`/user/${userId}/worlds`, { params: {} });
+      expect(mockApiClient.post).toHaveBeenCalledWith('/user-worlds', {}, { params: { id: userId } });
       expect(result.worlds).toHaveLength(2);
       expect(result.worlds[0].id).toBe('world-123');
       expect(result.worlds[1].id).toBe('world-456');
@@ -174,13 +200,23 @@ describe('WorldAnvilWorldService', () => {
         sort: 'creation_date',
         order: 'desc'
       };
-      mockApiClient.get.mockResolvedValue(mockWorldListResponse);
+      mockApiClient.post.mockResolvedValue({
+        worlds: [mockWorldResponse, {
+          ...mockWorldResponse,
+          id: 'world-456',
+          title: 'Another World',
+          slug: 'another-world'
+        }],
+        total: 2,
+        page: 1,
+        pages: 1
+      });
 
       // Execute
       const result = await service.getWorldsByUser(userId, options);
 
       // Verify
-      expect(mockApiClient.get).toHaveBeenCalledWith(`/user/${userId}/worlds`, { params: options });
+      expect(mockApiClient.post).toHaveBeenCalledWith('/user-worlds', options, { params: { id: userId } });
       expect(result.pagination).toEqual({
         total: 2,
         page: 1,
@@ -199,7 +235,9 @@ describe('WorldAnvilWorldService', () => {
       const result = await service.getWorldById(worldId);
 
       // Verify
-      expect(mockApiClient.get).toHaveBeenCalledWith(`/world/${worldId}`);
+      expect(mockApiClient.get).toHaveBeenCalledWith('/world', {
+        params: { id: worldId, granularity: '-1' }
+      });
       expect(result).toEqual(mockWorld);
     });
   });
@@ -214,7 +252,9 @@ describe('WorldAnvilWorldService', () => {
       const result = await service.getWorldBySlug(slug);
 
       // Verify
-      expect(mockApiClient.get).toHaveBeenCalledWith(`/world/slug/${slug}`);
+      expect(mockApiClient.get).toHaveBeenCalledWith('/world/by-slug', {
+        params: { slug: slug, granularity: '-1' }
+      });
       expect(result).toEqual(mockWorld);
     });
   });

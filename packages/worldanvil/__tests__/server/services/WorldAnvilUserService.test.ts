@@ -2,7 +2,7 @@
  * Tests for WorldAnvilUserService
  */
 
-import { WorldAnvilUserService, AuthorizationResult } from '../../../server/services/WorldAnvilUserService';
+import { WorldAnvilUserService } from '../../../server/services/WorldAnvilUserService';
 import { WorldAnvilApiClient } from '../../../server/clients/WorldAnvilApiClient';
 import { WorldAnvilUser, WorldAnvilUserResponse } from '../../../models/WorldAnvilUser';
 import * as configModule from '../../../server/configs';
@@ -13,12 +13,6 @@ jest.mock('../../../server/configs');
 
 describe('WorldAnvilUserService', () => {
   // Mock data for tests
-  const mockAuthResult: AuthorizationResult = {
-    access_token: 'mock-access-token',
-    refresh_token: 'mock-refresh-token',
-    expires_in: 3600,
-    token_type: 'Bearer'
-  };
 
   const mockUserResponse: WorldAnvilUserResponse = {
     id: 'user-123',
@@ -89,55 +83,7 @@ describe('WorldAnvilUserService', () => {
     });
   });
 
-  describe('authenticate', () => {
-    it('should authenticate a user with OAuth code', async () => {
-      // Setup
-      const code = 'auth-code';
-      const clientId = 'client-id';
-      const clientSecret = 'client-secret';
-      const redirectUri = 'http://localhost/callback';
 
-      mockApiClient.post.mockResolvedValue(mockAuthResult);
-
-      // Execute
-      const result = await service.authenticate(code, clientId, clientSecret, redirectUri);
-
-      // Verify
-      expect(mockApiClient.post).toHaveBeenCalledWith('/oauth/token', {
-        grant_type: 'authorization_code',
-        code,
-        client_id: clientId,
-        client_secret: clientSecret,
-        redirect_uri: redirectUri
-      });
-      expect(mockApiClient.setAccessToken).toHaveBeenCalledWith(mockAuthResult.access_token);
-      expect(result).toEqual(mockAuthResult);
-    });
-  });
-
-  describe('refreshToken', () => {
-    it('should refresh an access token', async () => {
-      // Setup
-      const refreshToken = 'old-refresh-token';
-      const clientId = 'client-id';
-      const clientSecret = 'client-secret';
-
-      mockApiClient.post.mockResolvedValue(mockAuthResult);
-
-      // Execute
-      const result = await service.refreshToken(refreshToken, clientId, clientSecret);
-
-      // Verify
-      expect(mockApiClient.post).toHaveBeenCalledWith('/oauth/token', {
-        grant_type: 'refresh_token',
-        refresh_token: refreshToken,
-        client_id: clientId,
-        client_secret: clientSecret
-      });
-      expect(mockApiClient.setAccessToken).toHaveBeenCalledWith(mockAuthResult.access_token);
-      expect(result).toEqual(mockAuthResult);
-    });
-  });
 
   describe('getCurrentUser', () => {
     it('should get the current user profile', async () => {
@@ -148,7 +94,9 @@ describe('WorldAnvilUserService', () => {
       const result = await service.getCurrentUser();
 
       // Verify
-      expect(mockApiClient.get).toHaveBeenCalledWith('/user/me');
+      expect(mockApiClient.get).toHaveBeenCalledWith('/user/me', {
+        params: { granularity: '-1' }
+      });
       expect(result).toEqual(mockUser);
     });
   });
@@ -163,7 +111,9 @@ describe('WorldAnvilUserService', () => {
       const result = await service.getUserById(userId);
 
       // Verify
-      expect(mockApiClient.get).toHaveBeenCalledWith(`/user/${userId}`);
+      expect(mockApiClient.get).toHaveBeenCalledWith('/user', {
+        params: { id: userId, granularity: '-1' }
+      });
       expect(result).toEqual(mockUser);
     });
   });
@@ -178,7 +128,9 @@ describe('WorldAnvilUserService', () => {
       const result = await service.getUserByUsername(username);
 
       // Verify
-      expect(mockApiClient.get).toHaveBeenCalledWith(`/user/username/${username}`);
+      expect(mockApiClient.get).toHaveBeenCalledWith('/user/by-username', {
+        params: { username: username, granularity: '-1' }
+      });
       expect(result).toEqual(mockUser);
     });
   });

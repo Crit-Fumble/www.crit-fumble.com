@@ -83,6 +83,7 @@
 - [COMPLETED] Implement World Anvil controllers
 - [COMPLETED] Update exports for proper integration with @crit-fumble/core
 - [BOT-WIP] Implement remaining API endpoints
+- [BOT-TODO] finish controller implementation and bring in all user-facing service methods
 - [BOT-WIP] Add comprehensive test coverage
 - [BOT-TODO] remove all completed FUTURE: and TODO: comments
 
