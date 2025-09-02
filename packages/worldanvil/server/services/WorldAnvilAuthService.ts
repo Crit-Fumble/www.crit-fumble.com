@@ -5,7 +5,7 @@
 
 import { WorldAnvilApiClient } from '../clients/WorldAnvilApiClient';
 import { getWorldAnvilConfig } from '../configs';
-import { WorldAnvilIdentityService, WorldAnvilIdentity } from './WorldAnvilIdentityService';
+import { WorldAnvilIdentity, WorldAnvilIdentityResponse } from '../../models/WorldAnvilIdentity';
 
 /**
  * Interface for OAuth authorization results
@@ -22,7 +22,6 @@ export interface AuthorizationResult {
  */
 export class WorldAnvilAuthService {
   private apiClient: WorldAnvilApiClient;
-  private identityService: WorldAnvilIdentityService;
   
   /**
    * Creates a new WorldAnvilAuthService
@@ -31,8 +30,6 @@ export class WorldAnvilAuthService {
   constructor(customClient?: WorldAnvilApiClient) {
     if (customClient) {
       this.apiClient = customClient;
-      // Create identity service with the same client for consistent token state
-      this.identityService = new WorldAnvilIdentityService(customClient);
     } else {
       const config = getWorldAnvilConfig();
       this.apiClient = new WorldAnvilApiClient({
@@ -40,7 +37,6 @@ export class WorldAnvilAuthService {
         apiKey: config.apiKey,
         accessToken: config.accessToken
       });
-      this.identityService = new WorldAnvilIdentityService(this.apiClient);
     }
   }
 
@@ -119,7 +115,6 @@ export class WorldAnvilAuthService {
    */
   setAccessToken(token: string): void {
     this.apiClient.setAccessToken(token);
-    this.identityService.setAccessToken(token);
   }
 
   /**
@@ -128,7 +123,12 @@ export class WorldAnvilAuthService {
    * @returns True if the token is valid, false otherwise
    */
   async isTokenValid(): Promise<boolean> {
-    return this.identityService.verifyAccessToken();
+    try {
+      await this.getCurrentIdentity();
+      return true;
+    } catch (error) {
+      return false;
+    }
   }
 
   /**
@@ -137,6 +137,26 @@ export class WorldAnvilAuthService {
    * @throws Error if the token is invalid or expired
    */
   async getCurrentIdentity(): Promise<WorldAnvilIdentity> {
-    return this.identityService.getCurrentIdentity();
+    const response = await this.apiClient.get<WorldAnvilIdentityResponse>('/identity');
+    return this.mapIdentityResponse(response);
+  }
+  
+  /**
+   * Map the API response to our internal identity model
+   * @param response The API response
+   * @returns The mapped identity
+   */
+  private mapIdentityResponse(response: WorldAnvilIdentityResponse): WorldAnvilIdentity {
+    return {
+      id: response.id,
+      username: response.username,
+      userhash: response.userhash,
+      success: response.success,
+      // Optional fields that might be returned by the API but aren't in spec
+      displayName: response.display_name,
+      subscriptionType: response.subscription_type,
+      isAuthor: response.is_author,
+      avatarUrl: response.avatar_url
+    };
   }
 }

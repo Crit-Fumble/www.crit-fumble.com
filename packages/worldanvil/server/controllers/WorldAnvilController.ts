@@ -55,9 +55,14 @@ import {
 import { 
   SecretInput, SecretResponse
 } from '../../models/WorldAnvilSecret';
+// Import variable models from the models directory
 import {
-  WorldAnvilVariable, WorldAnvilVariableInput, WorldAnvilVariableUpdate,
-  WorldAnvilVariableCollection, WorldAnvilVariableCollectionInput, WorldAnvilVariableCollectionUpdate,
+  WorldAnvilVariable, WorldAnvilVariableCollection
+} from '../../models/WorldAnvilVariable';
+// Import variable service interfaces from the service
+import {
+  WorldAnvilVariableInput, WorldAnvilVariableUpdate,
+  WorldAnvilVariableCollectionInput, WorldAnvilVariableCollectionUpdate,
   PaginationOptions
 } from '../services/WorldAnvilVariableService';
 import {

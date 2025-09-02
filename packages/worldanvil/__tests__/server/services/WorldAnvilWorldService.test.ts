@@ -99,6 +99,36 @@ describe('WorldAnvilWorldService', () => {
   });
 
   describe('getMyWorlds', () => {
+    it('should throw an error if identity retrieval fails', async () => {
+      // Setup
+      mockApiClient.get.mockImplementation((path) => {
+        if (path === '/identity') {
+          return Promise.resolve(null);
+        } else {
+          return Promise.resolve(mockWorldListResponse);
+        }
+      });
+      
+      // Execute and verify
+      await expect(service.getMyWorlds()).rejects.toThrow('Failed to get current user identity');
+      expect(mockApiClient.get).toHaveBeenCalledWith('/identity');
+    });
+
+    it('should throw an error if identity has no id', async () => {
+      // Setup
+      mockApiClient.get.mockImplementation((path) => {
+        if (path === '/identity') {
+          return Promise.resolve({ name: 'User without ID' });
+        } else {
+          return Promise.resolve(mockWorldListResponse);
+        }
+      });
+      
+      // Execute and verify
+      await expect(service.getMyWorlds()).rejects.toThrow('Failed to get current user identity');
+      expect(mockApiClient.get).toHaveBeenCalledWith('/identity');
+    });
+    
     it('should get worlds owned by the authenticated user with default options', async () => {
       // Setup
       mockApiClient.get.mockImplementation((path) => {
@@ -256,6 +286,89 @@ describe('WorldAnvilWorldService', () => {
         params: { slug: slug, granularity: '-1' }
       });
       expect(result).toEqual(mockWorld);
+    });
+  });
+
+  describe('createWorld', () => {
+    it('should create a new world', async () => {
+      // Setup
+      const worldData = {
+        title: 'New Test World',
+        description: 'A newly created test world',
+        excerpt: 'Short description',
+        tags: ['fantasy', 'medieval'],
+        genres: ['rpg'],
+        visibility: 'public' as 'public' | 'private' | 'unlisted'
+      };
+      mockApiClient.put.mockResolvedValue(mockWorldResponse);
+
+      // Execute
+      const result = await service.createWorld(worldData);
+
+      // Verify
+      expect(mockApiClient.put).toHaveBeenCalledWith('/world', worldData);
+      expect(result).toEqual(mockWorld);
+    });
+  });
+
+  describe('updateWorld', () => {
+    it('should update an existing world', async () => {
+      // Setup
+      const worldId = 'world-123';
+      const worldData = {
+        title: 'Updated World',
+        description: 'An updated world description'
+      };
+      const expectedParams = {
+        id: worldId,
+        title: 'Updated World',
+        description: 'An updated world description'
+      };
+      mockApiClient.put.mockResolvedValue({
+        ...mockWorldResponse,
+        title: 'Updated World',
+        description: 'An updated world description'
+      });
+
+      // Execute
+      const result = await service.updateWorld(worldId, worldData);
+
+      // Verify
+      expect(mockApiClient.put).toHaveBeenCalledWith('/world', expectedParams);
+      expect(result.title).toBe('Updated World');
+      expect(result.description).toBe('An updated world description');
+    });
+  });
+
+  describe('deleteWorld', () => {
+    it('should delete a world', async () => {
+      // Setup
+      const worldId = 'world-123';
+      mockApiClient.delete.mockResolvedValue({ success: true });
+
+      // Execute
+      const result = await service.deleteWorld(worldId);
+
+      // Verify
+      expect(mockApiClient.delete).toHaveBeenCalledWith('/world', {
+        params: { id: worldId }
+      });
+      expect(result).toBe(true);
+    });
+
+    it('should return false if deletion fails', async () => {
+      // Setup
+      const worldId = 'world-123';
+      mockApiClient.delete.mockResolvedValue({ success: false });
+
+      // Execute
+      const result = await service.deleteWorld(worldId);
+
+      // Verify
+      expect(mockApiClient.delete).toHaveBeenCalledWith('/world', {
+        params: { id: worldId }
+      });
+      expect(result).toBe(false);
     });
   });
 

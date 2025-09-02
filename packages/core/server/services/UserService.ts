@@ -1,6 +1,11 @@
+// TODO: we need to update this to link a user to their WorldAnvil account as well as their Discord account.
+// TODO: all third party integrations are optional for the end user, but at least one is required for SSO and we must have an email address as well.
+// TODO: allow users to have an array of characters; each may be a sheet from a third party platform, or a PDF uploaded by the user; each sheet should have some data attached to it regarding campaign, game master, and system
+
+
 import { PrismaClient } from '@prisma/client';
 import { prisma } from '../../prisma.js';
-import { Character, User } from 'models';
+import { User } from 'models';
 
 /**
  * Fetch user data by ID (which could be a database ID or a Discord ID)
@@ -33,17 +38,6 @@ export async function getUserById(userId: string): Promise<User | null> {
 export async function getUserByEmail(email: string): Promise<User | null> {
   return prisma.user.findUnique({
     where: { email }
-  });
-}
-
-/**
- * Fetch user characters
- */
-export async function getUserCharacters(userId: string): Promise<Character[]> {
-  return prisma.character.findMany({
-    where: {
-      player: userId
-    }
   });
 }
 

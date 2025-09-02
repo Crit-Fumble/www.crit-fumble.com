@@ -1,7 +1,7 @@
 {
   "name": "@crit-fumble/openai",
   "version": "5.16.0",
-  "description": "OpenAI API integration for Crit-Fumble",
+  "description": "OpenAI API integration for Crit-Fumble; version matches OpenAI API version",
   "type": "module",
   "main": "dist/index.js",
   "types": "dist/index.d.ts",

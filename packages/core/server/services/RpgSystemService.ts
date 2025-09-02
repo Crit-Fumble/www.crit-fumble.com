@@ -1,1 +1,1 @@
-// FUTURE: CFG custom RPG System table and handling
+// TODO: stub out a service for managing rpg systems in the DB

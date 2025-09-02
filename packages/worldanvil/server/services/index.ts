@@ -6,7 +6,6 @@ export * from './WorldAnvilAuthService';
 export * from './WorldAnvilUserService';
 export * from './WorldAnvilIdentityService';
 export * from './WorldAnvilWorldService';
-// export * from './WorldAnvilSubscriberService';
 export * from './WorldAnvilRpgSystemService';
 export * from './WorldAnvilArticleService';
 export * from './WorldAnvilVariableService';

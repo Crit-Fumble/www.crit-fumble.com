@@ -6,52 +6,27 @@
 
 import { WorldAnvilApiClient } from '../clients/WorldAnvilApiClient';
 import { getWorldAnvilConfig } from '../configs';
-
-/**
- * Interface for variable responses from World Anvil API
- */
-export interface WorldAnvilVariable {
-  id: string;
-  k: string; // key
-  v: string; // value
-  type: 'string' | 'number' | 'boolean' | 'json';
-  collection: string; // collection ID
-  world: string; // world ID
-  created_at?: string;
-  updated_at?: string;
-}
+import { WorldAnvilVariable, WorldAnvilVariableCollection } from '../../models/WorldAnvilVariable';
 
 /**
  * Interface for creating a variable
  */
 export interface WorldAnvilVariableInput {
-  k: string;
-  v: string;
+  k: string; // key (name)
+  v: string; // value
   type: 'string' | 'number' | 'boolean' | 'json';
-  collection: string;
-  world: string;
+  collection: string; // collection ID
+  world: string; // world ID
 }
 
 /**
  * Interface for updating a variable
  */
 export interface WorldAnvilVariableUpdate {
-  k?: string;
-  v?: string;
+  k?: string; // key (name)
+  v?: string; // value
   type?: 'string' | 'number' | 'boolean' | 'json';
-  collection?: string;
-}
-
-/**
- * Interface for variable collection responses from World Anvil API
- */
-export interface WorldAnvilVariableCollection {
-  id: string;
-  title: string;
-  world: string;
-  is_private?: boolean;
-  created_at?: string;
-  updated_at?: string;
+  collection?: string; // collection ID
 }
 
 /**

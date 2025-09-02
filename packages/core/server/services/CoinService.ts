@@ -1,0 +1,1 @@
+// TODO: stub out a service for a "coin"-based currency system

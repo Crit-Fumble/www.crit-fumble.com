@@ -1,7 +1,7 @@
 {
     "name": "@crit-fumble/discord",
-    "version": "14.14.1r1",
-    "description": "Discord stack for the Crit-Fumble web application",
+    "version": "14.14.1-r1",
+    "description": "Discord stack for the Crit-Fumble web application; version matches Discord.js version",
     "main": "index.js",
     "keywords": [
         "crit-fumble",
