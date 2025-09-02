@@ -4,10 +4,13 @@
  */
 
 // Export controllers
-export * from '../controllers';
+export * from './controllers';
 
 // Export services
-export * from '../../discord-bot/server/services';
+export * from './services';
 
-// Export configs (if any)
-// export * from './configs';
+// Export configs
+export * from './configs/index';
+
+// Export clients
+export * from './clients/DiscordApiClient';

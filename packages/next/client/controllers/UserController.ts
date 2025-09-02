@@ -95,8 +95,8 @@ export const updateUserInfo = async (updateData: {
 
 // Using default config from environment variables
 const defaultAuthConfig = createAuthConfig({
-  clientId: process.env.AUTH_DISCORD_ID ?? '',
-  clientSecret: process.env.AUTH_DISCORD_SECRET ?? '',
+  clientId: process.env.DISCORD_WEB_APP_ID ?? '',
+  clientSecret: process.env.DISCORD_WEB_SECRET ?? '',
 });
 
 export const authHandler = createAuthHandler(defaultAuthConfig);

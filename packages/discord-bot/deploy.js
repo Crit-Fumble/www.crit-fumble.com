@@ -133,8 +133,8 @@ function main() {
   console.log(chalk.bold.blue('\n=== FumbleBot Deployment Script ===\n'));
   
   // Check for required environment variables
-  if (!process.env.DISCORD_PERSISTENT_BOT_TOKEN || !process.env.DISCORD_PERSISTENT_BOT_APP_ID) {
-    console.warn(chalk.yellow('⚠️  Warning: DISCORD_PERSISTENT_BOT_TOKEN and/or DISCORD_PERSISTENT_BOT_APP_ID environment variables are not set.'));
+  if (!process.env.DISCORD_PERSISTENT_BOT_TOKEN || !process.env.DISCORD_PERSISTENT_APP_ID) {
+    console.warn(chalk.yellow('⚠️  Warning: DISCORD_PERSISTENT_BOT_TOKEN and/or DISCORD_PERSISTENT_APP_ID environment variables are not set.'));
     console.warn(chalk.yellow('These should be configured in your Fly.io secrets for the bot to work correctly.'));
     
     // Ask for confirmation to continue

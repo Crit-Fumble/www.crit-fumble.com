@@ -16,8 +16,8 @@ const config = {
       },
       token: 'https://discord.com/api/oauth2/token',
       userinfo: 'https://discord.com/api/users/@me',
-      get clientId() { return ConfigRegistry.getInstance().requireConfig<string>('AUTH_DISCORD_ID'); },
-      get clientSecret() { return ConfigRegistry.getInstance().requireConfig<string>('AUTH_DISCORD_SECRET'); },
+      get clientId() { return ConfigRegistry.getInstance().requireConfig<string>('DISCORD_WEB_APP_ID'); },
+      get clientSecret() { return ConfigRegistry.getInstance().requireConfig<string>('DISCORD_WEB_SECRET'); },
       profile(profile) {
         if (profile.avatar === null) {
           const defaultAvatarNumber = parseInt(profile.discriminator) % 5;

@@ -3,22 +3,31 @@
  */
 import { jest } from '@jest/globals';
 import { WorldAnvilController } from '../../../server/controllers/WorldAnvilController';
-import { WorldAnvilApiService } from '../../../server/services/WorldAnvilApiService';
-import { WorldAnvilUserService, AuthorizationResult } from '../../../server/services/WorldAnvilUserService';
+import { WorldAnvilAuthService, AuthorizationResult } from '../../../server/services/WorldAnvilAuthService';
+import { WorldAnvilUserService } from '../../../server/services/WorldAnvilUserService';
 import { WorldAnvilWorldService } from '../../../server/services/WorldAnvilWorldService';
+import { WorldAnvilRpgSystemService } from '../../../server/services/WorldAnvilRpgSystemService';
+import { WorldAnvilIdentityService } from '../../../server/services/WorldAnvilIdentityService';
 import { WorldAnvilWorld } from '../../../models/WorldAnvilWorld';
 import { WorldAnvilUser } from '../../../models/WorldAnvilUser';
+import { WorldAnvilApiClient } from '../../../server/clients/WorldAnvilApiClient';
 
 // Mock the service dependencies
-jest.mock('../../../server/services/WorldAnvilApiService');
+jest.mock('../../../server/clients/WorldAnvilApiClient');
+jest.mock('../../../server/services/WorldAnvilAuthService');
 jest.mock('../../../server/services/WorldAnvilUserService');
 jest.mock('../../../server/services/WorldAnvilWorldService');
+jest.mock('../../../server/services/WorldAnvilRpgSystemService');
+jest.mock('../../../server/services/WorldAnvilIdentityService');
 
 describe('WorldAnvilController', () => {
   let controller: WorldAnvilController;
-  let mockApiService: jest.Mocked<WorldAnvilApiService>;
+  let mockApiClient: jest.Mocked<WorldAnvilApiClient>;
+  let mockAuthService: jest.Mocked<WorldAnvilAuthService>;
   let mockUserService: jest.Mocked<WorldAnvilUserService>;
   let mockWorldService: jest.Mocked<WorldAnvilWorldService>;
+  let mockRpgSystemService: jest.Mocked<WorldAnvilRpgSystemService>;
+  let mockIdentityService: jest.Mocked<WorldAnvilIdentityService>;
 
   beforeEach(() => {
     // Clear all mocks before each test
@@ -28,13 +37,16 @@ describe('WorldAnvilController', () => {
     controller = new WorldAnvilController();
     
     // Get the mocked instances
-    mockApiService = WorldAnvilApiService.prototype as jest.Mocked<WorldAnvilApiService>;
+    mockApiClient = WorldAnvilApiClient.prototype as jest.Mocked<WorldAnvilApiClient>;
+    mockAuthService = WorldAnvilAuthService.prototype as jest.Mocked<WorldAnvilAuthService>;
     mockUserService = WorldAnvilUserService.prototype as jest.Mocked<WorldAnvilUserService>;
     mockWorldService = WorldAnvilWorldService.prototype as jest.Mocked<WorldAnvilWorldService>;
+    mockRpgSystemService = WorldAnvilRpgSystemService.prototype as jest.Mocked<WorldAnvilRpgSystemService>;
+    mockIdentityService = WorldAnvilIdentityService.prototype as jest.Mocked<WorldAnvilIdentityService>;
   });
 
   describe('authenticate', () => {
-    it('should call userService.authenticate with correct parameters', async () => {
+    it('should call authService.authenticate with correct parameters', async () => {
       // Arrange
       const code = 'test-auth-code';
       const clientId = 'test-client-id';
@@ -47,17 +59,17 @@ describe('WorldAnvilController', () => {
         token_type: 'bearer'
       };
       
-      mockUserService.authenticate.mockResolvedValue(expectedResult);
+      mockAuthService.authenticate.mockResolvedValue(expectedResult);
 
       // Act
       const result = await controller.authenticate(code, clientId, clientSecret, redirectUri);
 
       // Assert
-      expect(mockUserService.authenticate).toHaveBeenCalledWith(code, clientId, clientSecret, redirectUri);
+      expect(mockAuthService.authenticate).toHaveBeenCalledWith(code, clientId, clientSecret, redirectUri);
       expect(result).toEqual(expectedResult);
     });
     
-    it('should handle errors from userService.authenticate', async () => {
+    it('should handle errors from authService.authenticate', async () => {
       // Arrange
       const code = 'invalid-code';
       const clientId = 'test-client-id';
@@ -65,14 +77,14 @@ describe('WorldAnvilController', () => {
       const redirectUri = 'http://localhost:3000/callback';
       const expectedError = new Error('Authentication failed');
       
-      mockUserService.authenticate.mockRejectedValue(expectedError);
+      mockAuthService.authenticate.mockRejectedValue(expectedError);
 
       // Act & Assert
       await expect(
         controller.authenticate(code, clientId, clientSecret, redirectUri)
       ).rejects.toThrow(expectedError);
       
-      expect(mockUserService.authenticate).toHaveBeenCalledWith(code, clientId, clientSecret, redirectUri);
+      expect(mockAuthService.authenticate).toHaveBeenCalledWith(code, clientId, clientSecret, redirectUri);
     });
   });
 

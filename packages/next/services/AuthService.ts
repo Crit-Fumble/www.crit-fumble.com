@@ -206,8 +206,8 @@ export function createServerSessionGetter(authConfig: AuthOptions) {
 
 // Default implementations using environment variables for backward compatibility
 const defaultConfig = createAuthConfig({
-  clientId: process.env.AUTH_DISCORD_ID ?? '',
-  clientSecret: process.env.AUTH_DISCORD_SECRET ?? '',
+  clientId: process.env.DISCORD_WEB_APP_ID ?? '',
+  clientSecret: process.env.DISCORD_WEB_SECRET ?? '',
 });
 
 export const handler = createAuthHandler(defaultConfig);

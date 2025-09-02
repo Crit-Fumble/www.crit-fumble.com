@@ -36,12 +36,12 @@ export const worldAnvil = {
  * Discord configuration
  */
 export const discord = {
-  id: '1002008886137589771',
-  cfgAdminRole: '1056055558278479893',
+  get id() { return ConfigRegistry.getInstance().get('DISCORD_DEFAULT_GUILD_ID', '') }, //'1002008886137589771',
+  get cfgAdminRole() { return ConfigRegistry.getInstance().get('DISCORD_ADMIN_ROLE', ''); },
   get key() { return ConfigRegistry.getInstance().get('DISCORD_PUBLIC_KEY', ''); },
   get appId() { return ConfigRegistry.getInstance().get('DISCORD_APP_ID', ''); },
-  get authId() { return ConfigRegistry.getInstance().get('AUTH_DISCORD_ID', ''); },
-  get authSecret() { return ConfigRegistry.getInstance().get('AUTH_DISCORD_SECRET', ''); },
+  get authId() { return ConfigRegistry.getInstance().get('DISCORD_WEB_APP_ID', ''); },
+  get authSecret() { return ConfigRegistry.getInstance().get('DISCORD_WEB_SECRET', ''); },
 };
 
 /**

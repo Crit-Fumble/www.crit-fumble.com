@@ -35,22 +35,28 @@ describe('OpenAiImageService', () => {
       generate: jest.fn().mockResolvedValue(mockImageResponse)
     }
   };
+  
+  // Create a mock for the OpenAiApiClient that will be returned by getApiClient()
+  const mockApiClient = {
+    generateImage: jest.fn().mockResolvedValue(mockImageResponse)
+  };
 
   const mockApiService = {
-    getClient: jest.fn().mockReturnValue(mockClient)
+    getApiClient: jest.fn().mockReturnValue(mockApiClient)
   };
 
   beforeEach(() => {
     jest.clearAllMocks();
     
-    // Reset the client mock for each test
+    // Reset the client mocks for each test
     mockClient.images.generate.mockResolvedValue(mockImageResponse);
+    mockApiClient.generateImage.mockResolvedValue(mockImageResponse);
     
     // Reset the mock implementation
     (OpenAiApiService.getInstance as jest.Mock).mockReturnValue(mockApiService);
     
-    // Explicitly mock the getClient() method to always return our mockClient
-    mockApiService.getClient.mockReturnValue(mockClient);
+    // Explicitly mock the getApiClient() method to always return our mockApiClient
+    mockApiService.getApiClient.mockReturnValue(mockApiClient);
     
     // Setup the config mock for each test
     const mockedConfig = {
@@ -72,8 +78,8 @@ describe('OpenAiImageService', () => {
       
       const response = await imageService.generateImage({ prompt });
       
-      expect(mockApiService.getClient).toHaveBeenCalled();
-      expect(mockClient.images.generate).toHaveBeenCalledWith(expect.objectContaining({
+      expect(mockApiService.getApiClient).toHaveBeenCalled();
+      expect(mockApiClient.generateImage).toHaveBeenCalledWith(expect.objectContaining({
         prompt: prompt,
         size: '1024x1024',
         n: 1,
@@ -93,7 +99,7 @@ describe('OpenAiImageService', () => {
         response_format: 'b64_json'
       });
       
-      expect(mockClient.images.generate).toHaveBeenCalledWith(expect.objectContaining({
+      expect(mockApiClient.generateImage).toHaveBeenCalledWith(expect.objectContaining({
         prompt,
         size: '512x512',
         n: 2,
@@ -103,7 +109,7 @@ describe('OpenAiImageService', () => {
 
     it('should handle errors during image generation', async () => {
       const imageService = new OpenAiImageService();
-      mockClient.images.generate.mockRejectedValueOnce(new Error('API error'));
+      mockApiClient.generateImage.mockRejectedValueOnce(new Error('API error'));
       
       try {
         await imageService.generateImage({ prompt: 'Failed prompt' });
@@ -121,7 +127,7 @@ describe('OpenAiImageService', () => {
       
       const response = await imageService.generateImageFromPrompt(prompt);
       
-      expect(mockClient.images.generate).toHaveBeenCalledWith(expect.objectContaining({
+      expect(mockApiClient.generateImage).toHaveBeenCalledWith(expect.objectContaining({
         prompt,
         size: '1024x1024',
         n: 1,
@@ -137,7 +143,7 @@ describe('OpenAiImageService', () => {
       
       await imageService.generateImageFromPrompt(prompt, size);
       
-      expect(mockClient.images.generate).toHaveBeenCalledWith(expect.objectContaining({
+      expect(mockApiClient.generateImage).toHaveBeenCalledWith(expect.objectContaining({
         prompt,
         size,
         n: 1

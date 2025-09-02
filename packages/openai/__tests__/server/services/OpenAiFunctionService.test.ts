@@ -98,8 +98,17 @@ describe('OpenAiFunctionService', () => {
     createChatCompletion: jest.fn().mockResolvedValue(mockFunctionCallResponse)
   };
 
+  // Mock console methods to suppress warnings/errors in tests
+  const originalConsoleError = console.error;
+  const originalConsoleWarn = console.warn;
+
   beforeEach(() => {
     jest.clearAllMocks();
+    
+    // Mock console methods
+    console.error = jest.fn();
+    console.warn = jest.fn();
+    
     // Setup OpenAiApiService mock
     (OpenAiApiService.getInstance as jest.Mock).mockReturnValue({
       getApiClient: jest.fn().mockReturnValue(mockApiClient)
@@ -116,6 +125,12 @@ describe('OpenAiFunctionService', () => {
       defaultImageSize: '1024x1024'
     };
     (require('../../../server/configs').getOpenAiConfig as jest.Mock).mockReturnValue(mockedConfig);
+  });
+  
+  afterEach(() => {
+    // Restore original console methods
+    console.error = originalConsoleError;
+    console.warn = originalConsoleWarn;
   });
 
   describe('callFunction', () => {

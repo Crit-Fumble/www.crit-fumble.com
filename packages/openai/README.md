@@ -8,7 +8,7 @@ A TypeScript client library for the OpenAI API, designed for Crit-Fumble applica
 npm install @crit-fumble/openai
 ```
 
-## Features
+## FeaturesII
 
 - TypeScript definitions for OpenAI API responses
 - Client implementation for OpenAI API endpoints
@@ -35,7 +35,7 @@ const completion = await openai.createCompletion({
 });
 
 console.log(completion.choices[0].message.content);
-```
+```ii
 
 ### Using with Environment Variables
 

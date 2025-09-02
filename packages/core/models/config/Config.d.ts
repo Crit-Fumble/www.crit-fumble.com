@@ -39,12 +39,6 @@ export interface EnvironmentConfig {
   
   /** Required configuration keys for the Discord bot */
   DISCORD_BOT: string[];
-  
-  /** Required configuration keys for Discord apps */
-  DISCORD_APP: string[];
-  
-  /** Required configuration keys for Discord activities */
-  DISCORD_ACTIVITY: string[];
 }
 
 /**

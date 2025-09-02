@@ -66,22 +66,29 @@ describe('OpenAiTextService', () => {
     }
   };
 
+  // We need to mock our wrapper client instance, not just the raw OpenAI client
+  const mockApiClient = {
+    createChatCompletion: jest.fn().mockResolvedValue(mockChatCompletion),
+    createCompletion: jest.fn().mockResolvedValue(mockCompletion),
+    sendMessage: jest.fn().mockResolvedValue('This is a test response')
+  };
+
   const mockApiService = {
-    getClient: jest.fn().mockReturnValue(mockClient)
+    getApiClient: jest.fn().mockReturnValue(mockApiClient)
   };
 
   beforeEach(() => {
     jest.clearAllMocks();
     
-    // Reset the client mock for each test
-    mockClient.chat.completions.create.mockResolvedValue(mockChatCompletion);
-    mockClient.completions.create.mockResolvedValue(mockCompletion);
+    // Reset the mocks for each test
+    mockApiClient.createChatCompletion.mockResolvedValue(mockChatCompletion);
+    mockApiClient.createCompletion.mockResolvedValue(mockCompletion);
     
     // Reset the mock implementation
     (OpenAiApiService.getInstance as jest.Mock).mockReturnValue(mockApiService);
     
-    // Explicitly mock the getClient() method to always return our mockClient
-    mockApiService.getClient.mockReturnValue(mockClient);
+    // Explicitly mock the getApiClient() method to always return our mockApiClient
+    mockApiService.getApiClient.mockReturnValue(mockApiClient);
     
     // Setup the config mock for each test
     const mockedConfig = {
@@ -106,8 +113,8 @@ describe('OpenAiTextService', () => {
       
       const response = await textService.createChatCompletion({ messages });
       
-      expect(mockApiService.getClient).toHaveBeenCalled();
-      expect(mockClient.chat.completions.create).toHaveBeenCalledWith(expect.objectContaining({
+      expect(mockApiService.getApiClient).toHaveBeenCalled();
+      expect(mockApiClient.createChatCompletion).toHaveBeenCalledWith(expect.objectContaining({
         model: 'gpt-4',
         messages: messages,
         temperature: 0.7,
@@ -130,7 +137,7 @@ describe('OpenAiTextService', () => {
         max_tokens: 500
       });
       
-      expect(mockClient.chat.completions.create).toHaveBeenCalledWith(expect.objectContaining({
+      expect(mockApiClient.createChatCompletion).toHaveBeenCalledWith(expect.objectContaining({
         model: 'gpt-3.5-turbo',
         messages: messages,
         temperature: 0.9,
@@ -147,7 +154,7 @@ describe('OpenAiTextService', () => {
       
       const response = await textService.sendMessage(message, systemPrompt);
       
-      expect(mockClient.chat.completions.create).toHaveBeenCalledWith(expect.objectContaining({
+      expect(mockApiClient.createChatCompletion).toHaveBeenCalledWith(expect.objectContaining({
         model: 'gpt-4',
         messages: [
           { role: 'system', content: systemPrompt },
@@ -163,7 +170,8 @@ describe('OpenAiTextService', () => {
       
       await textService.sendMessage(message);
       
-      expect(mockClient.chat.completions.create).toHaveBeenCalledWith(expect.objectContaining({
+      expect(mockApiClient.createChatCompletion).toHaveBeenCalledWith(expect.objectContaining({
+        model: 'gpt-4',
         messages: [
           { role: 'user', content: message }
         ]
@@ -178,8 +186,8 @@ describe('OpenAiTextService', () => {
       
       const response = await textService.createCompletion({ prompt });
       
-      expect(mockApiService.getClient).toHaveBeenCalled();
-      expect(mockClient.completions.create).toHaveBeenCalledWith(expect.objectContaining({
+      expect(mockApiService.getApiClient).toHaveBeenCalled();
+      expect(mockApiClient.createCompletion).toHaveBeenCalledWith(expect.objectContaining({
         model: 'text-davinci-003',
         prompt: prompt,
         temperature: 0.7,
@@ -199,7 +207,7 @@ describe('OpenAiTextService', () => {
         max_tokens: 300
       });
       
-      expect(mockClient.completions.create).toHaveBeenCalledWith(expect.objectContaining({
+      expect(mockApiClient.createCompletion).toHaveBeenCalledWith(expect.objectContaining({
         model: 'davinci-002',
         prompt: prompt,
         temperature: 0.5,

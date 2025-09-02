@@ -3,13 +3,13 @@
  */
 
 import { WorldAnvilWorldService, WorldListOptions, WorldListResponse } from '../../../server/services/WorldAnvilWorldService';
-import { WorldAnvilApiService } from '../../../server/services/WorldAnvilApiService';
 import { WorldAnvilApiClient } from '../../../server/clients/WorldAnvilApiClient';
 import { WorldAnvilWorld, WorldAnvilWorldResponse } from '../../../models/WorldAnvilWorld';
+import * as configModule from '../../../server/configs';
 
 // Mock dependencies
-jest.mock('../../../server/services/WorldAnvilApiService');
 jest.mock('../../../server/clients/WorldAnvilApiClient');
+jest.mock('../../../server/configs');
 
 describe('WorldAnvilWorldService', () => {
   // Mock data
@@ -55,9 +55,8 @@ describe('WorldAnvilWorldService', () => {
     pages: 1
   };
 
-  // Mock client and service
+  // Mock client
   let mockApiClient: jest.Mocked<WorldAnvilApiClient>;
-  let mockApiService: jest.Mocked<WorldAnvilApiService>;
   let service: WorldAnvilWorldService;
 
   beforeEach(() => {
@@ -70,33 +69,32 @@ describe('WorldAnvilWorldService', () => {
       put: jest.fn(),
       delete: jest.fn(),
       setApiKey: jest.fn(),
-      setAccessToken: jest.fn(),
-      getCurrentUser: jest.fn(),
-      getMyWorlds: jest.fn(),
-      getWorldById: jest.fn(),
-      handleApiError: jest.fn()
+      setAccessToken: jest.fn()
     } as unknown as jest.Mocked<WorldAnvilApiClient>;
 
-    // Set up the mock service
-    mockApiService = {
-      getClient: jest.fn().mockReturnValue(mockApiClient),
-      setApiKey: jest.fn(),
-      setAccessToken: jest.fn(),
-      get: jest.fn(),
-      post: jest.fn(),
-      put: jest.fn(),
-      delete: jest.fn(),
-      // Add the private apiClient property
-      apiClient: mockApiClient
-    } as unknown as jest.Mocked<WorldAnvilApiService>;
-
     // Create instance of service under test
-    service = new WorldAnvilWorldService(mockApiService);
+    service = new WorldAnvilWorldService(mockApiClient);
   });
 
   describe('constructor', () => {
-    it('should initialize with the provided API service', () => {
-      expect(mockApiService.getClient).toHaveBeenCalled();
+    it('should initialize with the provided API client', () => {
+      expect(service).toBeDefined();
+    });
+    
+    it('should create a new client if none provided', () => {
+      // Mock config values
+      const mockConfig = {
+        apiUrl: 'https://test.worldanvil.com',
+        apiKey: 'test-key',
+        accessToken: 'test-token'
+      };
+      
+      // Setup the mock to return our config
+      (configModule.getWorldAnvilConfig as jest.Mock).mockReturnValue(mockConfig);
+      
+      // Create service without providing a client
+      const newService = new WorldAnvilWorldService();
+      expect(newService).toBeDefined();
     });
   });
 

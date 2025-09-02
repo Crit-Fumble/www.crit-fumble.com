@@ -71,31 +71,23 @@ export function verifyRequiredConfig(requiredKeys: string[], throwOnError = true
  */
 export const REQUIRED_CONFIG: EnvironmentConfig = {
   NEXT_WEB: [
-    'AUTH_DISCORD_ID',
-    'AUTH_DISCORD_SECRET',
+    'NEXTAUTH_SECRET',
+    'NEXTAUTH_URL',
+    'DISCORD_WEB_APP_ID',
+    'DISCORD_WEB_SECRET',
+    'DISCORD_WEB_BOT_TOKEN',
+    'DISCORD_DEFAULT_GUILD_ID',
     'AUTH_GITHUB_ID',
     'AUTH_GITHUB_SECRET',
     'POSTGRES_URL',
-    'NEXTAUTH_SECRET',
-    'NEXTAUTH_URL',
   ],
   DISCORD_BOT: [
-    'DISCORD_BOT_TOKEN',
-    'DISCORD_APP_ID',
-    'DISCORD_PUBLIC_KEY',
+    'DISCORD_PERSISTENT_BOT_TOKEN',
+    'DISCORD_PERSISTENT_APP_ID',
+    'DISCORD_PERSISTENT_SECRET',
+    'DISCORD_DEFAULT_GUILD_ID',
     'POSTGRES_URL',
   ],
-  DISCORD_APP: [
-    'DISCORD_APP_ID',
-    'DISCORD_PUBLIC_KEY',
-    'POSTGRES_URL',
-  ],
-  DISCORD_ACTIVITY: [
-    'DISCORD_ACTIVITY_ID',
-    'DISCORD_APP_ID',
-    'DISCORD_PUBLIC_KEY',
-    'POSTGRES_URL',
-  ]
 };
 
 // Export ConfigRegistry for convenience

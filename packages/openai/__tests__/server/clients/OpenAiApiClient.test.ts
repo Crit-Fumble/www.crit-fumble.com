@@ -9,15 +9,7 @@ const MockOpenAI = OpenAI as jest.MockedClass<typeof OpenAI>;
 
 // Mock configs
 jest.mock('../../../server/configs', () => ({
-  getOpenAiConfig: jest.fn().mockReturnValue({
-    apiKey: 'test-api-key',
-    organization: 'test-org',
-    defaultChatModel: 'gpt-4',
-    defaultEmbeddingModel: 'text-embedding-3-small',
-    defaultTemperature: 0.7,
-    defaultMaxTokens: 1000,
-    defaultImageSize: '1024x1024'
-  })
+  getOpenAiConfig: jest.fn()
 }));
 
 describe('OpenAiApiClient', () => {
@@ -74,7 +66,18 @@ describe('OpenAiApiClient', () => {
   beforeEach(() => {
     jest.clearAllMocks();
     
-    // Setup mock implementations
+    // Reset the mock config for each test
+    jest.mocked(configs.getOpenAiConfig).mockReturnValue({
+      apiKey: 'test-api-key',
+      organization: 'test-org',
+      defaultChatModel: 'gpt-4',
+      defaultEmbeddingModel: 'text-embedding-3-small',
+      defaultTemperature: 0.7,
+      defaultMaxTokens: 1000,
+      defaultImageSize: '1024x1024'
+    });
+    
+    // Setup OpenAI mock
     MockOpenAI.mockImplementation(() => ({
       chat: {
         completions: {

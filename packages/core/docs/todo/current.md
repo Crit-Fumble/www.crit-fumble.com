@@ -75,6 +75,38 @@
 - [COMPLETED] Update package naming to use consistent `@crit-fumble/` namespace
 - [COMPLETED] Update architecture to have specialized packages imported into @crit-fumble/core
 
+### @crit-fumble/worldanvil
+- [COMPLETED] Create package structure with models/server/client pattern
+- [COMPLETED] Implement World Anvil API client
+- [COMPLETED] Implement World Anvil models
+- [COMPLETED] Implement World Anvil services
+- [COMPLETED] Implement World Anvil controllers
+- [COMPLETED] Update exports for proper integration with @crit-fumble/core
+- [BOT-WIP] Implement remaining API endpoints
+- [BOT-WIP] Add comprehensive test coverage
+- [BOT-TODO] remove all completed FUTURE: and TODO: comments
+
+### @crit-fumble/openai
+- [COMPLETED] Create new package with proper structure
+- [COMPLETED] Implement OpenAI API client
+- [COMPLETED] Implement models for OpenAI responses
+- [COMPLETED] Implement services for different OpenAI features (chat, embeddings, etc.)
+- [COMPLETED] Create basic controllers for common OpenAI operations
+- [COMPLETED] Set up environment variables and configs
+- [COMPLETED] Add comprehensive test coverage
+- [BOT-TODO] update configs to simply accept a value instead of reading from .env
+- [BOT-TODO] implement SSO
+- [BOT-TODO] remove all completed FUTURE: and TODO: comments
+
+### @crit-fumble/discord
+- [COMPLETED] update package structure to match openai and worldanvil libraries
+- [COMPLETED] Set up eslint-plugin-import with restrictions (can only import from @crit-fumble/core)
+- [COMPLETED] update exports for proper integration with @crit-fumble/core
+- [COMPLETED] Create basic controllers for common Discord operations
+- [COMPLETED] Set up environment variables and configs
+- [COMPLETED] Add comprehensive test coverage
+- [BOT-TODO] remove all completed FUTURE: and TODO: comments
+
 ### @crit-fumble/core
 - [COMPLETED] Implement config registry
   - Set up proper config type definitions
@@ -90,61 +122,52 @@
 - [COMPLETED] Add dependency on @crit-fumble/worldanvil package
 - [COMPLETED] Add dependency on @crit-fumble/discord package
 - [COMPLETED] Add dependency on @crit-fumble/openai package (placeholder for now)
+- [BOT-TODO] link discord and worldanvil services in UserController, WorldController, and RpgSystemController in packages\core\server\controllers
+- [BOT-TODO] implement a "Marketplace" currency system "Crit-Coins" in packages\core\server\services\coinService.ts; the name of the  coins can be determined in a config we will pass in from the host project; we need methods to add and remove coins; we will build a wrapper package for stripe to handle the payment processing in the future, but we will want some methods we can use during the testing phase to give our coins for free
+- [BOT-TODO] create a server controller for the coinService in packages\core\server\controllers\coinController.ts
 - [FUTURE] Create schema validation for config types
 - [FUTURE] Check for and fix circular dependencies
-
-### @crit-fumble/worldanvil
-- [COMPLETED] Create package structure with models/server/client pattern
-- [COMPLETED] Implement World Anvil API client
-- [COMPLETED] Implement World Anvil models
-- [COMPLETED] Implement World Anvil services
-- [COMPLETED] Implement World Anvil controllers
-- [COMPLETED] Update exports for proper integration with @crit-fumble/core
-- [FUTURE] Implement remaining API endpoints
-- [FUTURE] Add comprehensive test coverage
-
-### @crit-fumble/openai
-- [TODO] Create new package with proper structure
-- [TODO] Implement OpenAI API client
-- [TODO] Implement models for OpenAI responses
-- [TODO] Implement services for different OpenAI features (chat, embeddings, etc.)
-- [TODO] Create basic controllers for common OpenAI operations
-- [TODO] Set up environment variables and configs
-
-### @crit-fumble/discord
-- [FUTURE] Update path aliases for clean and consistent imports
-- [FUTURE] Add the following missing dependencies:
-  - `@discordjs/voice`: Used in audio.js for voice channel functionality
-- [FUTURE] Fix import path in discord-bot/server.js (from `@crit-fumble/discord/services/managers/...` to `@crit-fumble/discord/services/managers/...`)
-- [FUTURE] Set up eslint-plugin-import with restrictions (can only import from @crit-fumble/core)
+- [BOT-TODO] remove all completed FUTURE: and TODO: comments
 
 ### @crit-fumble/next
-- [FUTURE] Fix circular reference in CharacterDashboard (currently imports from `@crit-fumble/next/views/...` which is a self-reference)
-- [FUTURE] Fix imports referencing `@crit-fumble/core/config/...` which doesn't exist in the package.json
-- [FUTURE] Set up eslint-plugin-import with restrictions (can only import from @crit-fumble/core)
-- [FUTURE] Configure tsconfig.json to extend from root configuration
+- [BOT-TODO] update package structure to match other libraries
+- [BOT-TODO] Set up eslint-plugin-import with restrictions (can only import from @crit-fumble/core)
+- [BOT-TODO] Configure tsconfig.json to extend from root configuration
+- [BOT-TODO] remove all completed FUTURE: and TODO: comments
 
 ### @crit-fumble/next-web
-- [FUTURE] Fix any import violations in the codebase
-- [FUTURE] Configure tsconfig.json to extend from root configuration
+- [BOT-TODO] Fix any import violations in the codebase
+- [BOT-TODO] Configure tsconfig.json to NOT extend from a root configuration
+- [BOT-TODO] Set up an api endpoint collection for use with the discord-bot we'll be updating later in packages\discord-bot
+- [BOT-TODO] Set up an api endpoint collection for use by a Discord App
+- [BOT-TODO] Set up a special view for the discord activity
+- [BOT-TODO] remove all completed FUTURE: and TODO: comments
 
 ### @crit-fumble/discord-bot
 - [BOT-TODO] Fix import paths that don't match actual file locations
-- [FUTURE] Configure tsconfig.json to extend from root configuration
-- [FUTURE] Set up CI checks to prevent future violations
+- [BOT-TODO] Configure tsconfig.json to NOT extend from a root configuration
+- [BOT-TODO] Update bot to use website endpoints for command execution
+- [BOT-TODO] Update bot to use website endpoints for event handling
+- [BOT-TODO] Update bot to use website endpoints for user authentication
+- [BOT-TODO] Ensure persistent bot is processing scheduled cron tasks
+- [BOT-TODO] Set up CI checks to prevent future violations
+- [BOT-TODO] remove all completed FUTURE: and TODO: comments
 
-### @crit-fumble/discord-app
-- [FUTURE] Configure tsconfig.json to extend from root configuration
-- [FUTURE] Set up CI checks to prevent future violations
+### Future Library Packages
+- [FUTURE] Scope out a package for wrapping Stripe payments
+- [FUTURE] Scope out package for Roll20 Integration
+- [FUTURE] Scope out a package for a FoundryVTT integration
+- [FUTURE] Scope out a Docker instance manager using Docker and either fly.io or vast.ai to deploy images
+- [FUTURE] Scope out a FoundryVTT instance manager using Docker
+- [FUTURE] Scope out package for Steam integration, with an instance manager using Docker for hosting game servers
+- [FUTURE] Scope out package for Twitch integration
+- [FUTURE] Scope out package for YouTube integration
+- [FUTURE] Consider splitting pure React code from Next.js code into a 'react' library
 
-### @crit-fumble/discord-activity
-- [FUTURE] Configure tsconfig.json to extend from root configuration
-- [FUTURE] Set up CI checks to prevent future violations
 
 ### Global Future Improvements
-- [FUTURE] Consider splitting pure React code from Next.js code
 - [FUTURE] Create a visualization of the architecture for documentation
 - [FUTURE] Add automated tests for package boundary violations
-- [FUTURE] Document architecture rules in docs/architecture.md
+- [FUTURE] Document architecture in docs/architecture.md
 - [FUTURE] Add compiler options to prevent importing non-existent modules
 - [FUTURE] Create an import validation script to verify compliance

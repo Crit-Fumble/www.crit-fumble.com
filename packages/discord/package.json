@@ -1,6 +1,6 @@
 {
     "name": "@crit-fumble/discord",
-    "version": "14.14.1",
+    "version": "14.14.1r1",
     "description": "Discord stack for the Crit-Fumble web application",
     "main": "index.js",
     "keywords": [
@@ -16,13 +16,20 @@
         "test": "jest"
     },
     "dependencies": {
+        "discord.js": "^14.14.1",
         "@discordjs/voice": "^0.18.0",
-        "discord.js": "^14.14.1"
+        "bufferutil": "^4.0.9",
+        "zlib-sync": "^0.1.10"
     },
     "devDependencies": {
+        "@babel/preset-typescript": "^7.27.1",
         "@types/jest": "^29.5.14",
         "eslint": "^8",
         "jest": "^29.7.0",
+        "ts-jest": "^29.4.1",
         "typescript": "^5.8.2"
+    },
+    "publishConfig": {
+        "access": "public"
     }
 }
