@@ -12,7 +12,11 @@ import {
   TimelineInput,
   TimelineUpdateInput,
   WorldTimelinesResponse,
-  TimelineListOptions
+  TimelineListOptions,
+  HistoryResponse,
+  HistoryInput,
+  HistoryUpdateInput,
+  WorldHistoriesResponse
 } from '../../models/WorldAnvilTimeline';
 
 /**
@@ -98,6 +102,75 @@ export class WorldAnvilTimelineService {
   async getTimelinesByWorld(worldId: string, options: TimelineListOptions = {}): Promise<WorldTimelinesResponse> {
     // Using POST as specified in the world-timelines.yml specification
     return this.apiClient.post<WorldTimelinesResponse>('/world-timelines', {
+      offset: options.offset || 0,
+      limit: options.limit || 50
+    }, {
+      params: { id: worldId }
+    });
+  }
+  
+  // History methods
+  
+  /**
+   * Get a history by ID
+   * @param historyId The ID of the history to get
+   * @param granularity The level of detail to return (-1, 0, 1, or 2)
+   * @returns History data at specified granularity
+   */
+  async getHistoryById(historyId: string, granularity: '-1' | '0' | '1' | '2' = '0'): Promise<HistoryResponse> {
+    return this.apiClient.get<HistoryResponse>('/history', {
+      params: {
+        id: historyId,
+        granularity
+      }
+    });
+  }
+
+  /**
+   * Create a new history
+   * @param historyData The history data to create (requires title, year, and world.id)
+   * @returns Created history reference
+   */
+  async createHistory(historyData: HistoryInput): Promise<HistoryResponse> {
+    return this.apiClient.put<HistoryResponse>('/history', historyData);
+  }
+
+  /**
+   * Update an existing history
+   * @param historyId The ID of the history to update
+   * @param historyData The updated history data
+   * @returns Updated history reference
+   */
+  async updateHistory(historyId: string, historyData: HistoryUpdateInput): Promise<HistoryResponse> {
+    return this.apiClient.patch<HistoryResponse>('/history', historyData, {
+      params: {
+        id: historyId
+      }
+    });
+  }
+
+  /**
+   * Delete a history
+   * @param historyId The ID of the history to delete
+   * @returns Success response
+   */
+  async deleteHistory(historyId: string): Promise<{ success: boolean }> {
+    return this.apiClient.delete<{ success: boolean }>('/history', {
+      params: {
+        id: historyId
+      }
+    });
+  }
+
+  /**
+   * Get a list of histories in a world
+   * Based on world-histories.yml POST endpoint
+   * @param worldId The ID of the world
+   * @param options Options for pagination
+   */
+  async getHistoriesByWorld(worldId: string, options: TimelineListOptions = {}): Promise<WorldHistoriesResponse> {
+    // Using POST as specified in the world-histories.yml specification
+    return this.apiClient.post<WorldHistoriesResponse>('/world-histories', {
       offset: options.offset || 0,
       limit: options.limit || 50
     }, {

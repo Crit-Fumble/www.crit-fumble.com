@@ -35,7 +35,14 @@ describe('WorldAnvilManuscriptService', () => {
     author: {
       id: 'user-789',
       username: 'testuser'
-    }
+    },
+    beats: [],
+    parts: [],
+    versions: [],
+    bookmarks: [],
+    sub_resources: [],
+    world_id: 'world-456',
+    user_id: 'user-789'
   };
 
   const mockManuscriptInput: ManuscriptInput = {
@@ -53,7 +60,10 @@ describe('WorldAnvilManuscriptService', () => {
 
   const mockManuscriptRef: ManuscriptRef = {
     id: 'manuscript-123',
-    title: 'Test Manuscript'
+    title: 'Test Manuscript',
+    slug: 'test-manuscript',
+    world_id: 'world-456',
+    user_id: 'user-789'
   };
 
   const mockWorldManuscriptsResponse: WorldManuscriptsResponse = {
@@ -61,11 +71,17 @@ describe('WorldAnvilManuscriptService', () => {
     entities: [
       {
         id: 'manuscript-123',
-        title: 'Test Manuscript'
+        title: 'Test Manuscript',
+        slug: 'test-manuscript',
+        world_id: 'world-456',
+        user_id: 'user-789'
       },
       {
         id: 'manuscript-456',
-        title: 'Another Manuscript'
+        title: 'Another Manuscript',
+        slug: 'another-manuscript',
+        world_id: 'world-456',
+        user_id: 'user-789'
       }
     ]
   };

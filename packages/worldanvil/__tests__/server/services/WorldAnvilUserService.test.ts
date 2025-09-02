@@ -134,4 +134,48 @@ describe('WorldAnvilUserService', () => {
       expect(result).toEqual(mockUser);
     });
   });
+
+  describe('updateUser', () => {
+    it('should update a user by ID', async () => {
+      // Setup
+      const userId = 'user-123';
+      const updateData = {
+        display_name: 'Updated Name',
+        first_name: 'Updated',
+        last_name: 'User'
+      };
+      mockApiClient.put.mockResolvedValue({
+        ...mockUserResponse,
+        display_name: 'Updated Name'
+      });
+
+      // Execute
+      const result = await service.updateUser(userId, updateData);
+
+      // Verify
+      expect(mockApiClient.put).toHaveBeenCalledWith('/user', {
+        id: userId,
+        ...updateData
+      });
+      expect(result).toEqual({
+        ...mockUser,
+        display_name: 'Updated Name'
+      });
+    });
+    
+    it('should handle error when updating user', async () => {
+      // Setup
+      const userId = 'user-123';
+      const updateData = { display_name: 'Updated Name' };
+      const errorMsg = 'Update failed';
+      mockApiClient.put.mockRejectedValue(new Error(errorMsg));
+
+      // Execute and verify error is propagated
+      await expect(service.updateUser(userId, updateData)).rejects.toThrow(errorMsg);
+      expect(mockApiClient.put).toHaveBeenCalledWith('/user', {
+        id: userId,
+        ...updateData
+      });
+    });
+  });
 });

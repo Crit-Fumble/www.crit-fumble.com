@@ -40,8 +40,23 @@ import {
 import { 
   CategoryInput, CategoryResponse
 } from '../../models/WorldAnvilCategory';
-import { 
-  ManuscriptInput, ManuscriptResponse, ManuscriptUpdateInput, WorldManuscriptsResponse, ManuscriptListOptions
+import {
+  ManuscriptRef,
+  ManuscriptResponse,
+  ManuscriptInput,
+  ManuscriptUpdateInput,
+  WorldManuscriptsResponse,
+  ManuscriptListOptions,
+  // Manuscript Beat types
+  ManuscriptBeatRef, ManuscriptBeatResponse, ManuscriptBeatInput, ManuscriptBeatUpdateInput, ManuscriptBeatsResponse,
+  // Manuscript Part types
+  ManuscriptPartRef, ManuscriptPartResponse, ManuscriptPartInput, ManuscriptPartUpdateInput, ManuscriptPartsResponse,
+  // Manuscript Version types
+  ManuscriptVersionRef, ManuscriptVersionResponse, ManuscriptVersionInput, ManuscriptVersionUpdateInput, ManuscriptVersionsResponse,
+  // Manuscript Bookmark types
+  ManuscriptBookmarkRef, ManuscriptBookmarkResponse, ManuscriptBookmarkInput, ManuscriptBookmarkUpdateInput, ManuscriptBookmarksResponse,
+  // Common types
+  ManuscriptSubResourceListOptions
 } from '../../models/WorldAnvilManuscript';
 import { 
   MapInput, MapResponse, MapUpdateInput, WorldMapsResponse, MapListOptions,
@@ -449,6 +464,51 @@ export class WorldAnvilController {
     return this.subscriberGroupService.getSubscriberGroupsByWorld(worldId, options);
   }
 
+  // History methods
+
+  /**
+   * Get history by ID
+   * @param historyId The ID of the history
+   * @param granularity The granularity level of the response
+   */
+  async getHistoryById(historyId: string, granularity: GranularityLevel = '0'): Promise<HistoryResponse> {
+    return this.timelineService.getHistoryById(historyId, granularity);
+  }
+
+  /**
+   * Create a new history
+   * @param historyData The history data
+   */
+  async createHistory(historyData: HistoryInput): Promise<HistoryResponse> {
+    return this.timelineService.createHistory(historyData);
+  }
+
+  /**
+   * Update a history
+   * @param historyId The ID of the history to update
+   * @param historyData The updated history data
+   */
+  async updateHistory(historyId: string, historyData: HistoryUpdateInput): Promise<HistoryResponse> {
+    return this.timelineService.updateHistory(historyId, historyData);
+  }
+
+  /**
+   * Delete a history
+   * @param historyId The ID of the history to delete
+   */
+  async deleteHistory(historyId: string): Promise<{ success: boolean }> {
+    return this.timelineService.deleteHistory(historyId);
+  }
+
+  /**
+   * Get a list of histories in a world
+   * @param worldId The ID of the world
+   * @param options Options for pagination
+   */
+  async getHistoriesByWorld(worldId: string, options: TimelineListOptions = {}): Promise<WorldHistoriesResponse> {
+    return this.timelineService.getHistoriesByWorld(worldId, options);
+  }
+
   // Timeline methods
 
   /**
@@ -646,6 +706,186 @@ export class WorldAnvilController {
     return this.manuscriptService.getManuscriptsByWorld(worldId, options);
   }
 
+  // Manuscript Beat methods
+
+  /**
+   * Get manuscript beat by ID
+   * @param beatId The ID of the manuscript beat
+   * @param granularity The level of detail to return (-1 to 2)
+   */
+  async getManuscriptBeat(beatId: string, granularity: '-1' | '0' | '2' = '0'): Promise<ManuscriptBeatResponse> {
+    return this.manuscriptService.getManuscriptBeatById(beatId, granularity);
+  }
+
+  /**
+   * Create a new manuscript beat
+   * @param beatData The manuscript beat data
+   */
+  async createManuscriptBeat(beatData: ManuscriptBeatInput): Promise<ManuscriptBeatRef> {
+    return this.manuscriptService.createManuscriptBeat(beatData);
+  }
+
+  /**
+   * Update a manuscript beat
+   * @param beatId The ID of the manuscript beat
+   * @param beatData The updated manuscript beat data
+   */
+  async updateManuscriptBeat(beatId: string, beatData: ManuscriptBeatUpdateInput): Promise<ManuscriptBeatRef> {
+    return this.manuscriptService.updateManuscriptBeat(beatId, beatData);
+  }
+
+  /**
+   * Delete a manuscript beat
+   * @param beatId The ID of the manuscript beat
+   */
+  async deleteManuscriptBeat(beatId: string): Promise<{ success: boolean }> {
+    return this.manuscriptService.deleteManuscriptBeat(beatId);
+  }
+
+  /**
+   * Get beats by manuscript part
+   * @param partId The ID of the manuscript part
+   * @param options Pagination options
+   */
+  async getBeatsByPart(partId: string, options: ManuscriptSubResourceListOptions = {}): Promise<ManuscriptBeatsResponse> {
+    return this.manuscriptService.getBeatsByPart(partId, options);
+  }
+  
+  // Manuscript Part methods
+
+  /**
+   * Get manuscript part by ID
+   * @param partId The ID of the manuscript part
+   * @param granularity The level of detail to return (-1 to 2)
+   */
+  async getManuscriptPart(partId: string, granularity: '-1' | '0' | '2' = '0'): Promise<ManuscriptPartResponse> {
+    return this.manuscriptService.getManuscriptPartById(partId, granularity);
+  }
+
+  /**
+   * Create a new manuscript part
+   * @param partData The manuscript part data
+   */
+  async createManuscriptPart(partData: ManuscriptPartInput): Promise<ManuscriptPartRef> {
+    return this.manuscriptService.createManuscriptPart(partData);
+  }
+
+  /**
+   * Update a manuscript part
+   * @param partId The ID of the manuscript part
+   * @param partData The updated manuscript part data
+   */
+  async updateManuscriptPart(partId: string, partData: ManuscriptPartUpdateInput): Promise<ManuscriptPartRef> {
+    return this.manuscriptService.updateManuscriptPart(partId, partData);
+  }
+
+  /**
+   * Delete a manuscript part
+   * @param partId The ID of the manuscript part
+   */
+  async deleteManuscriptPart(partId: string): Promise<{ success: boolean }> {
+    return this.manuscriptService.deleteManuscriptPart(partId);
+  }
+
+  /**
+   * Get parts by manuscript version
+   * @param versionId The ID of the manuscript version
+   * @param options Pagination options
+   */
+  async getPartsByVersion(versionId: string, options: ManuscriptSubResourceListOptions = {}): Promise<ManuscriptPartsResponse> {
+    return this.manuscriptService.getPartsByVersion(versionId, options);
+  }
+
+  // Manuscript Version methods
+
+  /**
+   * Get manuscript version by ID
+   * @param versionId The ID of the manuscript version
+   * @param granularity The level of detail to return (-1 to 2)
+   */
+  async getManuscriptVersion(versionId: string, granularity: '-1' | '0' | '2' = '0'): Promise<ManuscriptVersionResponse> {
+    return this.manuscriptService.getManuscriptVersionById(versionId, granularity);
+  }
+
+  /**
+   * Create a new manuscript version
+   * @param versionData The manuscript version data
+   */
+  async createManuscriptVersion(versionData: ManuscriptVersionInput): Promise<ManuscriptVersionRef> {
+    return this.manuscriptService.createManuscriptVersion(versionData);
+  }
+
+  /**
+   * Update a manuscript version
+   * @param versionId The ID of the manuscript version
+   * @param versionData The updated manuscript version data
+   */
+  async updateManuscriptVersion(versionId: string, versionData: ManuscriptVersionUpdateInput): Promise<ManuscriptVersionRef> {
+    return this.manuscriptService.updateManuscriptVersion(versionId, versionData);
+  }
+
+  /**
+   * Delete a manuscript version
+   * @param versionId The ID of the manuscript version
+   */
+  async deleteManuscriptVersion(versionId: string): Promise<{ success: boolean }> {
+    return this.manuscriptService.deleteManuscriptVersion(versionId);
+  }
+
+  /**
+   * Get versions by manuscript
+   * @param manuscriptId The ID of the manuscript
+   * @param options Pagination options
+   */
+  async getVersionsByManuscript(manuscriptId: string, options: ManuscriptSubResourceListOptions = {}): Promise<ManuscriptVersionsResponse> {
+    return this.manuscriptService.getVersionsByManuscript(manuscriptId, options);
+  }
+
+  // Manuscript Bookmark methods
+
+  /**
+   * Get manuscript bookmark by ID
+   * @param bookmarkId The ID of the manuscript bookmark
+   * @param granularity The level of detail to return (-1 to 2)
+   */
+  async getManuscriptBookmark(bookmarkId: string, granularity: '-1' | '0' | '2' = '0'): Promise<ManuscriptBookmarkResponse> {
+    return this.manuscriptService.getManuscriptBookmarkById(bookmarkId, granularity);
+  }
+
+  /**
+   * Create a new manuscript bookmark
+   * @param bookmarkData The manuscript bookmark data
+   */
+  async createManuscriptBookmark(bookmarkData: ManuscriptBookmarkInput): Promise<ManuscriptBookmarkRef> {
+    return this.manuscriptService.createManuscriptBookmark(bookmarkData);
+  }
+
+  /**
+   * Update a manuscript bookmark
+   * @param bookmarkId The ID of the manuscript bookmark
+   * @param bookmarkData The updated manuscript bookmark data
+   */
+  async updateManuscriptBookmark(bookmarkId: string, bookmarkData: ManuscriptBookmarkUpdateInput): Promise<ManuscriptBookmarkRef> {
+    return this.manuscriptService.updateManuscriptBookmark(bookmarkId, bookmarkData);
+  }
+
+  /**
+   * Delete a manuscript bookmark
+   * @param bookmarkId The ID of the manuscript bookmark
+   */
+  async deleteManuscriptBookmark(bookmarkId: string): Promise<{ success: boolean }> {
+    return this.manuscriptService.deleteManuscriptBookmark(bookmarkId);
+  }
+
+  /**
+   * Get bookmarks by manuscript
+   * @param manuscriptId The ID of the manuscript
+   * @param options Pagination options
+   */
+  async getBookmarksByManuscript(manuscriptId: string, options: ManuscriptSubResourceListOptions = {}): Promise<ManuscriptBookmarksResponse> {
+    return this.manuscriptService.getBookmarksByManuscript(manuscriptId, options);
+  }
+
   // Variable methods
 
   /**
@@ -734,6 +974,25 @@ export class WorldAnvilController {
     return this.variableService.listVariableCollectionsByWorld(worldId, options);
   }
 
+  // Article methods - additional list functionality
+  
+  /**
+   * Get articles by category
+   * @param categoryId The ID of the category
+   * @param options Options for pagination and filtering
+   */
+  async getArticlesByCategory(categoryId: string, options: Omit<ArticleListOptions, 'category_id'> = {}): Promise<{ articles: WorldAnvilArticleResponse[], pagination: { total: number, page: number, pages: number } }> {
+    return this.articleService.getArticlesByCategory(categoryId, options);
+  }
+  
+  /**
+   * Get all articles with filtering options
+   * @param options Options for filtering and pagination
+   */
+  async getArticles(options: ArticleListOptions = {}): Promise<{ articles: WorldAnvilArticleResponse[], pagination: { total: number, page: number, pages: number } }> {
+    return this.articleService.getArticles(options);
+  }
+  
   // Block Template methods
 
   /**
