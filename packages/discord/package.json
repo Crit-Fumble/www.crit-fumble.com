@@ -1,8 +1,13 @@
 {
     "name": "@crit-fumble/discord",
-    "version": "14.14.1-r1",
+    "version": "14.14.1-r2",
     "description": "Discord stack for the Crit-Fumble web application; version matches Discord.js version",
-    "main": "index.js",
+    "type": "module",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "files": [
+        "dist"
+    ],
     "keywords": [
         "crit-fumble",
         "discord"
@@ -10,8 +15,8 @@
     "author": "Crit-Fumble",
     "license": "MIT",
     "scripts": {
-        "build": "npx tsc",
-        "dev": "npx tsc --watch",
+        "build": "tsc",
+        "dev": "tsc --watch",
         "lint": "eslint .",
         "test": "jest"
     },

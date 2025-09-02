@@ -3,9 +3,16 @@
     "version": "6.8.2",
     "description": "Shared data for Crit-Fumble applications; version matches prisma client version",
     "type": "module",
-    "main": "index.js",
-    "types": "index.d.ts",
+    "main": "dist/index.js",
+    "types": "dist/index.d.ts",
+    "files": [
+        "dist"
+    ],
     "scripts": {
+        "build": "tsc",
+        "dev": "tsc --watch",
+        "lint": "eslint .",
+        "test": "jest",
         "pull": "prisma db pull",
         "generate": "prisma generate",
         "migrate": "prisma migrate dev",
@@ -13,24 +20,6 @@
         "reset": "prisma migrate reset",
         "push": "prisma db push",
         "seed": "prisma db prisma/seed"
-    },
-    "exports": {
-        ".": {
-            "import": "./index.js",
-            "types": "./index.d.ts"
-        },
-        "./prisma": {
-            "import": "./prisma.js",
-            "types": "./prisma.d.ts"
-        },
-        "./utils": {
-            "import": "./utils.js",
-            "types": "./utils.d.ts"
-        },
-        "./models": {
-            "import": "./models.js",
-            "types": "./models.d.ts"
-        }
     },
     "keywords": [
         "crit-fumble",
@@ -40,16 +29,15 @@
     "author": "Crit-Fumble",
     "license": "MIT",
     "dependencies": {
-        "@crit-fumble/discord": "^14.14.1-r1",
-        "@crit-fumble/openai": "^5.16.0",
-        "@crit-fumble/worldanvil": "^2.0.0-r1",
+        "@crit-fumble/discord": "^14.14.1-r2",
+        "@crit-fumble/openai": "^5.16.0-r2",
+        "@crit-fumble/worldanvil": "^2.0.0-r2",
         "@dice-roller/rpg-dice-roller": "^5.5.1",
         "@napi-rs/canvas": "^0.1.44",
         "@prisma/client": "^6.8.2",
         "@vercel/blob": "^1.1.1",
         "chrono-node": "^2.8.4",
         "dotenv": "^16.3.1",
-        "node-cron": "^3.0.3",
         "node-fetch": "^3.3.2",
         "pdfjs-dist": "^5.4.149"
     },

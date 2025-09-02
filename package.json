@@ -4,16 +4,25 @@
   "private": true,
   "type": "module",
   "workspaces": [
-    "packages/core",
-    "packages/discord",
-    "packages/worldanvil",
-    "packages/openai",
-    "packages/discord-bot",
-    "packages/models",
-    "packages/next",
-    "packages/next-web"
+    "packages/*"
   ],
-  "scripts": {},
-  "dependencies": {},
-  "devDependencies": {}
+  "scripts": {
+    "build": "npm run build --workspaces --if-present",
+    "dev": "npm run dev --workspaces --if-present",
+    "test": "npm run test --workspaces --if-present",
+    "lint": "npm run lint --workspaces --if-present"
+  },
+  "dependencies": {
+    "@crit-fumble/core": "file:packages/core",
+    "@crit-fumble/discord": "file:packages/discord",
+    "@crit-fumble/worldanvil": "file:packages/worldanvil",
+    "@crit-fumble/openai": "file:packages/openai",
+    "@crit-fumble/next": "file:packages/next",
+    "@crit-fumble/next-web": "file:packages/next-web",
+    "@crit-fumble/discord-bot": "file:packages/discord-bot"
+  },
+  "devDependencies": {
+    "typescript": "^5.8.2",
+    "eslint": "^8.57.1"
+  }
 }

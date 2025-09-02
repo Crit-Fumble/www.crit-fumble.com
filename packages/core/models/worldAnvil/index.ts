@@ -1,1 +1,1 @@
-// TODO: build out world anvil models in this directory
+export * from '@crit-fumble/worldanvil/models';

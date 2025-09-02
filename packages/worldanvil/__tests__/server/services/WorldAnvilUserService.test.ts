@@ -45,6 +45,7 @@ describe('WorldAnvilUserService', () => {
       get: jest.fn(),
       post: jest.fn(),
       put: jest.fn(),
+      patch: jest.fn(),
       delete: jest.fn(),
       setApiKey: jest.fn(),
       setAccessToken: jest.fn(),
@@ -144,7 +145,7 @@ describe('WorldAnvilUserService', () => {
         first_name: 'Updated',
         last_name: 'User'
       };
-      mockApiClient.put.mockResolvedValue({
+      mockApiClient.patch.mockResolvedValue({
         ...mockUserResponse,
         display_name: 'Updated Name'
       });
@@ -153,9 +154,8 @@ describe('WorldAnvilUserService', () => {
       const result = await service.updateUser(userId, updateData);
 
       // Verify
-      expect(mockApiClient.put).toHaveBeenCalledWith('/user', {
-        id: userId,
-        ...updateData
+      expect(mockApiClient.patch).toHaveBeenCalledWith('/user', updateData, {
+        params: { id: userId }
       });
       expect(result).toEqual({
         ...mockUser,
@@ -168,13 +168,12 @@ describe('WorldAnvilUserService', () => {
       const userId = 'user-123';
       const updateData = { display_name: 'Updated Name' };
       const errorMsg = 'Update failed';
-      mockApiClient.put.mockRejectedValue(new Error(errorMsg));
+      mockApiClient.patch.mockRejectedValue(new Error(errorMsg));
 
       // Execute and verify error is propagated
       await expect(service.updateUser(userId, updateData)).rejects.toThrow(errorMsg);
-      expect(mockApiClient.put).toHaveBeenCalledWith('/user', {
-        id: userId,
-        ...updateData
+      expect(mockApiClient.patch).toHaveBeenCalledWith('/user', updateData, {
+        params: { id: userId }
       });
     });
   });

@@ -62,14 +62,19 @@ import {
   MapInput, MapResponse, MapUpdateInput, WorldMapsResponse, MapListOptions,
   LayerInput, LayerResponse, LayerUpdateInput, LayerRef, MapLayersResponse,
   MarkerGroupInput, MarkerGroupResponse, MarkerGroupUpdateInput, MarkerGroupRef,
-  MapMarkerGroupsResponse, MapMarkersResponse, MarkerGroupMarkersResponse
+  MapMarkerGroupsResponse, MapMarkersResponse, MarkerGroupMarkersResponse,
+  MarkerRef, MarkerResponse, MarkerInput, MarkerUpdateInput,
+  MarkerTypeRef, MarkerTypeResponse, MarkerTypeInput, MarkerTypeUpdateInput, MarkerTypesResponse
 } from '../../models/WorldAnvilMap';
 import { 
   NotebookInput, NotebookResponse
 } from '../../models/WorldAnvilNotebook';
-import { 
-  SecretInput, SecretResponse
-} from '../../models/WorldAnvilSecret';
+import { SecretInput, SecretResponse, SecretUpdateInput, WorldSecretsResponse } from '../../models/WorldAnvilSecret';
+import {
+  NoteSectionResponse, NoteSectionInput, NoteSectionRef, NoteSectionUpdateInput,
+  NotebookNoteSectionsResponse, NoteResponse, NoteInput, NoteRef, NoteUpdateInput,
+  NoteSectionNotesResponse
+} from '../../models/WorldAnvilNotebook';
 // Import variable models from the models directory
 import {
   WorldAnvilVariable, WorldAnvilVariableCollection
@@ -397,6 +402,96 @@ export class WorldAnvilController {
     return this.notebookService.deleteNotebook(notebookId);
   }
 
+  // Note Section methods
+
+  /**
+   * Get note section by ID
+   * @param sectionId The ID of the note section
+   * @param granularity The level of detail to return (-1, 0, or 2)
+   */
+  async getNoteSectionById(sectionId: string, granularity: '-1' | '0' | '2' = '0'): Promise<NoteSectionResponse> {
+    return this.notebookService.getNoteSectionById(sectionId, granularity);
+  }
+
+  /**
+   * Create a new note section
+   * @param sectionData The note section data to create
+   */
+  async createNoteSection(sectionData: NoteSectionInput): Promise<NoteSectionRef> {
+    return this.notebookService.createNoteSection(sectionData);
+  }
+
+  /**
+   * Update a note section
+   * @param sectionId The ID of the note section
+   * @param sectionData The updated note section data
+   */
+  async updateNoteSection(sectionId: string, sectionData: NoteSectionUpdateInput): Promise<NoteSectionRef> {
+    return this.notebookService.updateNoteSection(sectionId, sectionData);
+  }
+
+  /**
+   * Delete a note section
+   * @param sectionId The ID of the note section to delete
+   */
+  async deleteNoteSection(sectionId: string): Promise<{ success: boolean }> {
+    return this.notebookService.deleteNoteSection(sectionId);
+  }
+
+  /**
+   * Get note sections in a notebook
+   * @param notebookId The ID of the notebook
+   * @param options Options for pagination
+   */
+  async getNoteSectionsByNotebook(notebookId: string, options: { offset?: number; limit?: number } = {}): Promise<NotebookNoteSectionsResponse> {
+    return this.notebookService.getNoteSectionsByNotebook(notebookId, options);
+  }
+
+  // Note methods
+
+  /**
+   * Get note by ID
+   * @param noteId The ID of the note
+   * @param granularity The level of detail to return (-1, 0, or 2)
+   */
+  async getNoteById(noteId: string, granularity: '-1' | '0' | '2' = '0'): Promise<NoteResponse> {
+    return this.notebookService.getNoteById(noteId, granularity);
+  }
+
+  /**
+   * Create a new note
+   * @param noteData The note data to create
+   */
+  async createNote(noteData: NoteInput): Promise<NoteRef> {
+    return this.notebookService.createNote(noteData);
+  }
+
+  /**
+   * Update a note
+   * @param noteId The ID of the note
+   * @param noteData The updated note data
+   */
+  async updateNote(noteId: string, noteData: NoteUpdateInput): Promise<NoteRef> {
+    return this.notebookService.updateNote(noteId, noteData);
+  }
+
+  /**
+   * Delete a note
+   * @param noteId The ID of the note to delete
+   */
+  async deleteNote(noteId: string): Promise<{ success: boolean }> {
+    return this.notebookService.deleteNote(noteId);
+  }
+
+  /**
+   * Get notes in a note section
+   * @param sectionId The ID of the note section
+   * @param options Options for pagination
+   */
+  async getNotesByNoteSection(sectionId: string, options: { offset?: number; limit?: number } = {}): Promise<NoteSectionNotesResponse> {
+    return this.notebookService.getNotesByNoteSection(sectionId, options);
+  }
+
   // Secret methods
 
   /**
@@ -415,8 +510,10 @@ export class WorldAnvilController {
 
   /**
    * Update a secret
+   * @param secretId The ID of the secret to update
+   * @param secretData The updated secret data
    */
-  async updateSecret(secretId: string, secretData: SecretInput): Promise<{ id: string; title: string }> {
+  async updateSecret(secretId: string, secretData: SecretUpdateInput): Promise<{ id: string; title: string }> {
     return this.secretService.updateSecret(secretId, secretData);
   }
 
@@ -667,6 +764,86 @@ export class WorldAnvilController {
    */
   async getMarkersByMarkerGroup(markerGroupId: string, options: MapListOptions = {}): Promise<MarkerGroupMarkersResponse> {
     return this.mapService.getMarkersByMarkerGroup(markerGroupId, options);
+  }
+
+  // Individual Marker methods
+
+  /**
+   * Get a marker by ID
+   * @param markerId The ID of the marker to get
+   * @param granularity The level of detail to return (-1, 0, 1, or 2)
+   */
+  async getMarkerById(markerId: string, granularity: '-1' | '0' | '1' | '2' = '0'): Promise<MarkerResponse> {
+    return this.mapService.getMarkerById(markerId, granularity);
+  }
+
+  /**
+   * Create a new marker
+   * @param markerData The marker data to create
+   */
+  async createMarker(markerData: MarkerInput): Promise<MarkerRef> {
+    return this.mapService.createMarker(markerData);
+  }
+
+  /**
+   * Update a marker
+   * @param markerId The ID of the marker to update
+   * @param markerData The updated marker data
+   */
+  async updateMarker(markerId: string, markerData: MarkerUpdateInput): Promise<MarkerRef> {
+    return this.mapService.updateMarker(markerId, markerData);
+  }
+
+  /**
+   * Delete a marker
+   * @param markerId The ID of the marker to delete
+   */
+  async deleteMarker(markerId: string): Promise<{ success: boolean }> {
+    return this.mapService.deleteMarker(markerId);
+  }
+
+  // Marker Type methods
+
+  /**
+   * Get a marker type by ID
+   * @param markerTypeId The ID of the marker type to get
+   * @param granularity The level of detail to return (-1, 0, or 2)
+   */
+  async getMarkerTypeById(markerTypeId: string, granularity: '-1' | '0' | '2' = '0'): Promise<MarkerTypeResponse> {
+    return this.mapService.getMarkerTypeById(markerTypeId, granularity);
+  }
+
+  /**
+   * Create a new marker type
+   * @param markerTypeData The marker type data to create
+   */
+  async createMarkerType(markerTypeData: MarkerTypeInput): Promise<MarkerTypeRef> {
+    return this.mapService.createMarkerType(markerTypeData);
+  }
+
+  /**
+   * Update a marker type
+   * @param markerTypeId The ID of the marker type to update
+   * @param markerTypeData The updated marker type data
+   */
+  async updateMarkerType(markerTypeId: string, markerTypeData: MarkerTypeUpdateInput): Promise<MarkerTypeRef> {
+    return this.mapService.updateMarkerType(markerTypeId, markerTypeData);
+  }
+
+  /**
+   * Delete a marker type
+   * @param markerTypeId The ID of the marker type to delete
+   */
+  async deleteMarkerType(markerTypeId: string): Promise<{ success: boolean }> {
+    return this.mapService.deleteMarkerType(markerTypeId);
+  }
+
+  /**
+   * Get a list of marker types
+   * @param options Options for pagination
+   */
+  async getMarkerTypes(options: MapListOptions = {}): Promise<MarkerTypesResponse> {
+    return this.mapService.getMarkerTypes(options);
   }
 
   // Manuscript methods

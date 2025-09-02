@@ -67,6 +67,7 @@ describe('WorldAnvilWorldService', () => {
       get: jest.fn(),
       post: jest.fn(),
       put: jest.fn(),
+      patch: jest.fn(),
       delete: jest.fn(),
       setApiKey: jest.fn(),
       setAccessToken: jest.fn()
@@ -319,12 +320,7 @@ describe('WorldAnvilWorldService', () => {
         title: 'Updated World',
         description: 'An updated world description'
       };
-      const expectedParams = {
-        id: worldId,
-        title: 'Updated World',
-        description: 'An updated world description'
-      };
-      mockApiClient.put.mockResolvedValue({
+      mockApiClient.patch.mockResolvedValue({
         ...mockWorldResponse,
         title: 'Updated World',
         description: 'An updated world description'
@@ -334,7 +330,9 @@ describe('WorldAnvilWorldService', () => {
       const result = await service.updateWorld(worldId, worldData);
 
       // Verify
-      expect(mockApiClient.put).toHaveBeenCalledWith('/world', expectedParams);
+      expect(mockApiClient.patch).toHaveBeenCalledWith('/world', worldData, {
+        params: { id: worldId }
+      });
       expect(result.title).toBe('Updated World');
       expect(result.description).toBe('An updated world description');
     });

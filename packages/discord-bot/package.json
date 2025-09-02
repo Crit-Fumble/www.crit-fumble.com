@@ -10,7 +10,8 @@
     "author": "Crit-Fumble",
     "license": "MIT",
     "dependencies": {
-        "@crit-fumble/core": "^6.8.2"
+        "@crit-fumble/core": "^6.8.2",
+        "node-cron": "^3.0.3"
     },
     "scripts": {
         "build": "npx tsc --outDir dist packages/**/*.ts",

@@ -1,6 +1,6 @@
 {
   "name": "@crit-fumble/worldanvil",
-  "version": "2.0.0-r1",
+  "version": "2.0.0-r2",
   "description": "World Anvil API integration for Crit-Fumble; version matches World Anvil API version",
   "main": "dist/index.js",
   "module": "dist/index.js",

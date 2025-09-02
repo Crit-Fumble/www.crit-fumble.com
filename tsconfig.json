@@ -1,28 +1,29 @@
 {
   "compilerOptions": {
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "noEmit": true,
+    /* Common base options for all packages */
     "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "bundler",
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
-    "incremental": true,
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
+    
+    /* Type checking */
+    "strict": true,
+    "noImplicitAny": true,
+    "strictNullChecks": true,
+    
+    /* Module resolution */
+    "moduleResolution": "node",
+    "baseUrl": ".",
+    
+    /* Path mappings for workspace packages */
     "paths": {
       "@crit-fumble/core/*": ["./packages/core/*"],
-      "@crit-fumble/next/*": ["./packages/next/*"],
       "@crit-fumble/discord/*": ["./packages/discord/*"],
+      "@crit-fumble/worldanvil/*": ["./packages/worldanvil/*"],
+      "@crit-fumble/openai/*": ["./packages/openai/*"],
+      "@crit-fumble/next/*": ["./packages/next/*"],
+      "@crit-fumble/discord-bot/*": ["./packages/discord-bot/*"]
     }
   },
-  "include": ["./packages/next-web/next-env.d.ts", "**/*.ts", "**/*.tsx", "./.next/types/**/*.ts"],
-  "exclude": ["node_modules"]
+  "exclude": ["node_modules", "**/dist/**"]
 }

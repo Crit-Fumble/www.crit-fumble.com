@@ -1,6 +1,6 @@
 # @crit-fumble/worldanvil
 
-A TypeScript client library for the World Anvil API, designed for Crit-Fumble applications.
+A TypeScript client library for the World Anvil API (Boromir specification), designed for Crit-Fumble applications.
 
 ## Installation
 
@@ -10,10 +10,10 @@ npm install @crit-fumble/worldanvil
 
 ## Features
 
-- TypeScript definitions for World Anvil API responses
-- Client implementation for World Anvil API endpoints
+- TypeScript definitions for World Anvil API responses aligned with the Boromir specification
+- Client implementation for World Anvil API endpoints with proper HTTP method alignment
 - User authentication and OAuth token management
-- Comprehensive services for worlds, articles, maps, timelines, and more
+- Comprehensive services for worlds, articles, maps, timelines, notes, markers, and more
 - Type-safe API client with automatic error handling
 - Dependency injection support for testing
 
@@ -155,8 +155,40 @@ const maps = await mapService.getMapsByWorld('world-id');
 // Get map details
 const map = await mapService.getMapById('map-id');
 
-// Get map pins
-const pins = await mapService.getMapPins('map-id');
+// Working with layers
+const layers = await mapService.getLayersByMap('map-id');
+const layer = await mapService.getLayerById('layer-id');
+
+// Working with markers and marker types
+const markerTypes = await mapService.getMarkerTypes();
+const markerType = await mapService.getMarkerTypeById('marker-type-id');
+const markers = await mapService.getMarkersByMap('map-id');
+const marker = await mapService.getMarkerById('marker-id');
+
+// Working with marker groups
+const markerGroups = await mapService.getMarkerGroupsByMap('map-id');
+const groupMarkers = await mapService.getMarkersByMarkerGroup('marker-group-id');
+```
+
+#### Notebook Operations
+
+```typescript
+import { WorldAnvilNotebookService } from '@crit-fumble/worldanvil';
+
+const notebookService = new WorldAnvilNotebookService();
+notebookService.setAccessToken('your-access-token');
+
+// Working with notebooks
+const notebooks = await notebookService.getNotebooksByWorld('world-id');
+const notebook = await notebookService.getNotebookById('notebook-id');
+
+// Working with note sections
+const sections = await notebookService.getNoteSectionsByNotebook('notebook-id');
+const section = await notebookService.getNoteSectionById('section-id');
+
+// Working with notes
+const notes = await notebookService.getNotesByNoteSection('section-id');
+const note = await notebookService.getNoteById('note-id');
 ```
 
 #### Manuscript Operations
@@ -241,6 +273,17 @@ const createResponse = await apiClient.post('/article/create', {
   title: 'New Article',
   content: 'Article content'
 });
+
+// Make PATCH request with data and query parameters
+const updateResponse = await apiClient.patch('/user', 
+  { displayName: 'Updated Name' },
+  { params: { id: 'user-id' } }
+);
+
+// Make PUT request
+const putResponse = await apiClient.put('/some-resource', {
+  field: 'updated value'
+});
 ```
 
 ## Testing
@@ -254,7 +297,11 @@ import { WorldAnvilWorldService } from '@crit-fumble/worldanvil';
 const mockClient = {
   get: jest.fn(),
   post: jest.fn(),
-  // ... other methods
+  put: jest.fn(),
+  patch: jest.fn(),
+  delete: jest.fn(),
+  setApiKey: jest.fn(),
+  setAccessToken: jest.fn()
 };
 
 // Inject mock client

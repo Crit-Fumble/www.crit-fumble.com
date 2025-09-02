@@ -93,11 +93,9 @@ export class WorldAnvilUserService {
    * @param userData The updated user data
    */
   async updateUser(userId: string, userData: WorldAnvilUserUpdateData): Promise<WorldAnvilUser> {
-    // The API uses PATCH but our client might not support it directly
-    // Using PUT as a fallback which the client supports
-    const response = await this.apiClient.put<WorldAnvilUserResponse>('/user', {
-      id: userId,
-      ...userData
+    // Using PATCH as specified in Boromir API docs (user.yml)
+    const response = await this.apiClient.patch<WorldAnvilUserResponse>('/user', userData, {
+      params: { id: userId }
     });
     
     return this.mapUserResponse(response);

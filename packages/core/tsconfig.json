@@ -1,20 +1,32 @@
 {
-  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "../dist/core",
+    "target": "ES2020",
+    "module": "ESNext",
+    "lib": ["ESNext"],
+    "declaration": true,
+    "outDir": "dist",
     "rootDir": ".",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "moduleResolution": "node",
     "baseUrl": ".",
     "paths": {
-      "@crit-fumble/core": ["."]
+      "@crit-fumble/core/*": ["./*/"]
     }
   },
   "include": [
-    "./**/*.ts",
-    "./**/*.tsx",
-    "./**/*.js",
-    "./**/*.jsx" 
+    "models/**/*",
+    "server/**/*",
+    "client/**/*",
+    "index.ts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "dist",
+    "**/__tests__/**"
   ]
 }

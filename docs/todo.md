@@ -42,7 +42,6 @@
 ## TODO List
 ### Bot Instructions
 - review the architecture above, but never modify it.
-- review the entire list below for context, especially [COMPLETED] items
 - first, check for any items in the list marked [BOT-REVIEW]; if any are found and review them; when complete, mark them as [HUMAN-REVIEW]
 - start working the first item marked as [BOT-WIP] in the list, if one is available; do not start work on an item unless all above items are [COMPLETED]
 - never touch items marked [WIP] or [NEEDS-REVIEW]; a human is completing these tasks
@@ -60,9 +59,21 @@
 - [COMPLETED] Implement World Anvil services
 - [COMPLETED] Implement World Anvil controllers
 - [COMPLETED] Update exports for proper integration with @crit-fumble/core
-- [BOT-WIP] Implement remaining API endpoints
-- [BOT-WIP] finish controller implementation and bring in all user-facing service methods
-- [BOT-WIP] Add comprehensive test coverage
+- [COMPLETED] update configs to simply accept a value instead of reading from .env
+  - Implemented config object pattern that accepts values directly
+  - Removed environment variable dependencies
+- [COMPLETED] Implement remaining API endpoints
+- [COMPLETED] finish controller implementation and bring in all user-facing service methods
+  - Fixed WorldAnvilApiClient to implement patch method correctly
+  - Updated services to use patch instead of put for partial updates
+  - Fixed parameter structure for update methods (ID in query params, data in body)
+  - Added detailed documentation for HTTP methods in docs/api-http-methods.md
+  - Updated README.md with examples of patch usage
+- [COMPLETED] Add comprehensive test coverage
+  - Fixed tests for WorldAnvilUserService and WorldAnvilWorldService
+  - Added proper mocking for patch method in tests
+  - All tests are now passing
+  - Published package as version 2.0.0-r2
 - [BOT-TODO] remove all completed FUTURE: and TODO: comments in code base
 
 ### @crit-fumble/openai
@@ -73,9 +84,13 @@
 - [COMPLETED] Create basic controllers for common OpenAI operations
 - [COMPLETED] Set up environment variables and configs
 - [COMPLETED] Add comprehensive test coverage
-- [BOT-TODO] update configs to simply accept a value instead of reading from .env
+- [COMPLETED] update configs to simply accept a value instead of reading from .env
+  - Removed environment variable dependencies from configuration
+  - Updated to use the config object pattern similar to WorldAnvil
+  - Updated documentation and tests
+  - Released as version 5.16.0-r1
 - [BOT-TODO] remove all completed FUTURE: and TODO: comments in code base
-- [FUTURE] implement SSO
+- [FUTURE] implement openai SSO
 
 ### @crit-fumble/discord
 - [COMPLETED] update package structure to match openai and worldanvil libraries
@@ -84,47 +99,45 @@
 - [COMPLETED] Create basic controllers for common Discord operations
 - [COMPLETED] Set up environment variables and configs
 - [COMPLETED] Add comprehensive test coverage
+- [COMPLETED] update configs to simply accept a value instead of reading from .env
+  - Removed environment variable dependencies from configuration
+  - Updated to use the config object pattern similar to WorldAnvil and OpenAI
 - [BOT-TODO] remove all completed FUTURE: and TODO: comments in code base
 
 ### @crit-fumble/core
-- [COMPLETED] Implement config registry
-  - Set up proper config type definitions
-  - Create centralized registry for config access
-  - Implement validation for required environment variables
-  - Add proper error handling for missing configs
-- [COMPLETED] Fix directory structure for utils (universal/client/server)
-- [COMPLETED] Add missing dependencies to package.json:
-  - Added `@dice-roller/rpg-dice-roller` (already installed)
-  - Added `openai`: Used for AI integration in various commands
-- [COMPLETED] Add the following missing dependencies:
-  - `chrono-node`: For date parsing in timestamp.js and event.js
 - [COMPLETED] Add dependency on @crit-fumble/worldanvil package
 - [COMPLETED] Add dependency on @crit-fumble/discord package
-- [COMPLETED] Add dependency on @crit-fumble/openai package (placeholder for now)
+- [COMPLETED] Add dependency on @crit-fumble/openai package
+- [BOT-WIP] update configs to simply accept a value instead of reading from .env; no need for backward compatibility
 - [BOT-TODO] link discord and worldanvil services in UserController, WorldController, and RpgSystemController in packages\core\server\controllers
-- [BOT-TODO] implement a "Marketplace" currency system "Crit-Coins" in packages\core\server\services\coinService.ts; the name of the  coins can be determined in a config we will pass in from the host project; we need methods to add and remove coins; we will build a wrapper package for stripe to handle the payment processing in the future, but we will want some methods we can use during the testing phase to give our coins for free
-- [BOT-TODO] create a server controller for the coinService in packages\core\server\controllers\coinController.ts
-- [BOT-TODO] Create schema validation for config types
+- [BOT-TODO] Create a migration to drop the majority of unused tables
+- [BOT-TODO] remove unused 
 - [BOT-TODO] Check for and fix circular dependencies
 - [BOT-TODO] remove all completed FUTURE: and TODO: comments in code base
+- [FUTURE] implement a "Marketplace" currency system "Crit-Coins" in packages\core\server\services\coinService.ts; the name of the  coins can be determined in a config we will pass in from the host project; we need methods to add and remove coins; we will build a wrapper package for stripe to handle the payment processing in the future, but we will want some methods we can use during the testing phase to give our coins for free
+- [FUTURE] create a server controller for the coinService in packages\core\server\controllers\coinController.ts
 
 ### @crit-fumble/next
 - [BOT-TODO] update package structure to match other libraries
 - [BOT-TODO] Set up eslint-plugin-import with restrictions (can only import from @crit-fumble/core)
 - [BOT-TODO] Configure tsconfig.json to extend from root configuration
+- [BOT-TODO] update configs to simply accept a value instead of reading from .env
+  - Should follow the same pattern as openai/worldanvil/discord
+  - Remove direct environment variable dependencies
 - [BOT-TODO] remove all completed FUTURE: and TODO: comments in code base
 
 ### @crit-fumble/next-web
-- [BOT-TODO] Fix any import violations in the codebase
 - [BOT-TODO] Configure tsconfig.json to NOT extend from a root configuration
+- [BOT-TODO] read in all env vars and set up lib configs
 - [BOT-TODO] Set up an api endpoint collection for use with the discord-bot we'll be updating later in packages\discord-bot
-- [BOT-TODO] Set up an api endpoint collection for use by a Discord App
-- [BOT-TODO] Set up a special view for the discord activity
+- [FUTURE] Set up an api endpoint collection for use by a Discord App
+- [FUTURE] Set up a special view for a voice channel Discord Activity
 - [BOT-TODO] remove all completed FUTURE: and TODO: comments in code base
 
 ### @crit-fumble/discord-bot
 - [BOT-TODO] Fix import paths that don't match actual file locations
 - [BOT-TODO] Configure tsconfig.json to NOT extend from a root configuration
+- [BOT-TODO] read in all env vars and set up lib configs
 - [BOT-TODO] Update bot to use website endpoints for command execution
 - [BOT-TODO] Update bot to use website endpoints for event handling
 - [BOT-TODO] Update bot to use website endpoints for user authentication
@@ -132,12 +145,18 @@
 - [BOT-TODO] Set up CI checks to prevent future violations
 - [BOT-TODO] remove all completed FUTURE: and TODO: comments in code base
 
+-----------------------------------------------------------------------------
+
 ### Future Library Packages
 - [FUTURE] Scope out a package for wrapping Stripe payments
-- [FUTURE] Scope out package for Roll20 Integration
+- [FUTURE] Scope out a package for Roll20 Integration
+- [FUTURE] Scope out a package for wrapping vast.ai
 - [FUTURE] Scope out a package for a FoundryVTT integration
-- [FUTURE] Scope out a FoundryVTT instance manager package using Docker and either fly.io or vast.ai
-- [FUTURE] Scope out a Docker instance manager package using Docker and either fly.io or vast.ai to deploy SteamCMD servers
+- [FUTURE] Scope out a FoundryVTT instance manager package using vast.ai
+- [FUTURE] Scope out a package for a Fantasy Grounds integration
+- [FUTURE] Scope out a package for a Fantasy Grounds instance manager package using vast.ai
+- [FUTURE] Scope out a package for 5e.tools integration
+- [FUTURE] Scope out a package for Old Gus SRD integration
 - [FUTURE] Scope out package for Steam integration, with an instance manager using Docker for hosting game servers
 - [FUTURE] Scope out package for Twitch integration
 - [FUTURE] Scope out package for YouTube integration

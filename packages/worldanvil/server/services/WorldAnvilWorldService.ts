@@ -157,11 +157,9 @@ export class WorldAnvilWorldService {
    * @param worldData The updated world data
    */
   async updateWorld(worldId: string, worldData: WorldAnvilWorldInput): Promise<WorldAnvilWorld> {
-    // API uses PATCH but our client might not support it directly
-    // Using PUT as fallback which the client supports
-    const response = await this.apiClient.put<WorldAnvilWorldResponse>('/world', {
-      id: worldId,
-      ...worldData
+    // Using PATCH as specified in Boromir API docs (world.yml)
+    const response = await this.apiClient.patch<WorldAnvilWorldResponse>('/world', worldData, {
+      params: { id: worldId }
     });
     return this.mapWorldResponse(response);
   }

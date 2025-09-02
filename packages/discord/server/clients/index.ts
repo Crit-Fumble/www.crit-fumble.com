@@ -1,1 +1,1 @@
-export { DiscordApiClient } from './DiscordApiClient';
+export * from './DiscordApiClient';

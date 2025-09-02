@@ -1,5 +1,5 @@
-import { PrismaClient, User as PrismaUser, UserWorldAnvil } from '@prisma/client';
-import { prisma } from '../../prisma.js';
+import { PrismaClient } from '@prisma/client';
+import { prisma } from '../../models/database/prisma';
 import { User } from 'models';
 
 /**
@@ -23,9 +23,6 @@ export async function getUserById(userId: string): Promise<User | null> {
     if (discordUser) {
       user = await prisma.user.findFirst({
         where: { discord: discordUser.id },
-        include: {
-          UserWorldAnvil: true // Include WorldAnvil data if available
-        }
       });
     }
   }
@@ -66,7 +63,6 @@ export async function getUserByEmail(email: string): Promise<User | null> {
  */
 export async function getUserData(userId: string): Promise<{
   user: User | null;
-  worldAnvilUser?: UserWorldAnvil | null;
 }> {
   const user = await getUserById(userId);
   
@@ -76,13 +72,7 @@ export async function getUserData(userId: string): Promise<{
     };
   }
 
-  // Get WorldAnvil user data if it exists
-  const worldAnvilUser = user.world_anvil ? await prisma.userWorldAnvil.findUnique({
-    where: { id: user.world_anvil }
-  }) : null;
-
   return {
     user,
-    worldAnvilUser
   };
 }

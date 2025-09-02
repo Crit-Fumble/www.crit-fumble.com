@@ -4,4 +4,4 @@
  */
 
 // Export all configuration modules
-export * from './config';
+export * from './configs';
