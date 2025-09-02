@@ -33,7 +33,7 @@ export interface WorldAnvilVariableUpdate {
  * Interface for creating a variable collection
  */
 export interface WorldAnvilVariableCollectionInput {
-  title: string;
+  name: string;
   world: string;
   is_private?: boolean;
 }
@@ -42,7 +42,7 @@ export interface WorldAnvilVariableCollectionInput {
  * Interface for updating a variable collection
  */
 export interface WorldAnvilVariableCollectionUpdate {
-  title?: string;
+  name?: string;
   is_private?: boolean;
 }
 
@@ -97,6 +97,9 @@ export class WorldAnvilVariableService {
    * Get a variable by ID
    * @param variableId The ID of the variable to get
    * @param granularity The detail level of the response (-1 to 2)
+   * @returns Variable data at the specified granularity
+   * 
+   * Based on docs/boromir/yml/parts/variable/variable.yml (readVariable)
    */
   async getVariable(variableId: string, granularity: number = 0): Promise<WorldAnvilVariable> {
     return this.apiClient.get<WorldAnvilVariable>('/variable', {
@@ -106,7 +109,10 @@ export class WorldAnvilVariableService {
 
   /**
    * Create a new variable
-   * @param variableData The variable data
+   * @param variableData The variable data (requires k, v, type, collection, world)
+   * @returns Created variable data
+   * 
+   * Based on docs/boromir/yml/parts/variable/variable.yml (createVariable)
    */
   async createVariable(variableData: WorldAnvilVariableInput): Promise<WorldAnvilVariable> {
     return this.apiClient.put<WorldAnvilVariable>('/variable', variableData);
@@ -116,9 +122,12 @@ export class WorldAnvilVariableService {
    * Update an existing variable
    * @param variableId The ID of the variable to update
    * @param variableData The updated variable data
+   * @returns Updated variable data
+   * 
+   * Based on docs/boromir/yml/parts/variable/variable.yml (updateVariable)
    */
   async updateVariable(variableId: string, variableData: WorldAnvilVariableUpdate): Promise<WorldAnvilVariable> {
-    return this.apiClient.put<WorldAnvilVariable>('/variable', {
+    return this.apiClient.patch<WorldAnvilVariable>('/variable', {
       id: variableId,
       ...variableData
     });
@@ -127,9 +136,12 @@ export class WorldAnvilVariableService {
   /**
    * Delete a variable
    * @param variableId The ID of the variable to delete
+   * @returns Success response
+   * 
+   * Based on docs/boromir/yml/parts/variable/variable.yml (deleteVariable)
    */
-  async deleteVariable(variableId: string): Promise<void> {
-    await this.apiClient.delete('/variable', {
+  async deleteVariable(variableId: string): Promise<{ success: boolean }> {
+    return this.apiClient.delete<{ success: boolean }>('/variable', {
       params: { id: variableId }
     });
   }
@@ -138,6 +150,9 @@ export class WorldAnvilVariableService {
    * List variables in a specific variable collection
    * @param collectionId The collection ID
    * @param options Pagination options
+   * @returns Array of variables in the collection (not the full response object)
+   * 
+   * Based on docs/boromir/yml/parts/variable/variables-by-variable-collection.yml (listVariablesByVariableCollection)
    */
   async listVariablesByCollection(collectionId: string, options: PaginationOptions = {}): Promise<WorldAnvilVariable[]> {
     const response = await this.apiClient.post<VariableListResponse>('/variable_collection/variables', options, {
@@ -151,6 +166,9 @@ export class WorldAnvilVariableService {
    * Get a variable collection by ID
    * @param collectionId The ID of the collection to get
    * @param granularity The detail level of the response (-1, 0, or 2)
+   * @returns Variable collection data at specified granularity
+   * 
+   * Based on docs/boromir/yml/parts/variable/variable-collection.yml (readVariableCollection)
    */
   async getVariableCollection(collectionId: string, granularity: number = 0): Promise<WorldAnvilVariableCollection> {
     return this.apiClient.get<WorldAnvilVariableCollection>('/variable_collection', {
@@ -160,7 +178,10 @@ export class WorldAnvilVariableService {
 
   /**
    * Create a new variable collection
-   * @param collectionData The collection data
+   * @param collectionData The collection data (requires title and world)
+   * @returns Created variable collection reference
+   * 
+   * Based on docs/boromir/yml/parts/variable/variable-collection.yml (createVariableCollection)
    */
   async createVariableCollection(collectionData: WorldAnvilVariableCollectionInput): Promise<WorldAnvilVariableCollection> {
     return this.apiClient.put<WorldAnvilVariableCollection>('/variable_collection', collectionData);
@@ -170,9 +191,12 @@ export class WorldAnvilVariableService {
    * Update an existing variable collection
    * @param collectionId The ID of the collection to update
    * @param collectionData The updated collection data
+   * @returns Updated variable collection
+   * 
+   * Based on docs/boromir/yml/parts/variable/variable-collection.yml (updateVariableCollection)
    */
   async updateVariableCollection(collectionId: string, collectionData: WorldAnvilVariableCollectionUpdate): Promise<WorldAnvilVariableCollection> {
-    return this.apiClient.put<WorldAnvilVariableCollection>('/variable_collection', {
+    return this.apiClient.patch<WorldAnvilVariableCollection>('/variable_collection', {
       id: collectionId,
       ...collectionData
     });
@@ -181,9 +205,12 @@ export class WorldAnvilVariableService {
   /**
    * Delete a variable collection
    * @param collectionId The ID of the collection to delete
+   * @returns Success response
+   * 
+   * Based on docs/boromir/yml/parts/variable/variable-collection.yml (deleteVariableCollection)
    */
-  async deleteVariableCollection(collectionId: string): Promise<void> {
-    await this.apiClient.delete('/variable_collection', {
+  async deleteVariableCollection(collectionId: string): Promise<{ success: boolean }> {
+    return this.apiClient.delete<{ success: boolean }>('/variable_collection', {
       params: { id: collectionId }
     });
   }
@@ -192,6 +219,9 @@ export class WorldAnvilVariableService {
    * List variable collections in a specific world
    * @param worldId The world ID
    * @param options Pagination options
+   * @returns List of variable collections in the world
+   * 
+   * Based on docs/boromir/yml/parts/variable/world-variablecollections.yml (listVariableCollectionByWorld)
    */
   async listVariableCollectionsByWorld(worldId: string, options: PaginationOptions = {}): Promise<WorldAnvilVariableCollection[]> {
     const response = await this.apiClient.post<VariableCollectionListResponse>('/world/variablecollections', options, {

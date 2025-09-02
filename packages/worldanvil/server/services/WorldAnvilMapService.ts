@@ -20,6 +20,14 @@ import {
   MarkerGroupInput,
   MarkerGroupUpdateInput,
   MarkerRef,
+  MarkerResponse,
+  MarkerInput,
+  MarkerUpdateInput,
+  MarkerTypeRef,
+  MarkerTypeResponse,
+  MarkerTypeInput,
+  MarkerTypeUpdateInput,
+  MarkerTypesResponse,
   WorldMapsResponse,
   MapLayersResponse,
   MapMarkerGroupsResponse,
@@ -283,6 +291,124 @@ export class WorldAnvilMapService {
       limit: options.limit || 50
     }, {
       params: { id: markerGroupId }
+    });
+  }
+  
+  // Marker endpoints
+
+  /**
+   * Get a marker by ID
+   * @param markerId The ID of the marker to get
+   * @param granularity The level of detail to return (-1, 0, 1, or 2)
+   * @returns Marker data at specified granularity
+   */
+  async getMarkerById(markerId: string, granularity: '-1' | '0' | '1' | '2' = '0'): Promise<MarkerResponse> {
+    return this.apiClient.get<MarkerResponse>('/marker', {
+      params: {
+        id: markerId,
+        granularity
+      }
+    });
+  }
+
+  /**
+   * Create a new marker
+   * @param markerData The marker data to create
+   * @returns Created marker reference
+   */
+  async createMarker(markerData: MarkerInput): Promise<MarkerRef> {
+    return this.apiClient.put<MarkerRef>('/marker', markerData);
+  }
+
+  /**
+   * Update an existing marker
+   * @param markerId The ID of the marker to update
+   * @param markerData The updated marker data
+   * @returns Updated marker reference
+   */
+  async updateMarker(markerId: string, markerData: MarkerUpdateInput): Promise<MarkerRef> {
+    return this.apiClient.patch<MarkerRef>('/marker', markerData, {
+      params: {
+        id: markerId
+      }
+    });
+  }
+
+  /**
+   * Delete a marker
+   * @param markerId The ID of the marker to delete
+   * @returns Success response
+   */
+  async deleteMarker(markerId: string): Promise<{ success: boolean }> {
+    return this.apiClient.delete<{ success: boolean }>('/marker', {
+      params: {
+        id: markerId
+      }
+    });
+  }
+
+  // Marker Type endpoints
+
+  /**
+   * Get a marker type by ID
+   * @param markerTypeId The ID of the marker type to get
+   * @param granularity The level of detail to return (-1, 0, or 2)
+   * @returns Marker type data at specified granularity
+   */
+  async getMarkerTypeById(markerTypeId: string, granularity: '-1' | '0' | '2' = '0'): Promise<MarkerTypeResponse> {
+    return this.apiClient.get<MarkerTypeResponse>('/markertype', {
+      params: {
+        id: markerTypeId,
+        granularity
+      }
+    });
+  }
+
+  /**
+   * Create a new marker type
+   * @param markerTypeData The marker type data to create
+   * @returns Created marker type reference
+   */
+  async createMarkerType(markerTypeData: MarkerTypeInput): Promise<MarkerTypeRef> {
+    return this.apiClient.put<MarkerTypeRef>('/markertype', markerTypeData);
+  }
+
+  /**
+   * Update an existing marker type
+   * @param markerTypeId The ID of the marker type to update
+   * @param markerTypeData The updated marker type data
+   * @returns Updated marker type reference
+   */
+  async updateMarkerType(markerTypeId: string, markerTypeData: MarkerTypeUpdateInput): Promise<MarkerTypeRef> {
+    return this.apiClient.patch<MarkerTypeRef>('/markertype', markerTypeData, {
+      params: {
+        id: markerTypeId
+      }
+    });
+  }
+
+  /**
+   * Delete a marker type
+   * @param markerTypeId The ID of the marker type to delete
+   * @returns Success response
+   */
+  async deleteMarkerType(markerTypeId: string): Promise<{ success: boolean }> {
+    return this.apiClient.delete<{ success: boolean }>('/markertype', {
+      params: {
+        id: markerTypeId
+      }
+    });
+  }
+
+  /**
+   * Get a list of marker types
+   * @param options Options for pagination
+   * @returns List of marker types
+   */
+  async getMarkerTypes(options: MapListOptions = {}): Promise<MarkerTypesResponse> {
+    return this.apiClient.post<MarkerTypesResponse>('/markertypes', {
+      offset: options.offset || 0,
+      limit: options.limit || 50
     });
   }
 }

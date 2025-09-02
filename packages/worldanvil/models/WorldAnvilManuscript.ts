@@ -262,6 +262,180 @@ export interface ManuscriptBookmarksResponse {
 }
 
 /**
+ * Interface for manuscript tag reference
+ * Based on manuscript-tag.yml specification
+ */
+export interface ManuscriptTagRef extends ManuscriptSubResourceBase {
+  manuscript_id: string;
+  title: string;
+}
+
+/**
+ * Interface for manuscript tag response
+ */
+export interface ManuscriptTagResponse extends ManuscriptTagRef {
+  created_at?: string;
+  updated_at?: string;
+}
+
+/**
+ * Interface for manuscript tag input
+ */
+export interface ManuscriptTagInput {
+  title: string;
+  manuscript: {
+    id: string;
+  };
+}
+
+/**
+ * Interface for manuscript tag update input
+ */
+export interface ManuscriptTagUpdateInput {
+  title?: string;
+}
+
+/**
+ * Interface for API response from manuscript tags listing endpoint
+ */
+export interface ManuscriptTagsResponse {
+  success: boolean;
+  entities: ManuscriptTagRef[];
+}
+
+/**
+ * Interface for manuscript plot reference
+ * Based on manuscript-plot.yml specification
+ */
+export interface ManuscriptPlotRef extends ManuscriptSubResourceBase {
+  version_id: string;
+  description?: string;
+}
+
+/**
+ * Interface for manuscript plot response
+ */
+export interface ManuscriptPlotResponse extends ManuscriptPlotRef {
+  created_at?: string;
+  updated_at?: string;
+}
+
+/**
+ * Interface for manuscript plot input
+ */
+export interface ManuscriptPlotInput {
+  title: string;
+  version: {
+    id: string;
+  };
+  description?: string;
+}
+
+/**
+ * Interface for manuscript plot update input
+ */
+export interface ManuscriptPlotUpdateInput {
+  title?: string;
+  description?: string;
+}
+
+/**
+ * Interface for API response from manuscript plots listing endpoint
+ */
+export interface ManuscriptPlotsResponse {
+  success: boolean;
+  entities: ManuscriptPlotRef[];
+}
+
+/**
+ * Interface for manuscript label reference
+ * Based on manuscript-label.yml specification
+ */
+export interface ManuscriptLabelRef extends ManuscriptSubResourceBase {
+  manuscript_id: string;
+  color?: string;
+}
+
+/**
+ * Interface for manuscript label response
+ */
+export interface ManuscriptLabelResponse extends ManuscriptLabelRef {
+  created_at?: string;
+  updated_at?: string;
+}
+
+/**
+ * Interface for manuscript label input
+ */
+export interface ManuscriptLabelInput {
+  title: string;
+  manuscript: {
+    id: string;
+  };
+  color?: string;
+}
+
+/**
+ * Interface for manuscript label update input
+ */
+export interface ManuscriptLabelUpdateInput {
+  title?: string;
+  color?: string;
+}
+
+/**
+ * Interface for API response from manuscript labels listing endpoint
+ */
+export interface ManuscriptLabelsResponse {
+  success: boolean;
+  entities: ManuscriptLabelRef[];
+}
+
+/**
+ * Interface for manuscript stat reference
+ * Based on manuscript-stat.yml specification
+ */
+export interface ManuscriptStatRef extends ManuscriptSubResourceBase {
+  version_id: string;
+  value?: number;
+}
+
+/**
+ * Interface for manuscript stat response
+ */
+export interface ManuscriptStatResponse extends ManuscriptStatRef {
+  created_at?: string;
+  updated_at?: string;
+}
+
+/**
+ * Interface for manuscript stat input
+ */
+export interface ManuscriptStatInput {
+  title: string;
+  version: {
+    id: string;
+  };
+  value?: number;
+}
+
+/**
+ * Interface for manuscript stat update input
+ */
+export interface ManuscriptStatUpdateInput {
+  title?: string;
+  value?: number;
+}
+
+/**
+ * Interface for API response from manuscript stats listing endpoint
+ */
+export interface ManuscriptStatsResponse {
+  success: boolean;
+  entities: ManuscriptStatRef[];
+}
+
+/**
  * Interface for request options for pagination
  */
 export interface ManuscriptSubResourceListOptions {

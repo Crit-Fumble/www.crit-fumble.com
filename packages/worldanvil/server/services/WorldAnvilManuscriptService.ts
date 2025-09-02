@@ -21,6 +21,14 @@ import {
   ManuscriptVersionRef, ManuscriptVersionResponse, ManuscriptVersionInput, ManuscriptVersionUpdateInput, ManuscriptVersionsResponse,
   // Manuscript Bookmark types
   ManuscriptBookmarkRef, ManuscriptBookmarkResponse, ManuscriptBookmarkInput, ManuscriptBookmarkUpdateInput, ManuscriptBookmarksResponse,
+  // Manuscript Tag types
+  ManuscriptTagRef, ManuscriptTagResponse, ManuscriptTagInput, ManuscriptTagUpdateInput, ManuscriptTagsResponse,
+  // Manuscript Plot types
+  ManuscriptPlotRef, ManuscriptPlotResponse, ManuscriptPlotInput, ManuscriptPlotUpdateInput, ManuscriptPlotsResponse,
+  // Manuscript Label types
+  ManuscriptLabelRef, ManuscriptLabelResponse, ManuscriptLabelInput, ManuscriptLabelUpdateInput, ManuscriptLabelsResponse,
+  // Manuscript Stat types
+  ManuscriptStatRef, ManuscriptStatResponse, ManuscriptStatInput, ManuscriptStatUpdateInput, ManuscriptStatsResponse,
   // Common types
   ManuscriptSubResourceListOptions
 } from '../../models/WorldAnvilManuscript';
@@ -380,6 +388,294 @@ export class WorldAnvilManuscriptService {
       limit: options.limit || 50
     }, {
       params: { id: manuscriptId }
+    });
+  }
+
+  // MANUSCRIPT TAG OPERATIONS
+
+  /**
+   * Get a manuscript tag by ID
+   * @param tagId The ID of the manuscript tag to get
+   * @param granularity The level of detail to return (-1 to 2)
+   * @returns Manuscript tag data at specified granularity
+   * @see manuscript-tag.yml GET endpoint
+   */
+  async getManuscriptTagById(tagId: string, granularity: '-1' | '0' | '2' = '0'): Promise<ManuscriptTagResponse> {
+    return this.apiClient.get<ManuscriptTagResponse>('/manuscript_tag', {
+      params: {
+        id: tagId,
+        granularity
+      }
+    });
+  }
+
+  /**
+   * Create a new manuscript tag
+   * @param tagData The manuscript tag data to create (requires title and manuscript.id)
+   * @returns Created manuscript tag reference
+   * @see manuscript-tag.yml PUT endpoint
+   */
+  async createManuscriptTag(tagData: ManuscriptTagInput): Promise<ManuscriptTagRef> {
+    return this.apiClient.put<ManuscriptTagRef>('/manuscript_tag', tagData);
+  }
+
+  /**
+   * Update an existing manuscript tag
+   * @param tagId The ID of the manuscript tag to update
+   * @param tagData The updated manuscript tag data
+   * @returns Updated manuscript tag reference
+   * @see manuscript-tag.yml PATCH endpoint
+   */
+  async updateManuscriptTag(tagId: string, tagData: ManuscriptTagUpdateInput): Promise<ManuscriptTagRef> {
+    return this.apiClient.patch<ManuscriptTagRef>('/manuscript_tag', tagData, {
+      params: {
+        id: tagId
+      }
+    });
+  }
+
+  /**
+   * Delete a manuscript tag
+   * @param tagId The ID of the manuscript tag to delete
+   * @returns Success response
+   * @see manuscript-tag.yml DELETE endpoint
+   */
+  async deleteManuscriptTag(tagId: string): Promise<{ success: boolean }> {
+    return this.apiClient.delete<{ success: boolean }>('/manuscript_tag', {
+      params: {
+        id: tagId
+      }
+    });
+  }
+
+  /**
+   * Get a list of tags in a manuscript
+   * @param manuscriptId The ID of the manuscript
+   * @param options Options for pagination
+   * @see manuscript-tags-by-manuscript.yml POST endpoint
+   */
+  async getTagsByManuscript(manuscriptId: string, options: ManuscriptSubResourceListOptions = {}): Promise<ManuscriptTagsResponse> {
+    return this.apiClient.post<ManuscriptTagsResponse>('/manuscript/manuscript_tags', {
+      offset: options.offset || 0,
+      limit: options.limit || 50
+    }, {
+      params: { id: manuscriptId }
+    });
+  }
+
+  // MANUSCRIPT PLOT OPERATIONS
+
+  /**
+   * Get a manuscript plot by ID
+   * @param plotId The ID of the manuscript plot to get
+   * @param granularity The level of detail to return (-1 to 2)
+   * @returns Manuscript plot data at specified granularity
+   * @see manuscript-plot.yml GET endpoint
+   */
+  async getManuscriptPlotById(plotId: string, granularity: '-1' | '0' | '2' = '0'): Promise<ManuscriptPlotResponse> {
+    return this.apiClient.get<ManuscriptPlotResponse>('/manuscript_plot', {
+      params: {
+        id: plotId,
+        granularity
+      }
+    });
+  }
+
+  /**
+   * Create a new manuscript plot
+   * @param plotData The manuscript plot data to create (requires title and version.id)
+   * @returns Created manuscript plot reference
+   * @see manuscript-plot.yml PUT endpoint
+   */
+  async createManuscriptPlot(plotData: ManuscriptPlotInput): Promise<ManuscriptPlotRef> {
+    return this.apiClient.put<ManuscriptPlotRef>('/manuscript_plot', plotData);
+  }
+
+  /**
+   * Update an existing manuscript plot
+   * @param plotId The ID of the manuscript plot to update
+   * @param plotData The updated manuscript plot data
+   * @returns Updated manuscript plot reference
+   * @see manuscript-plot.yml PATCH endpoint
+   */
+  async updateManuscriptPlot(plotId: string, plotData: ManuscriptPlotUpdateInput): Promise<ManuscriptPlotRef> {
+    return this.apiClient.patch<ManuscriptPlotRef>('/manuscript_plot', plotData, {
+      params: {
+        id: plotId
+      }
+    });
+  }
+
+  /**
+   * Delete a manuscript plot
+   * @param plotId The ID of the manuscript plot to delete
+   * @returns Success response
+   * @see manuscript-plot.yml DELETE endpoint
+   */
+  async deleteManuscriptPlot(plotId: string): Promise<{ success: boolean }> {
+    return this.apiClient.delete<{ success: boolean }>('/manuscript_plot', {
+      params: {
+        id: plotId
+      }
+    });
+  }
+
+  /**
+   * Get a list of plots in a manuscript version
+   * @param versionId The ID of the manuscript version
+   * @param options Options for pagination
+   * @see manuscript-plots-by-manuscript-version.yml POST endpoint
+   */
+  async getPlotsByVersion(versionId: string, options: ManuscriptSubResourceListOptions = {}): Promise<ManuscriptPlotsResponse> {
+    return this.apiClient.post<ManuscriptPlotsResponse>('/manuscript_version/manuscript_plots', {
+      offset: options.offset || 0,
+      limit: options.limit || 50
+    }, {
+      params: { id: versionId }
+    });
+  }
+
+  // MANUSCRIPT LABEL OPERATIONS
+
+  /**
+   * Get a manuscript label by ID
+   * @param labelId The ID of the manuscript label to get
+   * @param granularity The level of detail to return (-1 to 2)
+   * @returns Manuscript label data at specified granularity
+   * @see manuscript-label.yml GET endpoint
+   */
+  async getManuscriptLabelById(labelId: string, granularity: '-1' | '0' | '2' = '0'): Promise<ManuscriptLabelResponse> {
+    return this.apiClient.get<ManuscriptLabelResponse>('/manuscript_label', {
+      params: {
+        id: labelId,
+        granularity
+      }
+    });
+  }
+
+  /**
+   * Create a new manuscript label
+   * @param labelData The manuscript label data to create (requires color and manuscript.id)
+   * @returns Created manuscript label reference
+   * @see manuscript-label.yml PUT endpoint
+   */
+  async createManuscriptLabel(labelData: ManuscriptLabelInput): Promise<ManuscriptLabelRef> {
+    return this.apiClient.put<ManuscriptLabelRef>('/manuscript_label', labelData);
+  }
+
+  /**
+   * Update an existing manuscript label
+   * @param labelId The ID of the manuscript label to update
+   * @param labelData The updated manuscript label data
+   * @returns Updated manuscript label reference
+   * @see manuscript-label.yml PATCH endpoint
+   */
+  async updateManuscriptLabel(labelId: string, labelData: ManuscriptLabelUpdateInput): Promise<ManuscriptLabelRef> {
+    return this.apiClient.patch<ManuscriptLabelRef>('/manuscript_label', labelData, {
+      params: {
+        id: labelId
+      }
+    });
+  }
+
+  /**
+   * Delete a manuscript label
+   * @param labelId The ID of the manuscript label to delete
+   * @returns Success response
+   * @see manuscript-label.yml DELETE endpoint
+   */
+  async deleteManuscriptLabel(labelId: string): Promise<{ success: boolean }> {
+    return this.apiClient.delete<{ success: boolean }>('/manuscript_label', {
+      params: {
+        id: labelId
+      }
+    });
+  }
+
+  /**
+   * Get a list of labels in a manuscript
+   * @param manuscriptId The ID of the manuscript
+   * @param options Options for pagination
+   * @see manuscript-labels-by-manuscript.yml POST endpoint
+   */
+  async getLabelsByManuscript(manuscriptId: string, options: ManuscriptSubResourceListOptions = {}): Promise<ManuscriptLabelsResponse> {
+    return this.apiClient.post<ManuscriptLabelsResponse>('/manuscript/manuscript_labels', {
+      offset: options.offset || 0,
+      limit: options.limit || 50
+    }, {
+      params: { id: manuscriptId }
+    });
+  }
+
+  // MANUSCRIPT STAT OPERATIONS
+
+  /**
+   * Get a manuscript stat by ID
+   * @param statId The ID of the manuscript stat to get
+   * @param granularity The level of detail to return (-1 to 2)
+   * @returns Manuscript stat data at specified granularity
+   * @see manuscript-stat.yml GET endpoint
+   */
+  async getManuscriptStatById(statId: string, granularity: '-1' | '0' | '2' = '0'): Promise<ManuscriptStatResponse> {
+    return this.apiClient.get<ManuscriptStatResponse>('/manuscript_stat', {
+      params: {
+        id: statId,
+        granularity
+      }
+    });
+  }
+
+  /**
+   * Create a new manuscript stat
+   * @param statData The manuscript stat data to create (requires notes and version.id)
+   * @returns Created manuscript stat reference
+   * @see manuscript-stat.yml PUT endpoint
+   */
+  async createManuscriptStat(statData: ManuscriptStatInput): Promise<ManuscriptStatRef> {
+    return this.apiClient.put<ManuscriptStatRef>('/manuscript_stat', statData);
+  }
+
+  /**
+   * Update an existing manuscript stat
+   * @param statId The ID of the manuscript stat to update
+   * @param statData The updated manuscript stat data
+   * @returns Updated manuscript stat reference
+   * @see manuscript-stat.yml PATCH endpoint
+   */
+  async updateManuscriptStat(statId: string, statData: ManuscriptStatUpdateInput): Promise<ManuscriptStatRef> {
+    return this.apiClient.patch<ManuscriptStatRef>('/manuscript_stat', statData, {
+      params: {
+        id: statId
+      }
+    });
+  }
+
+  /**
+   * Delete a manuscript stat
+   * @param statId The ID of the manuscript stat to delete
+   * @returns Success response
+   * @see manuscript-stat.yml DELETE endpoint
+   */
+  async deleteManuscriptStat(statId: string): Promise<{ success: boolean }> {
+    return this.apiClient.delete<{ success: boolean }>('/manuscript_stat', {
+      params: {
+        id: statId
+      }
+    });
+  }
+
+  /**
+   * Get a list of stats in a manuscript version
+   * @param versionId The ID of the manuscript version
+   * @param options Options for pagination
+   * @see manuscript-stats-by-manuscript-version.yml POST endpoint
+   */
+  async getStatsByVersion(versionId: string, options: ManuscriptSubResourceListOptions = {}): Promise<ManuscriptStatsResponse> {
+    return this.apiClient.post<ManuscriptStatsResponse>('/manuscript_version/manuscript_stats', {
+      offset: options.offset || 0,
+      limit: options.limit || 50
+    }, {
+      params: { id: versionId }
     });
   }
 }

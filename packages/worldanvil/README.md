@@ -159,6 +159,70 @@ const map = await mapService.getMapById('map-id');
 const pins = await mapService.getMapPins('map-id');
 ```
 
+#### Manuscript Operations
+
+```typescript
+import { WorldAnvilManuscriptService } from '@crit-fumble/worldanvil';
+
+const manuscriptService = new WorldAnvilManuscriptService();
+manuscriptService.setAccessToken('your-access-token');
+
+// Get manuscripts for a world
+const manuscripts = await manuscriptService.getManuscriptsByWorld('world-id');
+
+// Get manuscript by ID with specified granularity (0-3)
+const manuscript = await manuscriptService.getManuscriptById('manuscript-id', '1');
+
+// Create a new manuscript
+const newManuscript = await manuscriptService.createManuscript({
+  title: 'My New Novel',
+  world: { id: 'world-id' }
+});
+
+// Update a manuscript
+const updatedManuscript = await manuscriptService.updateManuscript({
+  id: 'manuscript-id',
+  title: 'Updated Novel Title'
+});
+
+// Delete a manuscript
+await manuscriptService.deleteManuscript('manuscript-id');
+
+// Working with manuscript versions
+const versions = await manuscriptService.getVersionsByManuscript('manuscript-id');
+const version = await manuscriptService.getManuscriptVersionById('version-id');
+const newVersion = await manuscriptService.createManuscriptVersion({
+  title: 'First Draft',
+  manuscript: { id: 'manuscript-id' }
+});
+
+// Working with manuscript parts
+const parts = await manuscriptService.getPartsByVersion('version-id');
+const part = await manuscriptService.getManuscriptPartById('part-id');
+const newPart = await manuscriptService.createManuscriptPart({
+  title: 'Chapter 1',
+  version: { id: 'version-id' }
+});
+
+// Working with manuscript beats
+const beats = await manuscriptService.getBeatsByPart('part-id');
+const beat = await manuscriptService.getManuscriptBeatById('beat-id');
+const newBeat = await manuscriptService.createManuscriptBeat({
+  title: 'Introduction Scene',
+  content: 'Scene content goes here...',
+  part: { id: 'part-id' }
+});
+
+// Working with manuscript bookmarks
+const bookmarks = await manuscriptService.getBookmarksByManuscript('manuscript-id');
+const bookmark = await manuscriptService.getManuscriptBookmarkById('bookmark-id');
+const newBookmark = await manuscriptService.createManuscriptBookmark({
+  title: 'Important Plot Point',
+  manuscript: { id: 'manuscript-id' },
+  beat: { id: 'beat-id' }
+});
+```
+
 ### Direct API Access
 
 For advanced usage, access the API directly:

@@ -162,6 +162,54 @@ export interface MarkerRef {
 }
 
 /**
+ * Interface for marker data with varying levels of detail
+ */
+export interface MarkerResponse {
+  id: string;
+  title: string;
+  slug: string;
+  map_id: string;
+  markergroup_id?: string;
+  description?: string;
+  latitude?: number;
+  longitude?: number;
+  created_at?: string;
+  updated_at?: string;
+  [key: string]: any; // For additional properties based on the schema
+}
+
+/**
+ * Interface for marker creation input
+ */
+export interface MarkerInput {
+  title: string;
+  map: {
+    id: string;
+  };
+  markergroup?: {
+    id: string;
+  };
+  description?: string;
+  latitude?: number;
+  longitude?: number;
+  [key: string]: any; // For additional properties
+}
+
+/**
+ * Interface for marker update input
+ */
+export interface MarkerUpdateInput {
+  title?: string;
+  markergroup?: {
+    id: string;
+  } | null;
+  description?: string;
+  latitude?: number;
+  longitude?: number;
+  [key: string]: any; // For additional properties
+}
+
+/**
  * Interface for API response from world-maps endpoint
  */
 export interface WorldMapsResponse {
@@ -199,6 +247,64 @@ export interface MapMarkersResponse {
 export interface MarkerGroupMarkersResponse {
   success: boolean;
   entities: MarkerRef[];
+}
+
+/**
+ * Interface for marker type reference
+ */
+export interface MarkerTypeRef {
+  id: string;
+  title: string;
+  slug: string;
+  world_id: string;
+  image_url?: string;
+  [key: string]: any; // For additional properties
+}
+
+/**
+ * Interface for marker type data with varying levels of detail
+ */
+export interface MarkerTypeResponse {
+  id: string;
+  title: string;
+  slug: string;
+  world_id: string;
+  image_url?: string;
+  description?: string;
+  created_at?: string;
+  updated_at?: string;
+  [key: string]: any; // For additional properties based on the schema
+}
+
+/**
+ * Interface for marker type creation input
+ */
+export interface MarkerTypeInput {
+  title: string;
+  world: {
+    id: string;
+  };
+  image?: string; // ID of an already uploaded image
+  description?: string;
+  [key: string]: any; // For additional properties
+}
+
+/**
+ * Interface for marker type update input
+ */
+export interface MarkerTypeUpdateInput {
+  title?: string;
+  image?: string; // ID of an already uploaded image
+  description?: string;
+  [key: string]: any; // For additional properties
+}
+
+/**
+ * Interface for marker types list response
+ */
+export interface MarkerTypesResponse {
+  success: boolean;
+  entities: MarkerTypeRef[];
 }
 
 /**

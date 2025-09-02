@@ -125,7 +125,52 @@ This function will only work in test environments (when `process.env.NODE_ENV ==
 
 The package includes the following services:
 
-- `WorldAnvilUserService`: For user authentication and profile management
-- `WorldAnvilWorldService`: For managing worlds and their content
-- `WorldAnvilRpgSystemService`: For accessing RPG system information
+- `WorldAnvilApiClient`: Low-level HTTP client for World Anvil API
+- `WorldAnvilArticleService`: For article management and content
+- `WorldAnvilAuthService`: For authentication and OAuth token management
+- `WorldAnvilBlockService`: For content block operations
+- `WorldAnvilBlockTemplateService`: For managing block templates
+- `WorldAnvilCanvasService`: For canvas functionality
+- `WorldAnvilCategoryService`: For category organization
+- `WorldAnvilEntityService`: For entity management
 - `WorldAnvilIdentityService`: For verifying user sessions and identity
+- `WorldAnvilImageService`: For image upload and management
+- `WorldAnvilItemService`: For item management
+- `WorldAnvilManuscriptService`: For manuscript handling and writing tools
+- `WorldAnvilMapService`: For maps and map pins management
+- `WorldAnvilNotebookService`: For notebook operations
+- `WorldAnvilRpgSystemService`: For accessing RPG system information
+- `WorldAnvilSecretService`: For secret content management
+- `WorldAnvilSubscriberGroupService`: For subscriber group management
+- `WorldAnvilTimelineService`: For timeline operations
+- `WorldAnvilUserService`: For user authentication and profile management
+- `WorldAnvilVariableService`: For variable management
+- `WorldAnvilWorldService`: For managing worlds and their content
+
+### Manuscript Service
+
+The `WorldAnvilManuscriptService` provides comprehensive tools for managing writing projects and manuscripts. It supports:
+
+- Creating, updating, and deleting manuscripts
+- Managing manuscript versions for tracking drafts
+- Organizing content with parts and beats
+- Adding bookmarks for quick navigation
+
+Example usage:
+
+```typescript
+import { WorldAnvilManuscriptService } from '@crit-fumble/worldanvil';
+
+// Create instance with default config
+const manuscriptService = new WorldAnvilManuscriptService();
+
+// Or with dependency injection for testing
+const mockClient = /* your mock client */;
+const testService = new WorldAnvilManuscriptService(mockClient);
+
+// Set access token if not provided in constructor
+manuscriptService.setAccessToken('user-access-token');
+
+// Work with manuscripts and their components
+const manuscripts = await manuscriptService.getManuscriptsByWorld('world-id');
+```

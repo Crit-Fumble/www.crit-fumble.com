@@ -27,21 +27,17 @@ describe('WorldAnvilVariableService', () => {
 
   const mockVariable: WorldAnvilVariable = {
     id: mockVariableId,
-    k: 'testKey',
-    v: 'testValue',
-    type: 'string',
-    collection_id: mockCollectionId,
-    world_id: mockWorldId,
-    user_id: 'user-123'
+    name: 'testKey',
+    value: 'testValue',
+    is_private: false,
+    variable_collection_id: mockCollectionId
   };
 
   const mockVariableCollection: WorldAnvilVariableCollection = {
     id: mockCollectionId,
-    title: 'Test Collection',
+    name: 'Test Collection',
     is_private: false,
-    world_id: mockWorldId,
-    user_id: 'user-123',
-    variables: [mockVariable]
+    world_id: mockWorldId
   };
 
   const mockVariableInput: WorldAnvilVariableInput = {
@@ -59,13 +55,13 @@ describe('WorldAnvilVariableService', () => {
   };
 
   const mockCollectionInput: WorldAnvilVariableCollectionInput = {
-    title: 'New Collection',
+    name: 'New Collection',
     world: mockWorldId,
     is_private: true
   };
 
   const mockCollectionUpdate: WorldAnvilVariableCollectionUpdate = {
-    title: 'Updated Collection',
+    name: 'Updated Collection',
     is_private: false
   };
 
@@ -91,6 +87,7 @@ describe('WorldAnvilVariableService', () => {
       get: jest.fn(),
       post: jest.fn(),
       put: jest.fn(),
+      patch: jest.fn(),
       delete: jest.fn(),
       setApiKey: jest.fn(),
       setAccessToken: jest.fn(),
@@ -174,13 +171,13 @@ describe('WorldAnvilVariableService', () => {
   describe('updateVariable', () => {
     it('should update an existing variable', async () => {
       // Setup
-      mockApiClient.put.mockResolvedValue(mockVariable);
+      mockApiClient.patch.mockResolvedValue(mockVariable);
       
       // Execute
       const result = await service.updateVariable(mockVariableId, mockVariableUpdate);
       
       // Verify
-      expect(mockApiClient.put).toHaveBeenCalledWith('/variable', {
+      expect(mockApiClient.patch).toHaveBeenCalledWith('/variable', {
         id: mockVariableId,
         ...mockVariableUpdate
       });
@@ -300,13 +297,13 @@ describe('WorldAnvilVariableService', () => {
   describe('updateVariableCollection', () => {
     it('should update an existing variable collection', async () => {
       // Setup
-      mockApiClient.put.mockResolvedValue(mockVariableCollection);
+      mockApiClient.patch.mockResolvedValue(mockVariableCollection);
       
       // Execute
       const result = await service.updateVariableCollection(mockCollectionId, mockCollectionUpdate);
       
       // Verify
-      expect(mockApiClient.put).toHaveBeenCalledWith('/variable_collection', {
+      expect(mockApiClient.patch).toHaveBeenCalledWith('/variable_collection', {
         id: mockCollectionId,
         ...mockCollectionUpdate
       });

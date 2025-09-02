@@ -5,12 +5,6 @@
 ### packages/discord-bot: Discord bot
 - uses @crit-fumble/core
 - deploys to a Fly.io instance
-### packages/discord-app: Discord app
-- uses @crit-fumble/core
-- deployment details pending
-### packages/discord-activity: Discord activity
-- uses @crit-fumble/core
-- deployment details pending
 ### packages/core: Core models, utils, and Prisma wrapper
 - reads environment variables from .env files of the package it's installed into
 - wraps @prisma/client, @vercel/blob, and other shared packages
@@ -58,22 +52,6 @@
 - if you are blocked on a task requiring human actions, decisions, or terminal commands, change the status to [BOT-BLOCKED], and wait for prompt
 - if issues are detected with a [COMPLETED] item as you are iterating, change it's status to [HUMAN-REVIEW]; wait for prompt
 - when you are done with an item, change it's status to [HUMAN-REVIEW]; only a human should ever change an item to [COMPLETED]
-
-### Common Analysis & Setup (Completed)
-- [COMPLETED] Review each package.json to document current dependencies
-  - **Updated Packages Structure:**
-    - **@crit-fumble/core (v6.8.2)**: Dependencies: @prisma/client, @vercel/blob, @crit-fumble/discord, @crit-fumble/worldanvil, @crit-fumble/openai
-    - **@crit-fumble/next (v14.2.14)**: Dependencies: next, next-auth, react, react-dom, react-hook-form, react-hot-toast
-    - **@crit-fumble/discord (v14.14.1)**: Dependencies: discord.js, @napi-rs/canvas, dotenv, node-cron, node-fetch
-    - **@crit-fumble/worldanvil (v0.1.0)**: Dependencies: axios, yaml
-    - **@crit-fumble/openai (v0.1.0)**: Not yet implemented
-    - **@crit-fumble/next-web (v0.2.0)**: Dependencies: @crit-fumble/core, @crit-fumble/next
-    - **Discord packages (@crit-fumble/discord-*)**: All depend only on @crit-fumble/core
-- [COMPLETED] Identify dependency violations (packages using deps not in their package.json)
-- [COMPLETED] Map out the correct dependency flow between packages
-- [COMPLETED] Create a dependency graph to visualize package relationships
-- [COMPLETED] Update package naming to use consistent `@crit-fumble/` namespace
-- [COMPLETED] Update architecture to have specialized packages imported into @crit-fumble/core
 
 ### @crit-fumble/worldanvil
 - [COMPLETED] Create package structure with models/server/client pattern
