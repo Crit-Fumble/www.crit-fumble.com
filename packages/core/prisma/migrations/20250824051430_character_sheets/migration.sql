@@ -2,7 +2,7 @@
 CREATE TABLE "CharacterSheet" (
     "id" TEXT NOT NULL,
     "character_id" TEXT NOT NULL,
-    "game_system_id" TEXT, -- not required, user might want to use a PDF and play a different system
+    "rpg_system_id" TEXT, -- not required, user might want to use a PDF and play a different system
     "pdf_url" TEXT,
     "sheet_data" JSONB,
     "integration_data" JSONB, -- roll20, dndbeyond, world anvil, etc
@@ -20,14 +20,14 @@ CREATE TABLE "CharacterSheet" (
 
 -- Add foreign key constraints
 ALTER TABLE "CharacterSheet" ADD CONSTRAINT "CharacterSheet_character_id_fkey" FOREIGN KEY ("character_id") REFERENCES "Character"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-ALTER TABLE "CharacterSheet" ADD CONSTRAINT "CharacterSheet_game_system_id_fkey" FOREIGN KEY ("game_system_id") REFERENCES "GameSystem"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "CharacterSheet" ADD CONSTRAINT "CharacterSheet_rpg_system_id_fkey" FOREIGN KEY ("rpg_system_id") REFERENCES "GameSystem"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- Alter Character table to remove redundant fields
 DO $$ 
 BEGIN 
     -- Drop columns if they exist
-    IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='Character' AND column_name='game_system_id') THEN
-        ALTER TABLE "Character" DROP COLUMN "game_system_id";
+    IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='Character' AND column_name='rpg_system_id') THEN
+        ALTER TABLE "Character" DROP COLUMN "rpg_system_id";
     END IF;
     
     IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='Character' AND column_name='party_id') THEN
@@ -42,8 +42,8 @@ BEGIN
         ALTER TABLE "Character" DROP COLUMN "campaign";
     END IF;
     
-    IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='Character' AND column_name='game_system') THEN
-        ALTER TABLE "Character" DROP COLUMN "game_system";
+    IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='Character' AND column_name='rpg_system') THEN
+        ALTER TABLE "Character" DROP COLUMN "rpg_system";
     END IF;
     
     IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='Character' AND column_name='character_sheets') THEN
@@ -64,8 +64,8 @@ BEGIN
         ALTER TABLE "Campaign" DROP COLUMN "system";
     END IF;
 END $$;
-ALTER TABLE "Campaign" ADD COLUMN "game_system_id" TEXT;
-ALTER TABLE "Campaign" ADD CONSTRAINT "Campaign_game_system_id_fkey" FOREIGN KEY ("game_system_id") REFERENCES "GameSystem"("id") ON DELETE SET NULL;
+ALTER TABLE "Campaign" ADD COLUMN "rpg_system_id" TEXT;
+ALTER TABLE "Campaign" ADD CONSTRAINT "Campaign_rpg_system_id_fkey" FOREIGN KEY ("rpg_system_id") REFERENCES "GameSystem"("id") ON DELETE SET NULL;
 
 -- Update Party model to properly reference Campaign
 DO $$ 
@@ -81,7 +81,7 @@ ALTER TABLE "Party" ADD CONSTRAINT "Party_campaign_id_fkey" FOREIGN KEY ("campai
 
 -- Add necessary indexes for improved query performance
 CREATE INDEX "CharacterSheet_character_id_idx" ON "CharacterSheet"("character_id");
-CREATE INDEX "CharacterSheet_game_system_id_idx" ON "CharacterSheet"("game_system_id");
+CREATE INDEX "CharacterSheet_rpg_system_id_idx" ON "CharacterSheet"("rpg_system_id");
 CREATE INDEX "CharacterSheet_is_active_idx" ON "CharacterSheet"("is_active");
 
 -- Ensure character sheets have a link to campaign and party

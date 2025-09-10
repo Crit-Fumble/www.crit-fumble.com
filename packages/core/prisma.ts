@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client';
+import { isDevelopment, isProduction } from './models/configs/EnvironmentConfig';
 
 // PrismaClient is attached to the `global` object in development to prevent
 // exhausting your database connection limit during hot reloading.
@@ -16,10 +17,24 @@ if (!globalForPrisma.customClients) {
   globalForPrisma.customClients = {};
 }
 
+/**
+ * For migrations and database operations, we load the database URL from environment
+ * but this is not exported as part of the package
+ */
+function getDatabaseUrl(): string {
+  // This is only used for CLI operations like migrations
+  // Not exported as part of the package
+  if (process.env.POSTGRES_PRISMA_URL) {
+    return process.env.POSTGRES_PRISMA_URL;
+  }
+  
+  throw new Error('Database URL not configured. Set POSTGRES_PRISMA_URL environment variable');
+}
+
 // Initialize the default client immediately
 if (!globalForPrisma.prisma) {
   globalForPrisma.prisma = new PrismaClient({
-    log: process.env.NODE_ENV === 'development' 
+    log: isDevelopment() 
       ? ['query', 'error', 'warn'] 
       : ['error'],
   });
@@ -48,7 +63,7 @@ export function getPrismaClient(options?: PrismaOptions): PrismaClient {
             url: databaseUrl
           }
         },
-        log: options?.log || (process.env.NODE_ENV === 'development' ? ['error', 'warn'] : ['error'])
+        log: options?.log || (isDevelopment() ? ['error', 'warn'] : ['error'])
       });
     }
     
@@ -60,7 +75,7 @@ export function getPrismaClient(options?: PrismaOptions): PrismaClient {
 }
 
 // For development debugging - make sure global instance stays consistent
-if (process.env.NODE_ENV !== 'production') {
+if (!isProduction()) {
   globalForPrisma.prisma = prisma;
 }
 

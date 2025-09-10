@@ -91,71 +91,27 @@ model Site {
 }
 
 model User {
-  id             String          @id
-  name           String?
-  slug           String?         @unique
-  email          String?         @unique
-  emailVerified  DateTime?
-  image          String?
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @default(now())
-  admin          Boolean?        @default(false)
-  discord        String?
-  roll20         String?
-  dd_beyond      String?
-  world_anvil    String?
-  sheet_data     Json?
-  Account        Account[]
-  Post           Post[]
-  Session        Session[]
-  Site           Site[]
-  UserDndBeyond  UserDndBeyond?  @relation(fields: [dd_beyond], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "dd_beyond")
-  UserDiscord    UserDiscord?    @relation(fields: [discord], references: [id], onDelete: Cascade, map: "discord")
-  UserRoll20     UserRoll20?     @relation(fields: [roll20], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "roll20")
-  UserWorldAnvil UserWorldAnvil? @relation(fields: [world_anvil], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "world_anvil")
-}
-
-model UserDiscord {
-  id            String   @id
+  id            String         @id
+  discord_id    String? // Discord User ID
+  worldanvil_id String? // World Anvil User ID
   name          String?
-  displayName   String?
-  accent_color  BigInt?
-  avatar        String?
-  banner        String?
-  banner_color  String?
-  discriminator String?
-  email         String?
-  flags         BigInt?
-  global_name   String?
-  image_url     String?
-  locale        String?
-  mfa_enabled   Boolean?
-  premium_type  BigInt?
-  public_flags  BigInt?
-  username      String?
-  verified      Boolean?
-  User          User[]
+  slug          String?        @unique
+  email         String?        @unique
+  emailVerified DateTime?
+  image         String?
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @default(now())
+  admin         Boolean?       @default(false)
+  data          Json?
+  Account       Account[]
+  Post          Post[]
+  Session       Session[]
+  Site          Site[]
+  RpgCharacter  RpgCharacter[]
 }
 
-model UserDndBeyond {
-  id   String  @id
-  name String?
-  User User[]
-}
-
-model UserRoll20 {
-  id   String  @id(map: "id")
-  slug String? @unique
-  name String?
-  User User[]
-}
-
-model UserWorldAnvil {
-  id   String  @id
-  slug String? @unique
-  name String?
-  User User[]
-}
+// Deprecated tables removed: UserDiscord, UserDndBeyond, UserRoll20, UserWorldAnvil
+// External service data now comes from service APIs instead of database tables
 
 model VerificationToken {
   identifier String
@@ -165,153 +121,189 @@ model VerificationToken {
   @@unique([identifier, token])
 }
 
-model Campaign {
-  id                 String              @id
-  name               String?
-  slug               String?             @unique
-  game_system_id     String?
-  gms                String[]
-  active             Boolean?
-  world_anvil        String?
-  discord            String?
-  sheet_data         Json?
-  CampaignDiscord    CampaignDiscord?    @relation(fields: [discord], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "discord")
-  CampaignWorldAnvil CampaignWorldAnvil? @relation(fields: [world_anvil], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "world_anvil")
-  game_system        GameSystem?         @relation(fields: [game_system_id], references: [id])
-  parties            Party[]
-  character_sheets   CharacterSheet[]
-  characters         Character[] // Legacy relation, use character_sheets instead
+model RpgSystem {
+  id                   String   @id @default(cuid())
+  worldanvil_system_id String?  @unique
+  discord_post_id      String?  @unique // Discord Forum Post Id
+  discord_chat_id      String?  @unique // Discord Chat Channel Id
+  discord_thread_id    String?  @unique // Discord Chat Thread Id
+  discord_forum_id     String?  @unique // Discord Forum Channel Id
+  discord_voice_id     String?  @unique // Discord Voice Channel Id
+  discord_role_id      String?  @unique // Discord Role Id
+  title                String
+  slug                 String?  @unique
+  description          String?
+  data                 Json?
+  is_active            Boolean  @default(true)
+  created_at           DateTime @default(now())
+  updated_at           DateTime @updatedAt
+
+  // Relations
+  rpg_campaigns RpgCampaign[]
+  rpg_sheets    RpgSheet[]
+  rpg_worlds    RpgWorld[]
+
+  @@map("RpgSystem")
 }
 
-model CampaignDiscord {
-  id                  String     @id
-  fumbleBotId         String?
-  playerRoles         String[]
-  gmRoles             String[]
-  botRoles            String[]
-  forumChannelId      String?
-  playByPostChannelId String?
-  voiceChannelId      String?
-  serverId            String?
-  Campaign            Campaign[]
+model RpgWorld {
+  id                  String   @id @default(cuid())
+  worldanvil_world_id String?  @unique
+  discord_post_id     String?  @unique // Discord Forum Post Id
+  discord_chat_id     String?  @unique // Discord Chat Channel Id
+  discord_thread_id   String?  @unique // Discord Chat Thread Id
+  discord_forum_id    String?  @unique // Discord Forum Channel Id
+  discord_voice_id    String?  @unique // Discord Voice Channel Id
+  discord_role_id     String?  @unique // Discord Role Id
+  rpg_system_id       String?
+  gm_ids              String[]
+  title               String
+  slug                String?  @unique
+  summary             String?
+  description         String?  @db.Text
+  is_active           Boolean  @default(true)
+  data                Json?
+  created_at          DateTime @default(now())
+  updated_at          DateTime @updatedAt
+
+  // Relations
+  rpg_system    RpgSystem?    @relation(fields: [rpg_system_id], references: [id])
+  rpg_campaigns RpgCampaign[]
+  rpg_sheets    RpgSheet[]
+
+  @@map("RpgWorld")
 }
 
-model CampaignWorldAnvil {
-  id            String     @id
-  name          String?
-  slug          String?    @unique
-  worldMapId    String?
-  chronicleId   String?
-  chronicleSlug String?
-  Campaign      Campaign[]
+model RpgCampaign {
+  id                     String   @id @default(cuid())
+  worldanvil_campaign_id String? // World Anvil Campaign Id
+  discord_post_id        String?  @unique // Discord Forum Post Id
+  discord_chat_id        String?  @unique // Discord Chat Channel Id
+  discord_thread_id      String?  @unique // Discord Chat Thread Id
+  discord_forum_id       String?  @unique // Discord Forum Channel Id
+  discord_voice_id       String?  @unique // Discord Voice Channel Id
+  discord_role_id        String?  @unique // Discord Role Id
+  title                  String
+  slug                   String?  @unique
+  description            String?
+  gm_ids                 String[] // User/Account IDs for GMs
+  is_active              Boolean  @default(true)
+  data                   Json? // System-specific data
+  created_at             DateTime @default(now())
+  updated_at             DateTime @updatedAt
+
+  // Relations
+  rpg_system_id String?
+  rpg_system    RpgSystem? @relation(fields: [rpg_system_id], references: [id])
+  rpg_world_id  String?
+  rpg_world     RpgWorld?  @relation(fields: [rpg_world_id], references: [id])
+  rpg_parties   RpgParty[]
+  rpg_sheets    RpgSheet[] // All sheets associated with this campaign
+
+  @@map("Campaign")
 }
 
-model GameSystem {
-  id               String           @id
-  name             String?
-  slug             String?          @unique
+model RpgParty {
+  id                  String       @id
+  worldanvil_party_id String?      @unique
+  discord_post_id     String?      @unique // Discord Forum Post Id
+  discord_chat_id     String?      @unique // Discord Chat Channel Id
+  discord_thread_id   String?      @unique // Discord Chat Thread Id
+  discord_forum_id    String?      @unique // Discord Forum Channel Id
+  discord_voice_id    String?      @unique // Discord Voice Channel Id
+  discord_role_id     String?      @unique // Discord Role Id
+  rpg_campaign_id     String
+  slug                String?      @unique
+  title               String
+  description         String?
+  is_active           Boolean      @default(true)
+  data                Json?
+  rpg_campaign        RpgCampaign? @relation(fields: [rpg_campaign_id], references: [id])
+  rpg_sheets          RpgSheet[]
+  rpg_sessions        RpgSession[]
+
+  @@map("RpgParty")
+}
+
+model RpgSession {
+  id               String   @id(map: "RpgSession_pkey")
+  worldanvil_id    String? // World Anvil Session ID
+  discord_event_id String? // Discord Event ID
+  title            String
   description      String?
-  srdApi           String?
-  sheet_data       Json?
-  campaigns        Campaign[]
-  character_sheets CharacterSheet[]
-  characters       Character[] // Legacy relation, use character_sheets instead
+  data             Json?
+  created_at       DateTime @default(now())
+  updated_at       DateTime @updatedAt
+
+  // Relations
+  rpg_party_id String?
+  rpg_party    RpgParty? @relation(fields: [rpg_party_id], references: [id])
+
+  @@map("RpgSession")
 }
 
-model Character {
-  id               String           @id
-  player           String?
-  name             String?
-  slug             String?          @unique
-  title            String?
-  summary          String?
-  description      String?          @db.Text
-  portrait_url     String?
-  token_url        String?
-  created_at       DateTime         @default(now())
-  updated_at       DateTime         @default(now())
-  character_sheets CharacterSheet[]
-  GameSystem       GameSystem?      @relation(fields: [gameSystemId], references: [id])
-  gameSystemId     String?
-  campaigns        Campaign[] // Legacy relation, opposite of Campaign.characters
-  parties          Party[] // Legacy relation, opposite of Party.characters
+model RpgCharacter {
+  id                      String     @id
+  discord_post_id         String?    @unique // Discord Forum Post Id
+  discord_thread_id       String?    @unique // Discord Chat Thread Id
+  worldanvil_character_id String? // World Anvil Character ID
+  user_id                 String? // User ID
+  name                    String?
+  slug                    String?    @unique
+  title                   String?
+  summary                 String?
+  description             String?    @db.Text
+  portrait_url            String?
+  token_url               String?
+  is_active               Boolean    @default(true)
+  created_at              DateTime   @default(now())
+  updated_at              DateTime   @default(now())
+  rpg_sheets              RpgSheet[]
+
+  // Relations
+  user User? @relation(fields: [user_id], references: [id], onDelete: Cascade)
+
+  @@map("Character")
 }
 
-model GameSession {
-  id         String   @id(map: "PartySession_pkey")
-  day        String?
-  times      String[]
-  sheet_data Json?
-}
+model RpgSheet {
+  id                  String    @id @default(cuid())
+  worldanvil_block_id String?   @unique // World Anvil Block ID
+  discord_post_id     String?   @unique // Discord Forum Post Id
+  discord_thread_id   String?   @unique // Discord Chat Thread Id
+  title               String?
+  slug                String?   @unique
+  summary             String?
+  description         String?   @db.Text
+  portrait_url        String?
+  token_url           String?
+  data                Json?
+  is_active           Boolean   @default(true)
+  admin_only          Boolean   @default(false)
+  last_played         DateTime?
+  created_at          DateTime  @default(now())
+  updated_at          DateTime  @updatedAt
 
-model Party {
-  id               String           @id
-  campaign_id      String?
-  gm               String?
-  slug             String?          @unique
-  name             String?
-  active           Boolean?
-  session          String?
-  dd_beyond        String?
-  roll20           String?
-  discord          String?
-  parentParty      String?
-  sheet_data       Json?
-  campaign         Campaign?        @relation(fields: [campaign_id], references: [id])
-  characters       Character[] // Legacy relation, use character_sheets instead
-  character_sheets CharacterSheet[]
-}
+  // Relations
+  rpg_character_id String?
+  rpg_system_id    String?
+  rpg_party_id     String?
+  rpg_campaign_id  String?
+  rpg_world_id     String?
 
-model PartyDndBeyond {
-  id   String  @id
-  join String?
-}
+  // Sheet can optionally belong to a character
+  rpg_character RpgCharacter? @relation(fields: [rpg_character_id], references: [id], onDelete: SetNull)
+  // Sheet can optionally belong to a system
+  rpg_system    RpgSystem?    @relation(fields: [rpg_system_id], references: [id], onDelete: SetNull)
+  // Sheet can optionally belong to a party
+  rpg_party     RpgParty?     @relation(fields: [rpg_party_id], references: [id], onDelete: SetNull)
+  // Sheet can optionally belong to a campaign
+  rpg_campaign  RpgCampaign?  @relation(fields: [rpg_campaign_id], references: [id], onDelete: SetNull)
+  // Sheet can optionally belong to a world
+  rpg_world     RpgWorld?     @relation(fields: [rpg_world_id], references: [id], onDelete: SetNull)
 
-model PartyRoll20 {
-  id   String  @id
-  join String?
-}
-
-model PartyDiscord {
-  id               String  @id
-  roleId           String?
-  voiceChannelId   String?
-  sideChatThreadId String?
-  questLogThreadId String?
-  gameplayThreadId String?
-}
-
-model CharacterSheet {
-  id             String  @id @default(cuid())
-  character_id   String
-  game_system_id String
-  campaign_id    String?
-  party_id       String?
-
-  sheet_data       Json?
-  integration_data Json?
-  title            String?
-  summary          String?
-  description      String? @db.Text
-  bio              String? @db.Text
-  history          String? @db.Text
-
-  version       Int @default(1)
-  display_order Int @default(0)
-
-  is_active  Boolean @default(false)
-  admin_only Boolean @default(false)
-
-  last_played DateTime?
-  created_at  DateTime  @default(now())
-  updated_at  DateTime  @default(now())
-
-  character   Character  @relation(fields: [character_id], references: [id], onDelete: Cascade)
-  game_system GameSystem @relation(fields: [game_system_id], references: [id], onDelete: Cascade)
-  campaign    Campaign?  @relation(fields: [campaign_id], references: [id], onDelete: SetNull)
-  party       Party?     @relation(fields: [party_id], references: [id], onDelete: SetNull)
-
-  @@index([character_id], map: "CharacterSheet_character_id_idx")
-  @@index([game_system_id], map: "CharacterSheet_game_system_id_idx")
-  @@index([is_active], map: "CharacterSheet_is_active_idx")
+  @@index([rpg_character_id], map: "RpgSheet_character_id_idx")
+  @@index([rpg_system_id], map: "RpgSheet_rpg_system_id_idx")
+  @@index([is_active], map: "RpgSheet_is_active_idx")
+  @@map("RpgSheet")
 }

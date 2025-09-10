@@ -1,7 +1,7 @@
 "use server";
 
 import { getUserDashboardPageProps } from "../../../next/client/controllers/UserController";
-import UserDashboard from "../../../next/views/User/UserDashboard";
+import UserDashboard from "../../../next/client/views/User/UserDashboard";
 
 
 const Page = async () => {

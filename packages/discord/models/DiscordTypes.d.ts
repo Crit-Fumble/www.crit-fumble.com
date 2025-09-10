@@ -1,16 +1,16 @@
-import { DiscordProfile } from "next-auth/providers/discord"
-
 // Discord Model Type Definitions
 // This file exports shared types used by both the Discord bot and the Next.js web app
 
-export interface DiscordUser {
-  id: string;
-  username: string;
-  discriminator?: string;
-  avatar?: string;
-  bot?: boolean;
-}
+import { User, Guild, GuildMember, Channel, APIUser, Collection, Activity } from 'discord.js';
 
+// Re-export discord.js types
+export type DiscordUserType = User;
+export type DiscordAPIUserType = APIUser;
+export type DiscordGuildType = Guild;
+export type DiscordGuildMemberType = GuildMember;
+export type DiscordChannelType = Channel;
+
+// Simple interface for Discord data
 export interface DiscordGuild {
   id: string;
   name: string;

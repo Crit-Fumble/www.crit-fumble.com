@@ -2,10 +2,9 @@
  * Logger utility for application-wide logging with environment-based filtering
  * Provides a consistent API for logging that automatically disables verbose logs in production
  */
+import { isProduction, isDebugMode } from '../../models/configs/EnvironmentConfig';
 
 type LogLevel = 'debug' | 'info' | 'warn' | 'error';
-
-const isProduction = process.env.NODE_ENV === 'production';
 
 class Logger {
   private context: string;

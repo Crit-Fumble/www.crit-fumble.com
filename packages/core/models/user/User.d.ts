@@ -2,27 +2,16 @@
  * User model interface representing a user in the system
  */
 
-import { DiscordProfile } from "next-auth/providers/discord"
-import { 
-  User as PrismaUser,
-  UserDiscord,
-  UserDndBeyond,
-  UserRoll20,
-  UserWorldAnvil
-} from '@prisma/client';
+import { DiscordOAuthProfile } from "@crit-fumble/discord/models";
+import { User as PrismaUser } from '@prisma/client';
 import { Campaign } from '../campaign';
 import { Character } from '../character';
 
-export {
-  UserDiscord,
-  UserDndBeyond,
-  UserRoll20,
-  UserWorldAnvil
-}
+// External service data now comes from services instead of database models
 // Extending types with frontend-specific properties
 export type User = PrismaUser & {
   token?: string;
-  discord?: DiscordProfile;
+  discord?: DiscordOAuthProfile;
 };
 
 /**

@@ -2,6 +2,7 @@
  * Prisma client singleton for the core package
  */
 import { PrismaClient } from '@prisma/client';
+import { isProduction } from '../configs/EnvironmentConfig';
 
 // Create a singleton instance of the PrismaClient
 const prismaClientSingleton = () => {
@@ -17,6 +18,7 @@ const globalForPrisma = globalThis as unknown as {
 // Export a single instance of Prisma
 export const prisma = globalForPrisma.prisma ?? prismaClientSingleton();
 
-if (process.env.NODE_ENV !== 'production') {
+// In development environments, attach prisma to the global object to prevent multiple instances
+if (!isProduction()) {
   globalForPrisma.prisma = prisma;
 }

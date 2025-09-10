@@ -1,6 +1,6 @@
 {
     "name": "@crit-fumble/discord",
-    "version": "14.14.1-r2",
+    "version": "14.22.1",
     "description": "Discord stack for the Crit-Fumble web application; version matches Discord.js version",
     "type": "module",
     "main": "dist/index.js",
@@ -18,10 +18,10 @@
         "build": "tsc",
         "dev": "tsc --watch",
         "lint": "eslint .",
-        "test": "jest"
+        "test": "jest --config=jest.config.cjs"
     },
     "dependencies": {
-        "discord.js": "^14.14.1",
+        "discord.js": "^14.22.1",
         "@discordjs/voice": "^0.18.0",
         "bufferutil": "^4.0.9",
         "zlib-sync": "^0.1.10"

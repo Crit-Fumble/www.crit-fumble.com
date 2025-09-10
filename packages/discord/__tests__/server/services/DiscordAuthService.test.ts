@@ -14,12 +14,52 @@ jest.mock('../../../server/clients/DiscordApiClient', () => {
         return {
           initialize: jest.fn().mockImplementation(() => {
             return customClient.login('mocked-token-from-client');
-          })
+          }),
+          // Mock OAuth methods
+          clientId: 'mocked-client-id',
+          clientSecret: 'mocked-client-secret',
+          getAuthorizationUrl: jest.fn((redirectUri, scope, state) => {
+            const params = new URLSearchParams({
+              client_id: 'mocked-client-id',
+              redirect_uri: redirectUri,
+              response_type: 'code',
+              scope: scope || 'identify email guilds',
+            });
+            if (state) {
+              params.append('state', state);
+            }
+            return `https://discord.com/api/oauth2/authorize?${params.toString()}`;
+          }),
+          exchangeOAuthCode: jest.fn(),
+          getUserByOAuthToken: jest.fn(),
+          getUserGuilds: jest.fn(),
+          refreshOAuthToken: jest.fn(),
+          revokeOAuthToken: jest.fn()
         };
       }
       // Otherwise return mock implementation
       return {
-        initialize: jest.fn().mockResolvedValue(undefined)
+        initialize: jest.fn().mockResolvedValue(undefined),
+        // Mock OAuth methods
+        clientId: 'mocked-client-id',
+        clientSecret: 'mocked-client-secret',
+        getAuthorizationUrl: jest.fn((redirectUri, scope, state) => {
+          const params = new URLSearchParams({
+            client_id: 'mocked-client-id',
+            redirect_uri: redirectUri,
+            response_type: 'code',
+            scope: scope || 'identify email guilds',
+          });
+          if (state) {
+            params.append('state', state);
+          }
+          return `https://discord.com/api/oauth2/authorize?${params.toString()}`;
+        }),
+        exchangeOAuthCode: jest.fn(),
+        getUserByOAuthToken: jest.fn(),
+        getUserGuilds: jest.fn(),
+        refreshOAuthToken: jest.fn(),
+        revokeOAuthToken: jest.fn()
       };
     })
   };
@@ -37,35 +77,45 @@ jest.mock('../../../server/configs/config', () => ({
 
 describe('DiscordAuthService', () => {
   let authService: DiscordAuthService;
-  let mockClient: jest.Mocked<IDiscordClient>;
+  let apiClientMock: any;
 
   beforeEach(() => {
     jest.clearAllMocks();
-    mockClient = {
-      login: jest.fn(),
-      destroy: jest.fn(),
-      on: jest.fn(),
-      once: jest.fn(),
-      emit: jest.fn(),
-      guilds: {
-        fetch: jest.fn(),
-        cache: new Map()
-      },
-      channels: {
-        fetch: jest.fn(),
-        cache: new Map()
-      },
-      users: {
-        fetch: jest.fn(),
-        cache: new Map()
-      }
-    } as unknown as jest.Mocked<IDiscordClient>;
     
     const DiscordApiClientMock = DiscordApiClient as jest.MockedClass<typeof DiscordApiClient>;
     DiscordApiClientMock.mockClear();
     
-    // Create the auth service with our mock client
-    authService = new DiscordAuthService(mockClient);
+    // Create a mock instance of the API client with our test methods
+    apiClientMock = {
+      initialize: jest.fn().mockResolvedValue(undefined),
+      getAuthorizationUrl: jest.fn().mockImplementation((redirectUri, scope, state) => {
+        const params = new URLSearchParams({
+          client_id: 'mocked-client-id',
+          redirect_uri: redirectUri,
+          response_type: 'code',
+          scope: scope || 'identify email guilds',
+        });
+        if (state) {
+          params.append('state', state);
+        }
+        return `https://discord.com/api/oauth2/authorize?${params.toString()}`;
+      }),
+      exchangeOAuthCode: jest.fn(),
+      getUserByOAuthToken: jest.fn(),
+      getUserGuilds: jest.fn(),
+      refreshOAuthToken: jest.fn(),
+      revokeOAuthToken: jest.fn()
+    };
+    
+    // Create the auth service and replace its API client
+    authService = new DiscordAuthService({
+      clientId: 'mocked-client-id',
+      clientSecret: 'mocked-client-secret',
+      redirectUri: 'https://example.com/callback'
+    });
+    
+    // Replace the API client with our mock
+    (authService as any).apiClient = apiClientMock;
     
     // Reset fetch mock
     (global.fetch as jest.Mock).mockReset();
@@ -73,13 +123,10 @@ describe('DiscordAuthService', () => {
 
   describe('initialize', () => {
     it('should initialize the Discord client', async () => {
-      // Set up the mock login method to be called when initialize is called
-      mockClient.login.mockResolvedValueOnce('mocked-token');
-      
       await authService.initialize();
       
-      // Check that login was called on our mock client
-      expect(mockClient.login).toHaveBeenCalled();
+      // Check that initialize was called on our API client
+      expect(apiClientMock.initialize).toHaveBeenCalled();
     });
   });
 
@@ -111,30 +158,33 @@ describe('DiscordAuthService', () => {
 
   describe('exchangeCode', () => {
     it('should exchange code for access token successfully', async () => {
-      // Mock successful token response
-      (global.fetch as jest.Mock).mockImplementationOnce(() => 
-        Promise.resolve({
-          ok: true,
-          json: () => Promise.resolve({
-            access_token: 'test-access-token',
-            token_type: 'Bearer',
-            expires_in: 3600,
-            refresh_token: 'test-refresh-token',
-            scope: 'identify email'
-          })
-        })
-      ).mockImplementationOnce(() => 
-        Promise.resolve({
-          ok: true,
-          json: () => Promise.resolve({
-            id: 'user-123',
-            username: 'testuser',
-            discriminator: '1234',
-            avatar: 'avatar-hash',
-            email: 'user@example.com'
-          })
-        })
-      );
+      // Mock successful token and user responses
+      const mockTokenData = {
+        access_token: 'test-access-token',
+        token_type: 'Bearer',
+        expires_in: 3600,
+        refresh_token: 'test-refresh-token',
+        scope: 'identify email'
+      };
+      
+      const mockUserData = {
+        id: 'user-123',
+        username: 'testuser',
+        discriminator: '1234',
+        avatar: 'avatar-hash',
+        email: 'user@example.com'
+      };
+      
+      // Set up our API client mocks
+      apiClientMock.exchangeOAuthCode.mockResolvedValueOnce({
+        success: true,
+        data: mockTokenData
+      });
+      
+      apiClientMock.getUserByOAuthToken.mockResolvedValueOnce({
+        success: true,
+        data: mockUserData
+      });
       
       const result = await authService.exchangeCode('test-code', 'https://example.com/callback');
       
@@ -145,25 +195,17 @@ describe('DiscordAuthService', () => {
       expect(result.user?.id).toBe('user-123');
       expect(result.user?.email).toBe('user@example.com');
       
-      // Verify the token fetch call
-      expect(global.fetch).toHaveBeenCalledWith(
-        'https://discord.com/api/oauth2/token',
-        expect.objectContaining({
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: expect.stringContaining('code=test-code')
-        })
-      );
+      // Verify the API client methods were called
+      expect(apiClientMock.exchangeOAuthCode).toHaveBeenCalledWith('test-code', 'https://example.com/callback');
+      expect(apiClientMock.getUserByOAuthToken).toHaveBeenCalledWith('test-access-token', 'Bearer');
     });
     
     it('should handle token exchange failure', async () => {
       // Mock failed token response
-      (global.fetch as jest.Mock).mockImplementationOnce(() => 
-        Promise.resolve({
-          ok: false,
-          text: () => Promise.resolve('Invalid code')
-        })
-      );
+      apiClientMock.exchangeOAuthCode.mockResolvedValueOnce({
+        success: false,
+        error: 'Failed to exchange code: Invalid code'
+      });
       
       const result = await authService.exchangeCode('invalid-code', 'https://example.com/callback');
       
@@ -174,22 +216,23 @@ describe('DiscordAuthService', () => {
     
     it('should handle user info fetch failure', async () => {
       // Mock successful token response but failed user info
-      (global.fetch as jest.Mock).mockImplementationOnce(() => 
-        Promise.resolve({
-          ok: true,
-          json: () => Promise.resolve({
-            access_token: 'test-access-token',
-            token_type: 'Bearer',
-            expires_in: 3600,
-            refresh_token: 'test-refresh-token',
-            scope: 'identify email'
-          })
-        })
-      ).mockImplementationOnce(() => 
-        Promise.resolve({
-          ok: false
-        })
-      );
+      const mockTokenData = {
+        access_token: 'test-access-token',
+        token_type: 'Bearer',
+        expires_in: 3600,
+        refresh_token: 'test-refresh-token',
+        scope: 'identify email'
+      };
+      
+      apiClientMock.exchangeOAuthCode.mockResolvedValueOnce({
+        success: true,
+        data: mockTokenData
+      });
+      
+      apiClientMock.getUserByOAuthToken.mockResolvedValueOnce({
+        success: false,
+        error: 'Failed to fetch user data'
+      });
       
       const result = await authService.exchangeCode('test-code', 'https://example.com/callback');
       
@@ -203,18 +246,18 @@ describe('DiscordAuthService', () => {
   describe('refreshToken', () => {
     it('should refresh a token successfully', async () => {
       // Mock successful token refresh
-      (global.fetch as jest.Mock).mockImplementationOnce(() => 
-        Promise.resolve({
-          ok: true,
-          json: () => Promise.resolve({
-            access_token: 'new-access-token',
-            token_type: 'Bearer',
-            expires_in: 3600,
-            refresh_token: 'new-refresh-token',
-            scope: 'identify email'
-          })
-        })
-      );
+      const mockTokenData = {
+        access_token: 'new-access-token',
+        token_type: 'Bearer',
+        expires_in: 3600,
+        refresh_token: 'new-refresh-token',
+        scope: 'identify email'
+      };
+      
+      apiClientMock.refreshOAuthToken.mockResolvedValueOnce({
+        success: true,
+        data: mockTokenData
+      });
       
       const result = await authService.refreshToken('old-refresh-token');
       
@@ -223,25 +266,16 @@ describe('DiscordAuthService', () => {
       expect(result.token?.access_token).toBe('new-access-token');
       expect(result.token?.refresh_token).toBe('new-refresh-token');
       
-      // Verify the refresh token fetch call
-      expect(global.fetch).toHaveBeenCalledWith(
-        'https://discord.com/api/oauth2/token',
-        expect.objectContaining({
-          method: 'POST',
-          headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-          body: expect.stringContaining('refresh_token=old-refresh-token')
-        })
-      );
+      // Verify the API client was called
+      expect(apiClientMock.refreshOAuthToken).toHaveBeenCalledWith('old-refresh-token');
     });
     
     it('should handle token refresh failure', async () => {
       // Mock failed token refresh
-      (global.fetch as jest.Mock).mockImplementationOnce(() => 
-        Promise.resolve({
-          ok: false,
-          text: () => Promise.resolve('Invalid refresh token')
-        })
-      );
+      apiClientMock.refreshOAuthToken.mockResolvedValueOnce({
+        success: false,
+        error: 'Failed to refresh token: Invalid refresh token'
+      });
       
       const result = await authService.refreshToken('invalid-refresh-token');
       
@@ -254,40 +288,34 @@ describe('DiscordAuthService', () => {
   describe('getUserGuilds', () => {
     it('should fetch user guilds successfully', async () => {
       // Mock successful guilds fetch
-      (global.fetch as jest.Mock).mockImplementationOnce(() => 
-        Promise.resolve({
-          ok: true,
-          json: () => Promise.resolve([
-            { id: 'guild-1', name: 'Test Guild 1' },
-            { id: 'guild-2', name: 'Test Guild 2' }
-          ])
-        })
-      );
+      const mockGuilds = [
+        { id: 'guild-1', name: 'Test Guild 1', owner_id: 'owner-1' },
+        { id: 'guild-2', name: 'Test Guild 2', owner_id: 'owner-2' }
+      ];
+      
+      apiClientMock.getUserGuilds.mockResolvedValueOnce({
+        success: true,
+        data: mockGuilds
+      });
       
       const result = await authService.getUserGuilds('test-access-token');
       
       expect(result.success).toBe(true);
-      expect(result.guilds).toBeDefined();
-      expect(result.guilds).toHaveLength(2);
-      expect(result.guilds[0].id).toBe('guild-1');
+      expect(result.data).toBeDefined();
+      expect(result.data).toHaveLength(2);
+      expect(result.data?.[0].id).toBe('guild-1');
       
-      // Verify the guilds fetch call
-      expect(global.fetch).toHaveBeenCalledWith(
-        'https://discord.com/api/users/@me/guilds',
-        expect.objectContaining({
-          headers: { Authorization: 'Bearer test-access-token' }
-        })
-      );
+      // Verify the API client was called
+      expect(apiClientMock.getUserGuilds).toHaveBeenCalledWith('test-access-token', 'Bearer');
     });
     
     it('should handle guilds fetch failure', async () => {
       // Mock failed guilds fetch
-      (global.fetch as jest.Mock).mockImplementationOnce(() => 
-        Promise.resolve({
-          ok: false,
-          text: () => Promise.resolve('Invalid token')
-        })
-      );
+      apiClientMock.getUserGuilds.mockResolvedValueOnce({
+        success: false,
+        data: [],
+        error: 'Failed to fetch guilds: Invalid token'
+      });
       
       const result = await authService.getUserGuilds('invalid-token');
       
@@ -300,37 +328,57 @@ describe('DiscordAuthService', () => {
   describe('revokeToken', () => {
     it('should revoke token successfully', async () => {
       // Mock successful revocation
-      (global.fetch as jest.Mock).mockImplementationOnce(() => 
-        Promise.resolve({
-          ok: true
-        })
-      );
+      apiClientMock.revokeOAuthToken.mockResolvedValueOnce({
+        success: true
+      });
       
       const result = await authService.revokeToken('test-token');
       
       expect(result.success).toBe(true);
       
-      // Verify the revoke token fetch call
-      expect(global.fetch).toHaveBeenCalledWith(
-        'https://discord.com/api/oauth2/token/revoke',
-        expect.objectContaining({
-          method: 'POST',
-          body: expect.stringContaining('token=test-token')
-        })
-      );
+      // Verify the API client was called
+      expect(apiClientMock.revokeOAuthToken).toHaveBeenCalledWith('test-token');
     });
     
     it('should handle revocation failure', async () => {
       // Mock failed revocation
-      (global.fetch as jest.Mock).mockImplementationOnce(() => 
-        Promise.resolve({
-          ok: false
-        })
-      );
+      apiClientMock.revokeOAuthToken.mockResolvedValueOnce({
+        success: false,
+        error: 'Failed to revoke token'
+      });
       
       const result = await authService.revokeToken('invalid-token');
       
       expect(result.success).toBe(false);
+      expect(result.error).toBeDefined();
+      expect(result.error).toBe('Failed to revoke token');
+    });
+  });
+  
+  describe('getUserProfile', () => {
+    it('should fetch user profile successfully', async () => {
+      // Mock successful user profile fetch
+      const mockUserData = {
+        id: 'user-123',
+        username: 'testuser',
+        discriminator: '1234',
+        avatar: 'avatar-hash',
+        email: 'user@example.com'
+      };
+      
+      apiClientMock.getUserByOAuthToken.mockResolvedValueOnce({
+        success: true,
+        data: mockUserData
+      });
+      
+      const result = await authService.getUserProfile('test-access-token');
+      
+      expect(result.success).toBe(true);
+      expect(result.data).toBeDefined();
+      expect(result.data?.id).toBe('user-123');
+      
+      // Verify the API client was called
+      expect(apiClientMock.getUserByOAuthToken).toHaveBeenCalledWith('test-access-token', 'Bearer');
     });
   });
 });

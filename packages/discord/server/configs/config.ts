@@ -25,6 +25,11 @@ export interface DiscordConfig {
    * Default Guild ID to use if none specified
    */
   defaultGuildId?: string;
+
+  /**
+   * Default redirect URI for OAuth flows
+   */
+  redirectUri?: string;
 }
 
 // Default configuration (empty/placeholder values)
@@ -32,7 +37,8 @@ const defaultConfig: DiscordConfig = {
   botToken: '',
   clientId: '',
   clientSecret: '',
-  defaultGuildId: undefined
+  defaultGuildId: undefined,
+  redirectUri: undefined
 };
 
 // Singleton instance of the configuration

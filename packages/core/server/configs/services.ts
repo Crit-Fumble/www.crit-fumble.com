@@ -1,5 +1,3 @@
-import { ConfigSource } from '../../models/config/Config';
-
 // Import all configuration types from the models folder
 import { 
   PostgresConfig,
@@ -30,10 +28,25 @@ import {
 
 let postgresInstance = { ...defaultPostgresConfig };
 
+/**
+ * Set PostgreSQL configuration values directly
+ * 
+ * @param config - PostgreSQL configuration values
+ */
 export function setPostgresConfig(config: Partial<PostgresConfig>): void {
   postgresInstance = { ...postgresInstance, ...config };
 }
 
+/**
+ * Get PostgreSQL configuration values
+ */
+export function getPostgresConfig(): PostgresConfig {
+  return { ...postgresInstance };
+}
+
+/**
+ * PostgreSQL configuration accessor object
+ */
 export const postgres = {
   get url() { return postgresInstance.url; },
   get url_no_ssl() { return postgresInstance.url_no_ssl; },
@@ -63,7 +76,9 @@ export const discord = {
 };
 
 /**
- * Set configurations for all library packages
+ * Set configurations for all library packages directly
+ * 
+ * @param options - Configuration object containing values for each library
  */
 export function setLibraryConfigs({
   worldAnvil: waConfig,

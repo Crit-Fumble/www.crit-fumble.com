@@ -2,7 +2,7 @@
 
 'use client';
 
-import { Card, CardContent, CardHeader } from "../../next/views/components/blocks/Card";
+import { Card, CardContent, CardHeader } from "../../next/client/views/components/blocks/Card";
 import Image from "next/image";
 
 // Define prop types for the client component
