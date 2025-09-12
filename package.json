@@ -15,14 +15,13 @@
   "dependencies": {
     "@crit-fumble/core": "file:packages/core",
     "@crit-fumble/discord": "file:packages/discord",
-    "@crit-fumble/worldanvil": "file:packages/worldanvil",
-    "@crit-fumble/openai": "file:packages/openai",
+    "@crit-fumble/discord-bot": "file:packages/discord-bot",
     "@crit-fumble/next": "file:packages/next",
     "@crit-fumble/next-web": "file:packages/next-web",
-    "@crit-fumble/discord-bot": "file:packages/discord-bot"
+    "@crit-fumble/openai": "file:packages/openai",
+    "@crit-fumble/worldanvil": "file:packages/worldanvil"
   },
   "devDependencies": {
-    "typescript": "^5.8.2",
-    "eslint": "^8.57.1"
+    "typescript": "^5.8.2"
   }
 }
