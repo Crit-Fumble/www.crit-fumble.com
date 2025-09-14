@@ -26,12 +26,26 @@ export class AuthService {
    * @param database Database client instance
    */
   constructor(private database: DatabaseClient) {
-    this.discordAuth = new DiscordAuthService();
+    // Create Discord auth service with configuration from environment variables
+    this.discordAuth = new DiscordAuthService({
+      clientId: process.env.DISCORD_CLIENT_ID,
+      clientSecret: process.env.DISCORD_CLIENT_SECRET,
+      redirectUri: process.env.DISCORD_REDIRECT_URI
+    });
+    
+    // Configure JWT settings
     this.jwtSecret = process.env.JWT_SECRET || 'dev-secret-do-not-use-in-production';
     this.tokenExpiration = '7d'; // Default token expiration
     
-    if (process.env.NODE_ENV === 'production' && this.jwtSecret === 'dev-secret-do-not-use-in-production') {
-      console.warn('WARNING: Using default JWT secret in production. Set JWT_SECRET environment variable.');
+    // Security warning for production environments
+    if (process.env.NODE_ENV === 'production') {
+      if (this.jwtSecret === 'dev-secret-do-not-use-in-production') {
+        console.warn('WARNING: Using default JWT secret in production. Set JWT_SECRET environment variable.');
+      }
+      
+      if (!process.env.DISCORD_CLIENT_ID || !process.env.DISCORD_CLIENT_SECRET) {
+        console.warn('WARNING: Missing Discord credentials. Authentication may not work properly.');
+      }
     }
   }
 
@@ -190,20 +204,19 @@ export class AuthService {
   /**
    * Get Discord user information using Discord token
    * @param discordToken Discord access token
+   * @param tokenType Optional token type, defaults to 'Bearer'
    */
-  async getDiscordUserInfo(discordToken: string) {
+  async getDiscordUserInfo(discordToken: string, tokenType = 'Bearer') {
     try {
-      const response = await fetch('https://discord.com/api/users/@me', {
-        headers: {
-          Authorization: `Bearer ${discordToken}`
-        }
-      });
+      // Use the DiscordAuthService to get the user profile
+      const result = await this.discordAuth.getUserProfile(discordToken, tokenType);
       
-      if (!response.ok) {
+      if (!result.success || !result.data) {
+        console.error('Failed to fetch Discord user info:', result.error);
         return null;
       }
       
-      return await response.json();
+      return result.data;
     } catch (error) {
       console.error('Failed to fetch Discord user info:', error);
       return null;
@@ -213,8 +226,9 @@ export class AuthService {
   /**
    * Get Discord guilds information using Discord token
    * @param discordToken Discord access token
+   * @param tokenType Optional token type, defaults to 'Bearer'
    */
-  async getDiscordGuilds(discordToken: string) {
-    return this.discordAuth.getUserGuilds(discordToken);
+  async getDiscordGuilds(discordToken: string, tokenType = 'Bearer') {
+    return this.discordAuth.getUserGuilds(discordToken, tokenType);
   }
 }
