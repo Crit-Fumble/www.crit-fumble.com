@@ -1,7 +1,7 @@
 "use server";
 
 import { getUserProfilePageProps } from "../../../../next/client/controllers/UserController";
-import UserProfile from "../../../../next/views/User/UserProfile";
+import UserProfile from "../../../../next/client/views/User/UserProfile";
 
 
 const Page = async ({ params: { userSlug } }: any) => {

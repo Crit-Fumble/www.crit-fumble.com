@@ -1,78 +1,93 @@
-import { PrismaClient } from '@prisma/client';
-import { prisma } from '../../models/database/prisma';
-import { User } from 'models';
+import { User } from '@prisma/client';
+import { DatabaseClient } from '../clients/DatabaseClient';
 
 /**
- * Fetch user data by ID (which could be a database ID or a Discord ID)
+ * User service for managing users
  */
-export async function getUserById(userId: string): Promise<User | null> {
-  // Try to get user directly by ID
-  let user = await prisma.user.findUnique({
-    where: { id: userId },
-    include: {
-      UserWorldAnvil: true // Include WorldAnvil data if available
-    }
-  });
+export class UserService {
+  /**
+   * Creates a new User service
+   * @param database Database client instance
+   */
+  constructor(private database: DatabaseClient) {}
 
-  // If not found and it might be a Discord ID, look for user by Discord ID
-  if (!user) {
-    const discordUser = await prisma.userDiscord.findUnique({
+  /**
+   * Fetch user data by ID (which could be a database ID or a Discord ID or WorldAnvil ID)
+   */
+  async getUserById(userId: string): Promise<User | null> {
+    // Try to get user directly by ID
+    let user = await this.database.client.user.findUnique({
       where: { id: userId }
     });
 
-    if (discordUser) {
-      user = await prisma.user.findFirst({
-        where: { discord: discordUser.id },
+    // If not found, try to find by Discord ID
+    if (!user) {
+      user = await this.database.client.user.findFirst({
+        where: { discord_id: userId }
       });
     }
+
+    // If still not found, try to find by WorldAnvil ID
+    if (!user) {
+      user = await this.database.client.user.findFirst({
+        where: { worldanvil_id: userId }
+      });
+    }
+
+    return user;
   }
 
-  // Also try to find by WorldAnvil ID if not found yet
-  if (!user) {
-    const worldAnvilUser = await prisma.userWorldAnvil.findUnique({
-      where: { id: userId }
+  /**
+   * Fetch user data by email
+   */
+  async getUserByEmail(email: string): Promise<User | null> {
+    return this.database.client.user.findUnique({
+      where: { email }
+    });
+  }
+
+  /**
+   * Fetch complete user data including related entities
+   */
+  async getUserData(userId: string): Promise<{
+    user: User | null;
+    characters?: any[];
+  }> {
+    const user = await this.getUserById(userId);
+    
+    if (!user) {
+      return {
+        user: null,
+      };
+    }
+
+    // Get the user's characters
+    const characters = await this.database.client.rpgCharacter.findMany({
+      where: { user_id: user.id }
     });
 
-    if (worldAnvilUser) {
-      user = await prisma.user.findFirst({
-        where: { world_anvil: worldAnvilUser.id },
-        include: {
-          UserWorldAnvil: true
-        }
-      });
-    }
-  }
-
-  return user;
-}
-
-/**
- * Fetch user data by email
- */
-export async function getUserByEmail(email: string): Promise<User | null> {
-  return prisma.user.findUnique({
-    where: { email },
-    include: {
-      UserWorldAnvil: true // Include WorldAnvil data if available
-    }
-  });
-}
-
-/**
- * Fetch complete user data including related entities
- */
-export async function getUserData(userId: string): Promise<{
-  user: User | null;
-}> {
-  const user = await getUserById(userId);
-  
-  if (!user) {
     return {
-      user: null,
+      user,
+      characters
     };
   }
 
-  return {
-    user,
-  };
+  /**
+   * Create a new user
+   */
+  async createUser(data: any): Promise<User> {
+    return this.database.client.user.create({
+      data
+    });
+  }
+
+  /**
+   * Update an existing user
+   */
+  async updateUser(id: string, data: any): Promise<User> {
+    return this.database.client.user.update({
+      where: { id },
+      data
+    });
+  }
 }

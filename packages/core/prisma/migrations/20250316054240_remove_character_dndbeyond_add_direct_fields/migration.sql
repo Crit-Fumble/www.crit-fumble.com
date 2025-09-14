@@ -16,7 +16,7 @@ DROP COLUMN "dd_beyond",
 DROP COLUMN "party",
 ADD COLUMN     "campaign_id" TEXT,
 ADD COLUMN     "dnd_beyond_id" TEXT,
-ADD COLUMN     "game_system_id" TEXT,
+ADD COLUMN     "rpg_system_id" TEXT,
 ADD COLUMN     "party_id" TEXT,
 ADD COLUMN     "pdf_url" TEXT,
 ADD COLUMN     "sheet_data" JSONB,
@@ -32,4 +32,4 @@ ALTER TABLE "Character" ADD CONSTRAINT "Character_campaign_id_fkey" FOREIGN KEY 
 ALTER TABLE "Character" ADD CONSTRAINT "Character_party_id_fkey" FOREIGN KEY ("party_id") REFERENCES "Party"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Character" ADD CONSTRAINT "Character_game_system_id_fkey" FOREIGN KEY ("game_system_id") REFERENCES "GameSystem"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Character" ADD CONSTRAINT "Character_rpg_system_id_fkey" FOREIGN KEY ("rpg_system_id") REFERENCES "GameSystem"("id") ON DELETE SET NULL ON UPDATE CASCADE;

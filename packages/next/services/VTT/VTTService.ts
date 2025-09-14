@@ -1,1 +1,0 @@
-// TODO: manage VTT service layer

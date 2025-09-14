@@ -108,7 +108,11 @@
 - [COMPLETED] Add dependency on @crit-fumble/worldanvil package
 - [COMPLETED] Add dependency on @crit-fumble/discord package
 - [COMPLETED] Add dependency on @crit-fumble/openai package
-- [BOT-WIP] update configs to simply accept a value instead of reading from .env; no need for backward compatibility
+- [HUMAN-REVIEW] update configs to simply accept a value instead of reading from .env; no need for backward compatibility
+  - Created EnvironmentConfig to replace process.env.NODE_ENV checks
+  - Updated services.ts to accept config values directly
+  - Modified database and logging code to use the new config system
+  - Removed direct dependencies on environment variables
 - [BOT-TODO] link discord and worldanvil services in UserController, WorldController, and RpgSystemController in packages\core\server\controllers
 - [BOT-TODO] Create a migration to drop the majority of unused tables
 - [BOT-TODO] remove unused 

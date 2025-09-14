@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import { Inter } from "next/font/google";
-import { TopBarSession } from "../../next/views/components/sections/topBar";
+import { TopBarSession } from "../../next/client/views/components/sections/topBar";
 import "./globals.css";
-import { BottomBarSession } from "../../next/views/components/sections/bottomBar";
+import { BottomBarSession } from "../../next/client/views/components/sections/bottomBar";
 import { UserDataProvider, Session } from "../../next/client/controllers/providers";
 
 const inter = Inter({ subsets: ["latin"] });

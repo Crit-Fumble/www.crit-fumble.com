@@ -1,7 +1,8 @@
 import { Client, ClientOptions, Guild, Channel, User, GuildMember, TextChannel, Message, MessageCreateOptions } from 'discord.js';
 import { IDiscordClient, DiscordClientAdapter } from '../../models/DiscordClientInterface';
 import { getDiscordConfig, DiscordConfig } from '../configs/config';
-import { DiscordGuild, DiscordUser, DiscordChannel, ApiResponse } from '../../models/DiscordTypes';
+import { ApiResponse, DiscordGuild, DiscordChannel } from '../../models/DiscordTypes';
+import { DiscordUser, DiscordOAuthTokens } from '@crit-fumble/discord/models/DiscordUser';
 
 export interface DiscordApiClientConfig {
   /**
@@ -23,6 +24,11 @@ export interface DiscordApiClientConfig {
    * Default Guild ID
    */
   defaultGuildId?: string;
+  
+  /**
+   * Default redirect URI for OAuth
+   */
+  redirectUri?: string;
 }
 
 /**
@@ -35,6 +41,7 @@ export class DiscordApiClient {
   private clientId: string;
   private clientSecret: string;
   private defaultGuildId?: string;
+  private redirectUri?: string;
   private isReady: boolean = false;
 
   /**
@@ -50,12 +57,14 @@ export class DiscordApiClient {
       this.clientId = clientConfig.clientId || config.clientId;
       this.clientSecret = clientConfig.clientSecret || config.clientSecret;
       this.defaultGuildId = clientConfig.defaultGuildId || config.defaultGuildId;
+      this.redirectUri = clientConfig.redirectUri || config.redirectUri;
     } catch (e) {
       // If config isn't set yet, use only the provided client config
       this.botToken = clientConfig.botToken || '';
       this.clientId = clientConfig.clientId || '';
       this.clientSecret = clientConfig.clientSecret || '';
       this.defaultGuildId = clientConfig.defaultGuildId;
+      this.redirectUri = clientConfig.redirectUri;
     }
     
     // Use the provided client (for tests) or initialize a new one
@@ -267,5 +276,288 @@ export class DiscordApiClient {
       data,
       error
     };
+  }
+  
+  /**
+   * Generate an OAuth authorization URL for Discord
+   * @param redirectUri Optional redirect URI, falls back to default
+   * @param scope OAuth scopes to request
+   * @param state Optional state parameter for CSRF protection
+   * @returns Authorization URL
+   */
+  getAuthorizationUrl(redirectUri?: string, scope = 'identify email guilds', state?: string): string {
+    if (!this.clientId) {
+      throw new Error('Discord client ID not configured');
+    }
+    
+    const useRedirect = redirectUri || this.redirectUri;
+    if (!useRedirect) {
+      throw new Error('No redirect URI provided and no default configured');
+    }
+    
+    const params = new URLSearchParams({
+      client_id: this.clientId,
+      redirect_uri: useRedirect,
+      response_type: 'code',
+      scope
+    });
+
+    if (state) {
+      params.append('state', state);
+    }
+
+    return `https://discord.com/api/oauth2/authorize?${params.toString()}`;
+  }
+  
+  /**
+   * Exchange authorization code for Discord OAuth tokens
+   * @param code Authorization code from OAuth redirect
+   * @param redirectUri Redirect URI used for authorization
+   * @returns API response with token data
+   */
+  async exchangeOAuthCode(code: string, redirectUri?: string): Promise<ApiResponse<DiscordOAuthTokens>> {
+    try {
+      if (!this.clientId || !this.clientSecret) {
+        return this.createApiResponse<DiscordOAuthTokens>(false, {} as DiscordOAuthTokens, 'Discord client credentials not configured');
+      }
+      
+      const useRedirect = redirectUri || this.redirectUri;
+      if (!useRedirect) {
+        return this.createApiResponse<DiscordOAuthTokens>(false, {} as DiscordOAuthTokens, 'No redirect URI provided and no default configured');
+      }
+
+      const response = await fetch('https://discord.com/api/oauth2/token', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: new URLSearchParams({
+          client_id: this.clientId,
+          client_secret: this.clientSecret,
+          grant_type: 'authorization_code',
+          code,
+          redirect_uri: useRedirect
+        }).toString()
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error(`Discord API error exchanging code: ${response.status} ${errorText}`);
+        return this.createApiResponse<DiscordOAuthTokens>(false, {} as DiscordOAuthTokens, `Failed to exchange code: ${response.status} ${errorText}`);
+      }
+
+      const tokenData = await response.json() as Record<string, any>;
+      if (!tokenData || typeof tokenData !== 'object' || !('access_token' in tokenData) || !('token_type' in tokenData)) {
+        console.error('Invalid token response format:', tokenData);
+        return this.createApiResponse<DiscordOAuthTokens>(false, {} as DiscordOAuthTokens, 'Invalid token response from Discord');
+      }
+      
+      // Format the token data
+      const tokens: DiscordOAuthTokens = {
+        access_token: String(tokenData.access_token),
+        token_type: String(tokenData.token_type),
+        expires_in: Number(tokenData.expires_in || 0),
+        refresh_token: String(tokenData.refresh_token || ''),
+        scope: String(tokenData.scope || '')
+      };
+
+      return this.createApiResponse(true, tokens);
+    } catch (error) {
+      console.error('Error exchanging OAuth code:', error);
+      return this.createApiResponse<DiscordOAuthTokens>(false, {} as DiscordOAuthTokens, error instanceof Error ? error.message : 'Unknown error during authentication');
+    }
+  }
+  
+  /**
+   * Get current user data using OAuth access token
+   * @param accessToken OAuth access token
+   * @param tokenType Token type (e.g., "Bearer")
+   * @returns API response with user data
+   */
+  async getUserByOAuthToken(accessToken: string, tokenType = 'Bearer'): Promise<ApiResponse<DiscordUser>> {
+    try {
+      // Validate input
+      if (!accessToken) {
+        return this.createApiResponse<DiscordUser>(false, {} as DiscordUser, 'Access token is required');
+      }
+      
+      // Ensure token type has proper capitalization
+      const formattedTokenType = tokenType.charAt(0).toUpperCase() + tokenType.slice(1).toLowerCase();
+      
+      const response = await fetch('https://discord.com/api/users/@me', {
+        headers: {
+          Authorization: `${formattedTokenType} ${accessToken}`
+        }
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error(`Discord API error fetching user data: ${response.status} ${errorText}`);
+        return this.createApiResponse<DiscordUser>(false, {} as DiscordUser, `Failed to fetch user data: ${response.status}`);
+      }
+
+      const userData = await response.json() as Record<string, any>;
+      
+      // Map to DiscordUser interface
+      const user: DiscordUser = {
+        id: userData.id,
+        username: userData.username,
+        global_name: userData.global_name,
+        discriminator: userData.discriminator,
+        avatar: userData.avatar,
+        email: userData.email,
+        verified: userData.verified,
+        banner: userData.banner,
+        accent_color: userData.accent_color,
+        premium_type: userData.premium_type,
+        public_flags: userData.public_flags,
+        flags: userData.flags,
+        locale: userData.locale,
+        mfa_enabled: userData.mfa_enabled,
+        // Add computed avatar URL
+        image_url: userData.avatar ? 
+          `https://cdn.discordapp.com/avatars/${userData.id}/${userData.avatar}.png` : 
+          undefined,
+        provider: 'discord'
+      };
+
+      return this.createApiResponse(true, user);
+    } catch (error) {
+      console.error('Error fetching user by OAuth token:', error);
+      return this.createApiResponse<DiscordUser>(false, {} as DiscordUser, error instanceof Error ? error.message : 'Unknown error fetching user data');
+    }
+  }
+  
+  /**
+   * Get user guilds using OAuth access token
+   * @param accessToken OAuth access token
+   * @param tokenType Token type (e.g., "Bearer")
+   * @returns API response with guilds data
+   */
+  async getUserGuilds(accessToken: string, tokenType = 'Bearer'): Promise<ApiResponse<DiscordGuild[]>> {
+    try {
+      // Validate input
+      if (!accessToken) {
+        return this.createApiResponse<DiscordGuild[]>(false, [], 'Access token is required');
+      }
+      
+      // Ensure token type has proper capitalization
+      const formattedTokenType = tokenType.charAt(0).toUpperCase() + tokenType.slice(1).toLowerCase();
+      
+      const response = await fetch('https://discord.com/api/users/@me/guilds', {
+        headers: {
+          Authorization: `${formattedTokenType} ${accessToken}`
+        }
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error(`Discord API error fetching guilds: ${response.status} ${errorText}`);
+        return this.createApiResponse<DiscordGuild[]>(false, [], `Failed to fetch guilds: ${response.status} ${errorText}`);
+      }
+
+      const guildsData = await response.json();
+      if (!Array.isArray(guildsData)) {
+        console.warn('Discord API returned non-array for guilds:', guildsData);
+        return this.createApiResponse(true, []);
+      }
+      
+      // Map the raw guild data to our DiscordGuild interface
+      const guilds: DiscordGuild[] = guildsData.map(g => ({
+        id: g.id,
+        name: g.name,
+        icon: g.icon || undefined,
+        owner_id: g.owner_id,
+        features: g.features,
+        permissions: g.permissions
+      }));
+
+      return this.createApiResponse(true, guilds);
+    } catch (error) {
+      console.error('Error fetching guilds:', error);
+      return this.createApiResponse<DiscordGuild[]>(false, [], error instanceof Error ? error.message : 'Unknown error fetching guilds');
+    }
+  }
+  
+  /**
+   * Refresh OAuth token using refresh token
+   * @param refreshToken Refresh token from previous authentication
+   * @returns API response with new token data
+   */
+  async refreshOAuthToken(refreshToken: string): Promise<ApiResponse<DiscordOAuthTokens>> {
+    try {
+      if (!this.clientId || !this.clientSecret) {
+        return this.createApiResponse<DiscordOAuthTokens>(false, {} as DiscordOAuthTokens, 'Discord client credentials not configured');
+      }
+
+      const response = await fetch('https://discord.com/api/oauth2/token', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: new URLSearchParams({
+          client_id: this.clientId,
+          client_secret: this.clientSecret,
+          grant_type: 'refresh_token',
+          refresh_token: refreshToken
+        }).toString()
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        console.error(`Discord API error refreshing token: ${response.status} ${errorText}`);
+        return this.createApiResponse<DiscordOAuthTokens>(false, {} as DiscordOAuthTokens, `Failed to refresh token: ${response.status} ${errorText}`);
+      }
+
+      const tokenData = await response.json() as Record<string, any>;
+      if (!tokenData || typeof tokenData !== 'object' || !('access_token' in tokenData) || !('token_type' in tokenData)) {
+        console.error('Invalid token response format:', tokenData);
+        return this.createApiResponse<DiscordOAuthTokens>(false, {} as DiscordOAuthTokens, 'Invalid token response from Discord');
+      }
+      
+      // Format the token data
+      const tokens: DiscordOAuthTokens = {
+        access_token: String(tokenData.access_token),
+        token_type: String(tokenData.token_type),
+        expires_in: Number(tokenData.expires_in || 0),
+        refresh_token: String(tokenData.refresh_token || ''),
+        scope: String(tokenData.scope || '')
+      };
+
+      return this.createApiResponse(true, tokens);
+    } catch (error) {
+      console.error('Error refreshing OAuth token:', error);
+      return this.createApiResponse<DiscordOAuthTokens>(false, {} as DiscordOAuthTokens, error instanceof Error ? error.message : 'Unknown error during token refresh');
+    }
+  }
+  
+  /**
+   * Revoke an OAuth token
+   * @param token Token to revoke
+   * @returns API response indicating success or failure
+   */
+  async revokeOAuthToken(token: string): Promise<ApiResponse<void>> {
+    try {
+      if (!this.clientId || !this.clientSecret) {
+        return this.createApiResponse(false, undefined, 'Discord client credentials not configured');
+      }
+
+      const response = await fetch('https://discord.com/api/oauth2/token/revoke', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: new URLSearchParams({
+          client_id: this.clientId,
+          client_secret: this.clientSecret,
+          token
+        }).toString()
+      });
+
+      return this.createApiResponse(response.ok);
+    } catch (error) {
+      console.error('Error revoking OAuth token:', error);
+      return this.createApiResponse(false, undefined, error instanceof Error ? error.message : 'Unknown error revoking token');
+    }
   }
 }

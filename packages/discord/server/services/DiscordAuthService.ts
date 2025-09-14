@@ -1,11 +1,12 @@
 /**
  * Discord Auth Service
  * Handles Discord OAuth authentication processes
+ * Uses DiscordApiClient for API communication
  */
 
-import { IDiscordClient } from '../../models/DiscordClientInterface';
 import { DiscordApiClient } from '../clients/DiscordApiClient';
-import { getDiscordConfig } from '../configs/config';
+import { ApiResponse, DiscordGuild } from '../../models/DiscordTypes';
+import { DiscordUser, DiscordOAuthTokens } from '../../models/DiscordUser';
 
 export interface DiscordAuthResult {
   success: boolean;
@@ -34,27 +35,23 @@ export interface OAuthOptions {
 }
 
 export class DiscordAuthService {
-  private client: DiscordApiClient;
-  private clientId: string;
-  private clientSecret: string;
+  private apiClient: DiscordApiClient;
 
   /**
    * Initialize Discord Auth Service
+   * @param configOptions Optional configuration options
    * @param customClient Optional custom Discord client for testing
    */
-  constructor(customClient?: IDiscordClient) {
-    try {
-      const config = getDiscordConfig();
-      this.clientId = config.clientId;
-      this.clientSecret = config.clientSecret;
-    } catch (e) {
-      this.clientId = '';
-      this.clientSecret = '';
-    }
-    
-    this.client = new DiscordApiClient({
-      clientId: this.clientId,
-      clientSecret: this.clientSecret
+  constructor(configOptions?: {
+    clientId?: string;
+    clientSecret?: string;
+    redirectUri?: string;
+  }, customClient?: any) {
+    // Create the Discord API client
+    this.apiClient = new DiscordApiClient({
+      clientId: configOptions?.clientId,
+      clientSecret: configOptions?.clientSecret,
+      redirectUri: configOptions?.redirectUri
     }, customClient);
   }
 
@@ -62,7 +59,7 @@ export class DiscordAuthService {
    * Initialize the auth service
    */
   async initialize(): Promise<void> {
-    await this.client.initialize();
+    await this.apiClient.initialize();
   }
 
   /**
@@ -73,18 +70,7 @@ export class DiscordAuthService {
    * @returns URL to redirect user to for Discord OAuth
    */
   getAuthorizationUrl(redirectUri: string, scope = 'identify email guilds', state?: string): string {
-    const params = new URLSearchParams({
-      client_id: this.clientId,
-      redirect_uri: redirectUri,
-      response_type: 'code',
-      scope,
-    });
-
-    if (state) {
-      params.append('state', state);
-    }
-
-    return `https://discord.com/api/oauth2/authorize?${params.toString()}`;
+    return this.apiClient.getAuthorizationUrl(redirectUri, scope, state);
   }
 
   /**
@@ -95,67 +81,47 @@ export class DiscordAuthService {
    */
   async exchangeCode(code: string, redirectUri: string): Promise<DiscordAuthResult> {
     try {
-      if (!this.clientId || !this.clientSecret) {
+      // Exchange code for token using the API client
+      const tokenResult = await this.apiClient.exchangeOAuthCode(code, redirectUri);
+      
+      if (!tokenResult.success || !tokenResult.data) {
         return {
           success: false,
-          error: 'Discord client credentials not configured'
+          error: tokenResult.error || 'Failed to exchange code'
         };
       }
-
-      // Exchange code for token using Discord OAuth API
-      const tokenResponse = await fetch('https://discord.com/api/oauth2/token', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: new URLSearchParams({
-          client_id: this.clientId,
-          client_secret: this.clientSecret,
-          grant_type: 'authorization_code',
-          code,
-          redirect_uri: redirectUri
-        }).toString()
-      });
-
-      if (!tokenResponse.ok) {
-        const error = await tokenResponse.text();
+      
+      const token = tokenResult.data;
+      
+      // Get user information using the token
+      const userResult = await this.apiClient.getUserByOAuthToken(
+        token.access_token,
+        token.token_type
+      );
+      
+      if (!userResult.success || !userResult.data) {
         return {
           success: false,
-          error: `Failed to exchange code: ${error}`
-        };
-      }
-
-      const token = await tokenResponse.json();
-
-      // Get user information using the access token
-      const userResponse = await fetch('https://discord.com/api/users/@me', {
-        headers: {
-          Authorization: `${token.token_type} ${token.access_token}`
-        }
-      });
-
-      if (!userResponse.ok) {
-        return {
-          success: false,
-          error: 'Failed to fetch user data',
+          error: userResult.error || 'Failed to fetch user data',
           token
         };
       }
-
-      const user = await userResponse.json();
-
+      
+      const user = userResult.data;
+      
       return {
         success: true,
         token,
         user: {
           id: user.id,
           username: user.username,
-          discriminator: user.discriminator,
+          discriminator: user.discriminator || '',
           avatar: user.avatar,
           email: user.email
         }
       };
     } catch (error) {
+      console.error('Error in exchangeCode:', error);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Unknown error during authentication'
@@ -170,77 +136,25 @@ export class DiscordAuthService {
    */
   async refreshToken(refreshToken: string): Promise<DiscordAuthResult> {
     try {
-      if (!this.clientId || !this.clientSecret) {
+      // Use the API client to refresh the token
+      const tokenResult = await this.apiClient.refreshOAuthToken(refreshToken);
+      
+      if (!tokenResult.success || !tokenResult.data) {
         return {
           success: false,
-          error: 'Discord client credentials not configured'
+          error: tokenResult.error || 'Failed to refresh token'
         };
       }
-
-      const tokenResponse = await fetch('https://discord.com/api/oauth2/token', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: new URLSearchParams({
-          client_id: this.clientId,
-          client_secret: this.clientSecret,
-          grant_type: 'refresh_token',
-          refresh_token: refreshToken
-        }).toString()
-      });
-
-      if (!tokenResponse.ok) {
-        const error = await tokenResponse.text();
-        return {
-          success: false,
-          error: `Failed to refresh token: ${error}`
-        };
-      }
-
-      const token = await tokenResponse.json();
-
+      
       return {
         success: true,
-        token
+        token: tokenResult.data
       };
     } catch (error) {
+      console.error('Error refreshing token:', error);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Unknown error during token refresh'
-      };
-    }
-  }
-
-  /**
-   * Get user guilds (servers) using access token
-   * @param accessToken User's Discord access token
-   * @returns List of guilds the user is a member of
-   */
-  async getUserGuilds(accessToken: string): Promise<any> {
-    try {
-      const response = await fetch('https://discord.com/api/users/@me/guilds', {
-        headers: {
-          Authorization: `Bearer ${accessToken}`
-        }
-      });
-
-      if (!response.ok) {
-        return {
-          success: false,
-          error: `Failed to fetch guilds: ${await response.text()}`
-        };
-      }
-
-      const guilds = await response.json();
-      return {
-        success: true,
-        guilds
-      };
-    } catch (error) {
-      return {
-        success: false,
-        error: error instanceof Error ? error.message : 'Unknown error fetching guilds'
       };
     }
   }
@@ -252,33 +166,48 @@ export class DiscordAuthService {
    */
   async revokeToken(token: string): Promise<{ success: boolean; error?: string }> {
     try {
-      if (!this.clientId || !this.clientSecret) {
-        return {
-          success: false,
-          error: 'Discord client credentials not configured'
-        };
-      }
-
-      const response = await fetch('https://discord.com/api/oauth2/token/revoke', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded'
-        },
-        body: new URLSearchParams({
-          client_id: this.clientId,
-          client_secret: this.clientSecret,
-          token
-        }).toString()
-      });
-
+      // Use the API client to revoke the token
+      const result = await this.apiClient.revokeOAuthToken(token);
       return {
-        success: response.ok
+        success: result.success,
+        error: result.error
       };
     } catch (error) {
+      console.error('Error revoking token:', error);
       return {
         success: false,
         error: error instanceof Error ? error.message : 'Unknown error revoking token'
       };
     }
+  }
+
+  /**
+   * Get user guilds (servers) using access token
+   * @param accessToken User's Discord access token
+   * @param tokenType Optional token type, defaults to 'Bearer'
+   * @returns List of guilds the user is a member of
+   */
+  async getUserGuilds(accessToken: string, tokenType = 'Bearer'): Promise<ApiResponse<DiscordGuild[]>> {
+    try {
+      // Use the API client to get the user's guilds
+      return await this.apiClient.getUserGuilds(accessToken, tokenType);
+    } catch (error) {
+      console.error('Error fetching user guilds:', error);
+      return {
+        success: false,
+        data: [],
+        error: error instanceof Error ? error.message : 'Unknown error fetching guilds'
+      };
+    }
+  }
+  
+  /**
+   * Get Discord user profile using access token
+   * @param accessToken Access token from OAuth
+   * @param tokenType Token type (Bearer, etc)
+   * @returns User profile information
+   */
+  async getUserProfile(accessToken: string, tokenType = 'Bearer'): Promise<ApiResponse<DiscordUser>> {
+    return this.apiClient.getUserByOAuthToken(accessToken, tokenType);
   }
 }

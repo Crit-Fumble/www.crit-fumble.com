@@ -1,6 +1,6 @@
 "use server";
 
-import AdminDashboard from "../../../../next/views/Admin/AdminDashboard";
+import AdminDashboard from "../../../../next/client/views/Admin/AdminDashboard";
 import { getAdminDashboardPageProps } from "../../../../next/client/controllers/AdminController";
 
 

@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Card, CardContent, CardHeader } from "../../../../../../next/views/components/blocks/Card";
+import { Card, CardContent, CardHeader } from "../../../../../../next/client/views/components/blocks/Card";
 import { getSession } from "next-auth/react";
-import { LinkButton } from "../../../../../../next/views/components/ui/Button";
+import { LinkButton } from "../../../../../../next/client/views/components/ui/Button";
 
 interface CharacterSheetEditProps {
   params: {

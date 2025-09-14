@@ -1,7 +1,7 @@
 import { getServerSession } from '../../../../../next/services/AuthService';
 import { getCharacterBySlug } from '@crit-fumble/next/services/GameSystem/Base/Character/CharacterService';
 import { redirect } from 'next/navigation';
-import CharacterEditView from '../../../../../next/views/Character/CharacterEditView';
+import CharacterEditView from '../../../../../next/client/views/Character/CharacterEditView';
 
 // Define a Character type that matches your Prisma schema
 interface Character {
@@ -15,7 +15,7 @@ interface Character {
   discord?: string | null;
   roll20?: string | null;
   pdf_url?: string | null;
-  game_system_id?: string | null;
+  rpg_system_id?: string | null;
   campaign_id?: string | null;
   party_id?: string | null;
   sheet_data?: any;

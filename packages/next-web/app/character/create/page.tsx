@@ -2,7 +2,7 @@
 
 import { getServerSession } from '../../../../next/services/AuthService';
 import { redirect } from 'next/navigation';
-import CharacterCreateView from '../../../../next/views/Character/CharacterCreateView';
+import CharacterCreateView from '../../../../next/client/views/Character/CharacterCreateView';
 
 const Page = async () => {
   const session = await getServerSession();

@@ -2,7 +2,7 @@
 
 import { getWorldViewPageProps } from "@crit-fumble/next/controllers/GameSystem/Base/World/WorldController";
 import { getBlockById } from "@crit-fumble/next/services/GameSystem/Base/World/WorldAnvilService";
-import WorldView from "../../../../../../next/views/World/WorldView";
+import WorldView from "../../../../../../next/client/views/World/WorldView";
 
 const Page = async ({ params: { worldSlug, blockId } }: any) => {
   const props = await getWorldViewPageProps({
