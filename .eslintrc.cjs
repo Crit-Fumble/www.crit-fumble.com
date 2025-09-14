@@ -23,7 +23,17 @@ module.exports = {
     "import",
     "react",
     "react-hooks",
-    "crit-fumble-architecture",
+  ],
+  ignorePatterns: [
+    "**/node_modules/**",
+    "**/dist/**",
+    "**/build/**",
+    "**/coverage/**",
+    "**/docs/**",
+    "**/*.d.ts",
+    "**/*.config.js",
+    "**/*.config.cjs",
+    "jest.*.js"
   ],
   extends: [
     "eslint:recommended",
@@ -33,7 +43,6 @@ module.exports = {
     "plugin:import/typescript",
     "plugin:react/recommended",
     "plugin:react-hooks/recommended",
-    "plugin:crit-fumble-architecture/recommended",
   ],
   settings: {
     react: {

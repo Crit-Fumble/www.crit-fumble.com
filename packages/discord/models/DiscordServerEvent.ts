@@ -20,5 +20,5 @@ export abstract class DiscordServerEvent {
    * @param client The Discord client instance
    * @param args Any additional arguments provided by the event
    */
-  abstract execute(client: any, ...args: any[]): Promise<void> | void;
+  abstract execute(client: import('discord.js').Client, ...args: unknown[]): Promise<void> | void;
 }

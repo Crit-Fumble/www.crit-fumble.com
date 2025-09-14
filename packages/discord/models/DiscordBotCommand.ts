@@ -16,7 +16,7 @@ export abstract class DiscordBotCommand {
    * Execute the command with the given interaction
    * This method must be implemented by all command classes
    */
-  abstract execute(props: { interaction: any }): Promise<void> | void;
+  abstract execute(props: { interaction: import('discord.js').CommandInteraction }): Promise<void> | void;
 }
 
 /**

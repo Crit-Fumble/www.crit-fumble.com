@@ -33,14 +33,14 @@ export interface IDiscordClient {
    * @param event Event name to listen for
    * @param listener Event handler function
    */
-  once(event: string, listener: (...args: any[]) => void): any;
+  once(event: string, listener: (...args: unknown[]) => void): void;
 
   /**
    * Register an event handler
    * @param event Event name to listen for
    * @param listener Event handler function
    */
-  on(event: string, listener: (...args: any[]) => void): any;
+  on(event: string, listener: (...args: unknown[]) => void): void;
 
   /**
    * Access to guild operations
@@ -51,7 +51,7 @@ export interface IDiscordClient {
      * @param id Guild ID
      * @param options Fetch options
      */
-    fetch(id: string, options?: any): Promise<Guild>;
+    fetch(id: string, options?: Record<string, unknown>): Promise<Guild>;
 
     /**
      * Cache of guilds
@@ -68,7 +68,7 @@ export interface IDiscordClient {
      * @param id Channel ID
      * @param options Fetch options
      */
-    fetch(id: string, options?: any): Promise<Channel | null>;
+    fetch(id: string, options?: Record<string, unknown>): Promise<Channel | null>;
 
     /**
      * Cache of channels
@@ -85,7 +85,7 @@ export interface IDiscordClient {
      * @param id User ID
      * @param options Fetch options
      */
-    fetch(id: string, options?: any): Promise<User>;
+    fetch(id: string, options?: Record<string, unknown>): Promise<User>;
 
     /**
      * Cache of users
@@ -116,12 +116,12 @@ export class DiscordClientAdapter implements IDiscordClient {
     this.client.destroy();
   }
 
-  once(event: string, listener: (...args: any[]) => void): any {
-    return this.client.once(event, listener);
+  once(event: string, listener: (...args: unknown[]) => void): void {
+    this.client.once(event, listener);
   }
 
-  on(event: string, listener: (...args: any[]) => void): any {
-    return this.client.on(event, listener);
+  on(event: string, listener: (...args: unknown[]) => void): void {
+    this.client.on(event, listener);
   }
 
   get guilds() {

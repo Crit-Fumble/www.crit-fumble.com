@@ -31,5 +31,12 @@
         "variablecollections",
         "worldanvil",
         "worldbuilding"
-    ]
+    ],
+    "eslint.enable": true,
+    "eslint.workingDirectories": [
+        { "mode": "auto" }
+    ],
+    "eslint.options": {
+        "configFile": "${workspaceFolder}/.eslintrc.cjs"
+    }
 }
