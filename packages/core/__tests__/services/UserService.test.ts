@@ -68,16 +68,16 @@ describe('UserService', () => {
   describe('getUserById', () => {
     const mockUser: User = {
       id: 'user-123',
+      discord_id: 'discord-123',
+      worldanvil_id: 'wa-123',
       name: 'Test User',
+      slug: 'test-user',
       email: 'test@example.com',
       emailVerified: null,
       image: 'https://example.com/avatar.png',
-      discord_id: 'discord-123',
-      worldanvil_id: 'wa-123',
-      slug: 'test-user',
-      admin: false,
       createdAt: new Date(),
       updatedAt: new Date(),
+      admin: false,
       data: null,
     };
 
@@ -134,16 +134,16 @@ describe('UserService', () => {
     it('should get user by email', async () => {
       const mockUser: User = {
         id: 'user-123',
+        discord_id: null,
+        worldanvil_id: null,
         name: 'Test User',
+        slug: 'test-user',
         email: 'test@example.com',
         emailVerified: null,
         image: null,
-        discord_id: null,
-        worldanvil_id: null,
-        slug: 'test-user',
-        admin: false,
         createdAt: new Date(),
         updatedAt: new Date(),
+        admin: false,
         data: null,
       };
 

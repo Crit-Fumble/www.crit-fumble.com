@@ -62,15 +62,25 @@ describe('RpgSystemController', () => {
       const mockSystems = [
         {
           id: 'system-1',
-          name: 'D&D 5e',
+          worldanvil_system_id: 'wa-123',
+          discord_guild_id: null,
+          discord_post_id: null,
+          discord_chat_id: null,
+          discord_thread_id: null,
+          discord_forum_id: null,
+          discord_voice_id: null,
+          discord_role_id: null,
+          title: 'D&D 5e',
+          slug: 'dnd-5e',
           description: 'Fifth edition D&D',
-          worldanvil_id: 'wa-123',
-          version: '5.0',
-          publisher: 'Wizards of the Coast',
-          tags: ['fantasy'],
-          config: {},
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          data: {
+            version: '5.0',
+            publisher: 'Wizards of the Coast',
+            tags: ['fantasy']
+          },
+          is_active: true,
+          created_at: new Date(),
+          updated_at: new Date(),
         },
       ];
 
@@ -111,20 +121,32 @@ describe('RpgSystemController', () => {
   describe('registerRpgSystem', () => {
     it('should register new RPG system', async () => {
       const systemData = {
-        name: 'New System',
+        title: 'New System',
         description: 'A new RPG system',
-        version: '1.0',
-        publisher: 'Test Publisher',
-        tags: ['new'],
+        data: {
+          version: '1.0',
+          publisher: 'Test Publisher',
+          tags: ['new']
+        },
       };
 
       const mockCreatedSystem = {
         id: 'system-new',
-        ...systemData,
-        worldanvil_id: null,
-        config: {},
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        worldanvil_system_id: null,
+        discord_guild_id: null,
+        discord_post_id: null,
+        discord_chat_id: null,
+        discord_thread_id: null,
+        discord_forum_id: null,
+        discord_voice_id: null,
+        discord_role_id: null,
+        title: systemData.title,
+        slug: 'new-system',
+        description: systemData.description,
+        data: systemData.data,
+        is_active: true,
+        created_at: new Date(),
+        updated_at: new Date(),
       };
 
       (mockRpgSystemService.create as jest.Mock).mockResolvedValue(mockCreatedSystem);
@@ -135,12 +157,10 @@ describe('RpgSystemController', () => {
       await rpgSystemController.registerRpgSystem(req, res);
 
       expect(mockRpgSystemService.create).toHaveBeenCalledWith({
-        name: systemData.name,
+        title: systemData.title,
         description: systemData.description,
-        version: systemData.version,
-        publisher: systemData.publisher,
-        tags: systemData.tags,
-        config: {},
+        data: systemData.data,
+        is_active: true,
       });
       expect(res.status).toHaveBeenCalledWith(201);
       expect(res.json).toHaveBeenCalledWith({
@@ -152,7 +172,7 @@ describe('RpgSystemController', () => {
 
     it('should validate required fields', async () => {
       const invalidData = {
-        description: 'Missing name field',
+        description: 'Missing title field',
       };
 
       const req = createMockRequest(invalidData);
@@ -164,17 +184,19 @@ describe('RpgSystemController', () => {
       expect(res.json).toHaveBeenCalledWith({
         success: false,
         error: 'Bad request',
-        message: 'Missing required fields: name, description, version, publisher',
+        message: 'Missing required fields: title, description',
       });
     });
 
     it('should handle service errors during registration', async () => {
       const systemData = {
-        name: 'New System',
+        title: 'New System',
         description: 'A new RPG system',
-        version: '1.0',
-        publisher: 'Test Publisher',
-        tags: ['new'],
+        data: {
+          version: '1.0',
+          publisher: 'Test Publisher',
+          tags: ['new']
+        },
       };
 
       (mockRpgSystemService.create as jest.Mock).mockRejectedValue(
