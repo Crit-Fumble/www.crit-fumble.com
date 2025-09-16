@@ -45,8 +45,38 @@ describe('RpgPartyService', () => {
   describe('getAll', () => {
     it('should return all RPG parties', async () => {
       const expectedParties = [
-        { id: 'party1', title: 'The Heroes', rpg_campaign_id: 'campaign1' },
-        { id: 'party2', title: 'The Adventurers', rpg_campaign_id: 'campaign2' },
+        { 
+          id: 'party1', 
+          worldanvil_party_id: null,
+          discord_post_id: null,
+          discord_chat_id: null,
+          discord_thread_id: null,
+          discord_forum_id: null,
+          discord_voice_id: null,
+          discord_role_id: null,
+          rpg_campaign_id: 'campaign1',
+          slug: 'the-heroes',
+          title: 'The Heroes', 
+          description: null,
+          is_active: true,
+          data: null
+        },
+        { 
+          id: 'party2', 
+          worldanvil_party_id: null,
+          discord_post_id: null,
+          discord_chat_id: null,
+          discord_thread_id: null,
+          discord_forum_id: null,
+          discord_voice_id: null,
+          discord_role_id: null,
+          rpg_campaign_id: 'campaign2',
+          slug: 'the-adventurers',
+          title: 'The Adventurers', 
+          description: null,
+          is_active: true,
+          data: null
+        },
       ];
 
       mockPrismaClient.rpgParty.findMany.mockResolvedValue(expectedParties);
@@ -71,9 +101,19 @@ describe('RpgPartyService', () => {
       const partyId = 'party123';
       const expectedParty = {
         id: partyId,
+        worldanvil_party_id: null,
+        discord_post_id: null,
+        discord_chat_id: null,
+        discord_thread_id: null,
+        discord_forum_id: null,
+        discord_voice_id: null,
+        discord_role_id: null,
+        rpg_campaign_id: 'campaign1',
+        slug: 'the-heroes',
         title: 'The Heroes',
         description: 'A heroic party',
-        rpg_campaign_id: 'campaign1',
+        is_active: true,
+        data: null,
       };
 
       mockPrismaClient.rpgParty.findUnique.mockResolvedValue(expectedParty);
@@ -100,8 +140,19 @@ describe('RpgPartyService', () => {
       const worldAnvilId = 'wa123';
       const expectedParty = {
         id: 'party123',
-        title: 'The Heroes',
         worldanvil_party_id: worldAnvilId,
+        discord_post_id: null,
+        discord_chat_id: null,
+        discord_thread_id: null,
+        discord_forum_id: null,
+        discord_voice_id: null,
+        discord_role_id: null,
+        rpg_campaign_id: null,
+        slug: 'the-heroes',
+        title: 'The Heroes',
+        description: null,
+        is_active: true,
+        data: null,
       };
 
       mockPrismaClient.rpgParty.findUnique.mockResolvedValue(expectedParty);
@@ -120,8 +171,19 @@ describe('RpgPartyService', () => {
       const discordRoleId = 'role123';
       const expectedParty = {
         id: 'party123',
-        title: 'The Heroes',
+        worldanvil_party_id: null,
+        discord_post_id: null,
+        discord_chat_id: null,
+        discord_thread_id: null,
+        discord_forum_id: null,
+        discord_voice_id: null,
         discord_role_id: discordRoleId,
+        rpg_campaign_id: null,
+        slug: 'the-heroes',
+        title: 'The Heroes',
+        description: null,
+        is_active: true,
+        data: null,
       };
 
       mockPrismaClient.rpgParty.findUnique.mockResolvedValue(expectedParty);
@@ -139,8 +201,38 @@ describe('RpgPartyService', () => {
     it('should return parties for a campaign', async () => {
       const campaignId = 'campaign123';
       const expectedParties = [
-        { id: 'party1', title: 'Party A', rpg_campaign_id: campaignId },
-        { id: 'party2', title: 'Party B', rpg_campaign_id: campaignId },
+        { 
+          id: 'party1', 
+          worldanvil_party_id: null,
+          discord_post_id: null,
+          discord_chat_id: null,
+          discord_thread_id: null,
+          discord_forum_id: null,
+          discord_voice_id: null,
+          discord_role_id: null,
+          rpg_campaign_id: campaignId,
+          slug: 'party-a',
+          title: 'Party A', 
+          description: null,
+          is_active: true,
+          data: null
+        },
+        { 
+          id: 'party2', 
+          worldanvil_party_id: null,
+          discord_post_id: null,
+          discord_chat_id: null,
+          discord_thread_id: null,
+          discord_forum_id: null,
+          discord_voice_id: null,
+          discord_role_id: null,
+          rpg_campaign_id: campaignId,
+          slug: 'party-b',
+          title: 'Party B', 
+          description: null,
+          is_active: true,
+          data: null
+        },
       ];
 
       mockPrismaClient.rpgParty.findMany.mockResolvedValue(expectedParties);
@@ -159,8 +251,19 @@ describe('RpgPartyService', () => {
       const sessionId = 'session123';
       const expectedParty = {
         id: 'party123',
-        title: 'The Heroes',
+        worldanvil_party_id: null,
+        discord_post_id: null,
+        discord_chat_id: null,
+        discord_thread_id: null,
+        discord_forum_id: null,
+        discord_voice_id: null,
+        discord_role_id: null,
         rpg_campaign_id: 'campaign1',
+        slug: 'the-heroes',
+        title: 'The Heroes',
+        description: null,
+        is_active: true,
+        data: null,
       };
 
       mockPrismaClient.rpgParty.findFirst.mockResolvedValue(expectedParty);
@@ -178,8 +281,38 @@ describe('RpgPartyService', () => {
     it('should search parties by title', async () => {
       const query = 'heroes';
       const expectedParties = [
-        { id: 'party1', title: 'The Heroes' },
-        { id: 'party2', title: 'Heroes United' },
+        { 
+          id: 'party1', 
+          worldanvil_party_id: null,
+          discord_post_id: null,
+          discord_chat_id: null,
+          discord_thread_id: null,
+          discord_forum_id: null,
+          discord_voice_id: null,
+          discord_role_id: null,
+          rpg_campaign_id: null,
+          slug: 'the-heroes',
+          title: 'The Heroes', 
+          description: null,
+          is_active: true,
+          data: null
+        },
+        { 
+          id: 'party2', 
+          worldanvil_party_id: null,
+          discord_post_id: null,
+          discord_chat_id: null,
+          discord_thread_id: null,
+          discord_forum_id: null,
+          discord_voice_id: null,
+          discord_role_id: null,
+          rpg_campaign_id: null,
+          slug: 'heroes-united',
+          title: 'Heroes United', 
+          description: null,
+          is_active: true,
+          data: null
+        },
       ];
 
       mockPrismaClient.rpgParty.findMany.mockResolvedValue(expectedParties);
@@ -210,7 +343,22 @@ describe('RpgPartyService', () => {
     it('should search parties by description', async () => {
       const query = 'adventure';
       const expectedParties = [
-        { id: 'party1', description: 'An adventure party' },
+        { 
+          id: 'party1', 
+          worldanvil_party_id: null,
+          discord_post_id: null,
+          discord_chat_id: null,
+          discord_thread_id: null,
+          discord_forum_id: null,
+          discord_voice_id: null,
+          discord_role_id: null,
+          rpg_campaign_id: null,
+          slug: null,
+          title: null, 
+          description: 'An adventure party',
+          is_active: true,
+          data: null
+        },
       ];
 
       mockPrismaClient.rpgParty.findMany.mockResolvedValue(expectedParties);
@@ -224,18 +372,30 @@ describe('RpgPartyService', () => {
   describe('create', () => {
     it('should create a new party', async () => {
       const partyData: Prisma.RpgPartyCreateInput = {
+        id: 'party123',
+        slug: 'new-party',
         title: 'New Party',
         description: 'A new adventuring party',
+        is_active: true,
+        data: null,
         rpg_campaign: { connect: { id: 'campaign123' } },
       };
 
       const expectedParty = {
         id: 'party123',
+        worldanvil_party_id: null,
+        discord_post_id: null,
+        discord_chat_id: null,
+        discord_thread_id: null,
+        discord_forum_id: null,
+        discord_voice_id: null,
+        discord_role_id: null,
+        rpg_campaign_id: 'campaign123',
+        slug: 'new-party',
         title: 'New Party',
         description: 'A new adventuring party',
-        rpg_campaign_id: 'campaign123',
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        is_active: true,
+        data: null,
       };
 
       mockPrismaClient.rpgParty.create.mockResolvedValue(expectedParty);
@@ -250,7 +410,10 @@ describe('RpgPartyService', () => {
 
     it('should handle creation errors', async () => {
       const partyData: Prisma.RpgPartyCreateInput = {
+        id: 'party-invalid',
         title: 'New Party',
+        is_active: true,
+        data: null,
         rpg_campaign: { connect: { id: 'invalid' } },
       };
 
@@ -270,9 +433,19 @@ describe('RpgPartyService', () => {
 
       const expectedParty = {
         id: partyId,
+        worldanvil_party_id: null,
+        discord_post_id: null,
+        discord_chat_id: null,
+        discord_thread_id: null,
+        discord_forum_id: null,
+        discord_voice_id: null,
+        discord_role_id: null,
+        rpg_campaign_id: null,
+        slug: 'updated-party-name',
         title: 'Updated Party Name',
         description: 'Updated description',
-        updatedAt: new Date(),
+        is_active: true,
+        data: null,
       };
 
       mockPrismaClient.rpgParty.update.mockResolvedValue(expectedParty);
@@ -300,7 +473,22 @@ describe('RpgPartyService', () => {
   describe('delete', () => {
     it('should delete a party', async () => {
       const partyId = 'party123';
-      const deletedParty = { id: partyId, title: 'Deleted Party' };
+      const deletedParty = { 
+        id: partyId, 
+        worldanvil_party_id: null,
+        discord_post_id: null,
+        discord_chat_id: null,
+        discord_thread_id: null,
+        discord_forum_id: null,
+        discord_voice_id: null,
+        discord_role_id: null,
+        rpg_campaign_id: null,
+        slug: 'deleted-party',
+        title: 'Deleted Party', 
+        description: null,
+        is_active: false,
+        data: null
+      };
 
       mockPrismaClient.rpgParty.delete.mockResolvedValue(deletedParty);
 
@@ -359,7 +547,22 @@ describe('RpgPartyService', () => {
     it('should set up Discord role for existing party', async () => {
       const partyId = 'party123';
       const guildId = 'guild123';
-      const existingParty = { id: partyId, title: 'Test Party' };
+      const existingParty = { 
+        id: partyId, 
+        worldanvil_party_id: null,
+        discord_post_id: null,
+        discord_chat_id: null,
+        discord_thread_id: null,
+        discord_forum_id: null,
+        discord_voice_id: null,
+        discord_role_id: null,
+        rpg_campaign_id: null,
+        slug: 'test-party',
+        title: 'Test Party', 
+        description: null,
+        is_active: true,
+        data: null
+      };
 
       mockPrismaClient.rpgParty.findUnique.mockResolvedValue(existingParty);
 
@@ -374,8 +577,19 @@ describe('RpgPartyService', () => {
 
       const updatedParty = {
         id: partyId,
-        title: 'Synced Party',
         worldanvil_party_id: worldAnvilPartyId,
+        discord_post_id: null,
+        discord_chat_id: null,
+        discord_thread_id: null,
+        discord_forum_id: null,
+        discord_voice_id: null,
+        discord_role_id: null,
+        rpg_campaign_id: null,
+        slug: 'synced-party',
+        title: 'Synced Party',
+        description: null,
+        is_active: true,
+        data: null,
       };
 
       mockPrismaClient.rpgParty.update.mockResolvedValue(updatedParty);
@@ -395,7 +609,22 @@ describe('RpgPartyService', () => {
   describe('generateAIContent', () => {
     it('should generate AI content for existing party', async () => {
       const partyId = 'party123';
-      const existingParty = { id: partyId, title: 'Test Party' };
+      const existingParty = { 
+        id: partyId, 
+        worldanvil_party_id: null,
+        discord_post_id: null,
+        discord_chat_id: null,
+        discord_thread_id: null,
+        discord_forum_id: null,
+        discord_voice_id: null,
+        discord_role_id: null,
+        rpg_campaign_id: null,
+        slug: 'test-party',
+        title: 'Test Party', 
+        description: null,
+        is_active: true,
+        data: null
+      };
 
       mockPrismaClient.rpgParty.findUnique.mockResolvedValue(existingParty);
 
@@ -412,7 +641,22 @@ describe('RpgPartyService', () => {
 
     it('should generate different content types', async () => {
       const partyId = 'party123';
-      const existingParty = { id: partyId, title: 'Test Party' };
+      const existingParty = { 
+        id: partyId, 
+        worldanvil_party_id: null,
+        discord_post_id: null,
+        discord_chat_id: null,
+        discord_thread_id: null,
+        discord_forum_id: null,
+        discord_voice_id: null,
+        discord_role_id: null,
+        rpg_campaign_id: null,
+        slug: 'test-party',
+        title: 'Test Party', 
+        description: null,
+        is_active: true,
+        data: null
+      };
 
       mockPrismaClient.rpgParty.findUnique.mockResolvedValue(existingParty);
 
@@ -442,7 +686,10 @@ describe('RpgPartyService', () => {
 
     it('should handle foreign key constraint errors', async () => {
       const partyData: Prisma.RpgPartyCreateInput = {
+        id: 'invalid-party',
         title: 'New Party',
+        is_active: true,
+        data: null,
         rpg_campaign: { connect: { id: 'invalid-campaign' } },
       };
 
