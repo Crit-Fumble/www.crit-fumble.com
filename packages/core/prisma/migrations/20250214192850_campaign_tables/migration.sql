@@ -39,14 +39,14 @@ CREATE TABLE "CampaignWorldAnvil" (
 );
 
 -- CreateTable
-CREATE TABLE "GameSystem" (
+CREATE TABLE "RpgSystem" (
     "id" TEXT NOT NULL,
     "name" TEXT,
     "slug" TEXT,
     "description" TEXT,
     "srdApi" TEXT,
 
-    CONSTRAINT "GameSystem_pkey" PRIMARY KEY ("id")
+    CONSTRAINT "RpgSystem_pkey" PRIMARY KEY ("id")
 );
 
 -- AddForeignKey

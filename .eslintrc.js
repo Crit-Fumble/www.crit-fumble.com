@@ -49,6 +49,7 @@ module.exports = {
     "import/internal-regex": "^@crit-fumble/"
   },
   rules: {
+    // Workspace-level import ordering
     "import/order": ["error", {
       groups: ["builtin", "external", "internal", "parent", "sibling", "index"],
       pathGroups: [{
@@ -59,9 +60,34 @@ module.exports = {
       "newlines-between": "always",
       alphabetize: { order: "asc" }
     }],
-    "import/no-internal-modules": ["error", {
-      allow: ["@crit-fumble/*/**", "@crit-fumble/*/models"]
+    
+    // Workspace-level architectural boundaries
+    "import/no-restricted-paths": ["error", {
+      zones: [
+        {
+          target: "./packages/core/**/*",
+          from: "./packages/!(worldanvil)/**/*",
+          message: "Core package can only import from @crit-fumble/worldanvil"
+        },
+        {
+          target: "./packages/react/**/*",
+          from: "./packages/!(core)/**/*",
+          message: "React package can only import from @crit-fumble/core"
+        },
+        {
+          target: "./packages/next-web/**/*",
+          from: "./packages/!(core|react)/**/*",
+          message: "Next-web package can only import from @crit-fumble/core and @crit-fumble/react"
+        },
+        {
+          target: "./packages/discord-bot/**/*",
+          from: "./packages/!(core)/**/*",
+          message: "Discord-bot package can only import from @crit-fumble/core"
+        }
+      ]
     }],
+    
+    // TypeScript rules
     "@typescript-eslint/explicit-function-return-type": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-explicit-any": "warn",
@@ -69,10 +95,14 @@ module.exports = {
       argsIgnorePattern: "^_",
       varsIgnorePattern: "^_"
     }],
+    
+    // React rules
     "react/prop-types": "off",
     "react/react-in-jsx-scope": "off",
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
+    
+    // General code quality
     "no-console": ["warn", {
       allow: ["warn", "error", "info", "debug"]
     }],
@@ -80,21 +110,12 @@ module.exports = {
     "no-var": "error",
     "prefer-const": "error"
   },
-  overrides: [{
-    files: ["packages/core/**/*.ts"],
-    rules: {
-      "import/no-restricted-paths": ["error", {
-        zones: [{
-          target: "./packages/core",
-          from: "./packages/!(core)/**",
-          message: "Core package cannot import from other packages"
-        }]
-      }]
-    }
-  }, {
-    files: ["packages/next-web/**/*.ts", "packages/next-web/**/*.tsx"],
-    rules: {
-      "@next/next/no-html-link-for-pages": "off"
-    }
-  }]
+  
+  // Ignore package-specific overrides since each package has its own config
+  ignorePatterns: [
+    "packages/*/dist/**",
+    "packages/*/node_modules/**",
+    "**/node_modules/**",
+    "**/dist/**"
+  ]
 };

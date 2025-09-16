@@ -9,12 +9,12 @@ import { LinkButton } from "../../../../../../next/client/views/components/ui/Bu
 interface CharacterSheetEditProps {
   params: {
     characterSlug: string;
-    gameSystemSlug: string;
+    rpgSystemSlug: string;
   };
 }
 
 export default function CharacterSheetEditPage({ params }: CharacterSheetEditProps) {
-  const { characterSlug, gameSystemSlug } = params;
+  const { characterSlug, rpgSystemSlug } = params;
   const router = useRouter();
   const [character, setCharacter] = useState<any>(null);
   const [characterSheet, setCharacterSheet] = useState<any>(null);
@@ -45,7 +45,7 @@ export default function CharacterSheetEditPage({ params }: CharacterSheetEditPro
         setCharacter(characterData);
         
         // Fetch character sheet data
-        const sheetRes = await fetch(`/api/character/${characterSlug}/sheet/${gameSystemSlug}`);
+        const sheetRes = await fetch(`/api/character/${characterSlug}/sheet/${rpgSystemSlug}`);
         if (sheetRes.ok) {
           const sheetData = await sheetRes.json();
           setCharacterSheet(sheetData);
@@ -61,7 +61,7 @@ export default function CharacterSheetEditPage({ params }: CharacterSheetEditPro
     }
     
     fetchData();
-  }, [characterSlug, gameSystemSlug, router]);
+  }, [characterSlug, rpgSystemSlug, router]);
   
   // Handle form submission
   const handleSubmit = async (e: React.FormEvent) => {
@@ -98,7 +98,7 @@ export default function CharacterSheetEditPage({ params }: CharacterSheetEditPro
       });
       
       // Send data to API
-      const response = await fetch(`/api/character/${characterSlug}/sheet/${gameSystemSlug}`, {
+      const response = await fetch(`/api/character/${characterSlug}/sheet/${rpgSystemSlug}`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -108,7 +108,7 @@ export default function CharacterSheetEditPage({ params }: CharacterSheetEditPro
           characterId: character.id,
           sheetId: characterSheet?.id,
           sheetData,
-          sheetName: formData.get('sheetName') || `${character.name}'s ${gameSystemSlug.toUpperCase()} Sheet`,
+          sheetName: formData.get('sheetName') || `${character.name}'s ${rpgSystemSlug.toUpperCase()} Sheet`,
           summary: formData.get('summary') as string || '',
           description: formData.get('description') as string || '',
         }),
@@ -164,7 +164,7 @@ export default function CharacterSheetEditPage({ params }: CharacterSheetEditPro
         <CardHeader>
           <div className="flex justify-between items-center">
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-              {character.name} - {gameSystemSlug.toUpperCase()} Sheet
+              {character.name} - {rpgSystemSlug.toUpperCase()} Sheet
             </h1>
             <LinkButton href={`/character/${characterSlug}`} variant="outline" size="sm">
               Cancel
@@ -184,7 +184,7 @@ export default function CharacterSheetEditPage({ params }: CharacterSheetEditPro
                     type="text"
                     name="sheetName"
                     id="sheetName"
-                    defaultValue={characterSheet?.name || `${character.name}'s ${gameSystemSlug.toUpperCase()} Sheet`}
+                    defaultValue={characterSheet?.name || `${character.name}'s ${rpgSystemSlug.toUpperCase()} Sheet`}
                     className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                   />
                 </div>
@@ -216,8 +216,8 @@ export default function CharacterSheetEditPage({ params }: CharacterSheetEditPro
                 </div>
               </div>
               
-              {/* Game system specific fields - we'd render different fields based on gameSystemSlug */}
-              {gameSystemSlug === 'dnd5e' && (
+              {/* Game system specific fields - we'd render different fields based on rpgSystemSlug */}
+              {rpgSystemSlug === 'dnd5e' && (
                 <div className="space-y-6">
                   <h3 className="text-lg font-medium text-gray-900 dark:text-white">D&D 5e Character Sheet</h3>
                   <p className="text-gray-500 dark:text-gray-400">

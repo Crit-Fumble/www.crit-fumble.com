@@ -1,1 +1,0 @@
-// TODO: Implement based on manuscript-tag.yml specification

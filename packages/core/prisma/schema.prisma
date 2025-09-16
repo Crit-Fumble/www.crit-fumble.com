@@ -137,9 +137,9 @@ model RpgSystem {
   updated_at           DateTime @updatedAt
 
   // Relations
-  rpg_campaigns RpgCampaign[]
-  rpg_sheets    RpgSheet[]
-  rpg_worlds    RpgWorld[]
+  rpg_campaigns     RpgCampaign[]
+  rpg_sheets        RpgSheet[]
+  rpg_world_systems RpgWorldSystem[] // Many-to-many with worlds
 
   @@map("RpgSystem")
 }
@@ -153,7 +153,6 @@ model RpgWorld {
   discord_forum_id    String?  @unique // Discord Forum Channel Id
   discord_voice_id    String?  @unique // Discord Voice Channel Id
   discord_role_id     String?  @unique // Discord Role Id
-  rpg_system_id       String?
   gm_ids              String[]
   title               String
   slug                String?  @unique
@@ -165,9 +164,9 @@ model RpgWorld {
   updated_at          DateTime @updatedAt
 
   // Relations
-  rpg_system    RpgSystem?    @relation(fields: [rpg_system_id], references: [id])
-  rpg_campaigns RpgCampaign[]
-  rpg_sheets    RpgSheet[]
+  rpg_world_systems RpgWorldSystem[] // Many-to-many with systems
+  rpg_campaigns     RpgCampaign[]
+  rpg_sheets        RpgSheet[]
 
   @@map("RpgWorld")
 }
@@ -304,4 +303,24 @@ model RpgSheet {
   @@index([rpg_system_id], map: "RpgSheet_rpg_system_id_idx")
   @@index([is_active], map: "RpgSheet_is_active_idx")
   @@map("RpgSheet")
+}
+
+// Junction table for many-to-many relationship between worlds and systems
+model RpgWorldSystem {
+  id           String    @id @default(cuid())
+  world_id     String
+  system_id    String
+  is_primary   Boolean   @default(false) // Indicates if this is the primary system for the world
+  created_at   DateTime  @default(now())
+  updated_at   DateTime  @updatedAt
+
+  // Relations
+  world        RpgWorld  @relation(fields: [world_id], references: [id], onDelete: Cascade)
+  system       RpgSystem @relation(fields: [system_id], references: [id], onDelete: Cascade)
+
+  @@unique([world_id, system_id])
+  @@index([world_id], map: "RpgWorldSystem_world_id_idx")
+  @@index([system_id], map: "RpgWorldSystem_system_id_idx")
+  @@index([is_primary], map: "RpgWorldSystem_is_primary_idx")
+  @@map("RpgWorldSystem")
 }

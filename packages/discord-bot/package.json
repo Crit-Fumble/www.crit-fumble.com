@@ -9,12 +9,24 @@
     ],
     "author": "Crit-Fumble",
     "license": "MIT",
+    "engines": {
+        "node": ">=22.0.0",
+        "npm": ">=9.0.0"
+    },
     "dependencies": {
         "@crit-fumble/core": "^6.8.2",
         "node-cron": "^3.0.3"
     },
+    "devDependencies": {
+        "@typescript-eslint/eslint-plugin": "^6.21.0",
+        "@typescript-eslint/parser": "^6.21.0",
+        "eslint": "^8",
+        "eslint-plugin-import": "^2.29.1",
+        "typescript": "^5.8.2"
+    },
     "scripts": {
         "build": "npx tsc --outDir dist packages/**/*.ts",
-        "deploy": "node deploy.js"
+        "deploy": "node deploy.js",
+        "lint": "eslint ."
     }
 }

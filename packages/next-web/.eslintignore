@@ -1,0 +1,9 @@
+dist/
+node_modules/
+*.d.ts
+*.js.map
+coverage/
+.next/
+.vercel/
+build/
+out/

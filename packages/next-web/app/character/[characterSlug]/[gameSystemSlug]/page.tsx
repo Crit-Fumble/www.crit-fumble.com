@@ -1,6 +1,6 @@
 import { getDnd5eCharacterSheetPageProps } from '@crit-fumble/next/controllers/Character/Dnd5eCharacterSheetController';
-import { getCharacterBySlug } from '@crit-fumble/next/services/GameSystem/Base/Character/CharacterService';
-import { getCharacterSheetBySystem } from '@crit-fumble/next/services/GameSystem/Base/CharacterSheet/CharacterSheetService';
+import { getCharacterBySlug } from '@crit-fumble/next/services/RpgSystem/Base/Character/CharacterService';
+import { getCharacterSheetBySystem } from '@crit-fumble/next/services/RpgSystem/Base/CharacterSheet/CharacterSheetService';
 import { getServerSession } from '../../../../../next/services/AuthService';
 import { Card, CardContent, CardHeader } from '../../../../../next/client/views/components/blocks/Card';
 import { LinkButton } from '../../../../../next/client/views/components/ui/Button';
@@ -10,12 +10,12 @@ import Dnd5eCharacterView from '@crit-fumble/next/views/components/blocks/Dnd5eC
 interface CharacterSheetPageProps {
   params: {
     characterSlug: string;
-    gameSystemSlug: string;
+    rpgSystemSlug: string;
   };
 }
 
 export default async function CharacterSheetPage({ params }: CharacterSheetPageProps) {
-  const { characterSlug, gameSystemSlug } = params;
+  const { characterSlug, rpgSystemSlug } = params;
   const session = await getServerSession();
 
   if (!session) {
@@ -28,7 +28,7 @@ export default async function CharacterSheetPage({ params }: CharacterSheetPageP
   // Get character sheets for this character
   const characterSheets = character ? await getCharacterSheetBySystem(
     character.id || '',
-    gameSystemSlug === 'dnd5e' ? 'dnd5e' : gameSystemSlug
+    rpgSystemSlug === 'dnd5e' ? 'dnd5e' : rpgSystemSlug
   ) : null;
   
   // Attach character sheets to character object
@@ -67,14 +67,14 @@ export default async function CharacterSheetPage({ params }: CharacterSheetPageP
 
   // Get game system-specific character sheet
   let characterSheet;
-  if (gameSystemSlug === 'dnd5e') {
+  if (rpgSystemSlug === 'dnd5e') {
     const { characterSheet: dnd5eSheet } = await getDnd5eCharacterSheetPageProps(characterSlug);
     characterSheet = dnd5eSheet;
-  } else if (gameSystemSlug === 'cypher') {
+  } else if (rpgSystemSlug === 'cypher') {
     // In the future, implement cypher character sheet retrieval
     // const { characterSheet: cypherSheet } = await getCypherCharacterSheetPageProps(characterSlug);
     // characterSheet = cypherSheet;
-  } else if (gameSystemSlug === 'sw') {
+  } else if (rpgSystemSlug === 'sw') {
     // In the future, implement savage worlds character sheet retrieval
     // const { characterSheet: swSheet } = await getSavageWorldsCharacterSheetPageProps(characterSlug);
     // characterSheet = swSheet;
@@ -84,7 +84,7 @@ export default async function CharacterSheetPage({ params }: CharacterSheetPageP
       <div className="max-w-4xl mx-auto p-4">
         <Card>
           <CardContent className="flex justify-center items-center h-64">
-            <p className="text-gray-500">Unsupported game system: {gameSystemSlug}</p>
+            <p className="text-gray-500">Unsupported game system: {rpgSystemSlug}</p>
           </CardContent>
         </Card>
       </div>
@@ -97,7 +97,7 @@ export default async function CharacterSheetPage({ params }: CharacterSheetPageP
         <CardHeader>
           <div className="flex justify-between items-center">
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">
-              {character.name} - {gameSystemSlug.toUpperCase()} Sheet
+              {character.name} - {rpgSystemSlug.toUpperCase()} Sheet
             </h1>
             <div className="flex gap-2">
               <LinkButton 
@@ -108,7 +108,7 @@ export default async function CharacterSheetPage({ params }: CharacterSheetPageP
                 Back to Character
               </LinkButton>
               <LinkButton 
-                href={`/character/${characterSlug}/${gameSystemSlug}/edit`} 
+                href={`/character/${characterSlug}/${rpgSystemSlug}/edit`} 
                 variant="primary"
                 size="sm"
                 icon={
@@ -125,7 +125,7 @@ export default async function CharacterSheetPage({ params }: CharacterSheetPageP
         <CardContent>
           {characterSheet ? (
             <>
-              {gameSystemSlug === 'dnd5e' && (
+              {rpgSystemSlug === 'dnd5e' && (
                 <Dnd5eCharacterView 
                   character={character} 
                   characterSheet={characterSheet} 
@@ -135,12 +135,12 @@ export default async function CharacterSheetPage({ params }: CharacterSheetPageP
                   world={character.world || undefined}
                 />
               )}
-              {gameSystemSlug === 'cypher' && (
+              {rpgSystemSlug === 'cypher' && (
                 <div className="p-4 border border-gray-200 rounded-md">
                   <p className="text-center text-gray-500">Cypher character sheet view not yet implemented</p>
                 </div>
               )}
-              {gameSystemSlug === 'sw' && (
+              {rpgSystemSlug === 'sw' && (
                 <div className="p-4 border border-gray-200 rounded-md">
                   <p className="text-center text-gray-500">Savage Worlds character sheet view not yet implemented</p>
                 </div>
@@ -149,11 +149,11 @@ export default async function CharacterSheetPage({ params }: CharacterSheetPageP
           ) : (
             <div className="p-4 border border-gray-200 rounded-md">
               <p className="text-center text-gray-500">
-                No {gameSystemSlug.toUpperCase()} sheet found for this character.
+                No {rpgSystemSlug.toUpperCase()} sheet found for this character.
               </p>
               <div className="flex justify-center mt-4">
                 <LinkButton 
-                  href={`/character/${characterSlug}/${gameSystemSlug}/edit`} 
+                  href={`/character/${characterSlug}/${rpgSystemSlug}/edit`} 
                   variant="primary"
                   size="sm"
                 >

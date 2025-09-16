@@ -22,16 +22,18 @@
     "baseUrl": ".",
     
     /* Path mappings for workspace packages */
-    // TODO: add other packages when they are ready
     "paths": {
       "@crit-fumble/core/*": ["./packages/core/*"],
+      "@crit-fumble/react/*": ["./packages/react/*"],
       "@crit-fumble/worldanvil/*": ["./packages/worldanvil/*"]
     }
   },
   "exclude": ["node_modules", "**/dist/**"],
   "references": [
-    { "path": "./packages/core" },
     { "path": "./packages/worldanvil" },
-    { "path": "./packages/discord-bot" }
+    { "path": "./packages/core" },
+    { "path": "./packages/react" },
+    { "path": "./packages/discord-bot" },
+    { "path": "./packages/next-web" }
   ]
 }

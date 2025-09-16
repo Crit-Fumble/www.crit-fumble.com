@@ -11,7 +11,7 @@ ALTER TABLE "Campaign" ADD COLUMN     "sheet_data" JSONB;
 ALTER TABLE "GameSession" ADD COLUMN     "sheet_data" JSONB;
 
 -- AlterTable
-ALTER TABLE "GameSystem" ADD COLUMN     "sheet_data" JSONB;
+ALTER TABLE "RpgSystem" ADD COLUMN     "sheet_data" JSONB;
 
 -- AlterTable
 ALTER TABLE "Party" ADD COLUMN     "sheet_data" JSONB;

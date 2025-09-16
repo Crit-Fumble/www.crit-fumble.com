@@ -6,10 +6,20 @@
   "workspaces": [
     "packages/*"
   ],
+  "engines": {
+    "node": ">=22.0.0",
+    "npm": ">=9.0.0"
+  },
   "scripts": {
     "build": "npm run build --workspaces --if-present",
-    "build:all": "tsc -b packages/core packages/discord packages/worldanvil packages/openai",
+    "build:all": "tsc -b",
+    "build:optimized": "node scripts/build-optimized.js build",
+    "build:clean": "tsc -b --clean",
+    "build:force": "tsc -b --force",
+    "build:watch": "tsc -b --watch",
+    "build:verbose": "node scripts/build-optimized.js build --verbose",
     "clean": "find ./packages -type d -name dist -exec rm -rf {} +",
+    "clean:cache": "node scripts/build-optimized.js clean --cache",
     "dev": "npm run dev --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
     "lint": "npm run lint --workspaces --if-present",
@@ -17,11 +27,7 @@
     "create-package": "node scripts/create-package.js",
     "create-component": "node scripts/create-component.js"
   },
-  "dependencies": {
-    "@crit-fumble/core": "file:packages/core",
-    "@crit-fumble/worldanvil": "file:packages/worldanvil",
-    "effect": "^3.17.13"
-  },
+  "dependencies": {},
   "devDependencies": {
     "@babel/core": "^7.28.3",
     "@babel/preset-env": "^7.28.3",

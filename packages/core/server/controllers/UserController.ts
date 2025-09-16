@@ -38,8 +38,8 @@ export class UserController {
    * Initialize controller and underlying services
    */
   async initialize(): Promise<void> {
-    // Initialize the auth service
-    await this.authService.initialize();
+    // AuthService no longer has an initialize method - it initializes in constructor
+    // Initialization is handled automatically when AuthService is instantiated
   }
 
   /**
@@ -64,11 +64,13 @@ export class UserController {
     }
 
     // Get user from token
-    const user = await this.authService.getUserFromToken(authResult.token!);
-    if (!user) {
-      res.status(500).json({ error: 'Failed to get user details after authentication' });
+    const tokenResult = await this.authService.verifyToken(authResult.token!);
+    if (!tokenResult.success || !tokenResult.user) {
+      res.status(500).json({ error: tokenResult.error || 'Failed to get user details after authentication' });
       return;
     }
+
+    const user = tokenResult.user;
 
     res.status(200).json({
       success: true,
@@ -77,8 +79,8 @@ export class UserController {
         id: user.id,
         name: user.name,
         email: user.email,
-        discordId: user.discord_id,
-        worldAnvilId: user.worldanvil_id,
+        discordId: user.providers.discord?.id,
+        worldAnvilId: user.providers.worldanvil?.id,
         image: user.image
       }
     });
@@ -131,11 +133,12 @@ export class UserController {
       // Use auth service to verify token and get user
       let user;
       if (token) {
-        user = await this.authService.getUserFromToken(token);
-        if (!user || user.id !== userId) {
-          res.status(401).json({ error: 'Invalid or expired token' });
+        const tokenResult = await this.authService.verifyToken(token);
+        if (!tokenResult.success || !tokenResult.user || tokenResult.user.id !== userId) {
+          res.status(401).json({ error: tokenResult.error || 'Invalid or expired token' });
           return;
         }
+        user = tokenResult.user;
       } else {
         user = await this.userService.getUserById(userId);
       }
@@ -151,8 +154,8 @@ export class UserController {
         name: user.name,
         email: user.email,
         image: user.image,
-        discordId: user.discord_id,
-        worldAnvilId: user.worldanvil_id
+        discordId: 'providers' in user ? user.providers.discord?.id : user.discord_id,
+        worldAnvilId: 'providers' in user ? user.providers.worldanvil?.id : user.worldanvil_id
       };
 
       res.status(200).json(result);

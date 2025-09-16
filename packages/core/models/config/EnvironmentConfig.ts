@@ -1,6 +1,5 @@
 /**
  * Environment configuration settings
- * Provides consistent environment handling across the application
  */
 
 /**
@@ -18,90 +17,64 @@ export enum Environment {
 export interface EnvironmentConfig {
   /**
    * Current environment
-   * @default Environment.Development
    */
   current: Environment;
 
   /**
-   * Debug mode flag - enables additional logging
-   * @default false
+   * Debug mode flag
    */
   debug: boolean;
 }
 
 /**
- * Default environment configuration
- */
-const defaultConfig: EnvironmentConfig = {
-  current: Environment.Development,
-  debug: false,
-};
-
-/**
- * Current environment configuration
- */
-let currentConfig = { ...defaultConfig };
-
-/**
- * Set environment configuration
- * 
- * @param config - Environment configuration values
- */
-export function setEnvironmentConfig(config: Partial<EnvironmentConfig>): void {
-  currentConfig = { ...currentConfig, ...config };
-}
-
-/**
- * Get current environment configuration
- * 
- * @returns Current environment configuration
+ * Get environment configuration from environment variables
  */
 export function getEnvironmentConfig(): EnvironmentConfig {
-  return { ...currentConfig };
+  const nodeEnv = process.env.NODE_ENV || 'development';
+  const debug = process.env.DEBUG === 'true' || nodeEnv === 'development';
+  
+  let current: Environment;
+  switch (nodeEnv) {
+    case 'production':
+      current = Environment.Production;
+      break;
+    case 'test':
+      current = Environment.Test;
+      break;
+    default:
+      current = Environment.Development;
+  }
+
+  return {
+    current,
+    debug
+  };
 }
 
 /**
  * Check if the current environment is development
- * 
- * @returns True if in development environment
  */
 export function isDevelopment(): boolean {
-  return currentConfig.current === Environment.Development;
+  return getEnvironmentConfig().current === Environment.Development;
 }
 
 /**
  * Check if the current environment is production
- * 
- * @returns True if in production environment
  */
 export function isProduction(): boolean {
-  return currentConfig.current === Environment.Production;
+  return getEnvironmentConfig().current === Environment.Production;
 }
 
 /**
  * Check if the current environment is test
- * 
- * @returns True if in test environment
  */
 export function isTest(): boolean {
-  return currentConfig.current === Environment.Test;
+  return getEnvironmentConfig().current === Environment.Test;
 }
 
 /**
  * Check if debug mode is enabled
- * 
- * @returns True if debug mode is enabled
  */
 export function isDebugMode(): boolean {
-  return currentConfig.debug;
+  return getEnvironmentConfig().debug;
 }
-
-export default {
-  getEnvironmentConfig,
-  setEnvironmentConfig,
-  isDevelopment,
-  isProduction,
-  isTest,
-  isDebugMode,
-  Environment,
-};

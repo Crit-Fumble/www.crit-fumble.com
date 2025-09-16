@@ -6,7 +6,7 @@ The `sync5eCompendium.js` script imports D&D 5e data from the D&D 5e API and sto
 
 ## How It Works
 
-1. The script reads the game system definition from `public/gameSystemDefinitions/5e/5eDefinition.json`
+1. The script reads the game system definition from `public/rpgSystemDefinitions/5e/5eDefinition.json`
 2. It identifies API versions and base URLs from the compendium entries
 3. For each API version, it reads the corresponding `index.json` file in the API directory
 4. It processes each endpoint listed in the index file, respecting existing records and timestamps
@@ -73,7 +73,7 @@ The script stores data in the following directory structure:
 
 ```
 public/
-  gameSystemDefinitions/
+  rpgSystemDefinitions/
     5e/
       compendium/
         api/
