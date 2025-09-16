@@ -2,7 +2,7 @@
     "name": "@crit-fumble/discord-bot",
     "version": "14.14.1",
     "description": "Discord bot for the Crit-Fumble web application",
-    "main": "index.js",
+    "main": "index.ts",
     "keywords": [
         "crit-fumble",
         "discord"
@@ -13,20 +13,24 @@
         "node": ">=22.0.0",
         "npm": ">=9.0.0"
     },
+    "scripts": {
+        "build": "tsc",
+        "dev": "npx ts-node index.ts",
+        "start": "node dist/index.js",
+        "deploy": "node deploy.js",
+        "lint": "eslint .",
+        "test": "jest"
+    },
     "dependencies": {
         "@crit-fumble/core": "^6.8.2",
         "node-cron": "^3.0.3"
     },
     "devDependencies": {
+        "@types/node-cron": "^3.0.11",
         "@typescript-eslint/eslint-plugin": "^6.21.0",
         "@typescript-eslint/parser": "^6.21.0",
         "eslint": "^8",
         "eslint-plugin-import": "^2.29.1",
         "typescript": "^5.8.2"
-    },
-    "scripts": {
-        "build": "npx tsc --outDir dist packages/**/*.ts",
-        "deploy": "node deploy.js",
-        "lint": "eslint ."
     }
 }

@@ -42,8 +42,28 @@ describe('RpgSessionService', () => {
   describe('getAll', () => {
     it('should return all RPG sessions', async () => {
       const expectedSessions = [
-        { id: 'session1', title: 'The Beginning', rpg_party_id: 'party1' },
-        { id: 'session2', title: 'The Journey Continues', rpg_party_id: 'party1' },
+        { 
+          id: 'session1', 
+          title: 'The Beginning', 
+          rpg_party_id: 'party1',
+          worldanvil_id: null,
+          data: {},
+          description: null,
+          created_at: new Date(),
+          updated_at: new Date(),
+          discord_event_id: null
+        },
+        { 
+          id: 'session2', 
+          title: 'The Journey Continues', 
+          rpg_party_id: 'party1',
+          worldanvil_id: null,
+          data: {},
+          description: null,
+          created_at: new Date(),
+          updated_at: new Date(),
+          discord_event_id: null
+        },
       ];
 
       mockPrismaClient.rpgSession.findMany.mockResolvedValue(expectedSessions);

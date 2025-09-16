@@ -1,1 +1,1 @@
-export {};
+export { HandleScheduledEvents } from './HandleScheduledEvents';
