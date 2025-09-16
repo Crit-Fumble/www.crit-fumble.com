@@ -42,8 +42,28 @@ describe('RpgSessionService', () => {
   describe('getAll', () => {
     it('should return all RPG sessions', async () => {
       const expectedSessions = [
-        { id: 'session1', title: 'The Beginning', rpg_party_id: 'party1' },
-        { id: 'session2', title: 'The Journey Continues', rpg_party_id: 'party1' },
+        { 
+          id: 'session1', 
+          worldanvil_id: null,
+          discord_event_id: null,
+          title: 'The Beginning', 
+          description: null,
+          data: null,
+          created_at: new Date(),
+          updated_at: new Date(),
+          rpg_party_id: 'party1' 
+        },
+        { 
+          id: 'session2', 
+          worldanvil_id: null,
+          discord_event_id: null,
+          title: 'The Journey Continues', 
+          description: null,
+          data: null,
+          created_at: new Date(),
+          updated_at: new Date(),
+          rpg_party_id: 'party1' 
+        },
       ];
 
       mockPrismaClient.rpgSession.findMany.mockResolvedValue(expectedSessions);
@@ -68,8 +88,13 @@ describe('RpgSessionService', () => {
       const sessionId = 'session123';
       const expectedSession = {
         id: sessionId,
+        worldanvil_id: null,
+        discord_event_id: null,
         title: 'The Epic Quest',
         description: 'An amazing adventure',
+        data: null,
+        created_at: new Date(),
+        updated_at: new Date(),
         rpg_party_id: 'party1',
       };
 
@@ -97,8 +122,14 @@ describe('RpgSessionService', () => {
       const worldAnvilId = 'wa123';
       const expectedSession = {
         id: 'session123',
-        title: 'The Epic Quest',
         worldanvil_id: worldAnvilId,
+        discord_event_id: null,
+        title: 'The Epic Quest',
+        description: null,
+        data: null,
+        created_at: new Date(),
+        updated_at: new Date(),
+        rpg_party_id: null,
       };
 
       mockPrismaClient.rpgSession.findFirst.mockResolvedValue(expectedSession);
@@ -117,8 +148,14 @@ describe('RpgSessionService', () => {
       const discordEventId = 'event123';
       const expectedSession = {
         id: 'session123',
-        title: 'The Epic Quest',
+        worldanvil_id: null,
         discord_event_id: discordEventId,
+        title: 'The Epic Quest',
+        description: null,
+        data: null,
+        created_at: new Date(),
+        updated_at: new Date(),
+        rpg_party_id: null,
       };
 
       mockPrismaClient.rpgSession.findFirst.mockResolvedValue(expectedSession);
@@ -136,8 +173,28 @@ describe('RpgSessionService', () => {
     it('should return sessions for a party', async () => {
       const partyId = 'party123';
       const expectedSessions = [
-        { id: 'session1', title: 'Session 1', rpg_party_id: partyId },
-        { id: 'session2', title: 'Session 2', rpg_party_id: partyId },
+        { 
+          id: 'session1', 
+          worldanvil_id: null,
+          discord_event_id: null,
+          title: 'Session 1', 
+          description: null,
+          data: null,
+          created_at: new Date(),
+          updated_at: new Date(),
+          rpg_party_id: partyId 
+        },
+        { 
+          id: 'session2', 
+          worldanvil_id: null,
+          discord_event_id: null,
+          title: 'Session 2', 
+          description: null,
+          data: null,
+          created_at: new Date(),
+          updated_at: new Date(),
+          rpg_party_id: partyId 
+        },
       ];
 
       mockPrismaClient.rpgSession.findMany.mockResolvedValue(expectedSessions);
@@ -155,8 +212,28 @@ describe('RpgSessionService', () => {
     it('should search sessions by title', async () => {
       const query = 'epic';
       const expectedSessions = [
-        { id: 'session1', title: 'The Epic Quest' },
-        { id: 'session2', title: 'Epic Battle' },
+        { 
+          id: 'session1', 
+          worldanvil_id: null,
+          discord_event_id: null,
+          title: 'The Epic Quest', 
+          description: null,
+          data: null,
+          created_at: new Date(),
+          updated_at: new Date(),
+          rpg_party_id: null 
+        },
+        { 
+          id: 'session2', 
+          worldanvil_id: null,
+          discord_event_id: null,
+          title: 'Epic Battle', 
+          description: null,
+          data: null,
+          created_at: new Date(),
+          updated_at: new Date(),
+          rpg_party_id: null 
+        },
       ];
 
       mockPrismaClient.rpgSession.findMany.mockResolvedValue(expectedSessions);
@@ -187,7 +264,17 @@ describe('RpgSessionService', () => {
     it('should search sessions by description', async () => {
       const query = 'adventure';
       const expectedSessions = [
-        { id: 'session1', description: 'An amazing adventure' },
+        { 
+          id: 'session1', 
+          worldanvil_id: null,
+          discord_event_id: null,
+          title: null,
+          description: 'An amazing adventure', 
+          data: null,
+          created_at: new Date(),
+          updated_at: new Date(),
+          rpg_party_id: null 
+        },
       ];
 
       mockPrismaClient.rpgSession.findMany.mockResolvedValue(expectedSessions);
@@ -201,8 +288,28 @@ describe('RpgSessionService', () => {
   describe('getUpcomingSessions', () => {
     it('should return upcoming sessions ordered by creation date', async () => {
       const expectedSessions = [
-        { id: 'session1', title: 'Recent Session', created_at: new Date() },
-        { id: 'session2', title: 'Older Session', created_at: new Date(Date.now() - 86400000) },
+        { 
+          id: 'session1', 
+          worldanvil_id: null,
+          discord_event_id: null,
+          title: 'Recent Session', 
+          description: null,
+          data: null,
+          created_at: new Date(),
+          updated_at: new Date(),
+          rpg_party_id: null 
+        },
+        { 
+          id: 'session2', 
+          worldanvil_id: null,
+          discord_event_id: null,
+          title: 'Older Session', 
+          description: null,
+          data: null,
+          created_at: new Date(Date.now() - 86400000),
+          updated_at: new Date(Date.now() - 86400000),
+          rpg_party_id: null 
+        },
       ];
 
       mockPrismaClient.rpgSession.findMany.mockResolvedValue(expectedSessions);
@@ -222,18 +329,23 @@ describe('RpgSessionService', () => {
   describe('create', () => {
     it('should create a new session', async () => {
       const sessionData: Prisma.RpgSessionCreateInput = {
+        id: 'session123',
         title: 'New Session',
         description: 'A new adventure begins',
+        data: null,
         rpg_party: { connect: { id: 'party123' } },
       };
 
       const expectedSession = {
         id: 'session123',
+        worldanvil_id: null,
+        discord_event_id: null,
         title: 'New Session',
         description: 'A new adventure begins',
+        data: null,
+        created_at: new Date(),
+        updated_at: new Date(),
         rpg_party_id: 'party123',
-        createdAt: new Date(),
-        updatedAt: new Date(),
       };
 
       mockPrismaClient.rpgSession.create.mockResolvedValue(expectedSession);
@@ -248,7 +360,9 @@ describe('RpgSessionService', () => {
 
     it('should handle creation errors', async () => {
       const sessionData: Prisma.RpgSessionCreateInput = {
+        id: 'session-invalid',
         title: 'New Session',
+        data: null,
         rpg_party: { connect: { id: 'invalid' } },
       };
 
@@ -268,9 +382,14 @@ describe('RpgSessionService', () => {
 
       const expectedSession = {
         id: sessionId,
+        worldanvil_id: null,
+        discord_event_id: null,
         title: 'Updated Session Title',
         description: 'Updated description',
-        updatedAt: new Date(),
+        data: null,
+        created_at: new Date(),
+        updated_at: new Date(),
+        rpg_party_id: null,
       };
 
       mockPrismaClient.rpgSession.update.mockResolvedValue(expectedSession);
@@ -298,7 +417,17 @@ describe('RpgSessionService', () => {
   describe('delete', () => {
     it('should delete a session', async () => {
       const sessionId = 'session123';
-      const deletedSession = { id: sessionId, title: 'Deleted Session' };
+      const deletedSession = { 
+        id: sessionId, 
+        worldanvil_id: null,
+        discord_event_id: null,
+        title: 'Deleted Session',
+        description: null,
+        data: null,
+        created_at: new Date(),
+        updated_at: new Date(),
+        rpg_party_id: null 
+      };
 
       mockPrismaClient.rpgSession.delete.mockResolvedValue(deletedSession);
 
@@ -323,7 +452,14 @@ describe('RpgSessionService', () => {
       const expectedParty = { id: 'party123', title: 'The Heroes' };
       const sessionWithParty = {
         id: sessionId,
+        worldanvil_id: null,
+        discord_event_id: null,
         title: 'Test Session',
+        description: null,
+        data: null,
+        created_at: new Date(),
+        updated_at: new Date(),
+        rpg_party_id: 'party123',
         rpg_party: expectedParty,
       };
 
@@ -342,7 +478,14 @@ describe('RpgSessionService', () => {
       const sessionId = 'session123';
       const sessionWithoutParty = {
         id: sessionId,
+        worldanvil_id: null,
+        discord_event_id: null,
         title: 'Test Session',
+        description: null,
+        data: null,
+        created_at: new Date(),
+        updated_at: new Date(),
+        rpg_party_id: null,
         rpg_party: null,
       };
 
@@ -377,7 +520,17 @@ describe('RpgSessionService', () => {
       const sessionId = 'session123';
       const guildId = 'guild123';
       const scheduledTime = new Date();
-      const existingSession = { id: sessionId, title: 'Test Session' };
+      const existingSession = { 
+        id: sessionId, 
+        worldanvil_id: null,
+        discord_event_id: null,
+        title: 'Test Session',
+        description: null,
+        data: null,
+        created_at: new Date(),
+        updated_at: new Date(),
+        rpg_party_id: null 
+      };
 
       mockPrismaClient.rpgSession.findUnique.mockResolvedValue(existingSession);
 
@@ -392,8 +545,14 @@ describe('RpgSessionService', () => {
 
       const updatedSession = {
         id: sessionId,
-        title: 'Synced Session',
         worldanvil_id: worldAnvilId,
+        discord_event_id: null,
+        title: 'Synced Session',
+        description: null,
+        data: null,
+        created_at: new Date(),
+        updated_at: new Date(),
+        rpg_party_id: null,
       };
 
       mockPrismaClient.rpgSession.update.mockResolvedValue(updatedSession);
@@ -413,7 +572,17 @@ describe('RpgSessionService', () => {
   describe('generateAIContent', () => {
     it('should generate AI content for existing session', async () => {
       const sessionId = 'session123';
-      const existingSession = { id: sessionId, title: 'Test Session' };
+      const existingSession = { 
+        id: sessionId, 
+        worldanvil_id: null,
+        discord_event_id: null,
+        title: 'Test Session',
+        description: null,
+        data: null,
+        created_at: new Date(),
+        updated_at: new Date(),
+        rpg_party_id: null 
+      };
 
       mockPrismaClient.rpgSession.findUnique.mockResolvedValue(existingSession);
 
@@ -430,7 +599,17 @@ describe('RpgSessionService', () => {
 
     it('should generate different content types', async () => {
       const sessionId = 'session123';
-      const existingSession = { id: sessionId, title: 'Test Session' };
+      const existingSession = { 
+        id: sessionId, 
+        worldanvil_id: null,
+        discord_event_id: null,
+        title: 'Test Session',
+        description: null,
+        data: null,
+        created_at: new Date(),
+        updated_at: new Date(),
+        rpg_party_id: null 
+      };
 
       mockPrismaClient.rpgSession.findUnique.mockResolvedValue(existingSession);
 
@@ -460,7 +639,9 @@ describe('RpgSessionService', () => {
 
     it('should handle foreign key constraint errors', async () => {
       const sessionData: Prisma.RpgSessionCreateInput = {
+        id: 'invalid-session',
         title: 'New Session',
+        data: null,
         rpg_party: { connect: { id: 'invalid-party' } },
       };
 
