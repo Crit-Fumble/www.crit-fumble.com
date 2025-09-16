@@ -65,18 +65,23 @@ describe('RpgCampaignService', () => {
       const mockCampaigns: RpgCampaign[] = [
         {
           id: 'campaign-1',
-          name: 'Lost Mines of Phandelver',
+          worldanvil_campaign_id: null,
+          discord_post_id: null,
+          discord_chat_id: null,
+          discord_thread_id: null,
+          discord_forum_id: null,
+          discord_voice_id: null,
+          discord_role_id: null,
+          title: 'Lost Mines of Phandelver',
+          slug: 'lost-mines-of-phandelver',
           description: 'Starter campaign for D&D 5e',
-          systemId: 'system-1',
-          worldId: 'world-1',
-          gmId: 'user-1',
-          worldanvil_id: null,
-          status: 'active',
-          playerCount: 4,
-          sessionCount: 12,
-          config: {},
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          gm_ids: ['user-1'],
+          is_active: true,
+          data: null,
+          created_at: new Date(),
+          updated_at: new Date(),
+          rpg_system_id: 'system-1',
+          rpg_world_id: 'world-1',
         },
       ];
 
@@ -86,7 +91,7 @@ describe('RpgCampaignService', () => {
 
       expect(result).toEqual(mockCampaigns);
       expect(mockPrismaClient.rpgCampaign.findMany).toHaveBeenCalledWith({
-        orderBy: { name: 'asc' },
+        orderBy: { title: 'asc' },
       });
     });
   });
@@ -95,18 +100,23 @@ describe('RpgCampaignService', () => {
     it('should return campaign by ID', async () => {
       const mockCampaign: RpgCampaign = {
         id: 'campaign-1',
-        name: 'Lost Mines of Phandelver',
+        worldanvil_campaign_id: null,
+        discord_post_id: null,
+        discord_chat_id: null,
+        discord_thread_id: null,
+        discord_forum_id: null,
+        discord_voice_id: null,
+        discord_role_id: null,
+        title: 'Lost Mines of Phandelver',
+        slug: 'lost-mines-of-phandelver',
         description: 'Starter campaign for D&D 5e',
-        systemId: 'system-1',
-        worldId: 'world-1',
-        gmId: 'user-1',
-        worldanvil_id: null,
-        status: 'active',
-        playerCount: 4,
-        sessionCount: 12,
-        config: {},
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        gm_ids: ['user-1'],
+        is_active: true,
+        data: null,
+        created_at: new Date(),
+        updated_at: new Date(),
+        rpg_system_id: 'system-1',
+        rpg_world_id: 'world-1',
       };
 
       (mockPrismaClient.rpgCampaign.findUnique as jest.Mock).mockResolvedValue(mockCampaign);
@@ -132,18 +142,23 @@ describe('RpgCampaignService', () => {
     it('should return campaign by WorldAnvil ID', async () => {
       const mockCampaign: RpgCampaign = {
         id: 'campaign-1',
-        name: 'Lost Mines of Phandelver',
+        worldanvil_campaign_id: 'wa-123',
+        discord_post_id: null,
+        discord_chat_id: null,
+        discord_thread_id: null,
+        discord_forum_id: null,
+        discord_voice_id: null,
+        discord_role_id: null,
+        title: 'Lost Mines of Phandelver',
+        slug: 'lost-mines-of-phandelver',
         description: 'Starter campaign for D&D 5e',
-        systemId: 'system-1',
-        worldId: 'world-1',
-        gmId: 'user-1',
-        worldanvil_id: 'wa-123',
-        status: 'active',
-        playerCount: 4,
-        sessionCount: 12,
-        config: {},
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        gm_ids: ['user-1'],
+        is_active: true,
+        data: null,
+        created_at: new Date(),
+        updated_at: new Date(),
+        rpg_system_id: 'system-1',
+        rpg_world_id: 'world-1',
       };
 
       (mockPrismaClient.rpgCampaign.findUnique as jest.Mock).mockResolvedValue(mockCampaign);
@@ -152,7 +167,7 @@ describe('RpgCampaignService', () => {
 
       expect(result).toEqual(mockCampaign);
       expect(mockPrismaClient.rpgCampaign.findUnique).toHaveBeenCalledWith({
-        where: { worldanvil_id: 'wa-123' },
+        where: { worldanvil_campaign_id: 'wa-123' },
       });
     });
   });
@@ -162,18 +177,23 @@ describe('RpgCampaignService', () => {
       const mockCampaigns: RpgCampaign[] = [
         {
           id: 'campaign-1',
-          name: 'Lost Mines of Phandelver',
+          worldanvil_campaign_id: null,
+          discord_post_id: null,
+          discord_chat_id: null,
+          discord_thread_id: null,
+          discord_forum_id: null,
+          discord_voice_id: null,
+          discord_role_id: null,
+          title: 'Lost Mines of Phandelver',
+          slug: 'lost-mines-of-phandelver',
           description: 'Starter campaign for D&D 5e',
-          systemId: 'system-1',
-          worldId: 'world-1',
-          gmId: 'user-1',
-          worldanvil_id: null,
-          status: 'active',
-          playerCount: 4,
-          sessionCount: 12,
-          config: {},
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          gm_ids: ['user-1'],
+          is_active: true,
+          data: null,
+          created_at: new Date(),
+          updated_at: new Date(),
+          rpg_system_id: 'system-1',
+          rpg_world_id: 'world-1',
         },
       ];
 
@@ -183,8 +203,8 @@ describe('RpgCampaignService', () => {
 
       expect(result).toEqual(mockCampaigns);
       expect(mockPrismaClient.rpgCampaign.findMany).toHaveBeenCalledWith({
-        where: { systemId: 'system-1' },
-        orderBy: { name: 'asc' },
+        where: { rpg_system_id: 'system-1' },
+        orderBy: { title: 'asc' },
       });
     });
   });
@@ -194,18 +214,23 @@ describe('RpgCampaignService', () => {
       const mockCampaigns: RpgCampaign[] = [
         {
           id: 'campaign-1',
-          name: 'Lost Mines of Phandelver',
+          worldanvil_campaign_id: null,
+          discord_post_id: null,
+          discord_chat_id: null,
+          discord_thread_id: null,
+          discord_forum_id: null,
+          discord_voice_id: null,
+          discord_role_id: null,
+          title: 'Lost Mines of Phandelver',
+          slug: 'lost-mines-of-phandelver',
           description: 'Starter campaign for D&D 5e',
-          systemId: 'system-1',
-          worldId: 'world-1',
-          gmId: 'user-1',
-          worldanvil_id: null,
-          status: 'active',
-          playerCount: 4,
-          sessionCount: 12,
-          config: {},
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          gm_ids: ['user-1'],
+          is_active: true,
+          data: null,
+          created_at: new Date(),
+          updated_at: new Date(),
+          rpg_system_id: 'system-1',
+          rpg_world_id: 'world-1',
         },
       ];
 
@@ -215,8 +240,8 @@ describe('RpgCampaignService', () => {
 
       expect(result).toEqual(mockCampaigns);
       expect(mockPrismaClient.rpgCampaign.findMany).toHaveBeenCalledWith({
-        where: { worldId: 'world-1' },
-        orderBy: { name: 'asc' },
+        where: { rpg_world_id: 'world-1' },
+        orderBy: { title: 'asc' },
       });
     });
   });
@@ -226,18 +251,23 @@ describe('RpgCampaignService', () => {
       const mockCampaigns: RpgCampaign[] = [
         {
           id: 'campaign-1',
-          name: 'Lost Mines of Phandelver',
+          worldanvil_campaign_id: null,
+          discord_post_id: null,
+          discord_chat_id: null,
+          discord_thread_id: null,
+          discord_forum_id: null,
+          discord_voice_id: null,
+          discord_role_id: null,
+          title: 'Lost Mines of Phandelver',
+          slug: 'lost-mines-of-phandelver',
           description: 'Starter campaign for D&D 5e',
-          systemId: 'system-1',
-          worldId: 'world-1',
-          gmId: 'user-1',
-          worldanvil_id: null,
-          status: 'active',
-          playerCount: 4,
-          sessionCount: 12,
-          config: {},
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          gm_ids: ['user-1'],
+          is_active: true,
+          data: null,
+          created_at: new Date(),
+          updated_at: new Date(),
+          rpg_system_id: 'system-1',
+          rpg_world_id: 'world-1',
         },
       ];
 
@@ -247,12 +277,11 @@ describe('RpgCampaignService', () => {
 
       expect(result).toEqual(mockCampaigns);
       expect(mockPrismaClient.rpgCampaign.findMany).toHaveBeenCalledWith({
-        where: { gmId: 'user-1' },
-        orderBy: { name: 'asc' },
+        where: { gm_ids: { has: 'user-1' } },
+        orderBy: { title: 'asc' },
         include: {
-          system: true,
-          world: true,
-          gm: true,
+          rpg_system: true,
+          rpg_world: true,
         },
       });
     });
@@ -263,18 +292,23 @@ describe('RpgCampaignService', () => {
       const mockCampaigns: RpgCampaign[] = [
         {
           id: 'campaign-1',
-          name: 'Lost Mines of Phandelver',
+          worldanvil_campaign_id: null,
+          discord_post_id: null,
+          discord_chat_id: null,
+          discord_thread_id: null,
+          discord_forum_id: null,
+          discord_voice_id: null,
+          discord_role_id: null,
+          title: 'Lost Mines of Phandelver',
+          slug: 'lost-mines-of-phandelver',
           description: 'Starter campaign for D&D 5e',
-          systemId: 'system-1',
-          worldId: 'world-1',
-          gmId: 'user-1',
-          worldanvil_id: null,
-          status: 'active',
-          playerCount: 4,
-          sessionCount: 12,
-          config: {},
-          createdAt: new Date(),
-          updatedAt: new Date(),
+          gm_ids: ['user-1'],
+          is_active: true,
+          data: null,
+          created_at: new Date(),
+          updated_at: new Date(),
+          rpg_system_id: 'system-1',
+          rpg_world_id: 'world-1',
         },
       ];
 
@@ -286,11 +320,11 @@ describe('RpgCampaignService', () => {
       expect(mockPrismaClient.rpgCampaign.findMany).toHaveBeenCalledWith({
         where: {
           OR: [
-            { name: { contains: 'Lost Mines', mode: 'insensitive' } },
+            { title: { contains: 'Lost Mines', mode: 'insensitive' } },
             { description: { contains: 'Lost Mines', mode: 'insensitive' } },
           ],
         },
-        orderBy: { name: 'asc' },
+        orderBy: { title: 'asc' },
       });
     });
   });
@@ -298,31 +332,36 @@ describe('RpgCampaignService', () => {
   describe('create', () => {
     it('should create new campaign', async () => {
       const createData: Prisma.RpgCampaignCreateInput = {
-        name: 'New Campaign',
+        id: 'campaign-new',
+        title: 'New Campaign',
+        slug: 'new-campaign',
         description: 'A new RPG campaign',
-        system: { connect: { id: 'system-1' } },
-        world: { connect: { id: 'world-1' } },
-        gm: { connect: { id: 'user-1' } },
-        status: 'planning',
-        playerCount: 0,
-        sessionCount: 0,
-        config: {},
+        gm_ids: ['user-1'],
+        is_active: true,
+        data: null,
+        rpg_system: { connect: { id: 'system-1' } },
+        rpg_world: { connect: { id: 'world-1' } },
       };
 
       const mockCreatedCampaign: RpgCampaign = {
         id: 'campaign-new',
-        name: 'New Campaign',
+        worldanvil_campaign_id: null,
+        discord_post_id: null,
+        discord_chat_id: null,
+        discord_thread_id: null,
+        discord_forum_id: null,
+        discord_voice_id: null,
+        discord_role_id: null,
+        title: 'New Campaign',
+        slug: 'new-campaign',
         description: 'A new RPG campaign',
-        systemId: 'system-1',
-        worldId: 'world-1',
-        gmId: 'user-1',
-        worldanvil_id: null,
-        status: 'planning',
-        playerCount: 0,
-        sessionCount: 0,
-        config: {},
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        gm_ids: ['user-1'],
+        is_active: true,
+        data: null,
+        created_at: new Date(),
+        updated_at: new Date(),
+        rpg_system_id: 'system-1',
+        rpg_world_id: 'world-1',
       };
 
       (mockPrismaClient.rpgCampaign.create as jest.Mock).mockResolvedValue(mockCreatedCampaign);
@@ -339,25 +378,30 @@ describe('RpgCampaignService', () => {
   describe('update', () => {
     it('should update existing campaign', async () => {
       const updateData: Prisma.RpgCampaignUpdateInput = {
-        name: 'Updated Campaign',
+        title: 'Updated Campaign',
         description: 'An updated RPG campaign',
-        status: 'active',
+        is_active: true,
       };
 
       const mockUpdatedCampaign: RpgCampaign = {
         id: 'campaign-1',
-        name: 'Updated Campaign',
+        worldanvil_campaign_id: null,
+        discord_post_id: null,
+        discord_chat_id: null,
+        discord_thread_id: null,
+        discord_forum_id: null,
+        discord_voice_id: null,
+        discord_role_id: null,
+        title: 'Updated Campaign',
+        slug: 'updated-campaign',
         description: 'An updated RPG campaign',
-        systemId: 'system-1',
-        worldId: 'world-1',
-        gmId: 'user-1',
-        worldanvil_id: null,
-        status: 'active',
-        playerCount: 4,
-        sessionCount: 12,
-        config: {},
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        gm_ids: ['user-1'],
+        is_active: true,
+        data: null,
+        created_at: new Date(),
+        updated_at: new Date(),
+        rpg_system_id: 'system-1',
+        rpg_world_id: 'world-1',
       };
 
       (mockPrismaClient.rpgCampaign.update as jest.Mock).mockResolvedValue(mockUpdatedCampaign);
@@ -376,18 +420,23 @@ describe('RpgCampaignService', () => {
     it('should delete campaign', async () => {
       const mockDeletedCampaign: RpgCampaign = {
         id: 'campaign-1',
-        name: 'Lost Mines of Phandelver',
+        worldanvil_campaign_id: null,
+        discord_post_id: null,
+        discord_chat_id: null,
+        discord_thread_id: null,
+        discord_forum_id: null,
+        discord_voice_id: null,
+        discord_role_id: null,
+        title: 'Lost Mines of Phandelver',
+        slug: 'lost-mines-of-phandelver',
         description: 'Starter campaign for D&D 5e',
-        systemId: 'system-1',
-        worldId: 'world-1',
-        gmId: 'user-1',
-        worldanvil_id: null,
-        status: 'active',
-        playerCount: 4,
-        sessionCount: 12,
-        config: {},
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        gm_ids: ['user-1'],
+        is_active: true,
+        data: null,
+        created_at: new Date(),
+        updated_at: new Date(),
+        rpg_system_id: 'system-1',
+        rpg_world_id: 'world-1',
       };
 
       (mockPrismaClient.rpgCampaign.delete as jest.Mock).mockResolvedValue(mockDeletedCampaign);
