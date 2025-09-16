@@ -48,8 +48,40 @@ describe('RpgCharacterService', () => {
   describe('getAll', () => {
     it('should return all RPG characters', async () => {
       const expectedCharacters = [
-        { id: 'char1', name: 'Aragorn', title: 'Ranger' },
-        { id: 'char2', name: 'Legolas', title: 'Elf Prince' },
+        { 
+          id: 'char1', 
+          discord_post_id: null,
+          discord_thread_id: null,
+          worldanvil_character_id: null,
+          user_id: null,
+          name: 'Aragorn', 
+          slug: 'aragorn',
+          title: 'Ranger',
+          summary: null,
+          description: null,
+          portrait_url: null,
+          token_url: null,
+          is_active: true,
+          created_at: new Date(),
+          updated_at: new Date()
+        },
+        { 
+          id: 'char2', 
+          discord_post_id: null,
+          discord_thread_id: null,
+          worldanvil_character_id: null,
+          user_id: null,
+          name: 'Legolas', 
+          slug: 'legolas',
+          title: 'Elf Prince',
+          summary: null,
+          description: null,
+          portrait_url: null,
+          token_url: null,
+          is_active: true,
+          created_at: new Date(),
+          updated_at: new Date()
+        },
       ];
 
       mockPrismaClient.rpgCharacter.findMany.mockResolvedValue(expectedCharacters);
@@ -74,10 +106,20 @@ describe('RpgCharacterService', () => {
       const characterId = 'char123';
       const expectedCharacter = {
         id: characterId,
-        name: 'Aragorn',
-        title: 'Ranger',
-        description: 'A skilled ranger',
+        discord_post_id: null,
+        discord_thread_id: null,
+        worldanvil_character_id: null,
         user_id: 'user123',
+        name: 'Aragorn',
+        slug: 'aragorn',
+        title: 'Ranger',
+        summary: null,
+        description: 'A skilled ranger',
+        portrait_url: null,
+        token_url: null,
+        is_active: true,
+        created_at: new Date(),
+        updated_at: new Date(),
       };
 
       mockPrismaClient.rpgCharacter.findUnique.mockResolvedValue(expectedCharacter);
@@ -104,8 +146,20 @@ describe('RpgCharacterService', () => {
       const worldAnvilId = 'wa123';
       const expectedCharacter = {
         id: 'char123',
-        name: 'Aragorn',
+        discord_post_id: null,
+        discord_thread_id: null,
         worldanvil_character_id: worldAnvilId,
+        user_id: null,
+        name: 'Aragorn',
+        slug: 'aragorn',
+        title: null,
+        summary: null,
+        description: null,
+        portrait_url: null,
+        token_url: null,
+        is_active: true,
+        created_at: new Date(),
+        updated_at: new Date(),
       };
 
       mockPrismaClient.rpgCharacter.findFirst.mockResolvedValue(expectedCharacter);
@@ -124,8 +178,20 @@ describe('RpgCharacterService', () => {
       const discordPostId = 'post123';
       const expectedCharacter = {
         id: 'char123',
-        name: 'Aragorn',
         discord_post_id: discordPostId,
+        discord_thread_id: null,
+        worldanvil_character_id: null,
+        user_id: null,
+        name: 'Aragorn',
+        slug: 'aragorn',
+        title: null,
+        summary: null,
+        description: null,
+        portrait_url: null,
+        token_url: null,
+        is_active: true,
+        created_at: new Date(),
+        updated_at: new Date(),
       };
 
       mockPrismaClient.rpgCharacter.findUnique.mockResolvedValue(expectedCharacter);
@@ -144,8 +210,20 @@ describe('RpgCharacterService', () => {
       const discordThreadId = 'thread123';
       const expectedCharacter = {
         id: 'char123',
-        name: 'Aragorn',
+        discord_post_id: null,
         discord_thread_id: discordThreadId,
+        worldanvil_character_id: null,
+        user_id: null,
+        name: 'Aragorn',
+        slug: 'aragorn',
+        title: null,
+        summary: null,
+        description: null,
+        portrait_url: null,
+        token_url: null,
+        is_active: true,
+        created_at: new Date(),
+        updated_at: new Date(),
       };
 
       mockPrismaClient.rpgCharacter.findUnique.mockResolvedValue(expectedCharacter);
@@ -163,8 +241,40 @@ describe('RpgCharacterService', () => {
     it('should return characters owned by a user', async () => {
       const userId = 'user123';
       const expectedCharacters = [
-        { id: 'char1', name: 'Aragorn', user_id: userId },
-        { id: 'char2', name: 'Legolas', user_id: userId },
+        { 
+          id: 'char1', 
+          discord_post_id: null,
+          discord_thread_id: null,
+          worldanvil_character_id: null,
+          user_id: userId,
+          name: 'Aragorn', 
+          slug: 'aragorn',
+          title: null,
+          summary: null,
+          description: null,
+          portrait_url: null,
+          token_url: null,
+          is_active: true,
+          created_at: new Date(),
+          updated_at: new Date()
+        },
+        { 
+          id: 'char2', 
+          discord_post_id: null,
+          discord_thread_id: null,
+          worldanvil_character_id: null,
+          user_id: userId,
+          name: 'Legolas', 
+          slug: 'legolas',
+          title: null,
+          summary: null,
+          description: null,
+          portrait_url: null,
+          token_url: null,
+          is_active: true,
+          created_at: new Date(),
+          updated_at: new Date()
+        },
       ];
 
       mockPrismaClient.rpgCharacter.findMany.mockResolvedValue(expectedCharacters);
@@ -182,7 +292,23 @@ describe('RpgCharacterService', () => {
     it('should search characters by name', async () => {
       const query = 'aragorn';
       const expectedCharacters = [
-        { id: 'char1', name: 'Aragorn', title: 'Ranger' },
+        { 
+          id: 'char1', 
+          discord_post_id: null,
+          discord_thread_id: null,
+          worldanvil_character_id: null,
+          user_id: null,
+          name: 'Aragorn', 
+          slug: 'aragorn',
+          title: 'Ranger',
+          summary: null,
+          description: null,
+          portrait_url: null,
+          token_url: null,
+          is_active: true,
+          created_at: new Date(),
+          updated_at: new Date()
+        },
       ];
 
       mockPrismaClient.rpgCharacter.findMany.mockResolvedValue(expectedCharacters);
@@ -213,8 +339,40 @@ describe('RpgCharacterService', () => {
     it('should search characters by title', async () => {
       const query = 'ranger';
       const expectedCharacters = [
-        { id: 'char1', name: 'Aragorn', title: 'Ranger' },
-        { id: 'char2', name: 'Strider', title: 'Dunedain Ranger' },
+        { 
+          id: 'char1', 
+          discord_post_id: null,
+          discord_thread_id: null,
+          worldanvil_character_id: null,
+          user_id: null,
+          name: 'Aragorn', 
+          slug: 'aragorn',
+          title: 'Ranger',
+          summary: null,
+          description: null,
+          portrait_url: null,
+          token_url: null,
+          is_active: true,
+          created_at: new Date(),
+          updated_at: new Date()
+        },
+        { 
+          id: 'char2', 
+          discord_post_id: null,
+          discord_thread_id: null,
+          worldanvil_character_id: null,
+          user_id: null,
+          name: 'Strider', 
+          slug: 'strider',
+          title: 'Dunedain Ranger',
+          summary: null,
+          description: null,
+          portrait_url: null,
+          token_url: null,
+          is_active: true,
+          created_at: new Date(),
+          updated_at: new Date()
+        },
       ];
 
       mockPrismaClient.rpgCharacter.findMany.mockResolvedValue(expectedCharacters);
@@ -228,20 +386,31 @@ describe('RpgCharacterService', () => {
   describe('create', () => {
     it('should create a new character', async () => {
       const characterData: Prisma.RpgCharacterCreateInput = {
+        id: 'char123',
         name: 'Aragorn',
+        slug: 'aragorn',
         title: 'Ranger',
         description: 'A skilled ranger from the North',
+        is_active: true,
         user: { connect: { id: 'user123' } },
       };
 
       const expectedCharacter = {
         id: 'char123',
-        name: 'Aragorn',
-        title: 'Ranger',
-        description: 'A skilled ranger from the North',
+        discord_post_id: null,
+        discord_thread_id: null,
+        worldanvil_character_id: null,
         user_id: 'user123',
-        createdAt: new Date(),
-        updatedAt: new Date(),
+        name: 'Aragorn',
+        slug: 'aragorn',
+        title: 'Ranger',
+        summary: null,
+        description: 'A skilled ranger from the North',
+        portrait_url: null,
+        token_url: null,
+        is_active: true,
+        created_at: new Date(),
+        updated_at: new Date(),
       };
 
       mockPrismaClient.rpgCharacter.create.mockResolvedValue(expectedCharacter);
@@ -256,7 +425,9 @@ describe('RpgCharacterService', () => {
 
     it('should handle creation errors', async () => {
       const characterData: Prisma.RpgCharacterCreateInput = {
+        id: 'char-invalid',
         name: 'Aragorn',
+        is_active: true,
         user: { connect: { id: 'invalid-user' } },
       };
 
@@ -276,9 +447,20 @@ describe('RpgCharacterService', () => {
 
       const expectedCharacter = {
         id: characterId,
+        discord_post_id: null,
+        discord_thread_id: null,
+        worldanvil_character_id: null,
+        user_id: null,
         name: 'Strider',
+        slug: 'strider',
+        title: null,
+        summary: null,
         description: 'Updated description',
-        updatedAt: new Date(),
+        portrait_url: null,
+        token_url: null,
+        is_active: true,
+        created_at: new Date(),
+        updated_at: new Date(),
       };
 
       mockPrismaClient.rpgCharacter.update.mockResolvedValue(expectedCharacter);
@@ -306,7 +488,23 @@ describe('RpgCharacterService', () => {
   describe('delete', () => {
     it('should delete a character', async () => {
       const characterId = 'char123';
-      const deletedCharacter = { id: characterId, name: 'Deleted Character' };
+      const deletedCharacter = { 
+        id: characterId, 
+        discord_post_id: null,
+        discord_thread_id: null,
+        worldanvil_character_id: null,
+        user_id: null,
+        name: 'Deleted Character', 
+        slug: 'deleted-character',
+        title: null,
+        summary: null,
+        description: null,
+        portrait_url: null,
+        token_url: null,
+        is_active: false,
+        created_at: new Date(),
+        updated_at: new Date()
+      };
 
       mockPrismaClient.rpgCharacter.delete.mockResolvedValue(deletedCharacter);
 
@@ -359,7 +557,20 @@ describe('RpgCharacterService', () => {
 
       mockPrismaClient.rpgCharacter.findUnique.mockResolvedValue({
         id: characterId,
+        discord_post_id: null,
+        discord_thread_id: null,
+        worldanvil_character_id: null,
         user_id: userId,
+        name: null,
+        slug: null,
+        title: null,
+        summary: null,
+        description: null,
+        portrait_url: null,
+        token_url: null,
+        is_active: true,
+        created_at: new Date(),
+        updated_at: new Date(),
       });
 
       const result = await service.verifyCharacterOwnership(userId, characterId);
@@ -378,12 +589,35 @@ describe('RpgCharacterService', () => {
 
       mockPrismaClient.rpgCharacter.findUnique.mockResolvedValue({
         id: characterId,
+        discord_post_id: null,
+        discord_thread_id: null,
+        worldanvil_character_id: null,
         user_id: userId,
+        name: null,
+        slug: null,
+        title: null,
+        summary: null,
+        description: null,
+        portrait_url: null,
+        token_url: null,
+        is_active: true,
+        created_at: new Date(),
+        updated_at: new Date(),
       });
 
       mockPrismaClient.user.findFirst.mockResolvedValue({
         id: userId,
         discord_id: discordId,
+        worldanvil_id: null,
+        name: null,
+        slug: null,
+        email: null,
+        emailVerified: null,
+        image: null,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+        admin: false,
+        data: null,
       });
 
       const result = await service.verifyCharacterOwnership(discordId, characterId);
@@ -409,7 +643,20 @@ describe('RpgCharacterService', () => {
 
       mockPrismaClient.rpgCharacter.findUnique.mockResolvedValue({
         id: characterId,
+        discord_post_id: null,
+        discord_thread_id: null,
+        worldanvil_character_id: null,
         user_id: 'different-user',
+        name: null,
+        slug: null,
+        title: null,
+        summary: null,
+        description: null,
+        portrait_url: null,
+        token_url: null,
+        is_active: true,
+        created_at: new Date(),
+        updated_at: new Date(),
       });
 
       mockPrismaClient.user.findFirst.mockResolvedValue(null);
@@ -428,7 +675,23 @@ describe('RpgCharacterService', () => {
     });
 
     it('should throw not implemented error for existing character', async () => {
-      const character = { id: 'char123', name: 'Aragorn' };
+      const character = { 
+        id: 'char123', 
+        discord_post_id: null,
+        discord_thread_id: null,
+        worldanvil_character_id: null,
+        user_id: null,
+        name: 'Aragorn', 
+        slug: 'aragorn',
+        title: null,
+        summary: null,
+        description: null,
+        portrait_url: null,
+        token_url: null,
+        is_active: true,
+        created_at: new Date(),
+        updated_at: new Date()
+      };
       mockPrismaClient.rpgCharacter.findUnique.mockResolvedValue(character);
 
       await expect(service.generateBackstory('char123')).rejects.toThrow('Not implemented - use OpenAI SDK directly');
@@ -443,7 +706,23 @@ describe('RpgCharacterService', () => {
     });
 
     it('should throw not implemented error for existing character', async () => {
-      const character = { id: 'char123', name: 'Aragorn', description: 'A noble ranger' };
+      const character = { 
+        id: 'char123', 
+        discord_post_id: null,
+        discord_thread_id: null,
+        worldanvil_character_id: null,
+        user_id: null,
+        name: 'Aragorn', 
+        slug: 'aragorn',
+        title: null,
+        summary: null,
+        description: 'A noble ranger',
+        portrait_url: null,
+        token_url: null,
+        is_active: true,
+        created_at: new Date(),
+        updated_at: new Date()
+      };
       mockPrismaClient.rpgCharacter.findUnique.mockResolvedValue(character);
 
       await expect(service.analyzePersonality('char123')).rejects.toThrow('Not implemented - use OpenAI SDK directly');
@@ -458,7 +737,23 @@ describe('RpgCharacterService', () => {
     });
 
     it('should throw not implemented error for existing character', async () => {
-      const character = { id: 'char123', name: 'Aragorn', description: 'A noble ranger' };
+      const character = { 
+        id: 'char123', 
+        discord_post_id: null,
+        discord_thread_id: null,
+        worldanvil_character_id: null,
+        user_id: null,
+        name: 'Aragorn', 
+        slug: 'aragorn',
+        title: null,
+        summary: null,
+        description: 'A noble ranger',
+        portrait_url: null,
+        token_url: null,
+        is_active: true,
+        created_at: new Date(),
+        updated_at: new Date()
+      };
       mockPrismaClient.rpgCharacter.findUnique.mockResolvedValue(character);
 
       await expect(service.suggestCharacterDevelopment('char123')).rejects.toThrow('Not implemented - use OpenAI SDK directly');
@@ -475,7 +770,23 @@ describe('RpgCharacterService', () => {
     });
 
     it('should return false for character without WorldAnvil ID', async () => {
-      const character = { id: 'char123', name: 'Aragorn', worldanvil_character_id: null };
+      const character = { 
+        id: 'char123', 
+        discord_post_id: null,
+        discord_thread_id: null,
+        worldanvil_character_id: null,
+        user_id: null,
+        name: 'Aragorn', 
+        slug: 'aragorn',
+        title: null,
+        summary: null,
+        description: null,
+        portrait_url: null,
+        token_url: null,
+        is_active: true,
+        created_at: new Date(),
+        updated_at: new Date()
+      };
       mockPrismaClient.rpgCharacter.findUnique.mockResolvedValue(character);
 
       const result = await service.syncWithWorldAnvil('char123');
@@ -484,7 +795,23 @@ describe('RpgCharacterService', () => {
     });
 
     it('should return false for character with WorldAnvil ID (stubbed)', async () => {
-      const character = { id: 'char123', name: 'Aragorn', worldanvil_character_id: 'wa123' };
+      const character = { 
+        id: 'char123', 
+        discord_post_id: null,
+        discord_thread_id: null,
+        worldanvil_character_id: 'wa123',
+        user_id: null,
+        name: 'Aragorn', 
+        slug: 'aragorn',
+        title: null,
+        summary: null,
+        description: null,
+        portrait_url: null,
+        token_url: null,
+        is_active: true,
+        created_at: new Date(),
+        updated_at: new Date()
+      };
       mockPrismaClient.rpgCharacter.findUnique.mockResolvedValue(character);
 
       const result = await service.syncWithWorldAnvil('char123');
@@ -503,7 +830,23 @@ describe('RpgCharacterService', () => {
     });
 
     it('should return false for character without Discord thread ID', async () => {
-      const character = { id: 'char123', name: 'Aragorn', discord_thread_id: null };
+      const character = { 
+        id: 'char123', 
+        discord_post_id: null,
+        discord_thread_id: null,
+        worldanvil_character_id: null,
+        user_id: null,
+        name: 'Aragorn', 
+        slug: 'aragorn',
+        title: null,
+        summary: null,
+        description: null,
+        portrait_url: null,
+        token_url: null,
+        is_active: true,
+        created_at: new Date(),
+        updated_at: new Date()
+      };
       mockPrismaClient.rpgCharacter.findUnique.mockResolvedValue(character);
 
       const result = await service.notifyCharacterUpdate('char123', 'test message');
@@ -512,7 +855,23 @@ describe('RpgCharacterService', () => {
     });
 
     it('should throw not implemented error for character with Discord thread ID', async () => {
-      const character = { id: 'char123', name: 'Aragorn', discord_thread_id: 'thread123' };
+      const character = { 
+        id: 'char123', 
+        discord_post_id: null,
+        discord_thread_id: 'thread123',
+        worldanvil_character_id: null,
+        user_id: null,
+        name: 'Aragorn', 
+        slug: 'aragorn',
+        title: null,
+        summary: null,
+        description: null,
+        portrait_url: null,
+        token_url: null,
+        is_active: true,
+        created_at: new Date(),
+        updated_at: new Date()
+      };
       mockPrismaClient.rpgCharacter.findUnique.mockResolvedValue(character);
 
       await expect(service.notifyCharacterUpdate('char123', 'test message')).rejects.toThrow('Not implemented - use Discord.js SDK directly');
@@ -527,7 +886,23 @@ describe('RpgCharacterService', () => {
     });
 
     it('should throw not implemented error for existing character', async () => {
-      const character = { id: 'char123', name: 'Aragorn', description: 'A noble ranger' };
+      const character = { 
+        id: 'char123', 
+        discord_post_id: null,
+        discord_thread_id: null,
+        worldanvil_character_id: null,
+        user_id: null,
+        name: 'Aragorn', 
+        slug: 'aragorn',
+        title: null,
+        summary: null,
+        description: 'A noble ranger',
+        portrait_url: null,
+        token_url: null,
+        is_active: true,
+        created_at: new Date(),
+        updated_at: new Date()
+      };
       mockPrismaClient.rpgCharacter.findUnique.mockResolvedValue(character);
 
       await expect(service.generatePortraitDescription('char123')).rejects.toThrow('Not implemented - use OpenAI SDK directly');
@@ -550,7 +925,9 @@ describe('RpgCharacterService', () => {
 
     it('should handle foreign key constraint errors', async () => {
       const characterData: Prisma.RpgCharacterCreateInput = {
+        id: 'test-char',
         name: 'Test Character',
+        is_active: true,
         user: { connect: { id: 'invalid-user' } },
       };
 
