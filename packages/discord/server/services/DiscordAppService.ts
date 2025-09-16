@@ -1,1 +1,0 @@
-// TODO: stub a service for discord apps

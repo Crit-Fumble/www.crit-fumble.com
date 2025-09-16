@@ -1,51 +1,71 @@
 import { randomUUID } from "node:crypto";
-import { DiscordAuthService } from "@crit-fumble/discord/server/services";
-import { DatabaseClient } from "../clients/DatabaseClient";
 import { sign, verify } from 'jsonwebtoken';
+import { PrismaClient } from '@prisma/client';
+import { Client as DiscordClient, User as DiscordUser } from 'discord.js';
+import { WorldAnvilApiClient } from '@crit-fumble/worldanvil';
+import OpenAI from 'openai';
+import { WorldAnvilUser } from '@crit-fumble/worldanvil/models/WorldAnvilUser';
+import { servicesConfig } from '../../models/config/services.config';
 
 /**
  * Interface for JWT token payload
  */
 export interface AuthTokenPayload {
-  userId: string;        // User ID
-  discordId?: string; // Discord ID
+  userId: string;      // User ID
+  discordId?: string;  // Discord ID
   iat: number;        // Issued at timestamp
   exp: number;        // Expiration timestamp
 }
 
 /**
- * Auth service for handling authentication
+ * Extended user interface with integration data
+ */
+export interface AuthUser {
+  id: string;
+  name: string | null;
+  email: string | null;
+  discord_id: string | null;
+  worldanvil_id: string | null;
+  image: string | null;
+  slug: string | null;
+  worldAnvilData?: any; // We'll type this properly once we determine the shape
+}
+
+/**
+ * Auth service for handling unified authentication and user integration
  */
 export class AuthService {
-  private discordAuth: DiscordAuthService;
-  private jwtSecret: string;
-  private tokenExpiration: string;
+  private readonly discordClient: DiscordClient;
+  private readonly worldAnvilClient: WorldAnvilApiClient;
+  private readonly openaiClient: OpenAI;
+  private readonly jwtSecret: string;
+  private readonly tokenExpiration: string;
   
   /**
    * Creates a new auth service
-   * @param database Database client instance
+   * @param prisma Prisma client instance
+   * @param discord Discord client instance for user authentication and notifications
+   * @param worldanvil WorldAnvil client instance for user integration
+   * @param openai OpenAI client instance for AI-powered auth features
    */
-  constructor(private database: DatabaseClient) {
-    // Create Discord auth service with configuration from environment variables
-    this.discordAuth = new DiscordAuthService({
-      clientId: process.env.DISCORD_CLIENT_ID,
-      clientSecret: process.env.DISCORD_CLIENT_SECRET,
-      redirectUri: process.env.DISCORD_REDIRECT_URI
-    });
+  constructor(
+    private readonly prisma: PrismaClient,
+    private readonly discord: DiscordClient,
+    private readonly worldanvil: WorldAnvilApiClient,
+    private readonly openai: OpenAI
+  ) {
+    // Use provided clients (following unified architecture)
+    this.discordClient = discord;
+    this.worldAnvilClient = worldanvil;
+    this.openaiClient = openai;
     
-    // Configure JWT settings
-    this.jwtSecret = process.env.JWT_SECRET || 'dev-secret-do-not-use-in-production';
-    this.tokenExpiration = '7d'; // Default token expiration
+    // Configure JWT settings from config
+    this.jwtSecret = servicesConfig.auth.jwtSecret || 'dev-secret-do-not-use-in-production';
+    this.tokenExpiration = servicesConfig.auth.tokenExpiration || '7d';
     
     // Security warning for production environments
-    if (process.env.NODE_ENV === 'production') {
-      if (this.jwtSecret === 'dev-secret-do-not-use-in-production') {
-        console.warn('WARNING: Using default JWT secret in production. Set JWT_SECRET environment variable.');
-      }
-      
-      if (!process.env.DISCORD_CLIENT_ID || !process.env.DISCORD_CLIENT_SECRET) {
-        console.warn('WARNING: Missing Discord credentials. Authentication may not work properly.');
-      }
+    if (process.env.NODE_ENV === 'production' && this.jwtSecret === 'dev-secret-do-not-use-in-production') {
+      console.warn('WARNING: Using default JWT secret in production. Configure jwtSecret in services config.');
     }
   }
 
@@ -53,7 +73,8 @@ export class AuthService {
    * Initialize the auth service
    */
   async initialize(): Promise<void> {
-    await this.discordAuth.initialize();
+    // TODO: Initialize Discord client if needed
+    // await this.discordClient.login(token);
   }
   
   /**
@@ -62,12 +83,14 @@ export class AuthService {
    * @param state Optional state parameter for security
    */
   getAuthorizationUrl(redirectUri: string, state?: string): string {
-    return this.discordAuth.getAuthorizationUrl(redirectUri, 'identify email guilds', state);
+    // TODO: Implement Discord OAuth URL generation using Discord.js
+    // This would typically use the Discord OAuth2 API directly
+    throw new Error('Not implemented - use Discord OAuth2 API directly');
   }
   
   /**
    * Handle Discord OAuth callback
-   * @param code Authorization code from Discord
+   * @param code OAuth authorization code
    * @param redirectUri Redirect URI used in initial request
    */
   async handleCallback(code: string, redirectUri: string): Promise<{
@@ -75,36 +98,20 @@ export class AuthService {
     token?: string;
     error?: string;
   }> {
-    try {
-      // Exchange code for Discord token
-      const authResult = await this.discordAuth.exchangeCode(code, redirectUri);
-      
-      if (!authResult.success || !authResult.user) {
-        return {
-          success: false,
-          error: authResult.error || 'Failed to authenticate with Discord'
-        };
-      }
-      
-      // Find or create user in our database
-      let user = await this.database.client.user.findFirst({
-        where: { discord_id: authResult.user.id }
-      });
-      
-      if (!user) {
-        // Generate a slug based on username
-        const baseSlug = (authResult.user.username || 'user').toLowerCase().replace(/[^a-z0-9]/g, '-');
-        const slug = `${baseSlug}-${Math.floor(Math.random() * 1000)}`;
-        
-        // Create new user
-        user = await this.database.client.user.create({
-          data: {
-            id: randomUUID(),
-            name: authResult.user.username,
-            discord_id: authResult.user.id,
-            email: authResult.user.email,
-            image: authResult.user.avatar ? 
-              `https://cdn.discordapp.com/avatars/${authResult.user.id}/${authResult.user.avatar}.png` : 
+    // TODO: Implement Discord OAuth using raw Discord.js SDK
+    // This is placeholder implementation until we implement proper OAuth2 flow
+    return {
+      success: false,
+      error: 'Discord OAuth not implemented yet - use Discord.js OAuth2 directly'
+    };
+  }
+
+  /**
+            name: discordUser.username,
+            discord_id: discordUser.id,
+            email: discordUser.email,
+            image: discordUser.avatar ? 
+              `https://cdn.discordapp.com/avatars/${discordUser.id}/${discordUser.avatar}.png` : 
               undefined,
             slug
           }
@@ -112,7 +119,7 @@ export class AuthService {
       }
       
       // Generate JWT token
-      const token = this.createToken(user.id, authResult.user.id);
+      const token = this.createToken(user.id, discordUser.id);
       
       return {
         success: true,
@@ -163,7 +170,7 @@ export class AuthService {
     const payload = this.verifyToken(token);
     if (!payload) return null;
     
-    return this.database.client.user.findUnique({
+    return this.prisma.user.findUnique({
       where: { id: payload.userId }
     });
   }
@@ -206,17 +213,13 @@ export class AuthService {
    * @param discordToken Discord access token
    * @param tokenType Optional token type, defaults to 'Bearer'
    */
-  async getDiscordUserInfo(discordToken: string, tokenType = 'Bearer') {
+  async getDiscordUserInfo(discordToken: string, tokenType = 'Bearer'): Promise<DiscordUser | null> {
     try {
-      // Use the DiscordAuthService to get the user profile
-      const result = await this.discordAuth.getUserProfile(discordToken, tokenType);
-      
-      if (!result.success || !result.data) {
-        console.error('Failed to fetch Discord user info:', result.error);
-        return null;
-      }
-      
-      return result.data;
+      // TODO: Implement Discord OAuth REST API calls directly
+      // This would require making HTTP requests to Discord's REST API
+      // Example: GET https://discord.com/api/users/@me with Authorization header
+      console.warn('getDiscordUserInfo not implemented - use Discord REST API directly');
+      return null;
     } catch (error) {
       console.error('Failed to fetch Discord user info:', error);
       return null;
@@ -229,6 +232,159 @@ export class AuthService {
    * @param tokenType Optional token type, defaults to 'Bearer'
    */
   async getDiscordGuilds(discordToken: string, tokenType = 'Bearer') {
-    return this.discordAuth.getUserGuilds(discordToken, tokenType);
+    // TODO: Implement Discord REST API call for user guilds
+    // Example: GET https://discord.com/api/users/@me/guilds with Authorization header
+    console.warn('getDiscordGuilds not implemented - use Discord REST API directly');
+    return { success: false, error: 'Not implemented yet' };
+  }
+
+  /**
+   * Analyze user authentication patterns for security insights
+   * @param userId User ID
+   * @returns Security analysis and recommendations
+   */
+  async analyzeUserSecurityPatterns(userId: string): Promise<string> {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: {
+        id: true,
+        name: true,
+        createdAt: true,
+        updatedAt: true,
+        discord_id: true,
+        worldanvil_id: true
+      }
+    });
+
+    if (!user) throw new Error('User not found');
+
+    const prompt = `Analyze the security profile for this user account:
+User ID: ${user.id}
+Account Created: ${user.createdAt}
+Last Updated: ${user.updatedAt}
+Connected Services: ${[
+      user.discord_id ? 'Discord' : null,
+      user.worldanvil_id ? 'WorldAnvil' : null
+    ].filter(Boolean).join(', ') || 'None'}
+
+Provide security recommendations and identify any potential risks or improvements for this user's authentication setup.`;
+
+    try {
+      const response = await this.openaiClient.chat.completions.create({
+        model: 'gpt-3.5-turbo',
+        messages: [{ role: 'user', content: prompt }],
+        max_tokens: 500
+      });
+      
+      return response.choices[0]?.message?.content || 'No analysis available';
+    } catch (error) {
+      console.error('OpenAI API error:', error);
+      return 'Security analysis temporarily unavailable';
+    }
+  }
+
+  /**
+   * Generate personalized security recommendations
+   * @param userId User ID
+   * @returns Personalized security tips
+   */
+  async generateSecurityRecommendations(userId: string): Promise<string> {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId }
+    });
+
+    if (!user) throw new Error('User not found');
+
+    const prompt = `Generate personalized security recommendations for this user:
+Username: ${user.name || 'Anonymous User'}
+Connected Accounts: ${[
+      user.discord_id ? 'Discord' : null,
+      user.worldanvil_id ? 'WorldAnvil' : null
+    ].filter(Boolean).join(', ') || 'None'}
+
+Provide specific, actionable security recommendations tailored to their current setup and usage patterns.`;
+
+    try {
+      const response = await this.openaiClient.chat.completions.create({
+        model: 'gpt-3.5-turbo',
+        messages: [{ role: 'user', content: prompt }],
+        max_tokens: 500
+      });
+      
+      return response.choices[0]?.message?.content || 'No recommendations available';
+    } catch (error) {
+      console.error('OpenAI API error:', error);
+      return 'Security recommendations temporarily unavailable';
+    }
+  }
+
+  /**
+   * Detect suspicious authentication patterns
+   * @param userId User ID
+   * @param authAttempts Recent authentication attempts data
+   * @returns Suspicious activity analysis
+   */
+  async detectSuspiciousActivity(userId: string, authAttempts: any[]): Promise<string> {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: { id: true, name: true, discord_id: true }
+    });
+
+    if (!user) throw new Error('User not found');
+
+    const prompt = `Analyze authentication patterns for suspicious activity:
+User: ${user.name || user.id}
+Recent Authentication Attempts: ${authAttempts.length}
+
+Based on the authentication patterns, identify any suspicious activity and provide security recommendations. Consider factors like login frequency, timing, and connection patterns.`;
+
+    try {
+      const response = await this.openaiClient.chat.completions.create({
+        model: 'gpt-3.5-turbo',
+        messages: [{ role: 'user', content: prompt }],
+        max_tokens: 500
+      });
+      
+      return response.choices[0]?.message?.content || 'No suspicious activity detected';
+    } catch (error) {
+      console.error('OpenAI API error:', error);
+      return 'Activity analysis temporarily unavailable';
+    }
+  }
+
+  /**
+   * Generate user onboarding suggestions based on profile
+   * @param userId User ID
+   * @returns Personalized onboarding recommendations
+   */
+  async generateOnboardingSuggestions(userId: string): Promise<string> {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId }
+    });
+
+    if (!user) throw new Error('User not found');
+
+    const prompt = `Generate personalized onboarding suggestions for this new user:
+Username: ${user.name || 'New User'}
+Connected Services: ${[
+      user.discord_id ? 'Discord' : null,
+      user.worldanvil_id ? 'WorldAnvil' : null
+    ].filter(Boolean).join(', ') || 'None'}
+Account Age: ${user.createdAt ? Math.floor((Date.now() - new Date(user.createdAt).getTime()) / (1000 * 60 * 60 * 24)) : 0} days
+
+Provide helpful next steps and feature recommendations to help them get the most out of the platform.`;
+
+    try {
+      const response = await this.openaiClient.chat.completions.create({
+        model: 'gpt-3.5-turbo',
+        messages: [{ role: 'user', content: prompt }],
+        max_tokens: 500
+      });
+      
+      return response.choices[0]?.message?.content || 'Welcome! Explore the platform features.';
+    } catch (error) {
+      console.error('OpenAI API error:', error);
+      return 'Onboarding suggestions temporarily unavailable';
+    }
   }
 }

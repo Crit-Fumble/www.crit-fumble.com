@@ -2,7 +2,14 @@
  * Implementation for User-related functions and utilities
  */
 
-import { User } from './User';
+
+// User base type
+export interface User {
+  id: string;
+  email: string | null;
+  name?: string;
+  // Add other common user fields as needed
+}
 
 /**
  * Type guard to check if an object is a valid User

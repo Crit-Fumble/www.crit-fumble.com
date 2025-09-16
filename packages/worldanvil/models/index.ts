@@ -3,6 +3,7 @@
  */
 
 // Core models
+export * from './WorldAnvilConfig';
 export * from './WorldAnvilUser';
 export * from './WorldAnvilWorld';
 export * from './WorldAnvilVariable';

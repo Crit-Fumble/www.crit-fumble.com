@@ -1,6 +1,3 @@
-// Database client
-export * from '../clients/DatabaseClient';
-
 // Auth and User services
 export * from './AuthService';
 export * from './UserService';

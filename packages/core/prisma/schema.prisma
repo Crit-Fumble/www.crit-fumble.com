@@ -110,9 +110,6 @@ model User {
   RpgCharacter  RpgCharacter[]
 }
 
-// Deprecated tables removed: UserDiscord, UserDndBeyond, UserRoll20, UserWorldAnvil
-// External service data now comes from service APIs instead of database tables
-
 model VerificationToken {
   identifier String
   token      String   @unique
@@ -124,6 +121,7 @@ model VerificationToken {
 model RpgSystem {
   id                   String   @id @default(cuid())
   worldanvil_system_id String?  @unique
+  discord_guild_id     String?  @unique // Discord Guild Id
   discord_post_id      String?  @unique // Discord Forum Post Id
   discord_chat_id      String?  @unique // Discord Chat Channel Id
   discord_thread_id    String?  @unique // Discord Chat Thread Id

@@ -1,6 +1,11 @@
 {
   "compilerOptions": {
     /* Common base options for all packages */
+    "composite": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
@@ -12,18 +17,21 @@
     "strictNullChecks": true,
     
     /* Module resolution */
+    "module": "esnext",
     "moduleResolution": "node",
     "baseUrl": ".",
     
     /* Path mappings for workspace packages */
+    // TODO: add other packages when they are ready
     "paths": {
       "@crit-fumble/core/*": ["./packages/core/*"],
-      "@crit-fumble/discord/*": ["./packages/discord/*"],
-      "@crit-fumble/worldanvil/*": ["./packages/worldanvil/*"],
-      "@crit-fumble/openai/*": ["./packages/openai/*"],
-      "@crit-fumble/next/*": ["./packages/next/*"],
-      "@crit-fumble/discord-bot/*": ["./packages/discord-bot/*"]
+      "@crit-fumble/worldanvil/*": ["./packages/worldanvil/*"]
     }
   },
-  "exclude": ["node_modules", "**/dist/**"]
+  "exclude": ["node_modules", "**/dist/**"],
+  "references": [
+    { "path": "./packages/core" },
+    { "path": "./packages/worldanvil" },
+    { "path": "./packages/discord-bot" }
+  ]
 }

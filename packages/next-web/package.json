@@ -23,8 +23,7 @@
     "db:seed": "npx dotenv-cli -e .env.web -- npx prisma db seed --schema=../core/prisma/schema.prisma"
   },
   "dependencies": {
-    "@crit-fumble/core": "^6.8.2",
-    "@crit-fumble/next": "^14.2.14"
+    "@crit-fumble/core": "file:../core"
   },
   "devDependencies": {
     "@babel/core": "^7.28.3",

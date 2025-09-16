@@ -1,32 +1,24 @@
 {
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "target": "ES2020",
-    "module": "ESNext",
-    "lib": ["ESNext"],
-    "declaration": true,
     "outDir": "dist",
     "rootDir": ".",
-    "strict": true,
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "moduleResolution": "node",
-    "baseUrl": ".",
-    "paths": {
-      "@crit-fumble/core/*": ["./*/"]
-    }
+    "composite": true
   },
   "include": [
     "models/**/*",
-    "server/**/*",
+    "server/**/*", 
     "client/**/*",
-    "index.ts"
+    "utils/**/*",
+    "index.ts",
+    "prisma/**/*"
   ],
   "exclude": [
     "node_modules",
     "dist",
     "**/__tests__/**"
+  ],
+  "references": [
+    { "path": "../worldanvil" }
   ]
 }

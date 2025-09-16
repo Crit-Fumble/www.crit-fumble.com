@@ -1,5 +1,12 @@
 /**
- * Export all configuration types from this module
+ * Configuration system for Crit-Fumble
+ * 
+ * This module provides centralized configuration management for services
  */
 
-export * from './Config.d';
+// Export configuration objects
+export { default as servicesConfig } from './services';
+export * from './services';       // Named exports for individual services
+export * from './services.config'; // Services configuration
+export * from './auth.config';     // Auth configuration
+export * from './views';           // UI configuration

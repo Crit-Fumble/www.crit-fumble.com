@@ -1,21 +1,32 @@
 import { Prisma, RpgSession } from '@prisma/client';
-import { DatabaseClient } from '../clients/DatabaseClient';
+import { PrismaClient } from '@prisma/client';
+import { Client } from 'discord.js';
+import { WorldAnvilApiClient } from '@crit-fumble/worldanvil';
+import OpenAI from 'openai';
 
 /**
- * Service for managing RPG Sessions in the database
+ * Service for managing RPG Sessions with integrations across Discord, WorldAnvil, and OpenAI
  */
 export class RpgSessionService {
   /**
-   * Creates a new RPG Session service
+   * Creates a new RPG Session service with all necessary client dependencies
    * @param database Database client instance
+   * @param discordClient Discord API client instance
+   * @param worldAnvilClient WorldAnvil API client instance
+   * @param openAiClient OpenAI API client instance
    */
-  constructor(private database: DatabaseClient) {}
+  constructor(
+    private prisma: PrismaClient,
+    private readonly discordClient: Client,
+    private readonly worldAnvilClient: WorldAnvilApiClient,
+    private readonly openAiClient: OpenAI
+  ) {}
 
   /**
    * Get all RPG sessions
    */
   async getAll(): Promise<RpgSession[]> {
-    return this.database.client.rpgSession.findMany();
+    return this.prisma.rpgSession.findMany();
   }
 
   /**
@@ -23,7 +34,7 @@ export class RpgSessionService {
    * @param id RPG session ID
    */
   async getById(id: string): Promise<RpgSession | null> {
-    return this.database.client.rpgSession.findUnique({
+    return this.prisma.rpgSession.findUnique({
       where: { id }
     });
   }
@@ -33,7 +44,7 @@ export class RpgSessionService {
    * @param worldAnvilId WorldAnvil session ID
    */
   async getByWorldAnvilId(worldAnvilId: string): Promise<RpgSession | null> {
-    return this.database.client.rpgSession.findFirst({
+    return this.prisma.rpgSession.findFirst({
       where: { worldanvil_id: worldAnvilId }
     });
   }
@@ -43,7 +54,7 @@ export class RpgSessionService {
    * @param discordId Discord event ID for the session
    */
   async getByDiscordEventId(discordId: string): Promise<RpgSession | null> {
-    return this.database.client.rpgSession.findFirst({
+    return this.prisma.rpgSession.findFirst({
       where: { discord_event_id: discordId }
     });
   }
@@ -53,7 +64,7 @@ export class RpgSessionService {
    * @param partyId Party ID
    */
   async getByPartyId(partyId: string): Promise<RpgSession[]> {
-    return this.database.client.rpgSession.findMany({
+    return this.prisma.rpgSession.findMany({
       where: { rpg_party_id: partyId }
     });
   }
@@ -63,7 +74,7 @@ export class RpgSessionService {
    * @param query Search query
    */
   async search(query: string): Promise<RpgSession[]> {
-    return this.database.client.rpgSession.findMany({
+    return this.prisma.rpgSession.findMany({
       where: {
         OR: [
           {
@@ -91,7 +102,7 @@ export class RpgSessionService {
     
     // We would need a session_date field for this to work properly
     // This is a placeholder implementation assuming we eventually add that field
-    return this.database.client.rpgSession.findMany({
+    return this.prisma.rpgSession.findMany({
       where: {
         // Assuming we add a session_date field in the future
         // session_date: {
@@ -109,7 +120,7 @@ export class RpgSessionService {
    * @param data RPG session data
    */
   async create(data: Prisma.RpgSessionCreateInput): Promise<RpgSession> {
-    return this.database.client.rpgSession.create({
+    return this.prisma.rpgSession.create({
       data
     });
   }
@@ -120,7 +131,7 @@ export class RpgSessionService {
    * @param data Updated RPG session data
    */
   async update(id: string, data: Prisma.RpgSessionUpdateInput): Promise<RpgSession> {
-    return this.database.client.rpgSession.update({
+    return this.prisma.rpgSession.update({
       where: { id },
       data
     });
@@ -131,7 +142,7 @@ export class RpgSessionService {
    * @param id RPG session ID
    */
   async delete(id: string): Promise<RpgSession> {
-    return this.database.client.rpgSession.delete({
+    return this.prisma.rpgSession.delete({
       where: { id }
     });
   }
@@ -141,11 +152,69 @@ export class RpgSessionService {
    * @param sessionId Session ID
    */
   async getPartyForSession(sessionId: string) {
-    const session = await this.database.client.rpgSession.findUnique({
+    const session = await this.prisma.rpgSession.findUnique({
       where: { id: sessionId },
       include: { rpg_party: true }
     });
     
     return session?.rpg_party || null;
+  }
+
+  /**
+   * Setup Discord event for a session
+   * @param sessionId Session ID
+   * @param guildId Discord guild ID
+   * @param scheduledTime When the session is scheduled
+   */
+  async setupDiscordEvent(sessionId: string, guildId: string, scheduledTime: Date): Promise<void> {
+    const session = await this.getById(sessionId);
+    if (!session) {
+      throw new Error('Session not found');
+    }
+
+    // TODO: Use Discord client to create scheduled event
+    // const discordEvent = await this.discordClient.createScheduledEvent(guildId, {
+    //   name: session.title,
+    //   description: session.description,
+    //   scheduled_start_time: scheduledTime
+    // });
+    // await this.update(sessionId, { discord_event_id: discordEvent.id });
+  }
+
+  /**
+   * Sync session with WorldAnvil
+   * @param sessionId Session ID
+   * @param worldAnvilId WorldAnvil session ID
+   */
+  async syncWithWorldAnvil(sessionId: string, worldAnvilId: string): Promise<RpgSession> {
+    // TODO: Use WorldAnvil client to fetch session data
+    // const worldAnvilData = await this.worldAnvilClient.getSession(worldAnvilId);
+    
+    // Update session with WorldAnvil data
+    return this.update(sessionId, {
+      worldanvil_id: worldAnvilId,
+      // Map WorldAnvil data to our schema
+      // title: worldAnvilData.title,
+      // description: worldAnvilData.description
+    });
+  }
+
+  /**
+   * Generate AI-powered session content
+   * @param sessionId Session ID
+   * @param contentType Type of content to generate
+   */
+  async generateAIContent(sessionId: string, contentType: 'plot' | 'npcs' | 'encounters'): Promise<string> {
+    const session = await this.getById(sessionId);
+    if (!session) {
+      throw new Error('Session not found');
+    }
+
+    // TODO: Use OpenAI client to generate content
+    // const prompt = `Generate ${contentType} for RPG session: ${session.title}`;
+    // const response = await this.openAiClient.generateText(prompt);
+    // return response.text;
+
+    return `AI-generated ${contentType} for ${session.title} (not implemented yet)`;
   }
 }

@@ -1,21 +1,32 @@
 import { Prisma, RpgParty } from '@prisma/client';
-import { DatabaseClient } from '../clients/DatabaseClient';
+import { PrismaClient } from '@prisma/client';
+import { Client } from 'discord.js';
+import { WorldAnvilApiClient } from '@crit-fumble/worldanvil';
+import OpenAI from 'openai';
 
 /**
- * Service for managing RPG Parties in the database
+ * Service for managing RPG Parties with integrations across Discord, WorldAnvil, and OpenAI
  */
 export class RpgPartyService {
   /**
-   * Creates a new RPG Party service
+   * Creates a new RPG Party service with all necessary client dependencies
    * @param database Database client instance
+   * @param discordClient Discord API client instance
+   * @param worldAnvilClient WorldAnvil API client instance
+   * @param openAiClient OpenAI API client instance
    */
-  constructor(private database: DatabaseClient) {}
+  constructor(
+    private prisma: PrismaClient,
+    private readonly discordClient: Client,
+    private readonly worldAnvilClient: WorldAnvilApiClient,
+    private readonly openAiClient: OpenAI
+  ) {}
 
   /**
    * Get all RPG parties
    */
   async getAll(): Promise<RpgParty[]> {
-    return this.database.client.rpgParty.findMany();
+    return this.prisma.rpgParty.findMany();
   }
 
   /**
@@ -23,7 +34,7 @@ export class RpgPartyService {
    * @param id RPG party ID
    */
   async getById(id: string): Promise<RpgParty | null> {
-    return this.database.client.rpgParty.findUnique({
+    return this.prisma.rpgParty.findUnique({
       where: { id }
     });
   }
@@ -33,7 +44,7 @@ export class RpgPartyService {
    * @param worldAnvilId WorldAnvil party ID
    */
   async getByWorldAnvilId(worldAnvilId: string): Promise<RpgParty | null> {
-    return this.database.client.rpgParty.findUnique({
+    return this.prisma.rpgParty.findUnique({
       where: { worldanvil_party_id: worldAnvilId }
     });
   }
@@ -43,7 +54,7 @@ export class RpgPartyService {
    * @param discordId Discord role ID for the party
    */
   async getByDiscordRoleId(discordId: string): Promise<RpgParty | null> {
-    return this.database.client.rpgParty.findUnique({
+    return this.prisma.rpgParty.findUnique({
       where: { discord_role_id: discordId }
     });
   }
@@ -53,7 +64,7 @@ export class RpgPartyService {
    * @param campaignId Campaign ID
    */
   async getByCampaignId(campaignId: string): Promise<RpgParty[]> {
-    return this.database.client.rpgParty.findMany({
+    return this.prisma.rpgParty.findMany({
       where: { rpg_campaign_id: campaignId }
     });
   }
@@ -63,7 +74,7 @@ export class RpgPartyService {
    * @param sessionId Session ID
    */
   async getBySessionId(sessionId: string): Promise<RpgParty | null> {
-    return this.database.client.rpgParty.findFirst({
+    return this.prisma.rpgParty.findFirst({
       where: { rpg_sessions: { some: { id: sessionId } } }
     });
   }
@@ -73,7 +84,7 @@ export class RpgPartyService {
    * @param query Search query
    */
   async search(query: string): Promise<RpgParty[]> {
-    return this.database.client.rpgParty.findMany({
+    return this.prisma.rpgParty.findMany({
       where: {
         OR: [
           {
@@ -98,7 +109,7 @@ export class RpgPartyService {
    * @param data RPG party data
    */
   async create(data: Prisma.RpgPartyCreateInput): Promise<RpgParty> {
-    return this.database.client.rpgParty.create({
+    return this.prisma.rpgParty.create({
       data
     });
   }
@@ -109,7 +120,7 @@ export class RpgPartyService {
    * @param data Updated RPG party data
    */
   async update(id: string, data: Prisma.RpgPartyUpdateInput): Promise<RpgParty> {
-    return this.database.client.rpgParty.update({
+    return this.prisma.rpgParty.update({
       where: { id },
       data
     });
@@ -120,7 +131,7 @@ export class RpgPartyService {
    * @param id RPG party ID
    */
   async delete(id: string): Promise<RpgParty> {
-    return this.database.client.rpgParty.delete({
+    return this.prisma.rpgParty.delete({
       where: { id }
     });
   }
@@ -130,8 +141,65 @@ export class RpgPartyService {
    * @param partyId Party ID
    */
   async getPartyMembers(partyId: string) {
-    return this.database.client.rpgSheet.findMany({
+    return this.prisma.rpgSheet.findMany({
       where: { rpg_party_id: partyId }
     });
+  }
+
+  /**
+   * Setup Discord role for a party
+   * @param partyId Party ID
+   * @param guildId Discord guild ID
+   */
+  async setupDiscordRole(partyId: string, guildId: string): Promise<void> {
+    const party = await this.getById(partyId);
+    if (!party) {
+      throw new Error('Party not found');
+    }
+
+    // TODO: Use Discord client to create role for party
+    // const discordRole = await this.discordClient.createRole(guildId, {
+    //   name: party.title,
+    //   color: 0x00ff00, // Green color
+    //   mentionable: true
+    // });
+    // await this.update(partyId, { discord_role_id: discordRole.id });
+  }
+
+  /**
+   * Sync party with WorldAnvil
+   * @param partyId Party ID
+   * @param worldAnvilPartyId WorldAnvil party ID
+   */
+  async syncWithWorldAnvil(partyId: string, worldAnvilPartyId: string): Promise<RpgParty> {
+    // TODO: Use WorldAnvil client to fetch party data
+    // const worldAnvilData = await this.worldAnvilClient.getParty(worldAnvilPartyId);
+    
+    // Update party with WorldAnvil data
+    return this.update(partyId, {
+      worldanvil_party_id: worldAnvilPartyId,
+      // Map WorldAnvil data to our schema
+      // title: worldAnvilData.title,
+      // description: worldAnvilData.description
+    });
+  }
+
+  /**
+   * Generate AI-powered party content
+   * @param partyId Party ID
+   * @param contentType Type of content to generate
+   */
+  async generateAIContent(partyId: string, contentType: 'dynamics' | 'backstory' | 'goals'): Promise<string> {
+    const party = await this.getById(partyId);
+    if (!party) {
+      throw new Error('Party not found');
+    }
+
+    // TODO: Use OpenAI client to generate content
+    // const prompt = `Generate ${contentType} for RPG party: ${party.title}`;
+    // const response = await this.openAiClient.generateText(prompt);
+    // return response.text;
+
+    return `AI-generated ${contentType} for ${party.title} (not implemented yet)`;
   }
 }

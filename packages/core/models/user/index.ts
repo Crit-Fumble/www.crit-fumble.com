@@ -1,5 +1,2 @@
-// Export types from definition file
-export type { User, UserData, UserDiscord, UserDndBeyond, UserRoll20, UserWorldAnvil } from './User';
-
-// Export implementations
-export { isUser, isPartialUser } from './User';
+// Only export User type (deprecated types removed)
+export type { User } from './User';

@@ -2,7 +2,7 @@
  * Logger utility for application-wide logging with environment-based filtering
  * Provides a consistent API for logging that automatically disables verbose logs in production
  */
-import { isProduction, isDebugMode } from '../../models/configs/EnvironmentConfig';
+import { isProduction, isDebugMode } from '../../models/config/EnvironmentConfig';
 
 type LogLevel = 'debug' | 'info' | 'warn' | 'error';
 

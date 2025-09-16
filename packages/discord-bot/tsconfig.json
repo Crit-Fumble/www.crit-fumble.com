@@ -1,8 +1,9 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "outDir": "../../../dist/discord/bot",
+    "outDir": "dist",
     "rootDir": ".",
+    "composite": true,
     "baseUrl": ".",
     "paths": {
       "@crit-fumble/*": ["../../*"],
@@ -11,15 +12,14 @@
     }
   },
   "include": [
-    "**/*.ts",
-    "**/*.js",
-    "**/*.tsx",
-    "**/*.jsx"
+    "models/**/*",
+    "server/**/*",
+    "client/**/*",
+    "index.ts"
   ],
   "exclude": [
     "node_modules",
     "dist",
-    "**/*.test.ts",
-    "**/*.test.js"
-  ],
+    "**/__tests__/**"
+  ]
 }

@@ -2,7 +2,7 @@
  * Prisma client singleton for the core package
  */
 import { PrismaClient } from '@prisma/client';
-import { isProduction } from '../configs/EnvironmentConfig';
+import { isProduction } from '../config/EnvironmentConfig';
 
 // Create a singleton instance of the PrismaClient
 const prismaClientSingleton = () => {

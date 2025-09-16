@@ -8,35 +8,35 @@
   ],
   "scripts": {
     "build": "npm run build --workspaces --if-present",
+    "build:all": "tsc -b packages/core packages/discord packages/worldanvil packages/openai",
+    "clean": "find ./packages -type d -name dist -exec rm -rf {} +",
     "dev": "npm run dev --workspaces --if-present",
     "test": "npm run test --workspaces --if-present",
     "lint": "npm run lint --workspaces --if-present",
-    "lint:all": "npm run lint --workspaces"
+    "lint:all": "npm run lint --workspaces",
+    "create-package": "node scripts/create-package.js",
+    "create-component": "node scripts/create-component.js"
   },
   "dependencies": {
     "@crit-fumble/core": "file:packages/core",
-    "@crit-fumble/discord": "file:packages/discord",
-    "@crit-fumble/discord-bot": "file:packages/discord-bot",
-    "@crit-fumble/next": "file:packages/next",
-    "@crit-fumble/next-web": "file:packages/next-web",
-    "@crit-fumble/openai": "file:packages/openai",
-    "@crit-fumble/worldanvil": "file:packages/worldanvil"
+    "@crit-fumble/worldanvil": "file:packages/worldanvil",
+    "effect": "^3.17.13"
   },
   "devDependencies": {
-    "typescript": "^5.8.2",
     "@babel/core": "^7.28.3",
     "@babel/preset-env": "^7.28.3",
     "@types/jest": "^29.5.14",
     "@types/node": "^20.17.24",
-    "eslint": "^8",
     "@typescript-eslint/eslint-plugin": "^6.21.0",
     "@typescript-eslint/parser": "^6.21.0",
+    "eslint": "^8",
+    "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-prettier": "^5.1.3",
     "eslint-plugin-react": "^7.33.2",
     "eslint-plugin-react-hooks": "^4.6.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-prettier": "^5.1.3",
     "jest": "^29.7.0",
-    "ts-node": "^10.9.2"
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.2"
   }
 }

@@ -16,7 +16,5 @@ export * as client from './client/index';
 // Server-side exports (Node.js only)
 export * as server from './server';
 
-// Specialized package exports
-export * as discord from '@crit-fumble/discord';
+// Specialized package exports (only keeping WorldAnvil as it has no official SDK)
 export * as worldanvil from '@crit-fumble/worldanvil';
-export * as openai from '@crit-fumble/openai';
