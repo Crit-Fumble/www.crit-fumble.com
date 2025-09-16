@@ -1,0 +1,45 @@
+{
+    "name": "@crit-fumble/react",
+    "version": "18.0.0",
+    "description": "React components and hooks for the Crit-Fumble application",
+    "main": "index.js",
+    "types": "index.d.ts",
+    "keywords": [
+        "crit-fumble",
+        "react",
+        "components",
+        "hooks"
+    ],
+    "author": "Crit-Fumble",
+    "license": "MIT",
+    "engines": {
+        "node": ">=22.0.0",
+        "npm": ">=9.0.0"
+    },
+    "peerDependencies": {
+        "react": "^18",
+        "react-dom": "^18"
+    },
+    "dependencies": {
+        "@crit-fumble/core": "workspace:*",
+        "react-hook-form": "^7.51.2",
+        "react-hot-toast": "^2.5.2"
+    },
+    "devDependencies": {
+        "@types/react": "^18",
+        "@types/react-dom": "^18",
+        "@typescript-eslint/eslint-plugin": "^6.21.0",
+        "@typescript-eslint/parser": "^6.21.0",
+        "eslint": "^8",
+        "eslint-plugin-import": "^2.29.1",
+        "eslint-plugin-react": "^7.33.2",
+        "eslint-plugin-react-hooks": "^4.6.0",
+        "typescript": "^5.8.2"
+    },
+    "scripts": {
+        "build": "tsc",
+        "clean": "rm -rf dist *.js *.d.ts *.d.ts.map *.js.map",
+        "dev": "tsc --watch",
+        "lint": "eslint ."
+    }
+}

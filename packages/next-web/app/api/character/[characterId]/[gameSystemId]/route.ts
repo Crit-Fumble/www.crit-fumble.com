@@ -2,14 +2,14 @@
  * Character Sheet API - ID-based routes for game system specific character sheets
  * 
  * IMPORTANT: These routes use character ID for all operations on game system specific character sheets.
- * - GET: Retrieve character sheet data using characterId and gameSystemId 
- * - POST: Create/Update character sheet data using characterId and gameSystemId
- * - DELETE: Delete character sheet using characterId and gameSystemId
+ * - GET: Retrieve character sheet data using characterId and rpgSystemId 
+ * - POST: Create/Update character sheet data using characterId and rpgSystemId
+ * - DELETE: Delete character sheet using characterId and rpgSystemId
  *
  * Character ID must be used for all mutation operations (POST, DELETE) for character sheets
  * as it provides a stable identifier that won't change if the character's name/slug changes.
  *
- * The gameSystemId parameter determines which game system's sheet format is being used.
+ * The rpgSystemId parameter determines which game system's sheet format is being used.
  * Currently supported: 'dnd5e'
  */
 import { 
@@ -17,7 +17,7 @@ import {
   handleDeleteDnd5eCharacterSheet 
 } from '@crit-fumble/next/controllers/Character/Dnd5eCharacterSheetController';
 import { NextRequest, NextResponse } from 'next/server';
-import { getCharacterById } from '@crit-fumble/next/services/GameSystem/Base/Character/CharacterService';
+import { getCharacterById } from '@crit-fumble/next/services/RpgSystem/Base/Character/CharacterService';
 import { Character } from '@crit-fumble/models/Character/Character';
 
 export async function GET(

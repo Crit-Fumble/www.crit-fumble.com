@@ -1,5 +1,4 @@
-import { Prisma } from '@prisma/client';
-import { PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient } from '@prisma/client';
 import { Client } from 'discord.js';
 import { WorldAnvilApiClient, WorldAnvilWorld } from '@crit-fumble/worldanvil';
 import OpenAI from 'openai';
@@ -55,9 +54,12 @@ export class RpgWorldService {
    * @param systemId RPG system ID
    */
   async getBySystemId(systemId: string): Promise<RpgWorld[]> {
-    return this.prisma.rpgWorld.findMany({
-      where: { rpg_system_id: systemId }
+    const worldSystems = await this.prisma.rpgWorldSystem.findMany({
+      where: { system_id: systemId },
+      include: { world: true }
     });
+
+    return worldSystems.map(ws => ws.world);
   }
 
   /**
@@ -190,5 +192,119 @@ export class RpgWorldService {
     // return response.text;
 
     return `AI-generated ${regionType} description for ${world.title} (not implemented yet)`;
+  }
+
+  /**
+   * Add a system to a world (many-to-many relationship)
+   * @param worldId World ID
+   * @param systemId System ID  
+   * @param isPrimary Whether this should be the primary system for the world
+   */
+  async addSystemToWorld(worldId: string, systemId: string, isPrimary: boolean = false): Promise<void> {
+    // If this is being set as primary, unset any existing primary systems
+    if (isPrimary) {
+      await this.prisma.rpgWorldSystem.updateMany({
+        where: { world_id: worldId, is_primary: true },
+        data: { is_primary: false }
+      });
+    }
+
+    await this.prisma.rpgWorldSystem.upsert({
+      where: {
+        world_id_system_id: {
+          world_id: worldId,
+          system_id: systemId
+        }
+      },
+      create: {
+        world_id: worldId,
+        system_id: systemId,
+        is_primary: isPrimary
+      },
+      update: {
+        is_primary: isPrimary
+      }
+    });
+  }
+
+  /**
+   * Remove a system from a world
+   * @param worldId World ID
+   * @param systemId System ID
+   */
+  async removeSystemFromWorld(worldId: string, systemId: string): Promise<void> {
+    await this.prisma.rpgWorldSystem.deleteMany({
+      where: {
+        world_id: worldId,
+        system_id: systemId
+      }
+    });
+  }
+
+  /**
+   * Get all systems for a world
+   * @param worldId World ID
+   */
+  async getWorldSystems(worldId: string): Promise<Array<{ system: any; isPrimary: boolean; createdAt: Date }>> {
+    const worldSystems = await this.prisma.rpgWorldSystem.findMany({
+      where: { world_id: worldId },
+      include: { system: true },
+      orderBy: [
+        { is_primary: 'desc' }, // Primary system first
+        { created_at: 'asc' }   // Then by creation date
+      ]
+    });
+
+    return worldSystems.map((ws: any) => ({
+      system: ws.system,
+      isPrimary: ws.is_primary,
+      createdAt: ws.created_at
+    }));
+  }
+
+  /**
+   * Get the primary system for a world
+   * @param worldId World ID
+   */
+  async getPrimaryWorldSystem(worldId: string): Promise<any | null> {
+    const primaryWorldSystem = await this.prisma.rpgWorldSystem.findFirst({
+      where: { 
+        world_id: worldId,
+        is_primary: true
+      },
+      include: { system: true }
+    });
+
+    return primaryWorldSystem?.system || null;
+  }
+
+  /**
+   * Set the primary system for a world
+   * @param worldId World ID
+   * @param systemId System ID to set as primary
+   */
+  async setPrimarySystem(worldId: string, systemId: string): Promise<any> {
+    return await this.prisma.$transaction(async (prisma) => {
+      // First, unset any existing primary system
+      await this.prisma.rpgWorldSystem.updateMany({
+        where: { 
+          world_id: worldId,
+          is_primary: true
+        },
+        data: { is_primary: false }
+      });
+
+      // Then set the new primary system
+      return await this.prisma.rpgWorldSystem.update({
+        where: {
+          world_id_system_id: {
+            world_id: worldId,
+            system_id: systemId
+          }
+        },
+        data: { is_primary: true },
+        include: { system: true }
+      });
+    });
   }
 }

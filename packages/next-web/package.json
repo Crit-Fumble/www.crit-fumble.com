@@ -3,6 +3,10 @@
   "version": "0.2.0",
   "private": true,
   "type": "module",
+  "engines": {
+    "node": ">=22.0.0",
+    "npm": ">=9.0.0"
+  },
   "scripts": {
     "dev": "npx dotenv-cli -e .env.web -- next dev",
     "build": "npx dotenv-cli -e .env.web -- next build",
@@ -23,7 +27,12 @@
     "db:seed": "npx dotenv-cli -e .env.web -- npx prisma db seed --schema=../core/prisma/schema.prisma"
   },
   "dependencies": {
-    "@crit-fumble/core": "file:../core"
+    "@crit-fumble/core": "file:../core",
+    "@crit-fumble/react": "file:../react",
+    "next": "^14.2.14",
+    "next-auth": "^4.24.11",
+    "react": "^18",
+    "react-dom": "^18"
   },
   "devDependencies": {
     "@babel/core": "^7.28.3",
@@ -31,10 +40,15 @@
     "@types/node": "^20.17.24",
     "@types/react": "^18",
     "@types/react-dom": "^18",
+    "@typescript-eslint/eslint-plugin": "^6.21.0",
+    "@typescript-eslint/parser": "^6.21.0",
     "autoprefixer": "^10.0.1",
     "babel-jest": "^30.0.5",
     "eslint": "^8",
     "eslint-config-next": "14.1.4",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
     "postcss": "^8",
     "tailwindcss": "^3.3.0",
     "typescript": "^5.8.2"

@@ -7,6 +7,14 @@ import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from 'axios';
 import { WorldAnvilUser } from '../models/WorldAnvilUser';
 import { WorldAnvilWorld } from '../models/WorldAnvilWorld';
 import { getWorldAnvilConfig } from '../models/WorldAnvilConfig';
+import {
+  WorldAnvilOAuthConfig,
+  WorldAnvilAuthUrlParams,
+  WorldAnvilTokenExchangeParams,
+  WorldAnvilTokenResponse,
+  WorldAnvilOAuthUserProfile,
+  WorldAnvilOAuthResult
+} from '../models/WorldAnvilOAuth';
 
 /**
  * Interface to define HTTP client functionality for dependency injection
@@ -26,6 +34,7 @@ export interface WorldAnvilApiClientConfig {
   apiUrl?: string;
   apiKey?: string;
   accessToken?: string;
+  oauth?: WorldAnvilOAuthConfig;
 }
 
 export class WorldAnvilApiClient {
@@ -217,5 +226,198 @@ export class WorldAnvilApiClient {
    */
   async getWorldById(worldId: string): Promise<WorldAnvilWorld> {
     return this.get<WorldAnvilWorld>(`/world/${worldId}`);
+  }
+
+  // OAuth2 Methods
+
+  /**
+   * Generate WorldAnvil OAuth2 authorization URL
+   * Note: Requires oauth configuration to be set
+   */
+  getOAuthAuthorizationUrl(state?: string): string {
+    const config = (this as any).config?.oauth;
+    if (!config) {
+      throw new Error('OAuth configuration not provided');
+    }
+
+    const params = new URLSearchParams({
+      client_id: config.clientId,
+      redirect_uri: config.redirectUri,
+      response_type: 'code',
+      scope: config.scopes.join(' '),
+    });
+
+    if (state) {
+      params.set('state', state);
+    }
+
+    // Note: This is a placeholder URL - actual WorldAnvil OAuth endpoints need to be confirmed
+    return `https://www.worldanvil.com/oauth/authorize?${params.toString()}`;
+  }
+
+  /**
+   * Exchange OAuth authorization code for access token
+   * Note: Implementation pending WorldAnvil OAuth2 documentation
+   */
+  async exchangeCodeForToken(code: string, state?: string): Promise<WorldAnvilOAuthResult> {
+    const config = (this as any).config?.oauth;
+    if (!config) {
+      return {
+        success: false,
+        error: 'OAuth configuration not provided'
+      };
+    }
+
+    try {
+      const tokenData = new URLSearchParams({
+        client_id: config.clientId,
+        client_secret: config.clientSecret,
+        grant_type: 'authorization_code',
+        code: code,
+        redirect_uri: config.redirectUri,
+      });
+
+      // Note: This endpoint URL is a placeholder - actual WorldAnvil OAuth endpoints need to be confirmed
+      const response = await fetch('https://www.worldanvil.com/oauth/token', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'User-Agent': 'Crit-Fumble/1.0',
+        },
+        body: tokenData.toString(),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`HTTP ${response.status}: ${errorText}`);
+      }
+
+      const tokens: WorldAnvilTokenResponse = await response.json();
+
+      // Get user profile with the access token
+      const userProfile = await this.getOAuthUserProfile(tokens.access_token);
+
+      return {
+        success: true,
+        user: userProfile,
+        tokens,
+      };
+    } catch (error) {
+      console.error('WorldAnvil OAuth token exchange error:', error);
+      return {
+        success: false,
+        error: error instanceof Error ? error.message : 'Unknown OAuth error'
+      };
+    }
+  }
+
+  /**
+   * Get user profile using OAuth access token
+   * Note: Implementation pending WorldAnvil user API documentation
+   */
+  async getOAuthUserProfile(accessToken: string): Promise<WorldAnvilOAuthUserProfile> {
+    try {
+      // Note: This endpoint URL is a placeholder - actual WorldAnvil user API endpoints need to be confirmed
+      const response = await fetch('https://www.worldanvil.com/api/v1/user/me', {
+        headers: {
+          'Authorization': `Bearer ${accessToken}`,
+          'User-Agent': 'Crit-Fumble/1.0',
+        },
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`HTTP ${response.status}: ${errorText}`);
+      }
+
+      const userData = await response.json();
+
+      return {
+        id: userData.id,
+        username: userData.username,
+        displayName: userData.displayName || userData.username,
+        email: userData.email,
+        avatar: userData.avatar,
+        isPremium: userData.isPremium,
+        subscription: userData.subscription,
+      };
+    } catch (error) {
+      console.error('Failed to get WorldAnvil user profile:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Refresh OAuth access token
+   * Note: Implementation pending WorldAnvil OAuth2 refresh token support
+   */
+  async refreshOAuthToken(refreshToken: string): Promise<WorldAnvilTokenResponse> {
+    const config = (this as any).config?.oauth;
+    if (!config) {
+      throw new Error('OAuth configuration not provided');
+    }
+
+    try {
+      const tokenData = new URLSearchParams({
+        client_id: config.clientId,
+        client_secret: config.clientSecret,
+        grant_type: 'refresh_token',
+        refresh_token: refreshToken,
+      });
+
+      // Note: This endpoint URL is a placeholder - actual WorldAnvil OAuth endpoints need to be confirmed
+      const response = await fetch('https://www.worldanvil.com/oauth/token', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'User-Agent': 'Crit-Fumble/1.0',
+        },
+        body: tokenData.toString(),
+      });
+
+      if (!response.ok) {
+        const errorText = await response.text();
+        throw new Error(`HTTP ${response.status}: ${errorText}`);
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Failed to refresh WorldAnvil token:', error);
+      throw error;
+    }
+  }
+
+  /**
+   * Revoke OAuth access token
+   * Note: Implementation pending WorldAnvil OAuth2 token revocation support
+   */
+  async revokeOAuthToken(accessToken: string): Promise<boolean> {
+    const config = (this as any).config?.oauth;
+    if (!config) {
+      throw new Error('OAuth configuration not provided');
+    }
+
+    try {
+      const tokenData = new URLSearchParams({
+        client_id: config.clientId,
+        client_secret: config.clientSecret,
+        token: accessToken,
+      });
+
+      // Note: This endpoint URL is a placeholder - actual WorldAnvil OAuth endpoints need to be confirmed
+      const response = await fetch('https://www.worldanvil.com/oauth/revoke', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded',
+          'User-Agent': 'Crit-Fumble/1.0',
+        },
+        body: tokenData.toString(),
+      });
+
+      return response.ok;
+    } catch (error) {
+      console.error('Failed to revoke WorldAnvil token:', error);
+      return false;
+    }
   }
 }

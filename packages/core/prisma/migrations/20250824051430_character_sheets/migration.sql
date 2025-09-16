@@ -20,7 +20,7 @@ CREATE TABLE "CharacterSheet" (
 
 -- Add foreign key constraints
 ALTER TABLE "CharacterSheet" ADD CONSTRAINT "CharacterSheet_character_id_fkey" FOREIGN KEY ("character_id") REFERENCES "Character"("id") ON DELETE CASCADE ON UPDATE CASCADE;
-ALTER TABLE "CharacterSheet" ADD CONSTRAINT "CharacterSheet_rpg_system_id_fkey" FOREIGN KEY ("rpg_system_id") REFERENCES "GameSystem"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+ALTER TABLE "CharacterSheet" ADD CONSTRAINT "CharacterSheet_rpg_system_id_fkey" FOREIGN KEY ("rpg_system_id") REFERENCES "RpgSystem"("id") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- Alter Character table to remove redundant fields
 DO $$ 
@@ -57,7 +57,7 @@ ALTER TABLE "Character" ADD COLUMN "description" TEXT;
 
 -- Keep sheet_data fields on all tables as they're still needed
 
--- Update Campaign model to properly reference GameSystem
+-- Update Campaign model to properly reference RpgSystem
 DO $$ 
 BEGIN 
     IF EXISTS (SELECT 1 FROM information_schema.columns WHERE table_name='Campaign' AND column_name='system') THEN
@@ -65,7 +65,7 @@ BEGIN
     END IF;
 END $$;
 ALTER TABLE "Campaign" ADD COLUMN "rpg_system_id" TEXT;
-ALTER TABLE "Campaign" ADD CONSTRAINT "Campaign_rpg_system_id_fkey" FOREIGN KEY ("rpg_system_id") REFERENCES "GameSystem"("id") ON DELETE SET NULL;
+ALTER TABLE "Campaign" ADD CONSTRAINT "Campaign_rpg_system_id_fkey" FOREIGN KEY ("rpg_system_id") REFERENCES "RpgSystem"("id") ON DELETE SET NULL;
 
 -- Update Party model to properly reference Campaign
 DO $$ 

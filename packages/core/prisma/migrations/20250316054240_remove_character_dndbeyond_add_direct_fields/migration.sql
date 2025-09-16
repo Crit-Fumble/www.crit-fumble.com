@@ -32,4 +32,4 @@ ALTER TABLE "Character" ADD CONSTRAINT "Character_campaign_id_fkey" FOREIGN KEY 
 ALTER TABLE "Character" ADD CONSTRAINT "Character_party_id_fkey" FOREIGN KEY ("party_id") REFERENCES "Party"("id") ON DELETE SET NULL ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Character" ADD CONSTRAINT "Character_rpg_system_id_fkey" FOREIGN KEY ("rpg_system_id") REFERENCES "GameSystem"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Character" ADD CONSTRAINT "Character_rpg_system_id_fkey" FOREIGN KEY ("rpg_system_id") REFERENCES "RpgSystem"("id") ON DELETE SET NULL ON UPDATE CASCADE;

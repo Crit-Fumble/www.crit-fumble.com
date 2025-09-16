@@ -8,6 +8,7 @@ export * from './WorldAnvilUser';
 export * from './WorldAnvilWorld';
 export * from './WorldAnvilVariable';
 export * from './WorldAnvilRpgSystem';
+export * from './WorldAnvilOAuth';
 
 // Content models
 export * from './WorldAnvilArticle';

@@ -23,7 +23,7 @@
   - You are about to drop the `CampaignWorldAnvil` table. If the table is not empty, all the data it contains will be lost.
   - You are about to drop the `CharacterSheet` table. If the table is not empty, all the data it contains will be lost.
   - You are about to drop the `GameSession` table. If the table is not empty, all the data it contains will be lost.
-  - You are about to drop the `GameSystem` table. If the table is not empty, all the data it contains will be lost.
+  - You are about to drop the `RpgSystem` table. If the table is not empty, all the data it contains will be lost.
   - You are about to drop the `Party` table. If the table is not empty, all the data it contains will be lost.
   - You are about to drop the `PartyDiscord` table. If the table is not empty, all the data it contains will be lost.
   - You are about to drop the `PartyDndBeyond` table. If the table is not empty, all the data it contains will be lost.
@@ -143,7 +143,7 @@ DROP TABLE "public"."CharacterSheet";
 DROP TABLE "public"."GameSession";
 
 -- DropTable
-DROP TABLE "public"."GameSystem";
+DROP TABLE "public"."RpgSystem";
 
 -- DropTable
 DROP TABLE "public"."Party";
