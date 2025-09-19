@@ -11,8 +11,10 @@
     "npm": ">=9.0.0"
   },
   "scripts": {
-    "build": "npm run build --workspaces --if-present",
+    "build": "npm run build --workspace=@crit-fumble/core && npm run build --workspace=@crit-fumble/next-web",
+    "build:vercel": "npm run build --workspace=@crit-fumble/worldanvil --if-present && npm run build --workspace=@crit-fumble/core && npm run build --workspace=@crit-fumble/next-web",
     "build:all": "tsc -b",
+    "build:workspaces": "npm run build --workspaces --if-present",
     "build:optimized": "node scripts/build-optimized.js build",
     "build:clean": "tsc -b --clean",
     "build:force": "tsc -b --force",

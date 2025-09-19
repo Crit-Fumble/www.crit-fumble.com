@@ -7,9 +7,14 @@
       "esnext"
     ],
     "allowJs": true,
-    "emitDeclarationOnly": true,
-    "incremental": true,
-    "tsBuildInfoFile": "dist/.tsbuildinfo",
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
     "jsx": "preserve",
     "outDir": "dist",
     "rootDir": ".",
@@ -36,7 +41,6 @@
         "./app/utils/*"
       ]
     },
-    "noEmit": false,
     "isolatedModules": true
   },
   "include": [
