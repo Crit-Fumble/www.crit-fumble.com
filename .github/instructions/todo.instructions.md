@@ -8,10 +8,11 @@ applyTo: '**'
 - uses @crit-fumble/core and @crit-fumble/react
 - contains Next.js specific views and controllers in lib/ directory
 - deploys to vercel
-### packages/discord-bot: Discord bot
-- uses @crit-fumble/core directly (no wrapper packages)
+### agents/discord: Discord bot deployment
+- uses @crit-fumble/core directly (published npm package v6.16.4)
 - uses Discord.js SDK directly
-- deploys to a Fly.io instance
+- deployed to Fly.io (shared-cpu-1x@256MB)
+- planned migration to @crit-fumble/types for memory optimization
 ### packages/core: Shared data models, services, and utilities
 - contains models, utils, controllers, and services shared by all applications
 - contains 100% of the database schema, configuration, migration, utils, and controllers
@@ -24,6 +25,11 @@ applyTo: '**'
 - framework-agnostic React components, hooks, and providers
 - no Next.js dependencies - uses only React and @crit-fumble/core
 - used by next-web and any future React-based applications
+### packages/types: Lightweight type-only package
+- provides TypeScript interfaces and types without runtime dependencies
+- 75% smaller than core package (156K vs 631K)
+- planned for Discord bot memory optimization on Fly.io
+- contains auth, discord, config, and session types
 ### packages/worldanvil: World Anvil integration library
 - wrapper package for World Anvil API (WorldAnvil has no official SDK)
 - provides models, services, and controllers for World Anvil integration
@@ -151,21 +157,45 @@ applyTo: '**'
 - [FUTURE] implement a "Marketplace" currency system "Crit-Coins" in packages\core\server\services\coinService.ts; the name of the  coins can be determined in a config we will pass in from the host project; we need methods to add and remove coins; we will build a wrapper package for stripe to handle the payment processing in the future, but we will want some methods we can use during the testing phase to give our coins for free
 - [FUTURE] create a server controller for the coinService in packages\core\server\controllers\coinController.ts
 
-### @crit-fumble/discord-bot
+### @crit-fumble/types
+- [BOT-TODO] Complete types package architecture for lightweight Discord bot
+  - Created initial @crit-fumble/types package (156K vs 631K core package - 75% reduction)
+  - Added basic types: SessionTypes, SsoTypes, DiscordTypes, ConfigTypes
+  - TODO: Audit all communication between website and persistent agent
+  - TODO: Ensure types cover all API endpoints the bot will call
+  - TODO: Add Prisma-generated types for database models (without Prisma runtime)
+  - TODO: Add RPG/gaming specific types (campaigns, characters, sessions, etc.)
+  - TODO: Add cron job and scheduled event types
+  - TODO: Publish @crit-fumble/types to npm
+  - TODO: Update Discord bot to use @crit-fumble/types instead of @crit-fumble/core
+  - TODO: Update bot architecture to call Next.js API endpoints instead of direct database
+  - TODO: Verify bot memory usage drops below 256MB threshold on Fly.io
+  - TODO: Test full communication flow: bot → API → database → response
+
+### agents/discord (Discord bot)
 - [COMPLETED] Fix import paths that don't match actual file locations
   - Removed dependencies on deleted @crit-fumble/discord wrapper package
   - Updated to use Discord.js SDK directly
   - Simplified architecture to use website API endpoints instead of direct database access
+- [COMPLETED] deploy fumblebot
+  - Successfully deployed to Fly.io (shared-cpu-1x@256MB)
+  - Published @crit-fumble/core@6.16.4 to npm with TypeScript fixes
+  - Updated package.json to use npm dependency instead of file: reference
+  - Bot is now online and operational
 - [BOT-TODO] read in all env vars and set up lib configs
 - [BOT-TODO] Set up CI checks to prevent future violations
 - [BOT-TODO] remove all completed FUTURE: and TODO: comments in code base
-- [BOT-TODO] deploy fumblebot
 - [BOT-TODO] Ensure persistent bot is processing scheduled cron tasks
   - Updated HandleScheduledEvents to work without wrapper dependencies
   - Uses node-cron directly for scheduling
 - [BOT-TODO] Update bot to use website endpoints for command execution
 - [BOT-TODO] Update bot to use website endpoints for event handling
 - [BOT-TODO] Update bot to use website endpoints for user authentication
+- [BOT-TODO] Migrate from @crit-fumble/core to @crit-fumble/types for memory optimization
+  - Current: 631K core package, Target: 156K types package (75% reduction)
+  - Update imports to use lightweight type-only package
+  - Ensure all bot-website communication uses API endpoints
+  - Verify memory usage stays under 256MB Fly.io limit
 
 ### @crit-fumble/react
 - [BOT-TODO] Make session providers completely framework-agnostic
@@ -187,7 +217,7 @@ applyTo: '**'
   - Implement Discord OAuth2 flow for authentication
   - Create auth service supporting multiple SSO providers (Discord initially, WorldAnvil future)
   - Update session management to work with Discord SSO
-- [BOT-TODO] Set up an api endpoint collection for use with the discord-bot we'll be updating later in packages\discord-bot
+- [BOT-TODO] Set up an api endpoint collection for use with the discord bot (agents/discord)
 - [FUTURE] Add WorldAnvil SSO support to authentication system
 - [FUTURE] Add support for additional SSO providers as needed
 - [FUTURE] Set up an api endpoint collection for use by a Discord App
@@ -195,8 +225,8 @@ applyTo: '**'
 - [BOT-TODO] remove all completed FUTURE: and TODO: comments in code base
 
 
-### @crit-fumble/discord-bot (revisited)
-- [BOT-TODO] update deployment to use vast.ai ()
+### agents/discord (revisited - deployment optimization)
+- [BOT-TODO] update deployment to use vast.ai (if Fly.io memory constraints persist)
 - [BOT-TODO] offload operations to next-web api whenever possible
 -----------------------------------------------------------------------------
 

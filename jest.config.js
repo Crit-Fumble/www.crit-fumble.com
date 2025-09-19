@@ -1,7 +1,12 @@
 export default {
   moduleFileExtensions: ['js', 'json', 'ts', 'tsx'],
   transform: {
-    '^.+\.(js|jsx|ts|tsx)$': 'babel-jest'
+    '^.+\.(js|jsx|ts|tsx)$': ['babel-jest', {
+      presets: [
+        ['@babel/preset-env', { targets: { node: 'current' } }],
+        '@babel/preset-typescript'
+      ]
+    }]
   },
   testEnvironment: 'node',
   moduleNameMapper: {

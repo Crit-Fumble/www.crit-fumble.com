@@ -292,7 +292,7 @@ export class WorldAnvilApiClient {
         throw new Error(`HTTP ${response.status}: ${errorText}`);
       }
 
-      const tokens: WorldAnvilTokenResponse = await response.json();
+      const tokens = await response.json() as WorldAnvilTokenResponse;
 
       // Get user profile with the access token
       const userProfile = await this.getOAuthUserProfile(tokens.access_token);
@@ -330,7 +330,7 @@ export class WorldAnvilApiClient {
         throw new Error(`HTTP ${response.status}: ${errorText}`);
       }
 
-      const userData = await response.json();
+      const userData = await response.json() as any;
 
       return {
         id: userData.id,
@@ -380,7 +380,7 @@ export class WorldAnvilApiClient {
         throw new Error(`HTTP ${response.status}: ${errorText}`);
       }
 
-      return await response.json();
+      return await response.json() as WorldAnvilTokenResponse;
     } catch (error) {
       console.error('Failed to refresh WorldAnvil token:', error);
       throw error;

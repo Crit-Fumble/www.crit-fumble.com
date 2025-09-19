@@ -1,10 +1,55 @@
 {
   "files": [],
   "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./packages/core" },
-    { "path": "./packages/react" },
-    { "path": "./packages/worldanvil" },
-    { "path": "./agents/discord" }
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./packages/core"
+    },
+    {
+      "path": "./packages/types"
+    },
+    {
+      "path": "./packages/react"
+    },
+    {
+      "path": "./packages/worldanvil"
+    },
+    {
+      "path": "./agents/discord"
+    }
+  ],
+  "compilerOptions": {
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
+    "allowJs": true,
+    "skipLibCheck": true,
+    "strict": false,
+    "noEmit": true,
+    "incremental": true,
+    "module": "esnext",
+    "esModuleInterop": true,
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "jsx": "preserve",
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
+  },
+  "include": [
+    "next-env.d.ts",
+    ".next/types/**/*.ts",
+    "**/*.ts",
+    "**/*.tsx"
+  ],
+  "exclude": [
+    "node_modules"
   ]
 }
