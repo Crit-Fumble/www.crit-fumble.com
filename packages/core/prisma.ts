@@ -1,5 +1,5 @@
 import { PrismaClient } from '@prisma/client';
-import { isDevelopment, isProduction } from './models/configs/EnvironmentConfig';
+import { isDevelopment, isProduction } from './models/config/EnvironmentConfig';
 
 // PrismaClient is attached to the `global` object in development to prevent
 // exhausting your database connection limit during hot reloading.
