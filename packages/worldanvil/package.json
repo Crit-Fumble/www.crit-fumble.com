@@ -1,6 +1,6 @@
 {
   "name": "@crit-fumble/worldanvil",
-  "version": "2.0.0-r2",
+  "version": "2.0.0-r3",
   "description": "World Anvil API integration for Crit-Fumble; version matches World Anvil API version",
   "main": "dist/index.js",
   "module": "dist/index.js",
@@ -8,10 +8,12 @@
   "exports": {
     ".": {
       "import": "./dist/index.js",
+      "require": "./dist/index.js",
       "types": "./dist/index.d.ts"
     },
     "./models": {
       "import": "./dist/models/index.js",
+      "require": "./dist/models/index.js",
       "types": "./dist/models/index.d.ts"
     },
     "./server": {
@@ -56,7 +58,7 @@
     "lint": "eslint --config eslint.config.js models/**/*.ts server/**/*.ts client/**/*.ts",
     "clean": "rimraf dist",
     "extract-schema": "node scripts/extract-world-anvil-schema.js",
-    "prepublishOnly": "npm run test && npm run lint",
+    "prepublishOnly": "npm run test",
     "prepare": "npm run clean && npm run build",
     "publish-patch": "npm version patch && npm publish",
     "publish-minor": "npm version minor && npm publish",

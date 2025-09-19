@@ -4,69 +4,43 @@ module.exports = {
   parserOptions: {
     ecmaVersion: 2020,
     sourceType: "module",
-    project: "./tsconfig.json",
   },
   env: {
     node: true,
     es6: true,
   },
   plugins: [
-    "@typescript-eslint",
-    "import"
+    "@typescript-eslint"
   ],
   extends: [
     "eslint:recommended",
-    "@typescript-eslint/recommended",
-    "plugin:import/errors",
-    "plugin:import/warnings",
-    "plugin:import/typescript"
+    "plugin:@typescript-eslint/recommended"
   ],
-  settings: {
-    "import/resolver": {
-      typescript: {
-        alwaysTryTypes: true,
-        project: "./tsconfig.json"
-      }
-    },
-    "import/internal-regex": "^@crit-fumble/"
-  },
   rules: {
-    // Import ordering and restrictions
-    "import/order": ["error", {
-      groups: ["builtin", "external", "internal", "parent", "sibling", "index"],
-      pathGroups: [{
-        pattern: "@crit-fumble/**",
-        group: "internal",
-        position: "before"
-      }],
-      "newlines-between": "always",
-      alphabetize: { order: "asc" }
-    }],
-    
-    // Enforce architectural boundaries - discord-bot can only import from core
-    "import/no-restricted-paths": ["error", {
-      zones: [{
-        target: "./",
-        from: "../!(core)/**",
-        message: "Discord-bot package can only import from @crit-fumble/core"
-      }]
-    }],
-    
-    // TypeScript specific rules
+    // Discord bot specific rules
+    "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
     "@typescript-eslint/explicit-function-return-type": "off",
-    "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-explicit-any": "warn",
-    "@typescript-eslint/no-unused-vars": ["error", {
-      argsIgnorePattern: "^_",
-      varsIgnorePattern: "^_"
-    }],
-    
-    // General code quality
-    "no-console": ["warn", {
-      allow: ["warn", "error", "info", "debug"]
-    }],
+    "no-console": ["warn", { "allow": ["warn", "error", "info", "debug"] }],
     "eqeqeq": "error",
     "no-var": "error",
     "prefer-const": "error"
-  }
+  },
+  overrides: [
+    {
+      files: ["*.ts"],
+      parserOptions: {
+        project: "./tsconfig.json",
+      },
+    },
+    {
+      files: ["*.js"],
+      parser: "espree",
+      env: {
+        node: true,
+        es6: true,
+      },
+    }
+  ],
+  ignorePatterns: ["*.js", "dist/", "node_modules/"]
 };

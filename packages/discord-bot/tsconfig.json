@@ -1,7 +1,6 @@
 {
-  "extends": "../../tsconfig.json",
   "compilerOptions": {
-    /* Discord Bot specific overrides */
+    /* Discord Bot independent configuration */
     "module": "commonjs",
     "target": "ES2022",
     "lib": ["ES2022"],
@@ -18,9 +17,19 @@
     "declaration": true,
     "declarationMap": true,
     "sourceMap": true,
+    
+    /* Type checking - Discord Bot specific */
+    "strict": true,
+    "noImplicitAny": true,
     "strictNullChecks": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
+    
+    /* Module handling */
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
     
     /* Path mappings */
     "baseUrl": ".",

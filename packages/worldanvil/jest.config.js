@@ -23,6 +23,6 @@ module.exports = {
     '!**/__tests__/**',
     '!**/node_modules/**'
   ],
-  moduleNameMapper: pathsToModuleNameMapper(compilerOptions.paths, { prefix: '<rootDir>/' }),
+  moduleNameMapper: compilerOptions.paths ? pathsToModuleNameMapper(compilerOptions.paths, { prefix: '<rootDir>/' }) : {},
   setupFilesAfterEnv: ['<rootDir>/__tests__/setup.ts']
 };

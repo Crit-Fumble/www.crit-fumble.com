@@ -2,8 +2,32 @@
 
 'use client';
 
-import { Card, CardContent, CardHeader } from "../../next/client/views/components/blocks/Card";
 import Image from "next/image";
+
+// Simple Card components - preserving original styling
+const Card: React.FC<{ children?: any, className?: string, id?: string }> = ({ children, className = "", id }) => {
+  return (
+    <div id={id} className={`bg-white dark:bg-gray-800 shadow-md overflow-hidden ${className}`}>
+      {children}
+    </div>
+  );
+};
+
+const CardHeader: React.FC<{ children?: any, className?: string }> = ({ children, className = "" }) => {
+  return (
+    <div className={`bg-[#552e66] text-white p-4 ${className}`}>
+      {children}
+    </div>
+  );
+};
+
+const CardContent: React.FC<{ children?: any, className?: string }> = ({ className = "", children, ...props }) => {
+  return (
+    <div className={`p-4 text-gray-900 dark:text-gray-300 ${className}`} {...props}>
+      {children}
+    </div>
+  );
+};
 
 // Define prop types for the client component
 interface HomePageClientProps {
@@ -44,7 +68,29 @@ export default function HomePageClient({ session, config }: HomePageClientProps)
             </p>
 
             <div className="flex flex-col gap-2 justify-center items-center">
-              {!config.isLoggedIn && <a className={config.twClasses.LINK} href='/api/auth/signin'>Log In</a>}
+              {!config.isLoggedIn ? (
+                <a 
+                  className={`${config.twClasses.LINK} flex items-center gap-2`} 
+                  href='/api/auth/discord'
+                >
+                  <Image 
+                    src="/img/discord.svg" 
+                    alt="Discord" 
+                    width={20} 
+                    height={20}
+                    className="inline"
+                  />
+                  Sign in with Discord
+                </a>
+              ) : (
+                <div className="flex flex-col gap-2 items-center">
+                  <p>Welcome back, {config.userData?.username || 'User'}!</p>
+                  <div className="flex gap-2">
+                    <a className={config.twClasses.LINK} href='/dashboard'>Dashboard</a>
+                    <a className={config.twClasses.LINK} href='/api/auth/logout'>Sign Out</a>
+                  </div>
+                </div>
+              )}
             </div>
           </CardContent>
         </Card>

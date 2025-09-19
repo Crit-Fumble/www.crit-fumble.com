@@ -5,7 +5,9 @@
     "rootDir": ".",
     "composite": true,
     "incremental": true,
-    "tsBuildInfoFile": "dist/.tsbuildinfo"
+    "tsBuildInfoFile": "dist/.tsbuildinfo",
+    "module": "commonjs",
+    "target": "es2022"
   },
   "include": [
     "models/**/*", 

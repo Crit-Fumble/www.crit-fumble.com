@@ -110,7 +110,7 @@ export class DiscordSsoProvider extends BaseSsoProvider {
       throw new Error(`Discord token exchange failed: ${response.status} ${errorText}`);
     }
     
-    const tokenData: DiscordTokenResponse = await response.json();
+    const tokenData: DiscordTokenResponse = await response.json() as DiscordTokenResponse;
     
     return {
       access_token: tokenData.access_token,
@@ -137,7 +137,7 @@ export class DiscordSsoProvider extends BaseSsoProvider {
       throw new Error(`Discord user fetch failed: ${response.status} ${errorText}`);
     }
     
-    const discordUser: DiscordUser = await response.json();
+    const discordUser: DiscordUser = await response.json() as DiscordUser;
     
     // Handle avatar URL generation
     let avatarUrl: string;
@@ -203,7 +203,7 @@ export class DiscordSsoProvider extends BaseSsoProvider {
       throw new Error(`Discord token refresh failed: ${response.status} ${errorText}`);
     }
     
-    const tokenData: DiscordTokenResponse = await response.json();
+    const tokenData: DiscordTokenResponse = await response.json() as DiscordTokenResponse;
     
     return {
       access_token: tokenData.access_token,

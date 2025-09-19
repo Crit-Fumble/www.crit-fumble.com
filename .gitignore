@@ -3,6 +3,7 @@
 .env.web
 .env.discord
 .env.data
+.env.prod
 
 
 scripts/raw/

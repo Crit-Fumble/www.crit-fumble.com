@@ -1,4 +1,4 @@
-import { Prisma, PrismaClient } from '@prisma/client';
+import { Prisma, PrismaClient, RpgWorld as PrismaRpgWorld } from '@prisma/client';
 import { Client } from 'discord.js';
 import { WorldAnvilApiClient, WorldAnvilWorld } from '@crit-fumble/worldanvil';
 import OpenAI from 'openai';
@@ -26,7 +26,8 @@ export class RpgWorldService {
    * Get all RPG worlds
    */
   async getAll(): Promise<RpgWorld[]> {
-    return this.prisma.rpgWorld.findMany();
+    const worlds = await this.prisma.rpgWorld.findMany();
+    return worlds as RpgWorld[];
   }
 
   /**
@@ -34,9 +35,10 @@ export class RpgWorldService {
    * @param id RPG world ID
    */
   async getById(id: string): Promise<RpgWorld | null> {
-    return this.prisma.rpgWorld.findUnique({
+    const world = await this.prisma.rpgWorld.findUnique({
       where: { id }
     });
+    return world as RpgWorld | null;
   }
 
   /**
@@ -59,7 +61,7 @@ export class RpgWorldService {
       include: { world: true }
     });
 
-    return worldSystems.map(ws => ws.world);
+    return worldSystems.map((ws: { world: RpgWorld }) => ws.world);
   }
 
   /**
@@ -81,7 +83,7 @@ export class RpgWorldService {
    * Create a new RPG world
    * @param data RPG world data
    */
-  async create(data: Prisma.RpgWorldCreateInput): Promise<RpgWorld> {
+  async create(data: CreateRpgWorldInput): Promise<RpgWorld> {
     return this.prisma.rpgWorld.create({
       data
     });
@@ -92,7 +94,7 @@ export class RpgWorldService {
    * @param id RPG world ID
    * @param data Updated RPG world data
    */
-  async update(id: string, data: Prisma.RpgWorldUpdateInput): Promise<RpgWorld> {
+  async update(id: string, data: UpdateRpgWorldInput): Promise<RpgWorld> {
     return this.prisma.rpgWorld.update({
       where: { id },
       data
@@ -172,7 +174,8 @@ export class RpgWorldService {
     // const response = await this.openAiClient.generateText(prompt);
     // return response.text;
 
-    return `AI-generated ${contentType} for ${world.title} (not implemented yet)`;
+    // Use type assertion to access the title property
+    return `AI-generated ${contentType} for ${(world as PrismaRpgWorld).title} (not implemented yet)`;
   }
 
   /**
@@ -191,7 +194,8 @@ export class RpgWorldService {
     // const response = await this.openAiClient.generateText(prompt);
     // return response.text;
 
-    return `AI-generated ${regionType} description for ${world.title} (not implemented yet)`;
+    // Use type assertion to access the title property
+    return `AI-generated ${regionType} description for ${(world as PrismaRpgWorld).title} (not implemented yet)`;
   }
 
   /**
@@ -284,9 +288,9 @@ export class RpgWorldService {
    * @param systemId System ID to set as primary
    */
   async setPrimarySystem(worldId: string, systemId: string): Promise<any> {
-    return await this.prisma.$transaction(async (prisma) => {
+    return await this.prisma.$transaction(async (tx) => {
       // First, unset any existing primary system
-      await this.prisma.rpgWorldSystem.updateMany({
+      await tx.rpgWorldSystem.updateMany({
         where: { 
           world_id: worldId,
           is_primary: true
@@ -295,7 +299,7 @@ export class RpgWorldService {
       });
 
       // Then set the new primary system
-      return await this.prisma.rpgWorldSystem.update({
+      return await tx.rpgWorldSystem.update({
         where: {
           world_id_system_id: {
             world_id: worldId,

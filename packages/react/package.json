@@ -1,14 +1,15 @@
 {
     "name": "@crit-fumble/react",
     "version": "18.0.0",
-    "description": "React components and hooks for the Crit-Fumble application",
+    "description": "Framework-agnostic React components for RPG applications",
     "main": "index.js",
     "types": "index.d.ts",
     "keywords": [
         "crit-fumble",
         "react",
         "components",
-        "hooks"
+        "rpg",
+        "gaming"
     ],
     "author": "Crit-Fumble",
     "license": "MIT",
@@ -21,9 +22,7 @@
         "react-dom": "^18"
     },
     "dependencies": {
-        "@crit-fumble/core": "workspace:*",
-        "react-hook-form": "^7.51.2",
-        "react-hot-toast": "^2.5.2"
+        "@crit-fumble/core": "^6.8.2"
     },
     "devDependencies": {
         "@types/react": "^18",

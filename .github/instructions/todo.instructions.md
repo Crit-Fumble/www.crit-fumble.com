@@ -146,9 +146,6 @@ applyTo: '**'
   - COMPLETED: Verified all services already follow excellent dependency injection patterns. All services (UserService, RpgCampaignService, RpgWorldService, RpgSystemService, RpgPartyService, RpgCharacterService, RpgSheetService, RpgSessionService) accept Discord Client, OpenAI, and WorldAnvil clients as constructor parameters, use appropriate Prisma types and core models, have no dependencies on controllers/views, and maintain clean separation of concerns.
 - [COMPLETED] update controllers for handling API requests; controllers should accept services as dependencies, and not depend on other controllers, clients, or views
   - COMPLETED: Verified controllers already follow proper dependency injection patterns. UserController accepts AuthService and UserService, RpgSystemController accepts RpgSystemService. No controllers import clients, other controllers, or views directly. Created controllers/index.ts for clean exports and updated server/index.ts to export both services and controllers. Clean separation of concerns maintained.
-- [BOT-WIP] unit test the hell out of everything
-  - you created one valid test,a nd left three broken ones. Don't leave broken things in the code when you move on, make sure they don't have lint issues
-  - Need to properly unit test every service (AuthService, UserService, RpgCampaignService, RpgWorldService, RpgSystemService, RpgPartyService, RpgCharacterService, RpgSheetService, RpgSessionService), every controller (UserController, RpgSystemController), complex models, every client, and complex views with working tests that actually compile and pass.
 - [COMPLETED] remove all completed FUTURE: and TODO: comments in code base
   - COMPLETED: Searched core package thoroughly for FUTURE:, TODO:, FIXME, and @deprecated comments. Found no actionable completed comments to remove - all existing TODOs are legitimate placeholders for future implementation (WorldAnvil integration, OpenAI features, Discord features, etc.) and should remain as documentation. @deprecated comments are appropriate for backwards compatibility. Core package is clean of unnecessary comment clutter.
 - [FUTURE] implement a "Marketplace" currency system "Crit-Coins" in packages\core\server\services\coinService.ts; the name of the  coins can be determined in a config we will pass in from the host project; we need methods to add and remove coins; we will build a wrapper package for stripe to handle the payment processing in the future, but we will want some methods we can use during the testing phase to give our coins for free
@@ -159,17 +156,16 @@ applyTo: '**'
   - Removed dependencies on deleted @crit-fumble/discord wrapper package
   - Updated to use Discord.js SDK directly
   - Simplified architecture to use website API endpoints instead of direct database access
-- [BOT-TODO] Configure tsconfig.json to NOT extend from a root configuration
 - [BOT-TODO] read in all env vars and set up lib configs
-- [BOT-TODO] Update bot to use website endpoints for command execution
-- [BOT-TODO] Update bot to use website endpoints for event handling
-- [BOT-TODO] Update bot to use website endpoints for user authentication
-- [COMPLETED] Ensure persistent bot is processing scheduled cron tasks
-  - Updated HandleScheduledEvents to work without wrapper dependencies
-  - Uses node-cron directly for scheduling
 - [BOT-TODO] Set up CI checks to prevent future violations
 - [BOT-TODO] remove all completed FUTURE: and TODO: comments in code base
 - [BOT-TODO] deploy fumblebot
+- [BOT-TODO] Ensure persistent bot is processing scheduled cron tasks
+  - Updated HandleScheduledEvents to work without wrapper dependencies
+  - Uses node-cron directly for scheduling
+- [BOT-TODO] Update bot to use website endpoints for command execution
+- [BOT-TODO] Update bot to use website endpoints for event handling
+- [BOT-TODO] Update bot to use website endpoints for user authentication
 
 ### @crit-fumble/react
 - [BOT-TODO] Make session providers completely framework-agnostic

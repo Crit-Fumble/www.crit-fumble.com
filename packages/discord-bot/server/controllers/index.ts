@@ -1,2 +1,2 @@
-// Discord bot controllers will be added here as they are implemented
-export {};
+// Discord bot controllers and structures
+export * from './structures/Command';

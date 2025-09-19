@@ -9,22 +9,22 @@
       "args": ["run", "-i", "--rm", "mcp/fetch"],
       "cwd": "${workspaceFolder}"
     },
-    "sequential-thinking": {
-      "type": "stdio",
-      "command": "npx",
-      "args": [
-        "-y",
-        "@modelcontextprotocol/server-sequential-thinking"
-      ],
-      "env": {},
-      "cwd": "${workspaceFolder}"
-    },
-    "ESLint": {
-      "type": "stdio",
-      "command": "npx",
-      "args": ["@eslint/mcp@latest"],
-      "cwd": "${workspaceFolder}"
-    },
+    // "sequential-thinking": {
+    //   "type": "stdio",
+    //   "command": "npx",
+    //   "args": [
+    //     "-y",
+    //     "@modelcontextprotocol/server-sequential-thinking"
+    //   ],
+    //   "env": {},
+    //   "cwd": "${workspaceFolder}"
+    // },
+    // "ESLint": {
+    //   "type": "stdio",
+    //   "command": "npx",
+    //   "args": ["@eslint/mcp@latest"],
+    //   "cwd": "${workspaceFolder}"
+    // },
     "playwright": {
       "type": "stdio",
       "command": "npx",

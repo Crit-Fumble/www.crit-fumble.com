@@ -28,9 +28,7 @@
   },
   "dependencies": {
     "@crit-fumble/core": "file:../core",
-    "@crit-fumble/react": "file:../react",
     "next": "^14.2.14",
-    "next-auth": "^4.24.11",
     "react": "^18",
     "react-dom": "^18"
   },

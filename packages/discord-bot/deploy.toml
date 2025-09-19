@@ -7,7 +7,7 @@ app = "fumblebot-crit-fumble-com"
 primary_region = "den"
 
 [build]
-  dockerfile = "pipeline/Dockerfile.bot"
+  dockerfile = "Dockerfile.bot"
 
 [env]
   NODE_VERSION = "22"

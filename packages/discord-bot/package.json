@@ -22,15 +22,20 @@
         "test": "jest"
     },
     "dependencies": {
-        "@crit-fumble/core": "^6.8.2",
+        "@crit-fumble/core": "^6.16.1",
+        "@typescript-eslint/project-service": "^8.44.0",
+        "@typescript-eslint/tsconfig-utils": "^8.44.0",
+        "discord-api-types": "^0.38.25",
         "node-cron": "^3.0.3"
     },
     "devDependencies": {
         "@types/node-cron": "^3.0.11",
-        "@typescript-eslint/eslint-plugin": "^6.21.0",
-        "@typescript-eslint/parser": "^6.21.0",
+        "@typescript-eslint/eslint-plugin": "^8.44.0",
+        "@typescript-eslint/parser": "^8.44.0",
         "eslint": "^8",
+        "eslint-import-resolver-typescript": "^4.4.4",
         "eslint-plugin-import": "^2.29.1",
+        "ts-node": "^10.9.2",
         "typescript": "^5.8.2"
     }
 }
