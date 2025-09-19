@@ -21,11 +21,6 @@ export interface SessionContextValue {
   update?: (data?: any) => Promise<AuthSession | null>;
 }
 
-export interface SessionProviderProps {
-  children: React.ReactNode;
-  session?: AuthSession | null;
-}
-
 // Default context value
 export const defaultSessionContext: SessionContextValue = {
   data: null,

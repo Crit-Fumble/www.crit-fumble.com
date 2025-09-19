@@ -1,6 +1,6 @@
 {
     "name": "@crit-fumble/core",
-    "version": "6.16.3",
+    "version": "6.16.4",
     "description": "Shared data for Crit-Fumble applications; version matches prisma client version",
     "main": "dist/index.js",
     "types": "dist/index.d.ts",

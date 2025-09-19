@@ -10,6 +10,7 @@ import { WorldAnvilApiClient } from '@crit-fumble/worldanvil';
 import { DiscordBotConfig, loadDiscordBotConfig, validateDiscordBotConfig } from './config/DiscordBotConfig';
 import { HandleScheduledEvents } from './services/HandleScheduledEvents';
 import { DatabaseService } from './services/DatabaseService';
+import * as http from 'http';
 
 export class DiscordBotServer extends DiscordClient {
   public config: DiscordBotConfig;
@@ -21,6 +22,9 @@ export class DiscordBotServer extends DiscordClient {
   
   // Service layer
   public readonly db?: DatabaseService;
+  
+  // HTTP server for health checks
+  private httpServer?: http.Server;
 
   constructor(config: DiscordBotConfig) {
     super({
@@ -90,6 +94,7 @@ export class DiscordBotServer extends DiscordClient {
     console.info('Starting bot...');
     
     this.setupEventHandlers();
+    this.setupHttpServer();
     
     await this.login(this.config.discord.token);
     
@@ -113,10 +118,52 @@ export class DiscordBotServer extends DiscordClient {
     });
   }
 
+  private setupHttpServer(): void {
+    if (!this.config.api.enabled) {
+      console.info('HTTP server disabled in configuration');
+      return;
+    }
+
+    const port = this.config.api.port;
+    
+    this.httpServer = http.createServer((req, res) => {
+      if (req.url === '/health' || req.url === '/') {
+        const status = this.getStatus();
+        res.writeHead(200, { 'Content-Type': 'application/json' });
+        res.end(JSON.stringify({
+          status: 'ok',
+          timestamp: new Date().toISOString(),
+          bot: status
+        }));
+      } else {
+        res.writeHead(404, { 'Content-Type': 'text/plain' });
+        res.end('Not Found');
+      }
+    });
+
+    this.httpServer.listen(port, '0.0.0.0', () => {
+      console.info(`HTTP server listening on 0.0.0.0:${port}`);
+    });
+
+    this.httpServer.on('error', (error) => {
+      console.error('HTTP server error:', error);
+    });
+  }
+
   async shutdown(): Promise<void> {
     console.info('Shutting down Discord bot...');
     
     HandleScheduledEvents.stopMonitoring();
+    
+    // Close HTTP server if it exists
+    if (this.httpServer) {
+      await new Promise<void>((resolve) => {
+        this.httpServer!.close(() => {
+          console.info('HTTP server closed');
+          resolve();
+        });
+      });
+    }
     
     // Close database connection if it exists
     if (this.database) {

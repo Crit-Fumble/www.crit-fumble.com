@@ -7,6 +7,7 @@
     "moduleResolution": "node",
     "outDir": "dist",
     "rootDir": ".",
+    "downlevelIteration": true,
     
     /* Project references */
     "composite": true,
@@ -33,12 +34,6 @@
     
     /* Path mappings */
     "baseUrl": ".",
-    "paths": {
-      "@crit-fumble/core/*": ["../core/*"],
-      "@crit-fumble/worldanvil/*": ["../worldanvil/*"],
-      "@discord/*": ["./*"],
-      "@discord/bot/*": ["./*"]
-    },
     
     /* Node.js configuration */
     "types": ["node"],
@@ -57,8 +52,5 @@
     "**/__tests__/**",
     "**/*.test.ts",
     "**/*.spec.ts"
-  ],
-  "references": [
-    { "path": "../core" }
   ]
 }

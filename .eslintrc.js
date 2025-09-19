@@ -8,8 +8,9 @@ module.exports = {
       jsx: true
     },
     project: [
-      "./tsconfig.json",
-      "./packages/*/tsconfig.json"
+      "./tsconfig.app.json",
+      "./packages/*/tsconfig.json",
+      "./agents/*/tsconfig.json"
     ],
     tsconfigRootDir: __dirname
   },
@@ -80,9 +81,9 @@ module.exports = {
           message: "Next-web package can only import from @crit-fumble/core and @crit-fumble/react"
         },
         {
-          target: "./packages/discord-bot/**/*",
+          target: "./agents/discord/**/*",
           from: "./packages/!(core)/**/*",
-          message: "Discord-bot package can only import from @crit-fumble/core"
+          message: "Discord agent can only import from @crit-fumble/core"
         }
       ]
     }],

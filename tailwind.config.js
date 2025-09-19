@@ -1,11 +1,12 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: [
-    './packages/app/**/*.{js,ts,jsx,tsx,mdx}',
-    './packages/pages/**/*.{js,ts,jsx,tsx,mdx}',
-    './packages/components/**/*.{js,ts,jsx,tsx,mdx}',
-    './packages/**/*.{js,ts,jsx,tsx,mdx}',
-    './packages/views/**/*.{js,ts,jsx,tsx,mdx}',
+    './src/**/*.{js,ts,jsx,tsx,mdx}',
+    './app/**/*.{js,ts,jsx,tsx,mdx}',
+    './pages/**/*.{js,ts,jsx,tsx,mdx}',
+    './components/**/*.{js,ts,jsx,tsx,mdx}',
+    './packages/react/components/**/*.{js,ts,jsx,tsx,mdx}',
+    './packages/core/client/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
     extend: {

@@ -1,39 +1,10 @@
 {
-  "compilerOptions": {
-    /* Common base options for all packages */
-    "composite": true,
-    "declaration": true,
-    "declarationMap": true,
-    "sourceMap": true,
-    
-    "esModuleInterop": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "resolveJsonModule": true,
-    
-    /* Type checking */
-    "strict": true,
-    "noImplicitAny": true,
-    "strictNullChecks": true,
-    
-    /* Module resolution */
-    "module": "esnext",
-    "moduleResolution": "node",
-    "baseUrl": ".",
-    
-    /* Path mappings for workspace packages */
-    "paths": {
-      "@crit-fumble/core/*": ["./packages/core/*"],
-      "@crit-fumble/react/*": ["./packages/react/*"],
-      "@crit-fumble/worldanvil/*": ["./packages/worldanvil/*"]
-    }
-  },
-  "exclude": ["node_modules", "**/dist/**"],
+  "files": [],
   "references": [
-    { "path": "./packages/worldanvil" },
+    { "path": "./tsconfig.app.json" },
     { "path": "./packages/core" },
     { "path": "./packages/react" },
-    { "path": "./packages/discord-bot" },
-    { "path": "./packages/next-web" }
+    { "path": "./packages/worldanvil" },
+    { "path": "./agents/discord" }
   ]
 }

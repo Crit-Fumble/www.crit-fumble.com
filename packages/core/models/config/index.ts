@@ -20,21 +20,24 @@
  */
 
 // Database configuration
-export { DatabaseConfig, getDatabaseConfig } from './database.config';
+export type { DatabaseConfig } from './database.config';
+export { getDatabaseConfig } from './database.config';
 
 // Authentication configuration  
-export { AuthConfig } from './auth.config';
+export type { AuthConfig } from './auth.config';
 
 // Discord client configuration
-export { DiscordConfig, getDiscordConfig } from './discord.config';
+export type { DiscordConfig } from './discord.config';
+export { getDiscordConfig } from './discord.config';
 
 // OpenAI client configuration
-export { OpenAIConfig, getOpenAIConfig } from './openai.config';
+export type { OpenAIConfig } from './openai.config';
+export { getOpenAIConfig } from './openai.config';
 
 // Environment configuration
 export { 
   Environment, 
-  EnvironmentConfig, 
+  type EnvironmentConfig, 
   getEnvironmentConfig,
   isDevelopment,
   isProduction, 
@@ -43,7 +46,8 @@ export {
 } from './EnvironmentConfig';
 
 // WorldAnvil configuration (re-export from package)
-export { WorldAnvilConfig, getWorldAnvilConfig } from '@crit-fumble/worldanvil';
+export type { WorldAnvilConfig } from '@crit-fumble/worldanvil';
+export { getWorldAnvilConfig } from '@crit-fumble/worldanvil';
 
 // UI configuration
 export { DEFAULT as UI_DEFAULTS } from './views';

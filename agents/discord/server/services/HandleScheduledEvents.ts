@@ -54,7 +54,9 @@ export class HandleScheduledEvents {
       
       console.info(`📊 Checking events across ${guilds.size} guild(s)`);
       
-      for (const [, guild] of guilds) {
+      const guildArray = Array.from(guilds.values());
+      
+      for (const guild of guildArray) {
         try {
           // Fetch scheduled events for this guild
           const events = await guild.scheduledEvents.fetch();
@@ -67,20 +69,22 @@ export class HandleScheduledEvents {
           
           console.info(`📅 Found ${events.size} event(s) in guild: ${guild.name}`);
           
-          for (const [, event] of events) {
+          const eventArray = Array.from(events.values());
+          
+          for (const event of eventArray) {
             // Check if event is starting soon (within next 5 minutes)
             if (event.status === GuildScheduledEventStatus.Scheduled) {
               const timeUntilStart = event.scheduledStartTimestamp! - Date.now();
               
               if (timeUntilStart > 0 && timeUntilStart <= 5 * MINUTE) {
-                console.info(`⏰ Event "${event.name}" starting soon in guild ${guild.name}`);
+                console.info(`⏰ Event \"${event.name}\" starting soon in guild ${guild.name}`);
                 // TODO: Send notifications, update campaign status, etc.
               }
             }
             
             // Check if event just ended
             if (event.status === GuildScheduledEventStatus.Completed) {
-              console.info(`✅ Event "${event.name}" has completed`);
+              console.info(`✅ Event \"${event.name}\" has completed`);
               // TODO: Archive session data, update campaign progress, etc.
             }
           }
