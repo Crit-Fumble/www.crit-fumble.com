@@ -32,6 +32,75 @@ const mockWorldAnvilClient = {} as WorldAnvilApiClient;
 // Mock OpenAI Client
 const mockOpenAI = {} as OpenAI;
 
+// Helper function to create complete mock RpgCharacter objects
+function createMockRpgCharacter(overrides: Partial<any> = {}): any {
+  return {
+    id: 'char-id',
+    discord_post_id: null,
+    discord_thread_id: null,
+    worldanvil_character_id: null,
+    user_id: null,
+    name: null,
+    slug: null,
+    title: null,
+    summary: null,
+    description: null,
+    portrait_url: null,
+    token_url: null,
+    is_active: true,
+    created_at: new Date(),
+    updated_at: new Date(),
+    ...overrides,
+  };
+}
+
+// Helper function to create complete mock User objects
+function createMockUser(overrides: Partial<any> = {}): any {
+  return {
+    id: 'user-id',
+    name: null,
+    discord_id: null,
+    worldanvil_id: null,
+    slug: null,
+    email: null,
+    emailVerified: null,
+    image: null,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+    admin: null,
+    data: {},
+    ...overrides,
+  };
+}
+
+// Helper function to create complete mock RpgSheet objects
+function createMockRpgSheet(overrides: Partial<any> = {}): any {
+  return {
+    id: 'sheet-id',
+    slug: null,
+    data: {},
+    title: null,
+    description: null,
+    discord_post_id: null,
+    discord_thread_id: null,
+    worldanvil_block_id: null,
+    summary: null,
+    portrait_url: null,
+    token_url: null,
+    is_active: true,
+    admin_only: false,
+    last_played: null,
+    created_at: new Date(),
+    updated_at: new Date(),
+    rpg_character_id: null,
+    rpg_campaign_id: null,
+    rpg_party_id: null,
+    rpg_system_id: null,
+    rpg_world_id: null,
+    ...overrides,
+  };
+}
+
 describe('RpgCharacterService', () => {
   let service: RpgCharacterService;
 
@@ -48,8 +117,8 @@ describe('RpgCharacterService', () => {
   describe('getAll', () => {
     it('should return all RPG characters', async () => {
       const expectedCharacters = [
-        { id: 'char1', name: 'Aragorn', title: 'Ranger' },
-        { id: 'char2', name: 'Legolas', title: 'Elf Prince' },
+        createMockRpgCharacter({ id: 'char1', name: 'Aragorn', title: 'Ranger' }),
+        createMockRpgCharacter({ id: 'char2', name: 'Legolas', title: 'Elf Prince' }),
       ];
 
       mockPrismaClient.rpgCharacter.findMany.mockResolvedValue(expectedCharacters);
@@ -72,13 +141,13 @@ describe('RpgCharacterService', () => {
   describe('getById', () => {
     it('should return a character by ID', async () => {
       const characterId = 'char123';
-      const expectedCharacter = {
+      const expectedCharacter = createMockRpgCharacter({
         id: characterId,
         name: 'Aragorn',
         title: 'Ranger',
         description: 'A skilled ranger',
         user_id: 'user123',
-      };
+      });
 
       mockPrismaClient.rpgCharacter.findUnique.mockResolvedValue(expectedCharacter);
 
@@ -102,11 +171,11 @@ describe('RpgCharacterService', () => {
   describe('getByWorldAnvilId', () => {
     it('should return a character by WorldAnvil ID', async () => {
       const worldAnvilId = 'wa123';
-      const expectedCharacter = {
+      const expectedCharacter = createMockRpgCharacter({
         id: 'char123',
         name: 'Aragorn',
         worldanvil_character_id: worldAnvilId,
-      };
+      });
 
       mockPrismaClient.rpgCharacter.findFirst.mockResolvedValue(expectedCharacter);
 
@@ -122,11 +191,11 @@ describe('RpgCharacterService', () => {
   describe('getByDiscordPostId', () => {
     it('should return a character by Discord post ID', async () => {
       const discordPostId = 'post123';
-      const expectedCharacter = {
+      const expectedCharacter = createMockRpgCharacter({
         id: 'char123',
         name: 'Aragorn',
         discord_post_id: discordPostId,
-      };
+      });
 
       mockPrismaClient.rpgCharacter.findUnique.mockResolvedValue(expectedCharacter);
 
@@ -142,11 +211,11 @@ describe('RpgCharacterService', () => {
   describe('getByDiscordThreadId', () => {
     it('should return a character by Discord thread ID', async () => {
       const discordThreadId = 'thread123';
-      const expectedCharacter = {
+            const expectedCharacter = createMockRpgCharacter({
         id: 'char123',
         name: 'Aragorn',
         discord_thread_id: discordThreadId,
-      };
+      });
 
       mockPrismaClient.rpgCharacter.findUnique.mockResolvedValue(expectedCharacter);
 
@@ -163,8 +232,8 @@ describe('RpgCharacterService', () => {
     it('should return characters owned by a user', async () => {
       const userId = 'user123';
       const expectedCharacters = [
-        { id: 'char1', name: 'Aragorn', user_id: userId },
-        { id: 'char2', name: 'Legolas', user_id: userId },
+        createMockRpgCharacter({ id: 'char1', name: 'Aragorn', user_id: userId }),
+        createMockRpgCharacter({ id: 'char2', name: 'Legolas', user_id: userId }),
       ];
 
       mockPrismaClient.rpgCharacter.findMany.mockResolvedValue(expectedCharacters);
@@ -182,7 +251,7 @@ describe('RpgCharacterService', () => {
     it('should search characters by name', async () => {
       const query = 'aragorn';
       const expectedCharacters = [
-        { id: 'char1', name: 'Aragorn', title: 'Ranger' },
+        createMockRpgCharacter({ id: 'char1', name: 'Aragorn', title: 'Ranger' }),
       ];
 
       mockPrismaClient.rpgCharacter.findMany.mockResolvedValue(expectedCharacters);
@@ -213,8 +282,8 @@ describe('RpgCharacterService', () => {
     it('should search characters by title', async () => {
       const query = 'ranger';
       const expectedCharacters = [
-        { id: 'char1', name: 'Aragorn', title: 'Ranger' },
-        { id: 'char2', name: 'Strider', title: 'Dunedain Ranger' },
+        createMockRpgCharacter({ id: 'char1', name: 'Aragorn', title: 'Ranger' }),
+        createMockRpgCharacter({ id: 'char2', name: 'Strider', title: 'Dunedain Ranger' }),
       ];
 
       mockPrismaClient.rpgCharacter.findMany.mockResolvedValue(expectedCharacters);
@@ -228,21 +297,22 @@ describe('RpgCharacterService', () => {
   describe('create', () => {
     it('should create a new character', async () => {
       const characterData: Prisma.RpgCharacterCreateInput = {
+        id: 'char123',
         name: 'Aragorn',
         title: 'Ranger',
         description: 'A skilled ranger from the North',
         user: { connect: { id: 'user123' } },
       };
 
-      const expectedCharacter = {
+      const expectedCharacter = createMockRpgCharacter({
         id: 'char123',
         name: 'Aragorn',
         title: 'Ranger',
         description: 'A skilled ranger from the North',
         user_id: 'user123',
-        createdAt: new Date(),
-        updatedAt: new Date(),
-      };
+        created_at: new Date(),
+        updated_at: new Date(),
+      });
 
       mockPrismaClient.rpgCharacter.create.mockResolvedValue(expectedCharacter);
 
@@ -256,6 +326,7 @@ describe('RpgCharacterService', () => {
 
     it('should handle creation errors', async () => {
       const characterData: Prisma.RpgCharacterCreateInput = {
+        id: 'invalid-char',
         name: 'Aragorn',
         user: { connect: { id: 'invalid-user' } },
       };
@@ -274,12 +345,12 @@ describe('RpgCharacterService', () => {
         description: 'Updated description',
       };
 
-      const expectedCharacter = {
+      const expectedCharacter = createMockRpgCharacter({
         id: characterId,
         name: 'Strider',
         description: 'Updated description',
-        updatedAt: new Date(),
-      };
+        updated_at: new Date(),
+      });
 
       mockPrismaClient.rpgCharacter.update.mockResolvedValue(expectedCharacter);
 
@@ -306,7 +377,7 @@ describe('RpgCharacterService', () => {
   describe('delete', () => {
     it('should delete a character', async () => {
       const characterId = 'char123';
-      const deletedCharacter = { id: characterId, name: 'Deleted Character' };
+      const deletedCharacter = createMockRpgCharacter({ id: characterId, name: 'Deleted Character' });
 
       mockPrismaClient.rpgCharacter.delete.mockResolvedValue(deletedCharacter);
 
@@ -329,8 +400,8 @@ describe('RpgCharacterService', () => {
     it('should return character sheets for a character', async () => {
       const characterId = 'char123';
       const expectedSheets = [
-        { id: 'sheet1', rpg_character_id: characterId, character_name: 'Aragorn Level 1' },
-        { id: 'sheet2', rpg_character_id: characterId, character_name: 'Aragorn Level 5' },
+        createMockRpgSheet({ id: 'sheet1', rpg_character_id: characterId, title: 'Aragorn Level 1' }),
+        createMockRpgSheet({ id: 'sheet2', rpg_character_id: characterId, title: 'Aragorn Level 5' }),
       ];
 
       mockPrismaClient.rpgSheet.findMany.mockResolvedValue(expectedSheets);
@@ -357,10 +428,12 @@ describe('RpgCharacterService', () => {
       const userId = 'user123';
       const characterId = 'char123';
 
-      mockPrismaClient.rpgCharacter.findUnique.mockResolvedValue({
-        id: characterId,
-        user_id: userId,
-      });
+      mockPrismaClient.rpgCharacter.findUnique.mockResolvedValue(
+        createMockRpgCharacter({
+          id: characterId,
+          user_id: userId,
+        })
+      );
 
       const result = await service.verifyCharacterOwnership(userId, characterId);
 
@@ -376,15 +449,19 @@ describe('RpgCharacterService', () => {
       const userId = 'user123';
       const characterId = 'char123';
 
-      mockPrismaClient.rpgCharacter.findUnique.mockResolvedValue({
-        id: characterId,
-        user_id: userId,
-      });
+      mockPrismaClient.rpgCharacter.findUnique.mockResolvedValue(
+        createMockRpgCharacter({
+          id: characterId,
+          user_id: userId,
+        })
+      );
 
-      mockPrismaClient.user.findFirst.mockResolvedValue({
-        id: userId,
-        discord_id: discordId,
-      });
+      mockPrismaClient.user.findFirst.mockResolvedValue(
+        createMockUser({
+          id: userId,
+          discord_id: discordId,
+        })
+      );
 
       const result = await service.verifyCharacterOwnership(discordId, characterId);
 
@@ -407,10 +484,12 @@ describe('RpgCharacterService', () => {
       const userId = 'user123';
       const characterId = 'char123';
 
-      mockPrismaClient.rpgCharacter.findUnique.mockResolvedValue({
-        id: characterId,
-        user_id: 'different-user',
-      });
+      mockPrismaClient.rpgCharacter.findUnique.mockResolvedValue(
+        createMockRpgCharacter({
+          id: characterId,
+          user_id: 'different-user',
+        })
+      );
 
       mockPrismaClient.user.findFirst.mockResolvedValue(null);
 
@@ -428,7 +507,7 @@ describe('RpgCharacterService', () => {
     });
 
     it('should throw not implemented error for existing character', async () => {
-      const character = { id: 'char123', name: 'Aragorn' };
+      const character = createMockRpgCharacter({ id: 'char123', name: 'Aragorn' });
       mockPrismaClient.rpgCharacter.findUnique.mockResolvedValue(character);
 
       await expect(service.generateBackstory('char123')).rejects.toThrow('Not implemented - use OpenAI SDK directly');
@@ -443,7 +522,7 @@ describe('RpgCharacterService', () => {
     });
 
     it('should throw not implemented error for existing character', async () => {
-      const character = { id: 'char123', name: 'Aragorn', description: 'A noble ranger' };
+      const character = createMockRpgCharacter({ id: 'char123', name: 'Aragorn', description: 'A noble ranger' });
       mockPrismaClient.rpgCharacter.findUnique.mockResolvedValue(character);
 
       await expect(service.analyzePersonality('char123')).rejects.toThrow('Not implemented - use OpenAI SDK directly');
@@ -458,7 +537,7 @@ describe('RpgCharacterService', () => {
     });
 
     it('should throw not implemented error for existing character', async () => {
-      const character = { id: 'char123', name: 'Aragorn', description: 'A noble ranger' };
+      const character = createMockRpgCharacter({ id: 'char123', name: 'Aragorn', description: 'A noble ranger' });
       mockPrismaClient.rpgCharacter.findUnique.mockResolvedValue(character);
 
       await expect(service.suggestCharacterDevelopment('char123')).rejects.toThrow('Not implemented - use OpenAI SDK directly');
@@ -475,7 +554,7 @@ describe('RpgCharacterService', () => {
     });
 
     it('should return false for character without WorldAnvil ID', async () => {
-      const character = { id: 'char123', name: 'Aragorn', worldanvil_character_id: null };
+      const character = createMockRpgCharacter({ id: 'char123', name: 'Aragorn', worldanvil_character_id: null });
       mockPrismaClient.rpgCharacter.findUnique.mockResolvedValue(character);
 
       const result = await service.syncWithWorldAnvil('char123');
@@ -484,7 +563,7 @@ describe('RpgCharacterService', () => {
     });
 
     it('should return false for character with WorldAnvil ID (stubbed)', async () => {
-      const character = { id: 'char123', name: 'Aragorn', worldanvil_character_id: 'wa123' };
+      const character = createMockRpgCharacter({ id: 'char123', name: 'Aragorn', worldanvil_character_id: 'wa123' });
       mockPrismaClient.rpgCharacter.findUnique.mockResolvedValue(character);
 
       const result = await service.syncWithWorldAnvil('char123');
@@ -503,7 +582,7 @@ describe('RpgCharacterService', () => {
     });
 
     it('should return false for character without Discord thread ID', async () => {
-      const character = { id: 'char123', name: 'Aragorn', discord_thread_id: null };
+      const character = createMockRpgCharacter({ id: 'char123', name: 'Aragorn', discord_thread_id: null });
       mockPrismaClient.rpgCharacter.findUnique.mockResolvedValue(character);
 
       const result = await service.notifyCharacterUpdate('char123', 'test message');
@@ -512,7 +591,7 @@ describe('RpgCharacterService', () => {
     });
 
     it('should throw not implemented error for character with Discord thread ID', async () => {
-      const character = { id: 'char123', name: 'Aragorn', discord_thread_id: 'thread123' };
+      const character = createMockRpgCharacter({ id: 'char123', name: 'Aragorn', discord_thread_id: 'thread123' });
       mockPrismaClient.rpgCharacter.findUnique.mockResolvedValue(character);
 
       await expect(service.notifyCharacterUpdate('char123', 'test message')).rejects.toThrow('Not implemented - use Discord.js SDK directly');
@@ -527,7 +606,7 @@ describe('RpgCharacterService', () => {
     });
 
     it('should throw not implemented error for existing character', async () => {
-      const character = { id: 'char123', name: 'Aragorn', description: 'A noble ranger' };
+      const character = createMockRpgCharacter({ id: 'char123', name: 'Aragorn', description: 'A noble ranger' });
       mockPrismaClient.rpgCharacter.findUnique.mockResolvedValue(character);
 
       await expect(service.generatePortraitDescription('char123')).rejects.toThrow('Not implemented - use OpenAI SDK directly');
@@ -550,6 +629,7 @@ describe('RpgCharacterService', () => {
 
     it('should handle foreign key constraint errors', async () => {
       const characterData: Prisma.RpgCharacterCreateInput = {
+        id: 'test-char-id',
         name: 'Test Character',
         user: { connect: { id: 'invalid-user' } },
       };

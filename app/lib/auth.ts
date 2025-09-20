@@ -1,10 +1,13 @@
 import { cookies } from 'next/headers';
 
 export interface Session {
+  id: string;
   userId: string;
   username: string;
-  email?: string;
+  name: string | null;
+  email: string | null;
   avatar?: string;
+  admin: boolean;
 }
 
 /**

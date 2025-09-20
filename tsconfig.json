@@ -15,9 +15,6 @@
     },
     {
       "path": "./packages/worldanvil"
-    },
-    {
-      "path": "./agents/discord"
     }
   ],
   "compilerOptions": {

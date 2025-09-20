@@ -69,6 +69,14 @@ export default async function DashboardPage() {
               Welcome back, {userData.username}!
             </p>
 
+            {/* Admin notice */}
+            {userData.admin && (
+              <div className="mb-6 p-3 bg-red-50 border border-red-200 rounded text-red-800 text-center">
+                <div className="font-medium">🛡️ Admin Access</div>
+                <div className="text-sm">You have administrative privileges</div>
+              </div>
+            )}
+
             {/* Main navigation buttons */}
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 max-w-md mx-auto">
               <a 
@@ -77,6 +85,17 @@ export default async function DashboardPage() {
               >
                 🔗 Linked Accounts
               </a>
+              
+              {userData.admin && (
+                <a 
+                  className={buttonClass}
+                  href="/admin"
+                >
+                  ⚙️ Admin Dashboard
+                  <br />
+                  <small>User Management</small>
+                </a>
+              )}
               
               <div 
                 className={`${buttonClass} opacity-50 cursor-not-allowed`}

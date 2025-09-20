@@ -5,4 +5,5 @@
 
 export * from './UserController';
 export * from './RpgSystemController';
+export * from './DiscordController';
 // Note: WorldController is a placeholder - export when implemented
