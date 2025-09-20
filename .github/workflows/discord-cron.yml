@@ -2,8 +2,8 @@ name: Discord Event Monitor
 
 on:
   schedule:
-    # Run every 2 minutes (pushing GitHub's limits but may work)
-    - cron: '*/2 * * * *'
+    # Run every 5 minutes (GitHub Actions official minimum)
+    - cron: '*/5 * * * *'
   workflow_dispatch: # Allow manual triggering
 
 jobs:
