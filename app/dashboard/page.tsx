@@ -2,7 +2,6 @@ import { Metadata } from "next";
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import Image from "next/image";
-import { AccountConnections } from '@crit-fumble/react';
 
 export const metadata: Metadata = {
   title: "Dashboard | Crit-Fumble Gaming",
@@ -49,6 +48,7 @@ export default async function DashboardPage() {
   }
 
   const linkClass = "border-2 p-2 bg-[rgba(150,25,25,0.25)] text-white hover:bg-[rgba(150,25,25,0.5)] transition-colors inline-block";
+  const buttonClass = "border-2 p-4 bg-[rgba(200,100,50,0.25)] text-white hover:bg-[rgba(200,100,50,0.5)] transition-colors text-center block w-full";
 
   return (
     <div className={'flex flex-col justify-stretch items-center p-0 m-0'}>
@@ -62,12 +62,49 @@ export default async function DashboardPage() {
 
         <Card>
           <CardHeader>
-            <h1>Welcome, {userData.username}!</h1>
+            <h1>Dashboard</h1>
           </CardHeader>
           <CardContent>
-            <AccountConnections linkClassName={linkClass} />
+            <p className="text-center mb-6">
+              Welcome back, {userData.username}!
+            </p>
 
-            <div className="flex gap-2 justify-center mt-6">
+            {/* Main navigation buttons */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 max-w-md mx-auto">
+              <a 
+                className={buttonClass}
+                href="/linked-accounts"
+              >
+                🔗 Linked Accounts
+              </a>
+              
+              <div 
+                className={`${buttonClass} opacity-50 cursor-not-allowed`}
+              >
+                🎲 Dice Roller
+                <br />
+                <small>(Coming Soon)</small>
+              </div>
+              
+              <div 
+                className={`${buttonClass} opacity-50 cursor-not-allowed`}
+              >
+                💬 Chat
+                <br />
+                <small>(Coming Soon)</small>
+              </div>
+              
+              <div 
+                className={`${buttonClass} opacity-50 cursor-not-allowed`}
+              >
+                📊 My Data
+                <br />
+                <small>(Coming Soon)</small>
+              </div>
+            </div>
+
+            {/* Footer navigation */}
+            <div className="flex gap-2 justify-center">
               <a className={linkClass} href="/">Home</a>
               <a className={linkClass} href="/api/auth/logout">Sign Out</a>
             </div>

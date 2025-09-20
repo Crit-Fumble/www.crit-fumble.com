@@ -71,7 +71,7 @@ export default function HomePageClient({ session, config }: HomePageClientProps)
               {!config.isLoggedIn ? (
                 <a 
                   className={`${config.twClasses.LINK} flex items-center gap-2`} 
-                  href='/api/auth/discord'
+                  href='/api/discord/oauth/authorize'
                 >
                   <Image 
                     src="/img/discord.svg" 

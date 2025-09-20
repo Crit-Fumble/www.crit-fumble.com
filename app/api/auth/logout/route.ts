@@ -1,12 +1,21 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
-  // Get the base URL from the request
-  const baseUrl = `${request.nextUrl.protocol}//${request.nextUrl.host}`;
-  const response = NextResponse.redirect(`${baseUrl}/`);
+  // Use NEXT_PUBLIC_BASE_URL to avoid port issues in Codespaces
+  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || `${request.nextUrl.protocol}//${request.nextUrl.host}`;
+  const homeUrl = new URL('/', baseUrl);
   
-  // Clear the session cookie
-  response.cookies.delete('fumble-session');
+  // Create the redirect response
+  const response = NextResponse.redirect(homeUrl);
+  
+  // Clear the session cookie with explicit settings to ensure it's deleted
+  response.cookies.set('fumble-session', '', {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    maxAge: 0, // Expire immediately
+    expires: new Date(0) // Set to past date
+  });
   
   return response;
 }

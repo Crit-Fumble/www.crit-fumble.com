@@ -15,7 +15,9 @@ export async function GET(request: NextRequest) {
 
     if (error) {
       console.error('Discord OAuth error:', error);
-      return NextResponse.redirect('/auth/error?error=discord_oauth_failed');
+      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || request.url;
+      const errorUrl = new URL('/auth/error?error=discord_oauth_failed', baseUrl);
+      return NextResponse.redirect(errorUrl);
     }
 
     if (!code) {
@@ -40,7 +42,9 @@ export async function GET(request: NextRequest) {
     if (!tokenResponse.ok) {
       const error = await tokenResponse.text();
       console.error('Failed to exchange code for token:', error);
-      return NextResponse.redirect('/auth/error?error=token_exchange_failed');
+      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || request.url;
+      const errorUrl = new URL('/auth/error?error=token_exchange_failed', baseUrl);
+      return NextResponse.redirect(errorUrl);
     }
 
     const tokens = await tokenResponse.json();
@@ -54,20 +58,41 @@ export async function GET(request: NextRequest) {
 
     if (!userResponse.ok) {
       console.error('Failed to get user info');
-      return NextResponse.redirect('/auth/error?error=user_info_failed');
+      const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || request.url;
+      const errorUrl = new URL('/auth/error?error=user_info_failed', baseUrl);
+      return NextResponse.redirect(errorUrl);
     }
 
     const user = await userResponse.json();
 
-    // TODO: Store user in database, create session, etc.
+    // Create session cookie with user data
+    const sessionData = {
+      userId: user.id,
+      username: user.username,
+      email: user.email,
+      avatar: user.avatar,
+    };
+
     console.log('Discord user authenticated:', user.username);
 
-    // Redirect to success page or dashboard
-    return NextResponse.redirect('/dashboard?auth=success');
+    // Redirect to dashboard with session cookie
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || request.url;
+    const dashboardUrl = new URL('/dashboard?auth=success', baseUrl);
+    const response = NextResponse.redirect(dashboardUrl);
+    
+    response.cookies.set('fumble-session', JSON.stringify(sessionData), {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      maxAge: 60 * 60 * 24 * 7 // 7 days
+    });
+
+    return response;
 
   } catch (error) {
     console.error('Discord OAuth callback error:', error);
-    const baseUrl = `${request.nextUrl.protocol}//${request.nextUrl.host}`;
-    return NextResponse.redirect(`${baseUrl}/?error=auth_failed`);
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || request.url;
+    const errorUrl = new URL('/?error=auth_failed', baseUrl);
+    return NextResponse.redirect(errorUrl);
   }
 }
