@@ -112,7 +112,7 @@ Stored in `.build-cache/manifest.json`:
 Packages are built in optimal dependency order:
 1. **worldanvil** (no dependencies)
 2. **core** (depends on worldanvil)
-3. **react** & **discord-bot** (both depend on core, can build in parallel)
+3. **react** (depends on core)
 4. **next-web** (depends on core & react)
 
 ### **Change Detection Optimization**

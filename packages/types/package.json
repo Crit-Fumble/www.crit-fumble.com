@@ -19,7 +19,8 @@
     "test": "jest"
   },
   "dependencies": {
-    "discord-api-types": "^0.38.25"
+    "discord-api-types": "^0.38.25",
+    "node-cron": "^3.0.3"
   },
   "devDependencies": {
     "@types/jest": "^29.5.14",

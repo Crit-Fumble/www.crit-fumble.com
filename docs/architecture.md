@@ -22,7 +22,7 @@ Crit-Fumble is a comprehensive D&D gaming platform built as a TypeScript monorep
 
 ### 2. **Dependency Direction**
 ```
-Applications (next-web, discord-bot)
+Web Application (next-web) with Discord Webhooks
     ↓
 UI Components (react)
     ↓
@@ -34,9 +34,10 @@ External Integrations (worldanvil)
 ### 3. **Technology Stack**
 - **Language**: TypeScript for type safety and developer experience
 - **Frontend**: Next.js + React for the web application
-- **Backend**: Node.js services and Discord.js for bot functionality
+- **Backend**: Next.js API routes with Discord webhooks
 - **Database**: PostgreSQL with Prisma ORM
 - **External APIs**: World Anvil, OpenAI, Discord APIs
+- **Hosting**: Vercel with built-in cron jobs
 
 ## 📦 Package Architecture
 
@@ -105,25 +106,30 @@ Component → Hook → Core Service → API
 - Context providers for state management
 - TypeScript-first component design
 
-### @crit-fumble/discord-bot
-**Role**: Discord Integration Application
+### @crit-fumble/next-web
+**Role**: Full-Stack Web Application
 ```typescript
-// Purpose: Discord bot for community and game features
-interface DiscordBot {
-  commands: SlashCommands;
-  events: DiscordEvents;
-  services: BotServices;
-  scheduling: CronJobs;
+// Purpose: Complete web platform with Discord webhooks
+interface NextWebPackage {
+  pages: NextJSPages;
+  api: {
+    auth: AuthEndpoints;
+    discord: DiscordWebhooks;
+    cron: ScheduledTasks;
+  };
+  components: WebComponents;
+  services: WebServices;
 }
 
 // Architecture Pattern
-Discord Event → Command Handler → Core Service → Response
+User → Next.js Route → Discord Webhook → Core Service → Database
 ```
 
 **Key Features**:
-- Slash commands for D&D functionality
-- Event handling for Discord interactions
-- Scheduled tasks for automated features
+- Server-side rendering with Next.js
+- Discord webhook integration (no persistent bot needed)
+- Vercel cron jobs for scheduled tasks
+- Authentication and user management
 - Integration with core services for data management
 
 ### @crit-fumble/next-web
@@ -187,22 +193,25 @@ sequenceDiagram
     W->>U: Character Sheet
 ```
 
-### Discord Bot Interaction Flow
+### Discord Webhook Interaction Flow
 ```mermaid
 sequenceDiagram
     participant U as User
     participant D as Discord
-    participant B as discord-bot
+    participant V as Vercel
+    participant W as next-web
     participant C as core
     participant DB as Database
 
     U->>D: Slash Command
-    D->>B: Command Event
-    B->>C: Business Logic
+    D->>V: Webhook POST
+    V->>W: API Route
+    W->>C: Business Logic
     C->>DB: Data Operation
     DB->>C: Result
-    C->>B: Response Data
-    B->>D: Bot Reply
+    C->>W: Response Data
+    W->>V: HTTP Response
+    V->>D: Bot Reply
     D->>U: Command Result
 ```
 
@@ -243,7 +252,7 @@ Build Optimization
     ↓
 Deploy Applications
     ├── next-web → Vercel
-    └── discord-bot → Fly.io
+    └── next-web → Vercel
 ```
 
 ## 🗄️ Data Architecture

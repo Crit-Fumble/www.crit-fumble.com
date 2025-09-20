@@ -7,7 +7,7 @@ This workspace uses TypeScript project references to enable efficient builds, be
 ### Dependency Graph
 ```
 ┌─────────────────┐    ┌──────────────────┐
-│   next-web      │    │   discord-bot    │
+│   next-web      │
 │                 │    │                  │
 │ ┌─────────────┐ │    │                  │
 │ │   react     │ │    │                  │
@@ -28,9 +28,8 @@ Legend: WA = @crit-fumble/worldanvil
 ### Build Order
 1. **worldanvil** - No dependencies (wrapper package)
 2. **core** - Depends on worldanvil
-3. **react** - Depends on core
-4. **discord-bot** - Depends on core
-5. **next-web** - Depends on core and react
+2. **react** - Depends on core
+3. **next-web** - Depends on core and react
 
 ## Configuration
 
@@ -58,21 +57,7 @@ All packages extend the root configuration and include:
 - Includes: models, server, client, utils, prisma
 
 **@crit-fumble/react**
-- References: core
-- JSX configuration for React components
-- Browser environment settings
-
-**@crit-fumble/discord-bot**
-- References: core
-- Node.js server environment
-- Bot-specific paths
-
-**@crit-fumble/next-web**
-- References: core, react
-- Next.js-specific configuration
-- `emitDeclarationOnly: true` (Next.js handles build)
-
-## Build Commands
+- References: core\n- JSX configuration for React components\n- Browser environment settings\n\n**@crit-fumble/next-web**\n- References: core, react\n- Next.js-specific configuration\n- `emitDeclarationOnly: true` (Next.js handles build)\n\n## Build Commands
 
 ### Primary Commands
 ```bash

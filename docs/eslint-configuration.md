@@ -38,14 +38,6 @@ Each package has its own `.eslintrc.js` file tailored to its specific needs:
   - React and Next.js optimizations
   - Web performance rules
 
-#### @crit-fumble/discord-bot (packages/discord-bot/.eslintrc.js)
-- **Purpose**: Discord bot application
-- **Dependencies**: Can only import from `@crit-fumble/core`
-- **Environment**: Node.js
-- **Special Rules**:
-  - Server-side optimizations
-  - Discord.js best practices
-
 #### @crit-fumble/worldanvil (packages/worldanvil/.eslintrc.js)
 - **Purpose**: World Anvil API wrapper
 - **Dependencies**: No internal dependencies (wrapper package)
@@ -60,7 +52,7 @@ The ESLint configuration enforces these architectural rules:
 
 ```
 ┌─────────────────┐    ┌──────────────────┐
-│   next-web      │    │   discord-bot    │
+│   next-web      │
 │                 │    │                  │
 │ ┌─────────────┐ │    │                  │
 │ │   react     │ │    │                  │
@@ -149,7 +141,7 @@ All packages enforce consistent import ordering:
 ### Architectural Boundaries
 - **Core isolation**: Core package cannot import from other packages (except worldanvil)
 - **React purity**: React package can only use React and core
-- **Application boundaries**: Applications (next-web, discord-bot) have clearly defined dependencies
+- **Application boundaries**: Applications (next-web) have clearly defined dependencies
 
 ### Code Quality
 - TypeScript strict mode enforcement

@@ -7,12 +7,12 @@ This document describes how the @crit-fumble monorepo build system works, from d
 ### Monorepo Structure
 ```
 @crit-fumble/
-├── packages/
-│   ├── worldanvil/     # World Anvil API wrapper
-│   ├── core/           # Shared models, services, utilities
-│   ├── react/          # Framework-agnostic React components
-│   ├── discord-bot/    # Discord bot application
-│   └── next-web/       # Next.js web application
+packages/
+├── core/         # Business logic and shared utilities
+├── react/        # UI components library
+├── next-web/     # Main web application with Discord webhooks
+├── types/        # Type-only package for lightweight integrations
+└── worldanvil/   # World Anvil API wrapper
 ├── scripts/            # Build and development scripts
 └── docs/              # Documentation
 ```
@@ -27,7 +27,7 @@ graph TD
     CORE --> WEB
 ```
 
-**Build Order**: worldanvil → core → (react, discord-bot) → next-web
+**Build Order**: worldanvil → core → react → next-web
 
 ## 🔧 Build System Components
 
@@ -133,13 +133,7 @@ jobs:
       - name: Run tests
         run: npm test
       
-      - name: Deploy applications
-        run: |
-          # Deploy next-web to Vercel
-          cd packages/next-web && npm run build && npx vercel --prod
-          
-          # Deploy discord-bot to Fly.io
-          cd packages/discord-bot && npm run build && fly deploy
+      - name: Deploy applications\n        run: |\n          # Deploy next-web to Vercel\n          cd packages/next-web && npm run build && npx vercel --prod
 ```
 
 ### Package-Specific Builds
@@ -173,14 +167,6 @@ npm run storybook         # Component documentation (future)
 ```
 
 #### @crit-fumble/discord-bot
-```bash
-cd packages/discord-bot
-npm run build              # TypeScript compilation
-npm run test              # Jest tests
-npm run lint              # ESLint validation
-npm run deploy            # Deploy to Fly.io
-```
-
 #### @crit-fumble/next-web
 ```bash
 cd packages/next-web
@@ -202,7 +188,7 @@ npm run start             # Production server
 - **Purpose**: Shared business logic, data models, and utilities
 - **Exports**: Database models, services, utilities, configurations
 - **Dependencies**: worldanvil package
-- **Consumers**: react, discord-bot, next-web packages
+- **Consumers**: react, next-web packages
 
 ### @crit-fumble/react
 - **Purpose**: Framework-agnostic React components and hooks
@@ -210,17 +196,11 @@ npm run start             # Production server
 - **Dependencies**: core package
 - **Consumers**: next-web package, future React applications
 
-### @crit-fumble/discord-bot
-- **Purpose**: Discord bot application
-- **Exports**: None (standalone application)
-- **Dependencies**: core package
-- **Deployment**: Fly.io instance
-
 ### @crit-fumble/next-web
-- **Purpose**: Main web application
+- **Purpose**: Main web application with Discord webhook integration
 - **Exports**: None (standalone application)
 - **Dependencies**: core, react packages
-- **Deployment**: Vercel platform
+- **Deployment**: Vercel platform with automated cron jobs
 
 ## 🔄 Data Flow Architecture
 

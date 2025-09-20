@@ -7,12 +7,8 @@ applyTo: '**'
 ### packages/next-web: Main web application
 - uses @crit-fumble/core and @crit-fumble/react
 - contains Next.js specific views and controllers in lib/ directory
-- deploys to vercel
-### agents/discord: Discord bot deployment
-- uses @crit-fumble/core directly (published npm package v6.16.4)
-- uses Discord.js SDK directly
-- deployed to Fly.io (shared-cpu-1x@256MB)
-- planned migration to @crit-fumble/types for memory optimization
+- contains Discord webhook endpoints in app/api/discord/ for all Discord functionality
+- deploys to vercel with automatic cron jobs for scheduled tasks
 ### packages/core: Shared data models, services, and utilities
 - contains models, utils, controllers, and services shared by all applications
 - contains 100% of the database schema, configuration, migration, utils, and controllers
@@ -28,8 +24,8 @@ applyTo: '**'
 ### packages/types: Lightweight type-only package
 - provides TypeScript interfaces and types without runtime dependencies
 - 75% smaller than core package (156K vs 631K)
-- planned for Discord bot memory optimization on Fly.io
-- contains auth, discord, config, and session types
+- contains auth, discord, config, session, and cron types
+- used for lightweight integrations that don't need full core package
 ### packages/worldanvil: World Anvil integration library
 - wrapper package for World Anvil API (WorldAnvil has no official SDK)
 - provides models, services, and controllers for World Anvil integration
@@ -172,31 +168,6 @@ applyTo: '**'
   - TODO: Verify bot memory usage drops below 256MB threshold on Fly.io
   - TODO: Test full communication flow: bot → API → database → response
 
-### agents/discord (Discord bot)
-- [COMPLETED] Fix import paths that don't match actual file locations
-  - Removed dependencies on deleted @crit-fumble/discord wrapper package
-  - Updated to use Discord.js SDK directly
-  - Simplified architecture to use website API endpoints instead of direct database access
-- [COMPLETED] deploy fumblebot
-  - Successfully deployed to Fly.io (shared-cpu-1x@256MB)
-  - Published @crit-fumble/core@6.16.4 to npm with TypeScript fixes
-  - Updated package.json to use npm dependency instead of file: reference
-  - Bot is now online and operational
-- [BOT-TODO] read in all env vars and set up lib configs
-- [BOT-TODO] Set up CI checks to prevent future violations
-- [BOT-TODO] remove all completed FUTURE: and TODO: comments in code base
-- [BOT-TODO] Ensure persistent bot is processing scheduled cron tasks
-  - Updated HandleScheduledEvents to work without wrapper dependencies
-  - Uses node-cron directly for scheduling
-- [BOT-TODO] Update bot to use website endpoints for command execution
-- [BOT-TODO] Update bot to use website endpoints for event handling
-- [BOT-TODO] Update bot to use website endpoints for user authentication
-- [BOT-TODO] Migrate from @crit-fumble/core to @crit-fumble/types for memory optimization
-  - Current: 631K core package, Target: 156K types package (75% reduction)
-  - Update imports to use lightweight type-only package
-  - Ensure all bot-website communication uses API endpoints
-  - Verify memory usage stays under 256MB Fly.io limit
-
 ### @crit-fumble/react
 - [BOT-TODO] Make session providers completely framework-agnostic
 - [BOT-TODO] Add comprehensive component documentation and examples
@@ -212,22 +183,20 @@ applyTo: '**'
   - Migrated Next.js specific components to lib/components/
   - Migrated Next.js specific controllers to lib/controllers/
 - [BOT-TODO] Update import statements to use @crit-fumble/react and local lib/ files
-- [BOT-TODO] Remove NextAuth and implement Discord SSO authentication
-  - Remove NextAuth dependencies and configuration
-  - Implement Discord OAuth2 flow for authentication
-  - Create auth service supporting multiple SSO providers (Discord initially, WorldAnvil future)
-  - Update session management to work with Discord SSO
-- [BOT-TODO] Set up an api endpoint collection for use with the discord bot (agents/discord)
+- [COMPLETED] Implement Discord webhook-based architecture
+  - Created comprehensive Discord API endpoints in app/api/discord/
+  - Set up Vercel cron jobs for scheduled event monitoring (every 5 minutes)
+  - Implemented Discord interaction webhooks for slash commands
+  - Added Discord OAuth2 authentication flow
+  - Created bot management endpoints for command registration
+  - Added guild management functionality
+  - Eliminated need for persistent Discord bot (reduced costs, no memory limits)
+- [BOT-TODO] Set up API endpoint collection for Discord webhook integrations
 - [FUTURE] Add WorldAnvil SSO support to authentication system
 - [FUTURE] Add support for additional SSO providers as needed
 - [FUTURE] Set up an api endpoint collection for use by a Discord App
 - [FUTURE] Set up a special view for a voice channel Discord Activity
 - [BOT-TODO] remove all completed FUTURE: and TODO: comments in code base
-
-
-### agents/discord (revisited - deployment optimization)
-- [BOT-TODO] update deployment to use vast.ai (if Fly.io memory constraints persist)
-- [BOT-TODO] offload operations to next-web api whenever possible
 -----------------------------------------------------------------------------
 
 ### Future Library Packages
