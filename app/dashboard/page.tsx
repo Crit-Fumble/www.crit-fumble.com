@@ -34,18 +34,14 @@ const CardContent: React.FC<{ children?: any, className?: string }> = ({ classNa
   );
 };
 
+import { getSession } from '../lib/auth';
+
+// This page uses dynamic features (cookies)
+export const dynamic = 'force-dynamic';
+
 export default async function DashboardPage() {
-  // Get session from cookie
-  let userData = null;
-  
-  try {
-    const sessionCookie = cookies().get('fumble-session');
-    if (sessionCookie?.value) {
-      userData = JSON.parse(sessionCookie.value);
-    }
-  } catch (error) {
-    console.error('Error parsing session cookie:', error);
-  }
+  // Get session from auth utility
+  const userData = await getSession();
 
   // Redirect to home if not logged in
   if (!userData) {

@@ -88,8 +88,8 @@ export async function POST(request: NextRequest) {
  * Register global slash commands with Discord
  */
 async function registerGlobalCommands() {
-  const botToken = process.env.DISCORD_BOT_TOKEN;
-  const applicationId = process.env.DISCORD_APPLICATION_ID;
+  const botToken = process.env.DISCORD_WEB_BOT_TOKEN;
+  const applicationId = process.env.DISCORD_WEB_BOT_APP_ID;
 
   if (!botToken || !applicationId) {
     return NextResponse.json({ error: 'Bot credentials not configured' }, { status: 500 });

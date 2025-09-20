@@ -1,7 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function POST(request: NextRequest) {
-  const response = NextResponse.redirect(`${process.env.NEXTAUTH_URL}/`);
+  // Get the base URL from the request
+  const baseUrl = `${request.nextUrl.protocol}//${request.nextUrl.host}`;
+  const response = NextResponse.redirect(`${baseUrl}/`);
   
   // Clear the session cookie
   response.cookies.delete('fumble-session');

@@ -330,7 +330,15 @@ export class WorldAnvilApiClient {
         throw new Error(`HTTP ${response.status}: ${errorText}`);
       }
 
-      const userData = await response.json() as any;
+      const userData = await response.json() as {
+        id: string;
+        username: string;
+        displayName?: string;
+        email: string;
+        avatar?: string;
+        isPremium?: boolean;
+        subscription?: any;
+      };
 
       return {
         id: userData.id,

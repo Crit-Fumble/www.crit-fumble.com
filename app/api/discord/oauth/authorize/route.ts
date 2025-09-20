@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+// This route uses dynamic features
+export const dynamic = 'force-dynamic';
+
 /**
- * Discord OAuth2 initiation endpoint
- * Redirects users to Discord for authentication
+ * Initiate Discord OAuth2 flow
  */
 export async function GET(request: NextRequest) {
   try {

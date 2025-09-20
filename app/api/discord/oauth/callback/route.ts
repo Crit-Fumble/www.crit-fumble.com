@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+// This route uses dynamic features
+export const dynamic = 'force-dynamic';
+
 /**
- * Discord OAuth2 callback endpoint
- * Handles OAuth2 flow for Discord authentication
+ * Handle Discord OAuth2 callback
  */
 export async function GET(request: NextRequest) {
   try {
@@ -65,6 +67,7 @@ export async function GET(request: NextRequest) {
 
   } catch (error) {
     console.error('Discord OAuth callback error:', error);
-    return NextResponse.redirect('/auth/error?error=internal_error');
+    const baseUrl = `${request.nextUrl.protocol}//${request.nextUrl.host}`;
+    return NextResponse.redirect(`${baseUrl}/?error=auth_failed`);
   }
 }

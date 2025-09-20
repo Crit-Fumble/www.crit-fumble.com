@@ -24,11 +24,16 @@ if (!globalForPrisma.customClients) {
 function getDatabaseUrl(): string {
   // This is only used for CLI operations like migrations
   // Not exported as part of the package
+  if (process.env.DATABASE_URL) {
+    return process.env.DATABASE_URL;
+  }
+  
+  // Fallback to legacy Vercel Postgres environment variable
   if (process.env.POSTGRES_PRISMA_URL) {
     return process.env.POSTGRES_PRISMA_URL;
   }
   
-  throw new Error('Database URL not configured. Set POSTGRES_PRISMA_URL environment variable');
+  throw new Error('Database URL not configured. Set DATABASE_URL or POSTGRES_PRISMA_URL environment variable');
 }
 
 // Initialize the default client immediately
