@@ -14,7 +14,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "npm run build:core-only && next build",
-    "build:core-only": "npm run build --workspace=@crit-fumble/core",
+    "build:core-only": "npm run generate --workspace=@crit-fumble/core && npm run build --workspace=@crit-fumble/core",
     "build:all-packages": "npm run build --workspace=@crit-fumble/core && npm run build --workspace=@crit-fumble/worldanvil",
     "start": "next start",
     "lint": "next lint",

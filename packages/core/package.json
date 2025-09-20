@@ -12,7 +12,8 @@
         "npm": ">=9.0.0"
     },
     "scripts": {
-        "build": "tsc",
+        "build": "prisma generate && tsc",
+        "postinstall": "prisma generate",
         "dev": "tsc --watch",
         "lint": "eslint .",
         "test": "jest",
