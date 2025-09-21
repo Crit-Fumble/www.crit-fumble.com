@@ -35,7 +35,7 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 import { describe, it, expect, beforeEach, jest } from '@jest/globals';
-import { RpgPartyService } from '../server/services/RpgPartyService';
+import { RpgPartyService } from '../../server/services/RpgPartyService';
 // Mock Prisma Client
 var mockPrismaClient = {
     rpgParty: {

@@ -4,6 +4,7 @@ import "./globals.css";
 
 // Initialize Discord commands and other startup tasks
 import "../lib/startup.js";
+import Bottombar from './components/Bottombar';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -23,6 +24,7 @@ export default function RootLayout({
         <main className={'flex-grow w-full flex flex-col items-stretch'}>
           {children}
         </main>
+        <Bottombar />
       </body>
     </html>
   );

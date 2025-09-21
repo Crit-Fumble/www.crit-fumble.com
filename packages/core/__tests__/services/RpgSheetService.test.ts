@@ -3,7 +3,7 @@
  * Comprehensive tests for RPG sheet management service
  */
 
-import { RpgSheetService } from '../server/services/RpgSheetService';
+import { RpgSheetService } from '../../server/services/RpgSheetService';
 import { PrismaClient, RpgSheet, Prisma } from '@prisma/client';
 import { Client } from 'discord.js';
 import { WorldAnvilApiClient } from '@crit-fumble/worldanvil';

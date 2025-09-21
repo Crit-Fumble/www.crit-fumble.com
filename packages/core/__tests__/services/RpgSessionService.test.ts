@@ -1,5 +1,5 @@
 import { describe, it, expect, beforeEach, jest } from '@jest/globals';
-import { RpgSessionService } from '../server/services/RpgSessionService';
+import { RpgSessionService } from '../../server/services/RpgSessionService';
 import { PrismaClient, Prisma } from '@prisma/client';
 import { Client as DiscordClient } from 'discord.js';
 import { WorldAnvilApiClient } from '@crit-fumble/worldanvil';
