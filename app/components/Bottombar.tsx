@@ -1,4 +1,5 @@
 import React from 'react';
+import Image from 'next/image';
 
 const Bottombar: React.FC = () => {
   return (
@@ -9,8 +10,15 @@ const Bottombar: React.FC = () => {
           href="https://discord.gg/d4jWRM7KqA"
           target="_blank"
           rel="noopener noreferrer"
-          className="text-blue-400 hover:underline"
+          className="inline-flex items-center justify-center"
         >
+          <Image
+            src="/img/discord.svg"
+            alt="Discord Icon"
+            width={24}
+            height={24}
+            className="mr-2"
+          />
           Discord Server
         </a>
       </div>

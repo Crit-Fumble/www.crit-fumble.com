@@ -78,7 +78,7 @@ The `vercel.json` file automatically configures the cron job:
   "crons": [
     {
       "path": "/api/discord/cron",
-      "schedule": "*/5 * * * *"
+      "schedule": "*/15 * * * *"
     }
   ]
 }

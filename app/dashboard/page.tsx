@@ -96,30 +96,6 @@ export default async function DashboardPage() {
                   <small>User Management</small>
                 </a>
               )}
-              
-              <div 
-                className={`${buttonClass} opacity-50 cursor-not-allowed`}
-              >
-                🎲 Dice Roller
-                <br />
-                <small>(Coming Soon)</small>
-              </div>
-              
-              <div 
-                className={`${buttonClass} opacity-50 cursor-not-allowed`}
-              >
-                💬 Chat
-                <br />
-                <small>(Coming Soon)</small>
-              </div>
-              
-              <div 
-                className={`${buttonClass} opacity-50 cursor-not-allowed`}
-              >
-                📊 My Data
-                <br />
-                <small>(Coming Soon)</small>
-              </div>
             </div>
 
             {/* Footer navigation */}

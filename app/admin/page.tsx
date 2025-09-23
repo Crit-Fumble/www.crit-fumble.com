@@ -12,11 +12,22 @@ import { UserManagementTable, UserForm, type User } from '@crit-fumble/react/com
 
 type ViewMode = 'table' | 'create' | 'edit';
 
+interface UserData {
+  id: string;
+  displayName: string;
+  roles: { id: string; name: string }[];
+}
+
 export default function AdminDashboardPage() {
   const [viewMode, setViewMode] = useState<ViewMode>('table');
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
   const [loading, setLoading] = useState(true);
+
+  // Discord user fetch states
+  const [discordId, setDiscordId] = useState('');
+  const [userData, setUserData] = useState<UserData | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   // Check admin status on mount
   useEffect(() => {
@@ -107,6 +118,26 @@ export default function AdminDashboardPage() {
     setSelectedUser(null);
   };
 
+  const handleFetchUser = async () => {
+    setError(null);
+    try {
+      const response = await fetch('/api/discord/import-user', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ discordId }),
+      });
+
+      if (!response.ok) {
+        throw new Error((await response.json()).error || 'Failed to fetch user');
+      }
+
+      const data: UserData = await response.json();
+      setUserData(data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'An unknown error occurred');
+    }
+  };
+
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -126,9 +157,6 @@ export default function AdminDashboardPage() {
           <h1 className="text-2xl font-bold text-gray-800 mb-2">Access Denied</h1>
           <p className="text-gray-600 mb-4">
             You need admin privileges to access this page.
-          </p>
-          <p className="text-sm text-gray-500 mb-6">
-            Only users with the admin flag set in the database can access the admin dashboard.
           </p>
           <a
             href="/dashboard"
@@ -191,6 +219,41 @@ export default function AdminDashboardPage() {
             onCancel={handleCancel}
           />
         )}
+
+        {/* Discord User Fetch Form */}
+        <div className="mt-8 p-4 bg-white rounded shadow">
+          <h2 className="text-xl font-semibold text-gray-800 mb-4">Fetch Discord User</h2>
+          <div className="flex space-x-4">
+            <input
+              type="text"
+              placeholder="Enter Discord ID"
+              value={discordId}
+              onChange={(e) => setDiscordId(e.target.value)}
+              className="flex-1 px-4 py-2 border border-gray-300 rounded"
+            />
+            <button
+              onClick={handleFetchUser}
+              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+            >
+              Fetch User
+            </button>
+          </div>
+
+          {error && <p className="mt-2 text-red-600">{error}</p>}
+
+          {userData && (
+            <div className="mt-4 p-4 border border-gray-300 rounded bg-gray-50">
+              <h3 className="text-lg font-semibold text-gray-800 mb-2">User Details</h3>
+              <p className="text-gray-700">Display Name: {userData.displayName}</p>
+              <p className="text-gray-700">Roles:</p>
+              <ul className="list-disc list-inside">
+                {userData.roles.map((role) => (
+                  <li key={role.id} className="text-gray-700">{role.name}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
       </div>
 
       {/* Admin Notice */}

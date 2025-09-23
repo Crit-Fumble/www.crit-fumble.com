@@ -1,9 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
-
-// Initialize Discord commands and other startup tasks
-import "../lib/startup.js";
 import Bottombar from './components/Bottombar';
 
 const inter = Inter({ subsets: ["latin"] });

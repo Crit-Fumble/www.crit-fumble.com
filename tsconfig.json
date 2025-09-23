@@ -2,13 +2,14 @@
   "files": [],
   "references": [
     {
+      "path": "./packages/types",
+      "noEmit": false
+    },
+    {
       "path": "./tsconfig.app.json"
     },
     {
       "path": "./packages/core"
-    },
-    {
-      "path": "./packages/types"
     },
     {
       "path": "./packages/react"
@@ -38,7 +39,9 @@
       {
         "name": "next"
       }
-    ]
+    ],
+    "outDir": "dist",
+    "rootDir": "./"
   },
   "include": [
     "next-env.d.ts",

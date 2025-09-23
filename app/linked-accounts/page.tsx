@@ -80,8 +80,8 @@ export default async function LinkedAccountsPage() {
                 <span className="text-green-600 text-sm">✓ Connected</span>
               </div>
 
-              {/* WorldAnvil Account - Coming Soon */}
-              <div className="flex items-center justify-between p-4 border rounded opacity-50">
+              {/* WorldAnvil Account */}
+              <div className="flex items-center justify-between p-4 border rounded">
                 <div className="flex items-center gap-3">
                   <div className="w-6 h-6 bg-gray-400 rounded"></div>
                   <div className="text-left">
@@ -89,11 +89,11 @@ export default async function LinkedAccountsPage() {
                     <div className="text-sm text-gray-600">Connect your World Anvil account</div>
                   </div>
                 </div>
-                <span className="text-gray-400 text-sm">Coming Soon</span>
+                <span className="text-gray-400 text-sm"></span>
               </div>
 
-              {/* OpenAI Account - Coming Soon */}
-              <div className="flex items-center justify-between p-4 border rounded opacity-50">
+              {/* OpenAI Account */}
+              <div className="flex items-center justify-between p-4 border rounded">
                 <div className="flex items-center gap-3">
                   <div className="w-6 h-6 bg-gray-400 rounded"></div>
                   <div className="text-left">
@@ -101,7 +101,7 @@ export default async function LinkedAccountsPage() {
                     <div className="text-sm text-gray-600">Connect for AI features</div>
                   </div>
                 </div>
-                <span className="text-gray-400 text-sm">Coming Soon</span>
+                <span className="text-gray-400 text-sm"></span>
               </div>
             </div>
 
