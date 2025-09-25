@@ -155,36 +155,6 @@ async function clearGlobalCommands() {
   });
 }
 
-/**
- * Handle Discord webhook events
- */
-export async function webhookHandler(req: Request) {
-  try {
-    const body = await req.json();
-
-    // Log the incoming webhook payload for debugging
-    console.log('Webhook payload:', body);
-
-    switch (body.event?.type) {
-      case 'APPLICATION_AUTHORIZED':
-        console.log('Application Authorized:', body);
-        // Add logic for handling authorization
-        break;
-
-      case 'APPLICATION_DEAUTHORIZED':
-        console.log('Application Deauthorized:', body);
-        // Add logic for handling deauthorization
-        break;
-
-      default:
-        console.log('Unhandled event type:', body.event?.type);
-    }
-
-    return NextResponse.json({ status: 'success' });
-  } catch (error) {
-    console.error('Error handling webhook:', error);
-    return NextResponse.json({ error: 'Failed to process webhook' }, { status: 500 });
-  }
-}
+// Webhook handler moved to /api/discord/events/route.ts
 
 export const runtime = 'edge';
