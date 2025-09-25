@@ -10,7 +10,7 @@ export * from './SiteAdminProtection';
 // export * from './RpgWorldService';
 // export * from './RpgCampaignService';
 // export * from './RpgPartyService';
-// export * from './RpgCharacterService';
+export * from './RpgCharacterService';
 export * from './RpgSheetService';
 export * from './RpgSessionService';
 

@@ -22,25 +22,18 @@ export async function GET(
       where: { slug: params.slug },
       include: {
         user: {
-          select: { 
-            id: true, 
-            username: true,
-            discord_username: true
+          select: {
+            id: true,
+            name: true,
+            slug: true,
           }
         },
-        sheets: {
+        rpg_sheets: {
           include: {
             rpg_system: {
-              select: {
-                id: true,
-                name: true,
-                version: true,
-                color: true,
-                icon: true
-              }
+              select: { id: true, title: true }
             }
-          },
-          orderBy: { created_at: 'desc' }
+          }
         }
       }
     });

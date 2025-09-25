@@ -32,7 +32,7 @@ export async function GET(request: NextRequest) {
     const characters = await prisma.rpgCharacter.findMany({
       where: { user_id: userId },
       include: {
-        sheets: {
+        rpg_sheets: {
           include: {
             rpg_system: true
           }
@@ -142,9 +142,14 @@ export async function POST(request: NextRequest) {
     const character = await prisma.rpgCharacter.create({
       data: characterData,
       include: {
-        sheets: {
+        user: {
+          select: { id: true, name: true }
+        },
+        rpg_sheets: {
           include: {
-            rpg_system: true
+            rpg_system: {
+              select: { id: true, title: true }
+            }
           }
         }
       }

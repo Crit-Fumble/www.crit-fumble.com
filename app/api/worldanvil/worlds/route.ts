@@ -6,47 +6,20 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { getSession } from '../../../lib/auth';
-import { WorldAnvilService } from '@crit-fumble/worldanvil';
+import { PrismaClient } from '@crit-fumble/core';
+// TODO: Import WorldAnvilService when it's implemented
+// import { WorldAnvilService } from '@crit-fumble/worldanvil';
+
+const prisma = new PrismaClient();
 
 // GET /api/worldanvil/worlds - List user's worlds
 export async function GET(request: NextRequest) {
   try {
-    const session = await getSession();
-    if (!session) {
-      return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
-    }
-
-    // Get user's World Anvil token
-    const worldAnvilToken = await getUserWorldAnvilToken(session.id);
-    if (!worldAnvilToken) {
-      return NextResponse.json({ 
-        error: 'World Anvil account not connected',
-        worlds: []
-      }, { status: 401 });
-    }
-
-    const worldAnvilService = new WorldAnvilService(worldAnvilToken);
-
-    try {
-      const worlds = await worldAnvilService.getWorlds();
-      return NextResponse.json({ worlds });
-    } catch (apiError: any) {
-      // Handle World Anvil API errors gracefully
-      if (apiError.response?.status === 401) {
-        return NextResponse.json({ 
-          error: 'World Anvil token expired or invalid',
-          worlds: []
-        }, { status: 401 });
-      }
-      throw apiError;
-    }
-
+    // TODO: Implement World Anvil worlds API
+    return NextResponse.json({ error: 'World Anvil worlds API not yet implemented' }, { status: 501 });
   } catch (error) {
-    console.error('Error fetching World Anvil worlds:', error);
-    return NextResponse.json({ 
-      error: 'Failed to fetch worlds',
-      worlds: []
-    }, { status: 500 });
+    console.error('Error fetching worlds:', error);
+    return NextResponse.json({ error: 'Failed to fetch worlds' }, { status: 500 });
   }
 }
 

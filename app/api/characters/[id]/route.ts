@@ -27,9 +27,9 @@ export async function GET(
       where: { id: params.id },
       include: {
         user: {
-          select: { id: true, username: true }
+          select: { id: true, name: true }
         },
-        sheets: {
+        rpg_sheets: {
           include: {
             rpg_system: true
           },
@@ -179,9 +179,9 @@ export async function PUT(
       },
       include: {
         user: {
-          select: { id: true, username: true }
+          select: { id: true, name: true }
         },
-        sheets: {
+        rpg_sheets: {
           include: {
             rpg_system: true
           },
@@ -216,7 +216,7 @@ export async function DELETE(
     const character = await prisma.rpgCharacter.findUnique({
       where: { id: params.id },
       include: {
-        sheets: true
+        rpg_sheets: true
       }
     });
 

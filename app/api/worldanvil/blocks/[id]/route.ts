@@ -8,104 +8,57 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { getSession } from '../../../../lib/auth';
-import { WorldAnvilService } from '@crit-fumble/worldanvil';
+import { PrismaClient } from '@crit-fumble/core';
+// TODO: Import WorldAnvilService when it's implemented
+// import { WorldAnvilService } from '@crit-fumble/worldanvil';
 
-// GET /api/worldanvil/blocks/[id] - Get block by ID
+const prisma = new PrismaClient();
+
+// GET /api/worldanvil/blocks/[id] - Get specific block
 export async function GET(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await getSession();
-    if (!session) {
-      return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
-    }
-
-    const worldAnvilToken = await getUserWorldAnvilToken(session.id);
-    if (!worldAnvilToken) {
-      return NextResponse.json({ error: 'World Anvil account not connected' }, { status: 401 });
-    }
-
-    const worldAnvilService = new WorldAnvilService(worldAnvilToken);
-    const block = await worldAnvilService.getBlock(params.id);
-
-    return NextResponse.json({ block });
-
+    // TODO: Implement World Anvil block API
+    return NextResponse.json({ error: 'World Anvil block API not yet implemented' }, { status: 501 });
   } catch (error) {
-    console.error('Error fetching World Anvil block:', error);
+    console.error('Error fetching block:', error);
     return NextResponse.json({ error: 'Failed to fetch block' }, { status: 500 });
   }
 }
 
-// PUT /api/worldanvil/blocks/[id] - Update block
+// PUT /api/worldanvil/blocks/[id] - Update a block
 export async function PUT(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await getSession();
-    if (!session) {
-      return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
-    }
-
-    const body = await request.json();
-    const { title, content, is_public } = body;
-
-    const worldAnvilToken = await getUserWorldAnvilToken(session.id);
-    if (!worldAnvilToken) {
-      return NextResponse.json({ error: 'World Anvil account not connected' }, { status: 401 });
-    }
-
-    const worldAnvilService = new WorldAnvilService(worldAnvilToken);
-
-    const block = await worldAnvilService.updateBlock(params.id, {
-      title,
-      content,
-      is_public
-    });
-
-    return NextResponse.json({ 
-      block,
-      message: 'Block updated successfully'
-    });
-
+    // TODO: Implement World Anvil block update API
+    return NextResponse.json({ error: 'World Anvil block update not yet implemented' }, { status: 501 });
   } catch (error) {
-    console.error('Error updating World Anvil block:', error);
+    console.error('Error updating block:', error);
     return NextResponse.json({ error: 'Failed to update block' }, { status: 500 });
   }
 }
 
-// DELETE /api/worldanvil/blocks/[id] - Delete block
+// DELETE /api/worldanvil/blocks/[id] - Delete a block
 export async function DELETE(
   request: NextRequest,
   { params }: { params: { id: string } }
 ) {
   try {
-    const session = await getSession();
-    if (!session) {
-      return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
-    }
-
-    const worldAnvilToken = await getUserWorldAnvilToken(session.id);
-    if (!worldAnvilToken) {
-      return NextResponse.json({ error: 'World Anvil account not connected' }, { status: 401 });
-    }
-
-    const worldAnvilService = new WorldAnvilService(worldAnvilToken);
-    await worldAnvilService.deleteBlock(params.id);
-
-    return NextResponse.json({ 
-      message: 'Block deleted successfully'
-    });
-
+    // TODO: Implement World Anvil block deletion API
+    return NextResponse.json({ error: 'World Anvil block deletion not yet implemented' }, { status: 501 });
   } catch (error) {
-    console.error('Error deleting World Anvil block:', error);
+    console.error('Error deleting block:', error);
     return NextResponse.json({ error: 'Failed to delete block' }, { status: 500 });
   }
 }
 
-// Helper function to get user's World Anvil token
+// Helper function to get user's World Anvil token (TODO: implement)
 async function getUserWorldAnvilToken(userId: string): Promise<string | null> {
+  // TODO: Implement token retrieval from database or session
   // This is a placeholder - implement based on your token storage
   return process.env.WORLDANVIL_API_TOKEN || null;
 }

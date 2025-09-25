@@ -95,9 +95,9 @@ async function CharacterList({ userId }: { userId: string }) {
               </div>
             )}
             {/* Character Level Badge (if has sheets) */}
-            {character.sheets?.length > 0 && (
+            {character.rpg_sheets?.length > 0 && (
               <div className="absolute top-3 right-3 bg-black bg-opacity-50 text-white px-2 py-1 rounded text-sm">
-                Sheets: {character.sheets.length}
+                Sheets: {character.rpg_sheets.length}
               </div>
             )}
           </div>
