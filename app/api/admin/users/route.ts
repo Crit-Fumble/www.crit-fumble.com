@@ -7,10 +7,14 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { UserManagementService } from '@crit-fumble/core/server/services';
-import { withAdminAuth } from '../../../lib/admin-auth';
+import { withAdminAuth, AdminUser } from '../../../lib/admin-auth';
 
 // GET /api/admin/users - List users with filtering and pagination
-export const GET = withAdminAuth(async (request: NextRequest) => {
+async function handleGetUsers(
+  request: NextRequest,
+  context: { params: {} },
+  user: AdminUser
+) {
   try {
     const { searchParams } = new URL(request.url);
     
@@ -35,10 +39,14 @@ export const GET = withAdminAuth(async (request: NextRequest) => {
       { status: 500 }
     );
   }
-});
+}
 
 // POST /api/admin/users - Create new user
-export const POST = withAdminAuth(async (request: NextRequest) => {
+async function handleCreateUser(
+  request: NextRequest,
+  context: { params: {} },
+  user: AdminUser
+) {
   try {
     const body = await request.json();
 
@@ -66,9 +74,9 @@ export const POST = withAdminAuth(async (request: NextRequest) => {
       }
     }
 
-    const user = await userService.createUser(body);
+    const createdUser = await userService.createUser(body);
 
-    return NextResponse.json(user, { status: 201 });
+    return NextResponse.json(createdUser, { status: 201 });
 
   } catch (error) {
     console.error('Error creating user:', error);
@@ -77,4 +85,7 @@ export const POST = withAdminAuth(async (request: NextRequest) => {
       { status: 500 }
     );
   }
-});
+}
+
+export const GET = withAdminAuth(handleGetUsers);
+export const POST = withAdminAuth(handleCreateUser);

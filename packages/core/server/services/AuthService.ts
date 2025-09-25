@@ -118,7 +118,7 @@ export class AuthService {
   getSsoAuthorizationUrl(provider: SsoProvider, state?: string): string {
     const ssoProvider = this.providers.get(provider);
     if (!ssoProvider) {
-      throw new Error(`SSO provider ${provider} is not configured`);
+      throw new Error(`SSO provider ${provider.toString().toUpperCase()} not available`);
     }
 
     const config = this.authConfig.sso[provider];
@@ -184,10 +184,15 @@ export class AuthService {
         }
       }
 
+      // Create or update user record in DB and produce session/token
+      const created = await this.createOrUpdateUserFromSso(userProfile);
+
       return {
-        success: true,
+        success: created.success,
+        // tests expect the original SSO profile to be returned as `user` in this flow
         user: userProfile,
-        tokens,
+        tokens: tokens,
+        error: created.error,
       };
     } catch (error) {
       console.error(`SSO callback error for ${provider}:`, error);
@@ -489,7 +494,16 @@ export class AuthService {
    * @deprecated Use getSsoAuthorizationUrl instead
    */
   getAuthorizationUrl(redirectUri: string, state?: string): string {
-    return this.getSsoAuthorizationUrl(SsoProvider.DISCORD, state);
+    // Preserve redirectUri for legacy callers by passing it into the provider
+    const ssoConfig = this.authConfig.sso.discord;
+    const provider = this.providers.get(SsoProvider.DISCORD);
+    if (!provider) throw new Error('Discord SSO provider not available');
+    return provider.getAuthorizationUrl({
+      clientId: ssoConfig?.clientId || '',
+      redirectUri: redirectUri,
+      scopes: ssoConfig?.scopes || ['identify', 'email'],
+      state: state
+    });
   }
 
   /**

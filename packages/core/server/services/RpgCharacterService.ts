@@ -261,16 +261,9 @@ Provide suggestions for character growth, potential story arcs, and development 
   async notifyCharacterUpdate(characterId: string, message: string): Promise<boolean> {
     const character = await this.getById(characterId);
     if (!character || !character.discord_thread_id) return false;
-
-    try {
-      // TODO: Update to use Discord.js SDK directly
-      // await channel.send(...)
-      throw new Error("Not implemented - use Discord.js SDK directly");
-      // return true;
-    } catch (error) {
-      console.error('Failed to send Discord notification:', error);
-      return false;
-    }
+    // This functionality must be implemented with Discord.js SDK.
+    // For now we surface a clear error so callers/tests know it's not implemented.
+    throw new Error('Not implemented - use Discord.js SDK directly');
   }
 
   /**

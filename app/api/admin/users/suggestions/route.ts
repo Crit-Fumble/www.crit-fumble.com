@@ -7,10 +7,14 @@
 
 import { NextRequest, NextResponse } from 'next/server';
 import { UserManagementService } from '@crit-fumble/core/server/services';
-import { withAdminAuth } from '../../../../lib/admin-auth';
+import { withAdminAuth, AdminUser } from '../../../../lib/admin-auth';
 
 // GET /api/admin/users/suggestions - Get user suggestions for autocomplete
-export const GET = withAdminAuth(async (request: NextRequest) => {
+async function handleGetUserSuggestions(
+  request: NextRequest,
+  context: { params: {} },
+  user: AdminUser
+) {
   try {
     const { searchParams } = new URL(request.url);
     const query = searchParams.get('q') || '';
@@ -32,4 +36,6 @@ export const GET = withAdminAuth(async (request: NextRequest) => {
       { status: 500 }
     );
   }
-});
+}
+
+export const GET = withAdminAuth(handleGetUserSuggestions);

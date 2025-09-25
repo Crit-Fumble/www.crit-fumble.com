@@ -17,6 +17,4 @@ export async function GET(req: Request) {
   return NextResponse.redirect(authorizationUrl);
 }
 
-export const config = {
-  runtime: 'edge',
-};
+export const runtime = 'edge';

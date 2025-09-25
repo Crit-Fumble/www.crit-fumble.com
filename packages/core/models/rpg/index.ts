@@ -1,8 +1,34 @@
-// Temporarily disable RPG model exports until TypeScript files are created
-// export * from './RpgSystem';
-// export * from './RpgWorld';
-// export * from './RpgSheet';
-// export * from './SheetTemplate';
+// Export RPG model types and runtime values
+export type {
+  RpgSystem,
+  GameSession,
+  RpgSystemSheet,
+  GameSessionSheet,
+} from './RpgSystem';
 
-// Export empty object for now to prevent module resolution errors
-export const RPG_MODELS_PLACEHOLDER = true;
+export type {
+  RpgWorld,
+  CreateRpgWorldInput,
+  UpdateRpgWorldInput,
+} from './RpgWorld';
+
+export type {
+  RpgSheet,
+  RpgSheetData,
+  CreateRpgSheetInput,
+  UpdateRpgSheetInput,
+} from './RpgSheet';
+
+export type {
+  SheetField,
+  SheetSection,
+  SheetTemplate,
+} from './SheetTemplate';
+
+// Export runtime constants and functions
+export {
+  SHEET_TEMPLATES,
+  getSheetTemplate,
+  validateSheetData,
+  calculateComputedFields,
+} from './SheetTemplate';

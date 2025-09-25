@@ -20,10 +20,10 @@ export interface AdminUser {
  * Middleware to protect admin routes
  * Checks if user is authenticated and has admin privileges in the database
  */
-export async function withAdminAuth<T extends any[]>(
-  handler: (request: NextRequest, user: AdminUser, ...args: T) => Promise<NextResponse>
+export function withAdminAuth<T extends Record<string, any> = {}>(
+  handler: (request: NextRequest, context: { params: T }, user: AdminUser) => Promise<NextResponse>
 ) {
-  return async (request: NextRequest, ...args: T): Promise<NextResponse> => {
+  return async (request: NextRequest, context: { params: T }): Promise<NextResponse> => {
     try {
       // Get current user session
       const session = await getSession();
@@ -54,7 +54,7 @@ export async function withAdminAuth<T extends any[]>(
       };
 
       // Call the protected handler with admin user
-      return await handler(request, adminUser, ...args);
+      return await handler(request, context, adminUser);
 
     } catch (error) {
       console.error('Admin auth middleware error:', error);

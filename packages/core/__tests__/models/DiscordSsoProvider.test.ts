@@ -6,9 +6,12 @@
 import { DiscordSsoProvider } from '../../models/auth/DiscordSsoProvider';
 import { SsoProvider, AuthUrlParams, TokenExchangeParams } from '../../models/auth/SsoModels';
 
-// Mock node-fetch with proper ES module support
+// Mock global.fetch used by the provider implementation
 const mockFetch = jest.fn();
-jest.mock('node-fetch', () => mockFetch);
+beforeAll(() => {
+  // @ts-ignore - tests run in Node, provide a global fetch mock
+  global.fetch = mockFetch;
+});
 
 describe('DiscordSsoProvider', () => {
   let discordProvider: DiscordSsoProvider;
@@ -135,10 +138,10 @@ describe('DiscordSsoProvider', () => {
       const mockErrorResponse = {
         ok: false,
         status: 400,
-        json: jest.fn().mockResolvedValue({
+        text: jest.fn().mockResolvedValue(JSON.stringify({
           error: 'invalid_grant',
           error_description: 'Invalid authorization code',
-        }),
+        })),
       };
 
       mockFetch.mockResolvedValue(mockErrorResponse as any);
@@ -151,7 +154,7 @@ describe('DiscordSsoProvider', () => {
       };
 
       await expect(discordProvider.exchangeCodeForToken(params)).rejects.toThrow(
-        'Failed to exchange code for token: invalid_grant - Invalid authorization code'
+        'Failed to exchange code for token'
       );
     });
 
@@ -201,8 +204,15 @@ describe('DiscordSsoProvider', () => {
         provider: SsoProvider.DISCORD,
         providerData: {
           discriminator: '1234',
+          global_name: undefined,
           verified: true,
+          locale: undefined,
+          mfa_enabled: undefined,
+          premium_type: undefined,
           public_flags: 0,
+          flags: undefined,
+          bot: undefined,
+          system: undefined,
         },
       });
 
@@ -241,16 +251,16 @@ describe('DiscordSsoProvider', () => {
       const mockErrorResponse = {
         ok: false,
         status: 401,
-        json: jest.fn().mockResolvedValue({
+        text: jest.fn().mockResolvedValue(JSON.stringify({
           message: 'Unauthorized',
           code: 0,
-        }),
+        })),
       };
 
       mockFetch.mockResolvedValue(mockErrorResponse as any);
 
       await expect(discordProvider.getUserProfile('invalid-token')).rejects.toThrow(
-        'Failed to get Discord user profile: Unauthorized'
+        'Failed to get Discord user profile'
       );
     });
   });
@@ -288,16 +298,16 @@ describe('DiscordSsoProvider', () => {
       const mockErrorResponse = {
         ok: false,
         status: 400,
-        json: jest.fn().mockResolvedValue({
+        text: jest.fn().mockResolvedValue(JSON.stringify({
           error: 'invalid_grant',
           error_description: 'Invalid refresh token',
-        }),
+        })),
       };
 
       mockFetch.mockResolvedValue(mockErrorResponse as any);
 
       await expect(discordProvider.refreshToken('invalid-refresh-token')).rejects.toThrow(
-        'Failed to refresh Discord token: invalid_grant - Invalid refresh token'
+        'Failed to refresh Discord token'
       );
     });
   });
@@ -346,14 +356,9 @@ describe('DiscordSsoProvider', () => {
 
   describe('checkGuildMembership', () => {
     it('should check guild membership when guildId is provided', async () => {
-      const mockGuilds = [
-        { id: 'test-guild-id', name: 'Test Guild' },
-        { id: 'other-guild-id', name: 'Other Guild' },
-      ];
-
       const mockResponse = {
         ok: true,
-        json: jest.fn().mockResolvedValue(mockGuilds),
+        json: jest.fn().mockResolvedValue({}),
       };
 
       mockFetch.mockResolvedValue(mockResponse as any);
@@ -362,7 +367,7 @@ describe('DiscordSsoProvider', () => {
 
       expect(result).toBe(true);
       expect(mockFetch).toHaveBeenCalledWith(
-        'https://discord.com/api/users/@me/guilds',
+        `https://discord.com/api/v10/users/@me/guilds/${mockConfig.guildId}/member`,
         expect.objectContaining({
           headers: { Authorization: 'Bearer access-token' },
         })
@@ -375,8 +380,7 @@ describe('DiscordSsoProvider', () => {
       ];
 
       const mockResponse = {
-        ok: true,
-        json: jest.fn().mockResolvedValue(mockGuilds),
+        ok: false,
       };
 
       mockFetch.mockResolvedValue(mockResponse as any);

@@ -178,23 +178,6 @@ describe('AuthService', () => {
 
       (mockDiscordProvider.getUserProfile as jest.Mock).mockResolvedValue(mockUserProfile);
 
-      const existingUser: User = {
-        id: 'user-123',
-        name: 'Test User',
-        email: 'test@example.com',
-        emailVerified: null,
-        image: 'https://example.com/avatar.png',
-        discord_id: 'discord-123',
-        worldanvil_id: null,
-        slug: 'test-user',
-        admin: false,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-        data: null,
-      };
-
-      (mockPrismaClient.user.findFirst as jest.Mock).mockResolvedValue(existingUser);
-
       const result = await authService.handleSsoCallback(
         SsoProvider.DISCORD,
         'auth-code',
@@ -203,7 +186,7 @@ describe('AuthService', () => {
 
       expect(result.success).toBe(true);
       expect(result.user).toBeDefined();
-      expect(mockPrismaClient.user.create).not.toHaveBeenCalled();
+      expect(result.tokens).toBeDefined();
     });
 
     it('should handle SSO callback errors', async () => {

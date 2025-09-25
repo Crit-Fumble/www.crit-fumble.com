@@ -3,10 +3,11 @@
  * Comprehensive tests for RPG world management service
  */
 
-import { RpgWorldService } from '../server/services/RpgWorldService';
-import { PrismaClient, RpgWorld, RpgWorldSystem, Prisma } from '@prisma/client';
+import { RpgWorldService } from '@crit-fumble/core/server/services/RpgWorldService';
+import { PrismaClient, RpgWorld, RpgWorldSystem } from '@prisma/client';
 import { Client } from 'discord.js';
 import { WorldAnvilApiClient } from '@crit-fumble/worldanvil';
+import { CreateRpgWorldInput, UpdateRpgWorldInput } from '@crit-fumble/core/models';
 import OpenAI from 'openai';
 
 // Mock Prisma Client
@@ -168,14 +169,14 @@ describe('RpgWorldService', () => {
 
   describe('create', () => {
     it('should create a new RPG world', async () => {
-      const worldInput: Prisma.RpgWorldCreateInput = {
-        title: 'New World',
-        slug: 'new-world',
-        summary: 'A new RPG world',
-        description: 'A new world description',
-        gm_ids: ['gm-1'],
+      const worldInput: CreateRpgWorldInput = {
+        title: 'Test World',
+        slug: 'test-world',
+        summary: 'A test world for RPG adventures',
+        description: 'This is a detailed description of the test world',
+        gm_ids: ['gm-123', 'gm-456'],
         is_active: true,
-        data: { setting: 'fantasy' },
+        data: { theme: 'fantasy' },
       };
 
       const mockCreatedWorld: RpgWorld = {
@@ -211,7 +212,7 @@ describe('RpgWorldService', () => {
 
   describe('update', () => {
     it('should update an existing RPG world', async () => {
-      const worldUpdate: Prisma.RpgWorldUpdateInput = {
+      const worldUpdate: UpdateRpgWorldInput = {
         title: 'Updated World',
         description: 'An updated world description',
       };

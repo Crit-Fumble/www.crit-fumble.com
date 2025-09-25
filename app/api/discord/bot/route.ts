@@ -95,72 +95,17 @@ async function registerGlobalCommands() {
     return NextResponse.json({ error: 'Bot credentials not configured' }, { status: 500 });
   }
 
+  // Define the single 'help' command
   const commands = [
     {
-      name: 'event',
-      description: 'Manage Discord scheduled events',
-      options: [
-        {
-          name: 'create',
-          description: 'Create a new scheduled event',
-          type: 1, // SUB_COMMAND
-          options: [
-            {
-              name: 'name',
-              description: 'Event name',
-              type: 3, // STRING
-              required: true,
-            },
-            {
-              name: 'description',
-              description: 'Event description',
-              type: 3, // STRING
-              required: false,
-            },
-          ],
-        },
-        {
-          name: 'list',
-          description: 'List scheduled events',
-          type: 1, // SUB_COMMAND
-        },
-      ],
-    },
-    {
-      name: 'campaign',
-      description: 'Manage D&D campaigns',
-      options: [
-        {
-          name: 'create',
-          description: 'Create a new campaign',
-          type: 1, // SUB_COMMAND
-        },
-        {
-          name: 'list',
-          description: 'List your campaigns',
-          type: 1, // SUB_COMMAND
-        },
-      ],
-    },
-    {
-      name: 'character',
-      description: 'Manage D&D characters',
-      options: [
-        {
-          name: 'create',
-          description: 'Create a new character',
-          type: 1, // SUB_COMMAND
-        },
-        {
-          name: 'sheet',
-          description: 'View character sheet',
-          type: 1, // SUB_COMMAND
-        },
-      ],
+      name: 'help',
+      description: 'Provides information about bot commands.',
+      options: [],
     },
   ];
 
-  const response = await fetch(`https://discord.com/api/v10/applications/${applicationId}/commands`, {
+  // Register the commands with Discord
+  const response = await fetch('https://discord.com/api/v10/applications/me/commands', {
     method: 'PUT',
     headers: {
       'Authorization': `Bot ${botToken}`,
@@ -170,18 +115,12 @@ async function registerGlobalCommands() {
   });
 
   if (!response.ok) {
-    const error = await response.text();
+    const error = await response.json();
     console.error('Failed to register commands:', error);
     return NextResponse.json({ error: 'Failed to register commands' }, { status: 500 });
   }
 
-  const registeredCommands = await response.json();
-  
-  return NextResponse.json({
-    success: true,
-    message: `Registered ${registeredCommands.length} global commands`,
-    commands: registeredCommands.map((cmd: any) => ({ id: cmd.id, name: cmd.name })),
-  });
+  return NextResponse.json({ status: 'success', commands });
 }
 
 /**
@@ -215,3 +154,37 @@ async function clearGlobalCommands() {
     message: 'All global commands cleared',
   });
 }
+
+/**
+ * Handle Discord webhook events
+ */
+export async function webhookHandler(req: Request) {
+  try {
+    const body = await req.json();
+
+    // Log the incoming webhook payload for debugging
+    console.log('Webhook payload:', body);
+
+    switch (body.event?.type) {
+      case 'APPLICATION_AUTHORIZED':
+        console.log('Application Authorized:', body);
+        // Add logic for handling authorization
+        break;
+
+      case 'APPLICATION_DEAUTHORIZED':
+        console.log('Application Deauthorized:', body);
+        // Add logic for handling deauthorization
+        break;
+
+      default:
+        console.log('Unhandled event type:', body.event?.type);
+    }
+
+    return NextResponse.json({ status: 'success' });
+  } catch (error) {
+    console.error('Error handling webhook:', error);
+    return NextResponse.json({ error: 'Failed to process webhook' }, { status: 500 });
+  }
+}
+
+export const runtime = 'edge';

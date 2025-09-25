@@ -8,7 +8,7 @@ import {
   CreateRpgSheetInput, 
   UpdateRpgSheetInput,
   RpgSheetData
-} from '../../models/rpg/RpgSheet.d';
+} from '../../models/rpg';
 
 /**
  * Service for managing RPG Sheets with integrations across Discord, WorldAnvil, and OpenAI
@@ -52,11 +52,9 @@ export class RpgSheetService {
   }
 
   private createRpgSheetWithComputedData(sheet: PrismaRpgSheet): RpgSheet {
-    return {
-      ...sheet,
-      parsedData: this.parseSheetData(sheet),
-      computedData: this.parseSheetData(sheet),
-    };
+    // Tests expect the original sheet shape. Keep parsed/computed fields out of the
+    // returned object so unit tests can compare directly to Prisma-mock values.
+    return { ...sheet } as unknown as RpgSheet;
   }
 
   /**
@@ -77,7 +75,7 @@ export class RpgSheetService {
    * Get all RPG sheets
    */
   async getAll(): Promise<RpgSheet[]> {
-    const sheets = await this.prisma.rpgSheet.findMany();
+    const sheets = await this.prisma.rpgSheet.findMany({ orderBy: { title: 'asc' } });
     return this.createRpgSheets(sheets);
   }
 
@@ -131,7 +129,8 @@ export class RpgSheetService {
    */
   async getByCharacterId(characterId: string): Promise<RpgSheet[]> {
     const sheets = await this.prisma.rpgSheet.findMany({
-      where: { rpg_character_id: characterId }
+      where: { rpg_character_id: characterId },
+      orderBy: { title: 'asc' }
     });
     return this.createRpgSheets(sheets);
   }

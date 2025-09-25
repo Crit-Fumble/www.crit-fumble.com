@@ -51,6 +51,12 @@ describe('UserService', () => {
 
   beforeEach(() => {
     jest.clearAllMocks();
+    // Reset all mock implementations
+    (mockPrismaClient.user.findUnique as jest.Mock).mockReset();
+    (mockPrismaClient.user.findFirst as jest.Mock).mockReset();
+    (mockPrismaClient.user.create as jest.Mock).mockReset();
+    (mockPrismaClient.user.update as jest.Mock).mockReset();
+    
     userService = new UserService(
       mockPrismaClient,
       mockDiscordClient,
@@ -109,8 +115,8 @@ describe('UserService', () => {
     it('should get user by WorldAnvil ID when not found by other IDs', async () => {
       (mockPrismaClient.user.findUnique as jest.Mock).mockResolvedValue(null);
       (mockPrismaClient.user.findFirst as jest.Mock)
-        .mockResolvedValueOnce(null)
-        .mockResolvedValueOnce(mockUser);
+        .mockResolvedValueOnce(null) // First call for discord_id
+        .mockResolvedValueOnce(mockUser); // Second call for worldanvil_id
 
       const result = await userService.getUserById('wa-123');
 
@@ -122,7 +128,9 @@ describe('UserService', () => {
 
     it('should return null when user not found', async () => {
       (mockPrismaClient.user.findUnique as jest.Mock).mockResolvedValue(null);
-      (mockPrismaClient.user.findFirst as jest.Mock).mockResolvedValue(null);
+      (mockPrismaClient.user.findFirst as jest.Mock)
+        .mockResolvedValueOnce(null) // First call for discord_id
+        .mockResolvedValueOnce(null); // Second call for worldanvil_id
 
       const result = await userService.getUserById('non-existent');
 
@@ -147,6 +155,7 @@ describe('UserService', () => {
         data: null,
       };
 
+      // Clear any previous mock calls and set up fresh mock
       (mockPrismaClient.user.findFirst as jest.Mock).mockResolvedValue(mockUser);
 
       const result = await userService.getUserByEmail('test@example.com');
@@ -243,6 +252,10 @@ describe('UserService', () => {
 
   describe('generateAIContent', () => {
     it('should throw not implemented error', async () => {
+      // Mock getUserById to return a user so we don't get 'User not found' error
+      const mockUser = { id: 'user-123', name: 'Test User' };
+      (mockPrismaClient.user.findUnique as jest.Mock).mockResolvedValue(mockUser);
+      
       await expect(
         userService.generateAIContent('user-123', 'bio')
       ).rejects.toThrow('Not implemented - use OpenAI SDK directly');

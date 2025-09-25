@@ -6,15 +6,15 @@
  */
 
 import { jest } from '@jest/globals';
-import { SiteAdminProtection } from '../../../packages/core/server/services/SiteAdminProtection';
-import { PermissionService } from '../../../packages/core/server/services/PermissionService';
+import { SiteAdminProtection } from '@crit-fumble/core/server/services/SiteAdminProtection';
+import { PermissionService } from '@crit-fumble/core/server/services/PermissionService';
 import {
   WebAdminOperation,
   WebAdminContext,
   DiscordServerContext,
   WebAdminPermission,
   PermissionResult,
-} from '../../../packages/core/models/permissions/PermissionModels';
+} from '@crit-fumble/core/models/permissions/PermissionModels';
 
 // Mock PermissionService
 const mockPermissionService = {
@@ -162,7 +162,7 @@ describe('SiteAdminProtection', () => {
 
     it('should always return false and log security violation', () => {
       // Arrange
-      const consoleSpy = jest.spyOn(console, 'warn').mockImplementation();
+  const consoleSpy = jest.spyOn(console, 'warn').mockImplementation(() => undefined);
 
       // Act
       const result = siteAdminProtection.canDiscordPermissionsGrantWebAccess(
@@ -209,7 +209,7 @@ describe('SiteAdminProtection', () => {
         WebAdminOperation.WEB_ADMINISTRATION,
         WebAdminOperation.MANAGE_USERS,
         WebAdminOperation.MODERATE_CONTENT,
-        WebAdminOperation.MANAGE_OWN_PROFILE,
+        WebAdminOperation.VIEW_OWN_PROFILE,
       ];
 
       operations.forEach(operation => {
@@ -225,7 +225,7 @@ describe('SiteAdminProtection', () => {
   describe('auditAdminPermissionUsage', () => {
     it('should log admin permission check with correct metadata', () => {
       // Arrange
-      const consoleSpy = jest.spyOn(console, 'log').mockImplementation();
+  const consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => undefined);
 
       // Act
       siteAdminProtection.auditAdminPermissionUsage(
@@ -256,7 +256,7 @@ describe('SiteAdminProtection', () => {
 
     it('should log Discord permission attempt with security warning', () => {
       // Arrange
-      const consoleSpy = jest.spyOn(console, 'log').mockImplementation();
+  const consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => undefined);
 
       // Act
       siteAdminProtection.auditAdminPermissionUsage(
@@ -285,7 +285,7 @@ describe('SiteAdminProtection', () => {
 
     it('should include timestamp in audit log', () => {
       // Arrange
-      const consoleSpy = jest.spyOn(console, 'log').mockImplementation();
+  const consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => undefined);
       const beforeTime = new Date().toISOString();
 
       // Act
@@ -301,9 +301,10 @@ describe('SiteAdminProtection', () => {
       // Assert
       const logCall = consoleSpy.mock.calls[0];
       const logData = logCall[1];
-      expect(logData.timestamp).toBeDefined();
-      expect(logData.timestamp).toBeGreaterThanOrEqual(beforeTime);
-      expect(logData.timestamp).toBeLessThanOrEqual(afterTime);
+  expect(logData.timestamp).toBeDefined();
+  const tsNum = Date.parse(logData.timestamp as unknown as string);
+  expect(tsNum).toBeGreaterThanOrEqual(Date.parse(beforeTime));
+  expect(tsNum).toBeLessThanOrEqual(Date.parse(afterTime));
 
       consoleSpy.mockRestore();
     });

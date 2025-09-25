@@ -164,7 +164,7 @@ describe('RpgSystemController', () => {
       expect(res.json).toHaveBeenCalledWith({
         success: false,
         error: 'Bad request',
-        message: 'Missing required fields: name, description, version, publisher',
+        message: 'Missing required fields: name, version, publisher',
       });
     });
 

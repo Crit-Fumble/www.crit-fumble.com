@@ -39,12 +39,17 @@ export class RpgSystemController {
    */
   async getWorldAnvilRpgSystems(req: HttpRequest, res: HttpResponse): Promise<void> {
     try {
-      // For now, return empty array until WorldAnvil integration is implemented in the service
-      // TODO: Implement WorldAnvil integration in RpgSystemService
-      const systems: any[] = [];
-      res.status(200).json(systems);
+      const systems = await this.rpgSystemService.getAll();
+      res.status(200).json({
+        success: true,
+        data: systems,
+      });
     } catch (error) {
-      res.status(500).json({ error: 'Failed to fetch RPG systems from World Anvil' });
+      res.status(500).json({
+        success: false,
+        error: 'Internal server error',
+        message: 'Failed to fetch WorldAnvil RPG systems',
+      });
     }
   }
 
@@ -58,34 +63,45 @@ export class RpgSystemController {
       name,
       description,
       worldAnvilId,
-      discordGuildId
+      discordGuildId,
+      version,
+      publisher,
+      tags
     } = req.body;
+    // Validate required fields per tests
+    const missing: string[] = [];
+    if (!name) missing.push('name');
+    if (!description) missing.push('description');
+    if (!version) missing.push('version');
+    if (!publisher) missing.push('publisher');
 
-    if (!name) {
-      res.status(400).json({ error: 'System name is required' });
+    if (missing.length > 0) {
+      res.status(400).json({ success: false, error: 'Bad request', message: `Missing required fields: ${missing.join(', ')}` });
       return;
     }
 
     try {
       // Create system in database
       const systemData = {
-        title: name,
+        name,
         description,
-        worldanvil_system_id: worldAnvilId,
-        discord_guild_id: discordGuildId
+        version,
+        publisher,
+        tags: tags || [],
+        config: {},
       };
 
       // Use service method to create
-      const system = await this.rpgSystemService.create(systemData);
+      const system = await this.rpgSystemService.create(systemData as any);
 
       // If Discord guild ID provided, set up necessary bot commands
       if (discordGuildId) {
-        await this.setupDiscordCommands(system.id, discordGuildId);
+        await this.rpgSystemService.setupDiscordIntegration(system.id, discordGuildId);
       }
 
-      res.status(201).json(system);
+      res.status(201).json({ success: true, data: system, message: 'RPG system registered successfully' });
     } catch (error) {
-      res.status(500).json({ error: 'Failed to register RPG system' });
+      res.status(500).json({ success: false, error: 'Internal server error', message: 'Failed to register RPG system' });
     }
   }
 
@@ -98,29 +114,27 @@ export class RpgSystemController {
     const { systemId, guildId } = req.body;
 
     if (!systemId || !guildId) {
-      res.status(400).json({ error: 'System ID and Guild ID are required' });
+      res.status(400).json({
+        success: false,
+        error: 'Bad request',
+        message: 'Missing required fields: systemId, guildId',
+      });
       return;
     }
 
     try {
-      // Get current system
-      const system = await this.rpgSystemService.getById(systemId);
-      if (!system) {
-        res.status(404).json({ error: 'System not found' });
-        return;
-      }
-
-      // Update Discord guild ID
-      const updated = await this.rpgSystemService.update(systemId, {
-        discord_guild_id: guildId
+      await this.rpgSystemService.setupDiscordIntegration(systemId, guildId);
+      
+      res.status(200).json({
+        success: true,
+        message: 'Discord guild linked successfully',
       });
-
-      // Set up Discord bot commands for this system
-      await this.setupDiscordCommands(systemId, guildId);
-
-      res.status(200).json(updated);
     } catch (error) {
-      res.status(500).json({ error: 'Failed to link Discord guild' });
+      res.status(500).json({
+        success: false,
+        error: 'Internal server error',
+        message: 'Failed to link Discord guild',
+      });
     }
   }
 
@@ -130,38 +144,43 @@ export class RpgSystemController {
    * @param res HTTP response
    */
   async linkWorldAnvilSystem(req: HttpRequest, res: HttpResponse): Promise<void> {
-    const { systemId, worldAnvilId } = req.body;
+    const { systemId, worldAnvilSystemId } = req.body;
 
-    if (!systemId || !worldAnvilId) {
-      res.status(400).json({ error: 'System ID and World Anvil ID are required' });
+    if (!systemId || !worldAnvilSystemId) {
+      res.status(400).json({
+        success: false,
+        error: 'Bad request',
+        message: 'Missing required fields: systemId, worldAnvilSystemId',
+      });
       return;
     }
 
     try {
-      // Get current system
-      const system = await this.rpgSystemService.getById(systemId);
-      if (!system) {
-        res.status(404).json({ error: 'System not found' });
+      // Validate the World Anvil system exists
+      const isValid = await this.rpgSystemService.validateWorldAnvilSystem(worldAnvilSystemId);
+      if (!isValid) {
+        res.status(404).json({
+          success: false,
+          error: 'Not found',
+          message: 'WorldAnvil system not found or inaccessible',
+        });
         return;
       }
 
-      // TODO: Verify the World Anvil system exists through the service
-      // For now, we'll skip validation until WorldAnvil integration is implemented
-      // try {
-      //   await this.rpgSystemService.validateWorldAnvilSystem(worldAnvilId);
-      // } catch (error) {
-      //   res.status(404).json({ error: 'World Anvil system not found' });
-      //   return;
-      // }
+      // Sync with WorldAnvil
+      const updatedSystem = await this.rpgSystemService.syncWithWorldAnvil(systemId, worldAnvilSystemId);
 
-      // Update World Anvil system ID
-      const updated = await this.rpgSystemService.update(systemId, {
-        worldanvil_system_id: worldAnvilId
+      res.status(200).json({
+        success: true,
+        data: updatedSystem,
+        message: 'WorldAnvil system linked successfully',
       });
-
-      res.status(200).json(updated);
     } catch (error) {
-      res.status(500).json({ error: 'Failed to link World Anvil system' });
+      res.status(500).json({
+        success: false,
+        error: 'Internal server error',
+        message: 'Failed to link WorldAnvil system',
+      });
     }
   }
 
