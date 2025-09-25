@@ -95,17 +95,53 @@ async function registerGlobalCommands() {
     return NextResponse.json({ error: 'Bot credentials not configured' }, { status: 500 });
   }
 
-  // Define the single 'help' command
+  // Define Discord slash commands
   const commands = [
     {
       name: 'help',
       description: 'Provides information about bot commands.',
       options: [],
     },
+    {
+      name: 'roll',
+      description: 'Roll dice using standard notation (e.g., 3d6+2)',
+      options: [
+        {
+          type: 3, // STRING
+          name: 'dice',
+          description: 'Dice notation (e.g., 1d20, 3d6+2, 2d10+5)',
+          required: true,
+        },
+      ],
+    },
+    {
+      name: 'character',
+      description: 'Character sheet commands',
+      options: [
+        {
+          type: 1, // SUB_COMMAND
+          name: 'show',
+          description: 'Display your character sheet',
+          options: [
+            {
+              type: 3, // STRING
+              name: 'name',
+              description: 'Character name (optional, uses default if not specified)',
+              required: false,
+            },
+          ],
+        },
+        {
+          type: 1, // SUB_COMMAND
+          name: 'list',
+          description: 'List all your characters',
+        },
+      ],
+    },
   ];
 
   // Register the commands with Discord
-  const response = await fetch('https://discord.com/api/v10/applications/me/commands', {
+  const response = await fetch(`https://discord.com/api/v10/applications/${applicationId}/commands`, {
     method: 'PUT',
     headers: {
       'Authorization': `Bot ${botToken}`,
