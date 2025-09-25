@@ -18,7 +18,7 @@ export default async function CharacterProfilePage({ params }: CharacterProfileP
   const session = await getSession();
   
   // Fetch character by slug
-  const response = await fetch(`${process.env.NEXTAUTH_URL}/api/characters/by-slug/${params.slug}`, {
+  const response = await fetch(`${process.env.NEXTAUTH_URL}/api/characters/slug/${params.slug}`, {
     cache: 'no-store'
   });
 

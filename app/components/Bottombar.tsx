@@ -5,7 +5,6 @@ const Bottombar: React.FC = () => {
   return (
     <footer className="bg-gray-800 text-white py-4">
       <div className="container mx-auto text-center">
-        <p className="mb-2">Join our community:</p>
         <a
           href="https://discord.gg/d4jWRM7KqA"
           target="_blank"
@@ -15,11 +14,10 @@ const Bottombar: React.FC = () => {
           <Image
             src="/img/discord.svg"
             alt="Discord Icon"
-            width={24}
-            height={24}
+            width={48}
+            height={48}
             className="mr-2"
           />
-          Discord Server
         </a>
       </div>
     </footer>
