@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Bottombar from './components/Bottombar';
+import { ThemeProvider } from './components/providers/ThemeProvider';
+import TopNavigation from './components/navigation/TopNavigation';
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -17,11 +19,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={`${inter.className} dark min-h-screen overflow-x-hidden flex flex-col`} suppressHydrationWarning>
-        <main className={'flex-grow w-full flex flex-col items-stretch'}>
-          {children}
-        </main>
-        <Bottombar />
+      <body className={`${inter.className} min-h-screen overflow-x-hidden flex flex-col bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100`} suppressHydrationWarning>
+        <ThemeProvider>
+          <TopNavigation />
+          <main className={'flex-grow w-full flex flex-col items-stretch'}>
+            {children}
+          </main>
+          <Bottombar />
+        </ThemeProvider>
       </body>
     </html>
   );

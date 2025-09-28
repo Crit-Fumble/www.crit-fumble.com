@@ -8,7 +8,7 @@ export async function GET(req: Request) {
     client_id: process.env.AUTH_DISCORD_ID!,
     redirect_uri: `${process.env.NEXT_PUBLIC_BASE_URL}/api/discord/oauth2/callback`,
     response_type: 'code',
-    scope: 'identify email guilds',
+    scope: 'identify email', // Removed 'guilds' - we'll use bot token instead
     state: redirectTo,
   });
 

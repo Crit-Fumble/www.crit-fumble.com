@@ -5,10 +5,10 @@ const discordClient = new Client({ intents: ['GuildMembers'] });
 
 // Ensure the bot token is set in the environment variables
 const DISCORD_BOT_TOKEN = process.env.DISCORD_BOT_TOKEN;
-const GUILD_ID = process.env.DISCORD_GUILD_ID;
+const DISCORD_SERVER_ID = process.env.DISCORD_SERVER_ID;
 
-if (!DISCORD_BOT_TOKEN || !GUILD_ID) {
-  throw new Error('DISCORD_BOT_TOKEN and DISCORD_GUILD_ID must be set in the environment variables.');
+if (!DISCORD_BOT_TOKEN || !DISCORD_SERVER_ID) {
+  throw new Error('DISCORD_BOT_TOKEN and DISCORD_SERVER_ID must be set in the environment variables.');
 }
 
 discordClient.login(DISCORD_BOT_TOKEN);
@@ -25,7 +25,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
   }
 
   try {
-    const guild = await discordClient.guilds.fetch(GUILD_ID!);
+    const guild = await discordClient.guilds.fetch(DISCORD_SERVER_ID!);
     const member = await guild.members.fetch(discordId);
 
     if (!member) {

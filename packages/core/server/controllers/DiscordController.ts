@@ -152,6 +152,12 @@ export class DiscordController {
     console.log(`🎯 Command executed: /${data.name} by ${interaction.member?.user?.username || interaction.user?.username}`);
 
     switch (data.name) {
+      case 'help':
+        return await this.handleHelpCommand(interaction);
+        
+      case 'roll':
+        return await this.handleRollCommand(interaction);
+        
       case 'event':
         return await this.handleEventCommand(interaction);
       
@@ -218,6 +224,130 @@ export class DiscordController {
         flags: MessageFlags.Ephemeral
       }
     };
+  }
+
+  /**
+   * Handle /help command
+   */
+  private async handleHelpCommand(interaction: any) {
+    const helpMessage = `
+🤖 **Crit-Fumble Bot Commands**
+
+**Campaign Management**
+\`/campaign create\` - Create a new D&D campaign
+\`/campaign list\` - List your campaigns
+
+**Event Management**  
+\`/event create\` - Create a new Discord scheduled event
+\`/event list\` - List scheduled events
+
+**Character Management**
+\`/character create\` - Create a new character
+\`/character show\` - Display your character sheet
+\`/character list\` - List all your characters
+
+**Dice Rolling**
+\`/roll <dice>\` - Roll dice using standard notation (e.g., 1d20, 3d6+2)
+
+**Need Help?**
+Visit https://www.crit-fumble.com for more information about using the platform!
+    `.trim();
+
+    return {
+      type: InteractionResponseType.ChannelMessageWithSource,
+      data: {
+        content: helpMessage,
+        flags: MessageFlags.Ephemeral
+      }
+    };
+  }
+
+  /**
+   * Handle /roll command
+   */
+  private async handleRollCommand(interaction: any) {
+    const { data } = interaction;
+    const diceParam = data.options?.[0]?.value;
+
+    if (!diceParam) {
+      return {
+        type: InteractionResponseType.ChannelMessageWithSource,
+        data: {
+          content: '❌ Please specify dice to roll (e.g., `/roll 1d20` or `/roll 3d6+2`)',
+          flags: MessageFlags.Ephemeral
+        }
+      };
+    }
+
+    try {
+      // Simple dice parsing and rolling logic
+      const result = this.rollDice(diceParam);
+      const username = interaction.member?.user?.username || interaction.user?.username || 'Unknown';
+      
+      return {
+        type: InteractionResponseType.ChannelMessageWithSource,
+        data: {
+          content: `🎲 **${username}** rolled \`${diceParam}\`: **${result.total}**${result.breakdown ? ` (${result.breakdown})` : ''}`
+        }
+      };
+    } catch (error) {
+      return {
+        type: InteractionResponseType.ChannelMessageWithSource,
+        data: {
+          content: `❌ Invalid dice format. Use standard notation like \`1d20\`, \`3d6+2\`, or \`2d10-1\``,
+          flags: MessageFlags.Ephemeral
+        }
+      };
+    }
+  }
+
+  /**
+   * Simple dice roller implementation
+   */
+  private rollDice(diceString: string): { total: number; breakdown?: string } {
+    // Remove whitespace and convert to lowercase
+    const dice = diceString.replace(/\s/g, '').toLowerCase();
+    
+    // Parse basic dice notation: XdY+Z or XdY-Z
+    const match = dice.match(/^(\d+)?d(\d+)([+-]\d+)?$/);
+    
+    if (!match) {
+      throw new Error('Invalid dice format');
+    }
+    
+    const numDice = parseInt(match[1] || '1', 10);
+    const sides = parseInt(match[2], 10);
+    const modifier = match[3] ? parseInt(match[3], 10) : 0;
+    
+    if (numDice < 1 || numDice > 100) {
+      throw new Error('Number of dice must be between 1 and 100');
+    }
+    
+    if (sides < 2 || sides > 1000) {
+      throw new Error('Dice sides must be between 2 and 1000');
+    }
+    
+    // Roll the dice
+    const rolls = [];
+    for (let i = 0; i < numDice; i++) {
+      rolls.push(Math.floor(Math.random() * sides) + 1);
+    }
+    
+    const rollTotal = rolls.reduce((sum, roll) => sum + roll, 0);
+    const total = rollTotal + modifier;
+    
+    // Create breakdown for multiple dice or when there's a modifier
+    let breakdown = '';
+    if (numDice > 1 || modifier !== 0) {
+      breakdown = rolls.join(' + ');
+      if (modifier > 0) {
+        breakdown += ` + ${modifier}`;
+      } else if (modifier < 0) {
+        breakdown += ` - ${Math.abs(modifier)}`;
+      }
+    }
+    
+    return { total, breakdown };
   }
 
   /**

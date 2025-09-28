@@ -1,7 +1,12 @@
 import { NextRequest, NextResponse } from 'next/server';
+import { PrismaClient } from '@crit-fumble/core';
+import { isDiscordAdmin, logAdminCheck } from '../../../../lib/admin-utils';
 
 // This route uses dynamic features
 export const dynamic = 'force-dynamic';
+
+// Initialize Prisma client
+const prisma = new PrismaClient();
 
 /**
  * Handle Discord OAuth2 callback
@@ -47,12 +52,12 @@ export async function GET(request: NextRequest) {
       return NextResponse.redirect(errorUrl);
     }
 
-    const tokens = await tokenResponse.json();
+    const accessToken = (await tokenResponse.json()).access_token;
 
     // Get user information
     const userResponse = await fetch('https://discord.com/api/users/@me', {
       headers: {
-        'Authorization': `Bearer ${tokens.access_token}`,
+        'Authorization': `Bearer ${accessToken}`,
       },
     });
 
@@ -65,12 +70,103 @@ export async function GET(request: NextRequest) {
 
     const user = await userResponse.json();
 
+    // Try to fetch user roles from the Discord server using bot token (more reliable)
+    let roles: string[] = [];
+    if (process.env.DISCORD_SERVER_ID && process.env.DISCORD_WEB_BOT_TOKEN) {
+      try {
+        // Use bot token to fetch user's guild member info
+        const memberResponse = await fetch(`https://discord.com/api/v10/guilds/${process.env.DISCORD_SERVER_ID}/members/${user.id}`, {
+          headers: {
+            'Authorization': `Bot ${process.env.DISCORD_WEB_BOT_TOKEN}`,
+          },
+        });
+
+        if (memberResponse.ok) {
+          const guildMember = await memberResponse.json();
+          roles = guildMember.roles || [];
+          console.log('Successfully fetched user roles via bot token:', roles.length);
+        } else {
+          console.warn('Failed to fetch Discord roles via bot token:', memberResponse.status, memberResponse.statusText);
+          // User might not be in the server or bot doesn't have permissions
+        }
+      } catch (roleError) {
+        console.warn('Error fetching Discord roles:', roleError);
+        // Continue without roles - not critical for authentication
+      }
+    } else {
+      console.warn('Discord server ID or bot token not configured');
+    }
+
+    // Check if user is a Discord admin
+    const userIsAdmin = isDiscordAdmin(user.id);
+    logAdminCheck(user.id, userIsAdmin);
+
+    // Create or update user in database
+    let dbUser;
+    try {
+      // First try to find existing user by discord_id
+      const existingUser = await prisma.user.findFirst({
+        where: { discord_id: user.id }
+      });
+
+      if (existingUser) {
+        // Update existing user
+        dbUser = await prisma.user.update({
+          where: { id: existingUser.id },
+          data: {
+            name: user.global_name || user.username,
+            email: user.email,
+            image: user.avatar ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png` : null,
+            admin: userIsAdmin, // Update admin status on each login
+            data: {
+              discord: {
+                username: user.username,
+                discriminator: user.discriminator,
+                global_name: user.global_name,
+                verified: user.verified,
+              }
+            },
+            updatedAt: new Date(),
+          }
+        });
+      } else {
+        // Create new user
+        dbUser = await prisma.user.create({
+          data: {
+            id: user.id, // Use Discord ID as primary key
+            discord_id: user.id,
+            name: user.global_name || user.username,
+            email: user.email,
+            image: user.avatar ? `https://cdn.discordapp.com/avatars/${user.id}/${user.avatar}.png` : null,
+            admin: userIsAdmin,
+            data: {
+              discord: {
+                username: user.username,
+                discriminator: user.discriminator,
+                global_name: user.global_name,
+                verified: user.verified,
+              }
+            }
+          }
+        });
+      }
+      
+      console.log(`✅ User ${user.username} (${user.id}) ${dbUser.admin ? 'with admin privileges' : ''} logged in`);
+    } catch (dbError) {
+      console.error('Error creating/updating user in database:', dbError);
+      // Continue with session creation even if DB update fails
+    }
+
     // Create session cookie with user data
     const sessionData = {
+      id: user.id,
       userId: user.id,
       username: user.username,
+      name: user.global_name || user.username,
       email: user.email,
       avatar: user.avatar,
+      admin: dbUser?.admin ?? userIsAdmin, // Use database admin status if available, fallback to Discord check
+      roles,
     };
 
     console.log('Discord user authenticated:', user.username);

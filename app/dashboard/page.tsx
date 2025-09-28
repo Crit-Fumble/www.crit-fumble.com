@@ -2,6 +2,8 @@ import { Metadata } from "next";
 import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import Image from "next/image";
+import { getSession } from '../lib/auth';
+import UserRolesDisplay from './components/UserRolesDisplay';
 
 export const metadata: Metadata = {
   title: "Dashboard | Crit-Fumble Gaming",
@@ -11,7 +13,7 @@ export const metadata: Metadata = {
 // Simple Card components - preserving original styling
 const Card: React.FC<{ children?: any, className?: string, id?: string }> = ({ children, className = "", id }) => {
   return (
-    <div id={id} className={`bg-white dark:bg-gray-800 shadow-md overflow-hidden ${className}`}>
+    <div id={id} className={`bg-white dark:bg-gray-800 shadow-lg dark:shadow-gray-900/50 overflow-hidden ${className}`}>
       {children}
     </div>
   );
@@ -19,7 +21,7 @@ const Card: React.FC<{ children?: any, className?: string, id?: string }> = ({ c
 
 const CardHeader: React.FC<{ children?: any, className?: string }> = ({ children, className = "" }) => {
   return (
-    <div className={`bg-[#552e66] text-white p-4 ${className}`}>
+    <div className={`bg-[#552e66] dark:bg-purple-900 text-white p-4 ${className}`}>
       {children}
     </div>
   );
@@ -27,13 +29,11 @@ const CardHeader: React.FC<{ children?: any, className?: string }> = ({ children
 
 const CardContent: React.FC<{ children?: any, className?: string }> = ({ className = "", children, ...props }) => {
   return (
-    <div className={`p-4 text-gray-900 dark:text-gray-300 ${className}`} {...props}>
+    <div className={`p-4 text-gray-900 dark:text-gray-100 ${className}`} {...props}>
       {children}
     </div>
   );
 };
-
-import { getSession } from '../lib/auth';
 
 // This page uses dynamic features (cookies)
 export const dynamic = 'force-dynamic';
@@ -51,11 +51,11 @@ export default async function DashboardPage() {
   const buttonClass = "border-2 p-4 bg-[rgba(200,100,50,0.25)] text-white hover:bg-[rgba(200,100,50,0.5)] transition-colors text-center block w-full";
 
   return (
-    <div className={'flex flex-col justify-stretch items-center p-0 m-0'}>
+    <div className={'flex flex-col justify-stretch items-center p-0 m-0 min-h-screen bg-gray-50 dark:bg-gray-900'}>
       <div className="absolute h-[389px] p-0 m-0 w-full overflow-hidden"> 
-        <Image fill sizes="100vw" style={{ objectFit: 'cover' }} className="w-full min-h-[389px]" alt="CFG Background" src='/img/dice-back.jpg'/>
+        <Image fill sizes="100vw" style={{ objectFit: 'cover' }} className="w-full min-h-[389px] opacity-60 dark:opacity-30" alt="CFG Background" src='/img/dice-back.jpg'/>
       </div>
-      <div className={'p-8 pt-[192px] flex flex-col items-center text-center'} >
+      <div className={'p-8 pt-[192px] flex flex-col items-center text-center relative z-10'} >
         <div className={'p-4 flex justify-center'}>
           <Image className={'rounded-full'} alt="CFG Logo" src='/img/cfg-logo.jpg' height={'256'} width={'256'}/>
         </div>
@@ -69,39 +69,24 @@ export default async function DashboardPage() {
               Welcome back, {userData.username}!
             </p>
 
+            {/* Discord Roles Section */}
+            <div className="mb-6">
+              <UserRolesDisplay />
+            </div>
+
             {/* Admin notice */}
             {userData.admin && (
-              <div className="mb-6 p-3 bg-red-50 border border-red-200 rounded text-red-800 text-center">
+              <div className="mb-6 p-3 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded text-red-800 dark:text-red-200 text-center">
                 <div className="font-medium">🛡️ Admin Access</div>
                 <div className="text-sm">You have administrative privileges</div>
               </div>
             )}
 
-            {/* Main navigation buttons */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 max-w-md mx-auto">
-              <a 
-                className={buttonClass}
-                href="/linked-accounts"
-              >
-                🔗 Linked Accounts
-              </a>
-              
-              {userData.admin && (
-                <a 
-                  className={buttonClass}
-                  href="/admin"
-                >
-                  ⚙️ Admin Dashboard
-                  <br />
-                  <small>User Management</small>
-                </a>
-              )}
-            </div>
-
-            {/* Footer navigation */}
-            <div className="flex gap-2 justify-center">
-              <a className={linkClass} href="/">Home</a>
-              <a className={linkClass} href="/api/auth/logout">Sign Out</a>
+            {/* Quick Actions */}
+            <div className="text-center">
+              <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                Use the navigation above to access different sections
+              </p>
             </div>
           </CardContent>
         </Card>

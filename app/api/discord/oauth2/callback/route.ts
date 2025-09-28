@@ -30,6 +30,22 @@ export async function GET(req: Request) {
 
     const { access_token, refresh_token, expires_in } = tokenResponse.data;
 
+    // Fetch user roles from the Discord server
+    const guildResponse = await axios.get(`https://discord.com/api/v10/users/@me/guilds/${process.env.DISCORD_SERVER_ID}/member`, {
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+    });
+
+    if (guildResponse.status !== 200) {
+      return NextResponse.json({ error: 'Failed to fetch user roles' }, { status: guildResponse.status });
+    }
+
+    const guildMember = guildResponse.data;
+    const roles = guildMember.roles || [];
+
+    console.log('User roles:', roles);
+
     // Redirect to the original page stored in the `state` parameter
     return NextResponse.redirect(state);
   } catch (error) {

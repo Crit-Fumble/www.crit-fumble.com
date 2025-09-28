@@ -8,6 +8,7 @@ export interface Session {
   email: string | null;
   avatar?: string;
   admin: boolean;
+  roles?: string[]; // Discord role IDs
 }
 
 /**

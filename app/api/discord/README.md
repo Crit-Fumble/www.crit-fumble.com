@@ -67,7 +67,7 @@ NEXT_PUBLIC_BASE_URL=https://your-domain.vercel.app
 ### Discord Application Setup
 1. Set **Interactions Endpoint URL** to: `https://your-domain.vercel.app/api/discord/webhooks`
 2. Enable **OAuth2** with redirect URI: `https://your-domain.vercel.app/api/discord/oauth/callback`
-3. Set required **scopes**: `identify`, `email`, `guilds`
+3. Set required **scopes**: `identify`, `email` (guilds access is handled via bot token)
 4. Configure **bot permissions** as needed
 
 ### Vercel Configuration
