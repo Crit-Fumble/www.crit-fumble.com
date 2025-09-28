@@ -35,8 +35,8 @@ Instead of running a persistent Discord bot, we use:
   - Handles autocomplete requests
 
 ### OAuth2 Authentication
-- **`GET /api/discord/oauth/authorize`** - Initiate Discord OAuth flow
-- **`GET /api/discord/oauth/callback`** - Handle OAuth callback and user authentication
+- **`GET /api/discord/oauth2/authorize`** - Initiate Discord OAuth2 flow (supports both user auth and bot installation)
+- **`GET /api/discord/oauth2/callback`** - Handle OAuth2 callback and user authentication
 
 ### Bot Management
 - **`GET /api/discord/bot`** - Get bot status and information
@@ -66,7 +66,7 @@ NEXT_PUBLIC_BASE_URL=https://your-domain.vercel.app
 
 ### Discord Application Setup
 1. Set **Interactions Endpoint URL** to: `https://your-domain.vercel.app/api/discord/webhooks`
-2. Enable **OAuth2** with redirect URI: `https://your-domain.vercel.app/api/discord/oauth/callback`
+2. Enable **OAuth2** with redirect URI: `https://your-domain.vercel.app/api/discord/oauth2/callback`
 3. Set required **scopes**: `identify`, `email` (guilds access is handled via bot token)
 4. Configure **bot permissions** as needed
 

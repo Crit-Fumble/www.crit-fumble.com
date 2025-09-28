@@ -21,25 +21,28 @@ export default function TopNavigation() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   useEffect(() => {
-    // Check for session data (simplified version)
-    const sessionCookie = document.cookie
-      .split('; ')
-      .find(row => row.startsWith('fumble-session='));
-    
-    if (sessionCookie) {
-      try {
-        const sessionData = JSON.parse(decodeURIComponent(sessionCookie.split('=')[1]));
-        setSession(sessionData);
-      } catch (error) {
-        console.error('Error parsing session:', error);
-      }
-    }
+    // Fetch session data from API
+    fetch('/api/auth/session')
+      .then(response => response.json())
+      .then(data => {
+        if (data.isLoggedIn && data.session) {
+          setSession(data.session);
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching session:', error);
+      });
   }, []);
 
   const navigationItems = [
     { href: '/dashboard', label: 'Dashboard', icon: '🏠' },
+    // TODO: Make this a dropdown where they select "Gamer", "Player", "Gamemaster", "Storyteller", "Worldbuilder", "Moderator", or "Admin". They should only see options available to them per settings and discord roles. Player and Gamemaster dashboards are available to all.
+    
+    // TODO: make characters make sense for our approach
+    // { href: '/dashboard/characters', label: 'Characters', icon: '🎭' },
+
+    // TODO: add account linking tools to linked-accounts
     { href: '/linked-accounts', label: 'Linked Accounts', icon: '🔗' },
-    { href: '/dashboard/characters', label: 'Characters', icon: '🎭' },
     ...(session?.admin ? [
       { href: '/admin', label: 'Admin', icon: '⚙️' }
     ] : []),
@@ -60,7 +63,7 @@ export default function TopNavigation() {
                 className="rounded-full"
               />
               <span className="text-xl font-bold text-gray-900 dark:text-white">
-                Crit-Fumble
+                Crit-Fumble Gaming
               </span>
             </a>
           </div>
@@ -94,9 +97,6 @@ export default function TopNavigation() {
             {session ? (
               <div className="flex items-center space-x-3">
                 <div className="hidden sm:flex flex-col text-right text-sm">
-                  <span className="text-gray-900 dark:text-white font-medium">
-                    {session.name || session.username}
-                  </span>
                   {session.admin && (
                     <span className="text-xs text-red-600 dark:text-red-400">
                       Admin
@@ -127,7 +127,7 @@ export default function TopNavigation() {
               </div>
             ) : (
               <a
-                href="/api/discord/oauth/authorize"
+                href="/api/discord/oauth2/authorize"
                 className="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors"
               >
                 Sign In

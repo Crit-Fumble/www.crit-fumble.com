@@ -13,9 +13,22 @@ export function getDiscordAdminIds(): string[] {
   }
   
   try {
-    // Handle array format like [id1,id2,id3] or JSON array format
-    const cleaned = adminIds.replace(/^\[|\]$/g, ''); // Remove brackets
-    return cleaned.split(',').map(id => id.trim()).filter(Boolean);
+    // Handle both array format ['id1','id2'] and comma-separated format id1,id2
+    let parsed: string[];
+    
+    if (adminIds.startsWith('[') && adminIds.endsWith(']')) {
+      // Array format: ['451207409915002882','another_id']
+      const arrayContent = adminIds.slice(1, -1); // Remove brackets
+      parsed = arrayContent.split(',').map(id => {
+        // Remove quotes and trim whitespace
+        return id.replace(/['"]/g, '').trim();
+      }).filter(id => id.length > 0);
+    } else {
+      // Comma-separated format: 451207409915002882,another_id
+      parsed = adminIds.split(',').map(id => id.trim()).filter(id => id.length > 0);
+    }
+    
+    return parsed;
   } catch (error) {
     console.error('Error parsing DISCORD_ADMIN_IDS:', error);
     return [];

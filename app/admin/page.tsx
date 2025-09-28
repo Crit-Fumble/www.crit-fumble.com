@@ -9,8 +9,10 @@
 
 import React, { useState, useEffect } from 'react';
 import { UserManagementTable, UserForm, type User } from '@crit-fumble/react/components';
+import RPGSystemsAdmin from './components/RPGSystemsAdmin';
 
 type ViewMode = 'table' | 'create' | 'edit';
+type AdminTab = 'users' | 'rpg-systems';
 
 interface UserData {
   id: string;
@@ -20,6 +22,7 @@ interface UserData {
 
 export default function AdminDashboardPage() {
   const [viewMode, setViewMode] = useState<ViewMode>('table');
+  const [activeTab, setActiveTab] = useState<AdminTab>('users');
   const [selectedUser, setSelectedUser] = useState<User | null>(null);
   const [isAdmin, setIsAdmin] = useState<boolean | null>(null);
   const [loading, setLoading] = useState(true);
@@ -203,57 +206,94 @@ export default function AdminDashboardPage() {
 
       {/* Content */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        {viewMode === 'table' && (
-          <UserManagementTable
-            onCreateUser={handleCreateUser}
-            onEditUser={handleEditUser}
-            onDeleteUser={handleDeleteUser}
-          />
-        )}
-
-        {(viewMode === 'create' || viewMode === 'edit') && (
-          <UserForm
-            user={selectedUser}
-            mode={viewMode}
-            onSave={handleSaveUser}
-            onCancel={handleCancel}
-          />
-        )}
-
-        {/* Discord User Fetch Form */}
-        <div className="mt-8 p-4 bg-white rounded shadow">
-          <h2 className="text-xl font-semibold text-gray-800 mb-4">Fetch Discord User</h2>
-          <div className="flex space-x-4">
-            <input
-              type="text"
-              placeholder="Enter Discord ID"
-              value={discordId}
-              onChange={(e) => setDiscordId(e.target.value)}
-              className="flex-1 px-4 py-2 border border-gray-300 rounded"
-            />
+        {/* Tab Navigation */}
+        <div className="border-b border-gray-200 mb-6">
+          <nav className="-mb-px flex space-x-8">
             <button
-              onClick={handleFetchUser}
-              className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+              onClick={() => setActiveTab('users')}
+              className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                activeTab === 'users'
+                  ? 'border-purple-500 text-purple-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
             >
-              Fetch User
+              User Management
             </button>
-          </div>
-
-          {error && <p className="mt-2 text-red-600">{error}</p>}
-
-          {userData && (
-            <div className="mt-4 p-4 border border-gray-300 rounded bg-gray-50">
-              <h3 className="text-lg font-semibold text-gray-800 mb-2">User Details</h3>
-              <p className="text-gray-700">Display Name: {userData.displayName}</p>
-              <p className="text-gray-700">Roles:</p>
-              <ul className="list-disc list-inside">
-                {userData.roles.map((role) => (
-                  <li key={role.id} className="text-gray-700">{role.name}</li>
-                ))}
-              </ul>
-            </div>
-          )}
+            <button
+              onClick={() => setActiveTab('rpg-systems')}
+              className={`py-2 px-1 border-b-2 font-medium text-sm ${
+                activeTab === 'rpg-systems'
+                  ? 'border-purple-500 text-purple-600'
+                  : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
+              }`}
+            >
+              RPG Systems
+            </button>
+          </nav>
         </div>
+
+        {/* Tab Content */}
+        {activeTab === 'users' && (
+          <div>
+            {viewMode === 'table' && (
+              <UserManagementTable
+                onCreateUser={handleCreateUser}
+                onEditUser={handleEditUser}
+                onDeleteUser={handleDeleteUser}
+              />
+            )}
+
+            {(viewMode === 'create' || viewMode === 'edit') && (
+              <UserForm
+                user={selectedUser}
+                mode={viewMode}
+                onSave={handleSaveUser}
+                onCancel={handleCancel}
+              />
+            )}
+
+            {/* Discord User Fetch Form - only show in users tab */}
+            {viewMode === 'table' && (
+              <div className="mt-8 p-4 bg-white rounded shadow">
+                <h2 className="text-xl font-semibold text-gray-800 mb-4">Fetch Discord User</h2>
+                <div className="flex space-x-4">
+                  <input
+                    type="text"
+                    placeholder="Enter Discord ID"
+                    value={discordId}
+                    onChange={(e) => setDiscordId(e.target.value)}
+                    className="flex-1 px-4 py-2 border border-gray-300 rounded"
+                  />
+                  <button
+                    onClick={handleFetchUser}
+                    className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+                  >
+                    Fetch User
+                  </button>
+                </div>
+
+                {error && <p className="mt-2 text-red-600">{error}</p>}
+
+                {userData && (
+                  <div className="mt-4 p-4 border border-gray-300 rounded bg-gray-50">
+                    <h3 className="text-lg font-semibold text-gray-800 mb-2">User Details</h3>
+                    <p className="text-gray-700">Display Name: {userData.displayName}</p>
+                    <p className="text-gray-700">Roles:</p>
+                    <ul className="list-disc list-inside">
+                      {userData.roles.map((role) => (
+                        <li key={role.id} className="text-gray-700">{role.name}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        )}
+
+        {activeTab === 'rpg-systems' && (
+          <RPGSystemsAdmin />
+        )}
       </div>
 
       {/* Admin Notice */}

@@ -36,7 +36,7 @@ describe('Auth API Routes', () => {
     process.env = originalEnv;
   });
 
-  describe('Discord OAuth Route - /api/auth/discord', () => {
+  describe('Discord OAuth Route - /api/discord/oauth/callback', () => {
     // Create the handler function that mimics the route logic
     const discordAuthHandler = async (request: NextRequest) => {
       const { searchParams } = new URL(request.url);
@@ -48,7 +48,7 @@ describe('Auth API Routes', () => {
         // Build Discord OAuth URL manually
         const params = new URLSearchParams({
           client_id: process.env.AUTH_DISCORD_ID || '',
-          redirect_uri: `${baseUrl}/api/auth/discord`,
+          redirect_uri: `${baseUrl}/api/discord/oauth/callback`,
           response_type: 'code',
           scope: 'identify email',
         });
@@ -69,7 +69,7 @@ describe('Auth API Routes', () => {
             client_secret: process.env.AUTH_DISCORD_SECRET || '',
             grant_type: 'authorization_code',
             code: code,
-            redirect_uri: `${baseUrl}/api/auth/discord`,
+            redirect_uri: `${baseUrl}/api/discord/oauth/callback`,
           }),
         });
 

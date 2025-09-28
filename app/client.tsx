@@ -67,31 +67,11 @@ export default function HomePageClient({ session, config }: HomePageClientProps)
               Welcome to Crit Fumble Gaming! We're a VTTRPG group and have players with some of the worst luck and dumbest ideas. We started as an in-person group in the Midwest United States, but have moved our campaigns online and have since grown to include members all over the country. We play a few long-running campaigns, as well as plenty of one-shots and &quot;mini-campaigns&quot; that only last a few sessions.
             </p>
 
-            <div className="flex flex-col gap-2 justify-center items-center">
-              {!config.isLoggedIn ? (
-                <a 
-                  className={`${config.twClasses.LINK} flex items-center gap-2`} 
-                  href='/api/discord/oauth/authorize'
-                >
-                  <Image 
-                    src="/img/discord.svg" 
-                    alt="Discord" 
-                    width={20} 
-                    height={20}
-                    className="inline"
-                  />
-                  Sign in with Discord
-                </a>
-              ) : (
-                <div className="flex flex-col gap-2 items-center">
-                  <p>Welcome back, {config.userData?.username || 'User'}!</p>
-                  <div className="flex gap-2">
-                    <a className={config.twClasses.LINK} href='/dashboard'>Dashboard</a>
-                    <a className={config.twClasses.LINK} href='/api/auth/logout'>Sign Out</a>
-                  </div>
-                </div>
-              )}
-            </div>
+            {config.isLoggedIn && (
+              <div className="text-center">
+                <p>Welcome back, {config.userData?.username || 'User'}!</p>
+              </div>
+            )}
           </CardContent>
         </Card>
         

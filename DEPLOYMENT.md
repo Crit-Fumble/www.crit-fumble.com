@@ -125,8 +125,7 @@ Update your Discord Application settings with production URLs:
 
 2. **OAuth2** → **Redirects**:
    ```
-   https://your-project-name.vercel.app/api/discord/oauth/callback
-   https://your-project-name.vercel.app/api/auth/discord
+   https://your-project-name.vercel.app/api/discord/oauth2/callback
    ```
 
 3. **General Information** → **Privacy Policy URL**:

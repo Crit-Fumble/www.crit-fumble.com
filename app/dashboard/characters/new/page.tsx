@@ -7,7 +7,7 @@
 
 import { redirect } from 'next/navigation';
 import { getSession } from '../../../lib/auth';
-import CharacterForm from '../../../components/characters/CharacterForm';
+import CharacterForm from '../../../lib/components/characters/CharacterForm';
 
 export default async function NewCharacterPage() {
   const session = await getSession();

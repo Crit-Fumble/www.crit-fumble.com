@@ -6,8 +6,16 @@ export const dynamic = 'force-dynamic';
 
 /**
  * Debug endpoint to check admin status
+ * DEVELOPMENT ONLY - disabled in production for security
  */
 export async function GET(request: NextRequest) {
+  // Security: Only allow in development environment
+  if (process.env.NODE_ENV === 'production') {
+    return NextResponse.json({
+      error: 'Debug endpoints are disabled in production'
+    }, { status: 404 });
+  }
+
   const { searchParams } = new URL(request.url);
   const discordId = searchParams.get('discordId');
   

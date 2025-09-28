@@ -6,8 +6,16 @@ export const dynamic = 'force-dynamic';
 
 /**
  * Debug endpoint to check session data
+ * DEVELOPMENT ONLY - disabled in production for security
  */
 export async function GET(request: NextRequest) {
+  // Security: Only allow in development environment
+  if (process.env.NODE_ENV === 'production') {
+    return NextResponse.json({
+      error: 'Debug endpoints are disabled in production'
+    }, { status: 404 });
+  }
+
   try {
     const session = await getSession();
     

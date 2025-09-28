@@ -66,7 +66,7 @@ export default async function DashboardPage() {
           </CardHeader>
           <CardContent>
             <p className="text-center mb-6">
-              Welcome back, {userData.username}!
+              Welcome back, {userData.name}!
             </p>
 
             {/* Discord Roles Section */}
@@ -81,13 +81,6 @@ export default async function DashboardPage() {
                 <div className="text-sm">You have administrative privileges</div>
               </div>
             )}
-
-            {/* Quick Actions */}
-            <div className="text-center">
-              <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
-                Use the navigation above to access different sections
-              </p>
-            </div>
           </CardContent>
         </Card>
       </div>

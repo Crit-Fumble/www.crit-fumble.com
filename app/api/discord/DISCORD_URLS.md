@@ -53,7 +53,7 @@ https://your-domain.vercel.app/verify-user
 ### 2. OAuth2 Configuration
 In the OAuth2 section, add these redirect URIs:
 ```
-https://your-domain.vercel.app/api/discord/oauth/callback
+https://your-domain.vercel.app/api/discord/oauth2/callback
 ```
 
 ### 3. Bot Configuration
