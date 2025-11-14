@@ -1,4 +1,5 @@
 import { NextResponse } from 'next/server';
+import { getDiscordConfig } from '@crit-fumble/core/models/config';
 
 /**
  * Discord OAuth2 Bot Installation Flow
@@ -11,9 +12,11 @@ export async function GET(req: Request) {
   const redirectTo = url.searchParams.get('redirectTo') || '/dashboard';
   const installBot = url.searchParams.get('bot') === 'true';
 
+  const discordConfig = getDiscordConfig();
+
   const baseParams = {
-    client_id: process.env.AUTH_DISCORD_ID!,
-    redirect_uri: `${process.env.NEXT_PUBLIC_BASE_URL}/api/discord/oauth2/callback`,
+    client_id: discordConfig.clientId,
+    redirect_uri: discordConfig.redirectUri || `${process.env.NEXT_PUBLIC_BASE_URL}/api/discord/oauth2/callback`,
     response_type: 'code',
     state: redirectTo,
   };

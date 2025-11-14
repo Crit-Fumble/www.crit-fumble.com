@@ -5,9 +5,9 @@ import { NextRequest, NextResponse } from 'next/server';
  * Replaces the persistent Discord bot's scheduled task monitoring
  */
 export async function GET(request: NextRequest) {
-  // Verify this is actually Vercel calling our cron job
+  // Verify this is actually GitHub Actions calling our cron job
   const userAgent = request.headers.get('user-agent');
-  if (!userAgent?.includes('vercel-cron/1.0')) {
+  if (!userAgent?.includes('GitHub-Actions-Cron')) {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
   }
 

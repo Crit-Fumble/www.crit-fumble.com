@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { getSession } from '../../../lib/auth';
+import { getDiscordConfig } from '@crit-fumble/core/models/config';
 
 // This route uses dynamic features
 export const dynamic = 'force-dynamic';
@@ -22,28 +23,27 @@ export async function GET(request: NextRequest) {
 
     console.log('Debug: User has roles in session:', session.roles.length, session.roles);
 
-    // Fetch role details from Discord
-    const botToken = process.env.DISCORD_WEB_BOT_TOKEN;
-    const guildId = process.env.DISCORD_SERVER_ID;
+        // Fetch role details from Discord
+    const discordConfig = getDiscordConfig();
 
-    if (!botToken || !guildId) {
-      console.log('Debug: Discord not configured:', { hasBotToken: !!botToken, hasGuildId: !!guildId });
+    if (!discordConfig.botToken || !discordConfig.serverId) {
+      console.log('Debug: Discord not configured:', { hasBotToken: !!discordConfig.botToken, hasServerId: !!discordConfig.serverId });
       return NextResponse.json({ error: 'Discord not configured' }, { status: 500 });
     }
 
-    console.log('Debug: Fetching guild roles for guild:', guildId);
+    console.log('Debug: Fetching guild roles for guild:', discordConfig.serverId);
 
     // Get all guild roles
-    const rolesResponse = await fetch(`https://discord.com/api/v10/guilds/${guildId}/roles`, {
+    const rolesResponse = await fetch(`https://discord.com/api/v10/guilds/${discordConfig.serverId}/roles`, {
       headers: {
-        'Authorization': `Bot ${botToken}`,
+        'Authorization': `Bot ${discordConfig.botToken}`,
       },
     });
 
     // Also fetch guild information to get the server name
-    const guildResponse = await fetch(`https://discord.com/api/v10/guilds/${guildId}`, {
+    const guildResponse = await fetch(`https://discord.com/api/v10/guilds/${discordConfig.serverId}`, {
       headers: {
-        'Authorization': `Bot ${botToken}`,
+        'Authorization': `Bot ${discordConfig.botToken}`,
       },
     });
 
@@ -86,7 +86,7 @@ export async function GET(request: NextRequest) {
     return NextResponse.json({ 
       roles: roleInfo, 
       guildName: guildName,
-      guildId: guildId 
+      guildId: discordConfig.serverId 
     });
     
   } catch (error) {

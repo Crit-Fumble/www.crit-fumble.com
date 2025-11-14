@@ -91,23 +91,25 @@ model Site {
 }
 
 model User {
-  id            String         @id
-  discord_id    String? // Discord User ID
-  worldanvil_id String? // World Anvil User ID
-  name          String?
-  slug          String?        @unique
-  email         String?        @unique
-  emailVerified DateTime?
-  image         String?
-  createdAt     DateTime       @default(now())
-  updatedAt     DateTime       @default(now())
-  admin         Boolean?       @default(false)
-  data          Json?
-  Account       Account[]
-  Post          Post[]
-  Session       Session[]
-  Site          Site[]
-  RpgCharacter  RpgCharacter[]
+  id                   String         @id
+  discord_id           String? // Discord User ID
+  worldanvil_id        String? // World Anvil User ID
+  worldanvil_username  String? // World Anvil Username
+  worldanvil_token     String? // World Anvil API Token (encrypted)
+  name                 String?
+  slug                 String?        @unique
+  email                String?        @unique
+  emailVerified        DateTime?
+  image                String?
+  createdAt            DateTime       @default(now())
+  updatedAt            DateTime       @default(now())
+  admin                Boolean?       @default(false)
+  data                 Json?
+  Account              Account[]
+  Post                 Post[]
+  Session              Session[]
+  Site                 Site[]
+  RpgCharacter         RpgCharacter[]
 }
 
 model VerificationToken {

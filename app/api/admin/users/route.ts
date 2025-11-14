@@ -1,36 +1,79 @@
 /**
  * Admin Users API Endpoint
  * 
- * Provides CRUD operations for user management.
+ * Provides user listing for admin management.
  * Requires admin authentication via database admin flag.
  */
 
 import { NextRequest, NextResponse } from 'next/server';
-import { UserManagementService } from '@crit-fumble/core/server/services';
-import { withAdminAuth, AdminUser } from '../../../lib/admin-auth';
+import { prisma } from '@crit-fumble/core';
+import { getSession } from '../../../lib/auth';
 
 // GET /api/admin/users - List users with filtering and pagination
-async function handleGetUsers(
-  request: NextRequest,
-  context: { params: {} },
-  user: AdminUser
-) {
+export async function GET(request: NextRequest) {
   try {
+    // Check admin authentication
+    const session = await getSession();
+    if (!session?.admin) {
+      return NextResponse.json({ error: 'Admin access required' }, { status: 403 });
+    }
+
     const { searchParams } = new URL(request.url);
     
-    const filter = {
-      search: searchParams.get('search') || undefined,
-      admin: searchParams.get('admin') ? searchParams.get('admin') === 'true' : undefined,
-      hasDiscord: searchParams.get('hasDiscord') ? searchParams.get('hasDiscord') === 'true' : undefined,
-      hasWorldAnvil: searchParams.get('hasWorldAnvil') ? searchParams.get('hasWorldAnvil') === 'true' : undefined,
-      limit: searchParams.get('limit') ? parseInt(searchParams.get('limit')!) : 50,
-      offset: searchParams.get('offset') ? parseInt(searchParams.get('offset')!) : 0
-    };
+    const search = searchParams.get('search') || '';
+    const limit = Math.min(parseInt(searchParams.get('limit') || '100'), 1000); // Max 1000
+    const offset = parseInt(searchParams.get('offset') || '0');
 
-    const userService = new UserManagementService();
-    const result = await userService.listUsers(filter);
+    // Build where clause for search
+    const whereClause = search ? {
+      OR: [
+        { name: { contains: search, mode: 'insensitive' as const } },
+        { email: { contains: search, mode: 'insensitive' as const } },
+        { discord_id: { contains: search } }
+      ]
+    } : {};
 
-    return NextResponse.json(result);
+    // Get total count
+    const totalCount = await prisma.user.count({ where: whereClause });
+
+    // Get users with pagination
+    const users = await prisma.user.findMany({
+      where: whereClause,
+      select: {
+        id: true,
+        discord_id: true,
+        name: true,
+        email: true,
+        image: true,
+        admin: true,
+        createdAt: true,
+        updatedAt: true,
+        data: true
+      },
+      orderBy: { createdAt: 'desc' },
+      take: limit,
+      skip: offset
+    });
+
+    return NextResponse.json({
+      users: users.map(user => ({
+        id: user.id,
+        discord_id: user.discord_id,
+        name: user.name,
+        email: user.email,
+        image: user.image,
+        admin: user.admin,
+        created_at: user.createdAt,
+        updated_at: user.updatedAt,
+        discord_data: (user.data as any)?.discord || null
+      })),
+      pagination: {
+        total: totalCount,
+        limit,
+        offset,
+        hasMore: offset + limit < totalCount
+      }
+    });
 
   } catch (error) {
     console.error('Error listing users:', error);
@@ -40,52 +83,3 @@ async function handleGetUsers(
     );
   }
 }
-
-// POST /api/admin/users - Create new user
-async function handleCreateUser(
-  request: NextRequest,
-  context: { params: {} },
-  user: AdminUser
-) {
-  try {
-    const body = await request.json();
-
-    const userService = new UserManagementService();
-    
-    // Validate email uniqueness if provided
-    if (body.email) {
-      const emailTaken = await userService.isEmailTaken(body.email);
-      if (emailTaken) {
-        return NextResponse.json(
-          { error: 'Email is already in use' },
-          { status: 400 }
-        );
-      }
-    }
-
-    // Validate slug uniqueness if provided
-    if (body.slug) {
-      const slugTaken = await userService.isSlugTaken(body.slug);
-      if (slugTaken) {
-        return NextResponse.json(
-          { error: 'Slug is already in use' },
-          { status: 400 }
-        );
-      }
-    }
-
-    const createdUser = await userService.createUser(body);
-
-    return NextResponse.json(createdUser, { status: 201 });
-
-  } catch (error) {
-    console.error('Error creating user:', error);
-    return NextResponse.json(
-      { error: 'Failed to create user' },
-      { status: 500 }
-    );
-  }
-}
-
-export const GET = withAdminAuth(handleGetUsers);
-export const POST = withAdminAuth(handleCreateUser);

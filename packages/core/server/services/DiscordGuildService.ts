@@ -68,7 +68,7 @@ export class DiscordGuildService {
         throw new Error(`Failed to get guild member: ${memberResponse.status}`);
       }
 
-      const member: DiscordGuildMember = await memberResponse.json();
+      const member = await memberResponse.json() as DiscordGuildMember;
 
       // Get guild roles to resolve role details
       const rolesResponse = await fetch(
@@ -84,7 +84,7 @@ export class DiscordGuildService {
         throw new Error(`Failed to get guild roles: ${rolesResponse.status}`);
       }
 
-      const allRoles: DiscordRole[] = await rolesResponse.json();
+      const allRoles = await rolesResponse.json() as DiscordRole[];
 
       // Filter to only the roles this user has
       const userRoleDetails = allRoles.filter(role => member.roles.includes(role.id));
@@ -170,7 +170,7 @@ export class DiscordGuildService {
         throw new Error(`Failed to get guild roles: ${response.status}`);
       }
 
-      return await response.json();
+      return await response.json() as DiscordRole[];
     } catch (error) {
       console.error('Error fetching guild roles:', error);
       return [];

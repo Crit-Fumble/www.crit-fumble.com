@@ -1,56 +1,26 @@
 import { NextResponse } from 'next/server';
 import axios from 'axios';
-import { PrismaClient } from '@crit-fumble/core';
+import { prisma } from '@crit-fumble/core';
+import { getDiscordConfig } from '@crit-fumble/core/models/config';
 
-// Inline admin utility functions to avoid import path issues
-function getDiscordAdminIds(): string[] {
-  const adminIds = process.env.DISCORD_ADMIN_IDS;
-  if (!adminIds) {
-    console.warn('DISCORD_ADMIN_IDS environment variable not set');
-    return [];
-  }
-  
-  try {
-    // Handle both array format ['id1','id2'] and comma-separated format id1,id2
-    let parsed: string[];
-    
-    if (adminIds.startsWith('[') && adminIds.endsWith(']')) {
-      // Array format: ['451207409915002882','another_id']
-      const arrayContent = adminIds.slice(1, -1); // Remove brackets
-      parsed = arrayContent.split(',').map(id => {
-        // Remove quotes and trim whitespace
-        return id.replace(/['"]/g, '').trim();
-      }).filter(id => id.length > 0);
-    } else {
-      // Comma-separated format: 451207409915002882,another_id
-      parsed = adminIds.split(',').map(id => id.trim()).filter(id => id.length > 0);
-    }
-    
-    return parsed;
-  } catch (error) {
-    console.error('Error parsing DISCORD_ADMIN_IDS:', error);
-    return [];
-  }
-}
+// Get Discord configuration
+const discordConfig = getDiscordConfig();
 
 function isDiscordAdmin(discordId: string): boolean {
   if (!discordId) return false;
   
-  const adminIds = getDiscordAdminIds();
-  const isAdmin = adminIds.includes(discordId);
+  const isAdmin = discordConfig.adminIds?.includes(discordId) ?? false;
   
   return isAdmin;
 }
 
 function logAdminCheck(discordId: string, isAdmin: boolean): void {
-  const adminIds = getDiscordAdminIds();
   console.log(`🔍 Admin Check: Discord ID ${discordId}`);
-  console.log(`📋 Admin IDs in env: [${adminIds.join(', ')}]`);
+  console.log(`📋 Admin IDs in config: [${discordConfig.adminIds?.join(', ') || ''}]`);
   console.log(`✅ Is Admin: ${isAdmin}`);
 }
 
 // Initialize Prisma client
-const prisma = new PrismaClient();
 
 /**
  * Discord OAuth2 Bot Installation Callback
@@ -73,11 +43,11 @@ export async function GET(req: Request) {
   try {
     // Exchange code for tokens
     const tokenResponse = await axios.post('https://discord.com/api/oauth2/token', new URLSearchParams({
-      client_id: process.env.AUTH_DISCORD_ID!,
-      client_secret: process.env.AUTH_DISCORD_SECRET!,
+      client_id: discordConfig.clientId,
+      client_secret: discordConfig.clientSecret,
       grant_type: 'authorization_code',
       code,
-      redirect_uri: `${process.env.NEXT_PUBLIC_BASE_URL}/api/discord/oauth2/callback`,
+      redirect_uri: discordConfig.redirectUri || `${process.env.NEXT_PUBLIC_BASE_URL}/api/discord/oauth2/callback`,
     }), {
       headers: {
         'Content-Type': 'application/x-www-form-urlencoded',
@@ -105,11 +75,11 @@ export async function GET(req: Request) {
 
     // Try to fetch user roles from the Discord server using bot token (more reliable than user token)
     let roles: string[] = [];
-    if (process.env.DISCORD_SERVER_ID && process.env.DISCORD_WEB_BOT_TOKEN) {
+    if (discordConfig.serverId && discordConfig.botToken) {
       try {
-        const memberResponse = await fetch(`https://discord.com/api/v10/guilds/${process.env.DISCORD_SERVER_ID}/members/${user.id}`, {
+        const memberResponse = await fetch(`https://discord.com/api/v10/guilds/${discordConfig.serverId}/members/${user.id}`, {
           headers: {
-            'Authorization': `Bot ${process.env.DISCORD_WEB_BOT_TOKEN}`,
+            'Authorization': `Bot ${discordConfig.botToken}`,
           },
         });
 
@@ -156,9 +126,9 @@ export async function GET(req: Request) {
       };
 
       if (existingUser) {
-        // Update existing user
+        // Update existing user using their unique ID
         dbUser = await prisma.user.update({
-          where: { id: existingUser.id },
+          where: { id: existingUser.id as string },
           data: userData
         });
       } else {

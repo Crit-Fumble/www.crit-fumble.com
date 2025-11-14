@@ -70,7 +70,7 @@ export class WorldAnvilApiClient {
     
     this.apiKey = effectiveConfig.apiKey;
     this.accessToken = effectiveConfig.accessToken;
-    this.baseUrl = effectiveConfig.apiUrl || 'https://www.worldanvil.com/api/v1';
+    this.baseUrl = effectiveConfig.apiUrl || 'https://www.worldanvil.com/api/external/boromir';
 
     // Use custom HTTP client for testing if provided, otherwise create axios instance
     if (customHttpClient) {
@@ -89,11 +89,14 @@ export class WorldAnvilApiClient {
         if (this.apiKey) {
           request.headers['x-application-key'] = this.apiKey;
         }
-        
+
         if (this.accessToken) {
-          request.headers['Authorization'] = `Bearer ${this.accessToken}`;
+          request.headers['x-auth-token'] = this.accessToken;
         }
-        
+
+        // Add User-Agent header as required by World Anvil API
+        request.headers['User-Agent'] = 'Crit-Fumble (https://www.crit-fumble.com, 1.0.0)';
+
         return request;
       });
 
@@ -330,15 +333,7 @@ export class WorldAnvilApiClient {
         throw new Error(`HTTP ${response.status}: ${errorText}`);
       }
 
-      const userData = await response.json() as {
-        id: string;
-        username: string;
-        displayName?: string;
-        email: string;
-        avatar?: string;
-        isPremium?: boolean;
-        subscription?: any;
-      };
+      const userData = await response.json() as any;
 
       return {
         id: userData.id,

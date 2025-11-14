@@ -1,7 +1,7 @@
 /**
- * World Anvil Worlds API Route
+ * World Anvil Block Folders API Route
  *
- * GET /api/worldanvil/worlds - List user's worlds
+ * GET /api/worldanvil/blockfolders?worldId=xxx - List block folders in a world
  */
 
 import { NextRequest, NextResponse } from 'next/server';
@@ -10,7 +10,7 @@ import { prisma } from '@crit-fumble/core';
 import { WorldAnvilApiClient } from '@crit-fumble/worldanvil';
 import { getWorldAnvilConfig } from '@crit-fumble/worldanvil/models/WorldAnvilConfig';
 
-// GET /api/worldanvil/worlds - List user's worlds
+// GET /api/worldanvil/blockfolders?worldId=xxx - List block folders in a world
 export async function GET(request: NextRequest) {
   try {
     // Get user session
@@ -21,12 +21,22 @@ export async function GET(request: NextRequest) {
 
     const userData = JSON.parse(sessionCookie.value);
 
+    // Get query parameters
+    const url = new URL(request.url);
+    const worldId = url.searchParams.get('worldId');
+
+    if (!worldId) {
+      return NextResponse.json({
+        error: 'World ID is required',
+        message: 'Please provide a worldId query parameter'
+      }, { status: 400 });
+    }
+
     // Get user's World Anvil token from database
     const user = await prisma.user.findUnique({
       where: { id: userData.userId },
       select: {
         worldanvil_token: true,
-        worldanvil_id: true,
       },
     });
 
@@ -44,15 +54,20 @@ export async function GET(request: NextRequest) {
       accessToken: user.worldanvil_token,
     });
 
-    // Fetch user's worlds from World Anvil
-    const worlds = await client.get('/user/worlds', { params: { granularity: 1 } });
+    // Fetch block folders from the specified world
+    const folders = await client.get('/world/blockfolders', {
+      params: {
+        id: worldId,
+        granularity: 1
+      }
+    });
 
     return NextResponse.json({
       success: true,
-      worlds: worlds || [],
+      folders: folders || [],
     });
   } catch (error: any) {
-    console.error('Error fetching worlds:', error);
+    console.error('Error fetching block folders:', error);
 
     // Handle World Anvil API errors
     if (error.response?.status === 401) {
@@ -63,7 +78,7 @@ export async function GET(request: NextRequest) {
     }
 
     return NextResponse.json({
-      error: 'Failed to fetch worlds',
+      error: 'Failed to fetch block folders',
       details: error.message
     }, { status: 500 });
   }

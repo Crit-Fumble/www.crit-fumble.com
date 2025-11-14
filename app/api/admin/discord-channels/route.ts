@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
 import { getSession } from '../../../lib/auth';
+import { getDiscordConfig } from '@crit-fumble/core/models/config';
 
 /**
  * API endpoint to fetch Discord channels
@@ -14,16 +15,17 @@ export async function GET() {
     }
 
     // Fetch Discord channels using bot token
-    if (!process.env.DISCORD_SERVER_ID || !process.env.DISCORD_WEB_BOT_TOKEN) {
+    const discordConfig = getDiscordConfig();
+    if (!discordConfig.serverId || !discordConfig.botToken) {
       return NextResponse.json({ 
         error: 'Discord configuration missing',
-        details: 'DISCORD_SERVER_ID or DISCORD_WEB_BOT_TOKEN not configured' 
+        details: 'DISCORD_SERVER_ID or DISCORD_BOT_TOKEN not configured' 
       }, { status: 500 });
     }
 
-    const response = await fetch(`https://discord.com/api/v10/guilds/${process.env.DISCORD_SERVER_ID}/channels`, {
+    const response = await fetch(`https://discord.com/api/v10/guilds/${discordConfig.serverId}/channels`, {
       headers: {
-        'Authorization': `Bot ${process.env.DISCORD_WEB_BOT_TOKEN}`,
+        'Authorization': `Bot ${discordConfig.botToken}`,
       },
     });
 

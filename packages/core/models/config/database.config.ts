@@ -14,6 +14,6 @@ export interface DatabaseConfig {
  */
 export function getDatabaseConfig(): DatabaseConfig {
   return {
-    url: process.env.DATABASE_URL || process.env.POSTGRES_URL_PRISMA || ''
+    url: process.env.DATABASE_URL || process.env.POSTGRES_PRISMA_URL || ''
   };
 }

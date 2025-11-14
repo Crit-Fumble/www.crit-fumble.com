@@ -96,13 +96,6 @@ export default function TopNavigation() {
             {/* User menu */}
             {session ? (
               <div className="flex items-center space-x-3">
-                <div className="hidden sm:flex flex-col text-right text-sm">
-                  {session.admin && (
-                    <span className="text-xs text-red-600 dark:text-red-400">
-                      Admin
-                    </span>
-                  )}
-                </div>
                 <div className="w-8 h-8 bg-purple-600 rounded-full flex items-center justify-center">
                   {session.avatar ? (
                     <Image
