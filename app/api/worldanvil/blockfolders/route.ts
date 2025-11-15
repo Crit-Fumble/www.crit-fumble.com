@@ -8,7 +8,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { prisma } from '@crit-fumble/core';
 import { WorldAnvilApiClient } from '@crit-fumble/worldanvil';
-import { getWorldAnvilConfig } from '@crit-fumble/worldanvil/models/WorldAnvilConfig';
+import { getWorldAnvilConfig } from '@crit-fumble/worldanvil';
 
 // GET /api/worldanvil/blockfolders?worldId=xxx - List block folders in a world
 export async function GET(request: NextRequest) {

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
 import { prisma } from '@crit-fumble/core';
 import { WorldAnvilApiClient } from '@crit-fumble/worldanvil';
-import { getWorldAnvilConfig } from '@crit-fumble/worldanvil/models/WorldAnvilConfig';
+import { getWorldAnvilConfig } from '@crit-fumble/worldanvil';
 
 export async function POST(request: NextRequest) {
   try {

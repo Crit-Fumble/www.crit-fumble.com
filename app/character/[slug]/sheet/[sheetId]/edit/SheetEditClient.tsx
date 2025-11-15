@@ -10,7 +10,7 @@ interface SheetEditClientProps {
     worldanvil_block_id: string;
   };
   character: {
-    id: string;
+    slug: string;
     name: string;
   };
 }
@@ -28,7 +28,7 @@ export default function SheetEditClient({ sheet, character }: SheetEditClientPro
           <div className="flex items-center justify-between">
             <div>
               <Link
-                href={`/character/${character.id}`}
+                href={`/character/${character.slug}`}
                 className="text-blue-600 dark:text-blue-400 hover:underline text-sm mb-1 block"
               >
                 ← Back to {character.name}

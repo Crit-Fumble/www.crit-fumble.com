@@ -14,7 +14,7 @@ export const dynamic = 'force-dynamic';
 
 interface PageProps {
   params: {
-    characterId: string;
+    slug: string;
     sheetId: string;
   };
 }
@@ -28,15 +28,16 @@ export default async function SheetEditPage({ params }: PageProps) {
     redirect('/');
   }
 
-  const { characterId, sheetId } = params;
+  const { slug, sheetId } = params;
 
-  // Fetch the sheet and verify ownership
+  // Fetch the sheet and verify ownership by slug
   const sheet = await prisma.rpgSheet.findUnique({
     where: { id: sheetId },
     include: {
       rpg_character: {
         select: {
           id: true,
+          slug: true,
           user_id: true,
           name: true,
         },
@@ -48,7 +49,7 @@ export default async function SheetEditPage({ params }: PageProps) {
     redirect('/dashboard/player');
   }
 
-  if (sheet.rpg_character_id !== characterId) {
+  if (sheet.rpg_character?.slug !== slug) {
     redirect('/dashboard/player');
   }
 
@@ -57,19 +58,19 @@ export default async function SheetEditPage({ params }: PageProps) {
   }
 
   if (!sheet.worldanvil_block_id) {
-    redirect(`/character/${characterId}`);
+    redirect(`/character/${slug}`);
   }
 
   return (
     <SheetEditClient
       sheet={{
-        id: sheet.id,
-        title: sheet.title || 'Untitled Sheet',
-        worldanvil_block_id: sheet.worldanvil_block_id,
+        id: sheet.id as string,
+        title: (sheet.title as string) || 'Untitled Sheet',
+        worldanvil_block_id: sheet.worldanvil_block_id as string,
       }}
       character={{
-        id: sheet.rpg_character.id,
-        name: sheet.rpg_character.name || 'Unnamed Character',
+        slug: (sheet.rpg_character.slug as string) || slug,
+        name: (sheet.rpg_character.name as string) || 'Unnamed Character',
       }}
     />
   );
